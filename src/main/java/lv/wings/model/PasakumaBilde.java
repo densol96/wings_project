@@ -2,8 +2,6 @@ package lv.wings.model;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,8 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,48 +19,34 @@ import lombok.ToString;
 @Setter
 @Getter
 @NoArgsConstructor
-@Table(name = "pasakumi")
+@Table(name = "pasakumaBildes")
 @ToString
 @Entity
-public class Pasakums {
-	@Column(name = "idpa")
+public class PasakumaBilde {
+	@Column(name = "idpab")
 	@Id
 	@Setter(value = AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int idpa;
-
+	private int idpab;
+	
+	
+	/// image changed to image reference (link - string)
 	@NotNull
-	@Column(name = "sakumadatums")
-	private LocalDateTime sakumaDatums; /// sukumaDatums also includes time.
-
-	@NotNull
-	@Column(name = "beigudatums")
-	private LocalDateTime beiguDatums;
-
+	@Column(name = "atsauceUzBildi")
+	private String atsauceUzBildi;
+	
 	@NotNull
 	@Column(name = "nosaukums")
 	private String nosaukums;
 
 	@NotNull
-	@Column(name = "vieta")
-	private String vieta;
-
-	@NotNull
 	@Column(name = "apraksts")
 	private String apraksts;
-
-	@NotNull
-	@Column(name = "keyWords")
-	private String keyWords;
-
-	public Pasakums(LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String nosaukums, String vieta,
-			String apraksts, String keyWords) {
-		setSakumaDatums(sakumaDatums);
-		setBeiguDatums(beiguDatums);
+	
+	public PasakumaBilde(String atsauceUzBildi, String nosaukums, String apraksts) {
+		setAtsauceUzBildi(atsauceUzBildi);
 		setNosaukums(nosaukums);
-		setVieta(vieta);
 		setApraksts(apraksts);
-		setKeyWords(keyWords);
 	}
 
 }
