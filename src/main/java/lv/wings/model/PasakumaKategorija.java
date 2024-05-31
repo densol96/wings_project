@@ -1,10 +1,13 @@
 package lv.wings.model;
 
+import java.util.Collection;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -32,6 +35,9 @@ public class PasakumaKategorija {
 	@Column(name = "nosaukums")
 	@Size(min = 1, max = 200, message = "Kategorijas nosaukums nedrīkst saturēt mazāk par 1 vai vairāk par 200 rakstzīmēm!")
 	private String nosaukums;
+	
+	@OneToMany(mappedBy = "pasakumaKategorija")
+	private Collection<Pasakums> kategorijas;
 	
 	public PasakumaKategorija(String nosaukums) {
 		setNosaukums(nosaukums);
