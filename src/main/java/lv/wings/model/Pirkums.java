@@ -44,7 +44,7 @@ public class Pirkums {
 	private Samaksas_veids samaksas_veids;
 	
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "Pircejs_ID")
 	private Pircejs pircejs;
 	
