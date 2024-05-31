@@ -40,5 +40,10 @@ public class Kategorijas {
 	@Size(min = 4, max = 150)
 	private String apraksts;
 	
+	public Kategorijas(String nosaukums, String apraksts) {
+		setNosaukums(nosaukums);
+		setApraksts(apraksts);
+	}
+	
 	
 }
