@@ -56,5 +56,14 @@ public class Pirkums {
 	
 	@Column(name = "Piegades_detalas")
 	private String piegades_detalas;
+	
+	
+	public Pirkums(Piegades_veids piegades_veids, Samaksas_veids samaksas_veids, Pircejs pircejs, LocalDateTime pasutijuma_datums, String piegades_detalas) {
+		setPiegades_veids(piegades_veids);
+		setSamaksas_veids(samaksas_veids);
+		setPircejs(pircejs);
+		setPasutijuma_datums(pasutijuma_datums);
+		setPiegades_detalas(piegades_detalas);
+	}
 
 }

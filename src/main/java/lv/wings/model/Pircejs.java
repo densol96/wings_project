@@ -89,8 +89,8 @@ public class Pircejs {
 		setEpasts(epasts);
 		setAdrese(adrese);
 		setPersonas_kods(personas_kods);
-		setBankas_SWIFT_kods(bankas_swift_kods);
 		setBankas_nosaukums(bankas_nosaukums);
+		setBankas_SWIFT_kods(bankas_swift_kods);
 		setBankas_kods(bankas_kods);
 	}
 	
