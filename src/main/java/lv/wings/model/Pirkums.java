@@ -34,12 +34,12 @@ public class Pirkums {
 	private int pirkums_ID;
 	
 
-	@OneToMany
+	@ManyToOne
 	@JoinColumn(name = "PV_ID")
 	private Piegades_veids piegades_veids;
 	
 	
-	@OneToMany
+	@ManyToOne
 	@JoinColumn(name = "SV_ID")
 	private Samaksas_veids samaksas_veids;
 	
