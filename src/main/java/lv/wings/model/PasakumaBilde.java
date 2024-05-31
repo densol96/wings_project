@@ -53,10 +53,11 @@ public class PasakumaBilde {
 	@JoinColumn(name = "idpa")
 	private Pasakums pasakums;
 	
-	public PasakumaBilde(String atsauceUzBildi, String nosaukums, String apraksts) {
+	public PasakumaBilde(String atsauceUzBildi, String nosaukums, String apraksts, Pasakums pasakums) {
 		setAtsauceUzBildi(atsauceUzBildi);
 		setNosaukums(nosaukums);
 		setApraksts(apraksts);
+		setPasakums(pasakums);
 	}
 
 }

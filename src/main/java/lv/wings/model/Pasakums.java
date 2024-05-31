@@ -10,6 +10,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -69,18 +71,28 @@ public class Pasakums {
 	
 	/////// Saites //////
 	@OneToMany(mappedBy = "pasakums")
-	private Collection<PasakumaBilde> PasakumaBilde;
+	private Collection<PasakumaBilde> pasakumaBilde;
+	
+	@ManyToOne
+	@JoinColumn(name = "idpako")
+	private PasakumaKomentars pasakumaKomentars;
+	
+	@ManyToOne
+	@JoinColumn(name = "idpaka")
+	private PasakumaKategorija pasakumaKategorija;
 	
 	
 
 	public Pasakums(LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String nosaukums, String vieta,
-			String apraksts, String keyWords) {
+			String apraksts, String keyWords, PasakumaKomentars pasakumaKomentars, PasakumaKategorija pasakumaKategorija) {
 		setSakumaDatums(sakumaDatums);
 		setBeiguDatums(beiguDatums);
 		setNosaukums(nosaukums);
 		setVieta(vieta);
 		setApraksts(apraksts);
 		setKeyWords(keyWords);
+		setPasakumaKomentars(pasakumaKomentars);
+		setPasakumaKategorija(pasakumaKategorija);
 	}
 
 }
