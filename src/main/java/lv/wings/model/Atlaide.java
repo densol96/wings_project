@@ -2,13 +2,18 @@ package lv.wings.model;
 
 import java.time.LocalDateTime;
 
+import org.springframework.cglib.core.Local;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,6 +37,8 @@ public class Atlaide {
 	
 	@NotNull
 	@Column(name = "atlaidesApmers")
+	@Min(value = 0, message = "Atlaide apmērs nevar būt negatīvs!")
+	@Max(value = 100, message = "Atlaides apmērs nevar būt vairāk par 100!")
 	private float atlaidesApmers;
 
 	@NotNull
@@ -44,7 +51,15 @@ public class Atlaide {
 
 	@NotNull
 	@Column(name = "apraksts")
+	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju!")
 	private String apraksts;
+	
+	public Atlaide(float atlaidesApmers, LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String apraksts) {
+		setAtlaidesApmers(atlaidesApmers);
+		setSakumaDatums(sakumaDatums);
+		setBeiguDatums(beiguDatums);
+		setApraksts(apraksts);
+	}
 	
 	
 }
