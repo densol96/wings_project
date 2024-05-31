@@ -1,10 +1,13 @@
 package lv.wings.model;
 
+import java.util.Collection;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -39,6 +42,11 @@ public class Kategorijas {
 	@NotNull
 	@Size(min = 4, max = 150)
 	private String apraksts;
+	
+	//Saite uz preci
+	@OneToMany(mappedBy = "kategorijas")
+	@ToString.Exclude
+	private Collection<Prece> preces;
 	
 	public Kategorijas(String nosaukums, String apraksts) {
 		setNosaukums(nosaukums);
