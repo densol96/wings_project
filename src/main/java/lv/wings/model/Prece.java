@@ -1,10 +1,15 @@
 package lv.wings.model;
 
+import java.util.Collection;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -30,8 +35,15 @@ public class Prece {
 	@Setter(value = AccessLevel.NONE)
 	private int prece_id;
 	
+	//saite no kategorijas
+	@ManyToOne
+	@JoinColumn(name="Kategorijas_id")
+	private Kategorijas kategorijas;
 	
-	//TODO te nāk kategorijas ID
+	//saite uz bildi
+//	@OneToMany(mappedBy = "kategorijas")
+//	@ToString.Exclude
+//	private Collection<Prece> preces;
 	
 	
 	@Column(name = "Nosaukums")
