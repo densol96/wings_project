@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -28,9 +30,11 @@ public class Preces_bilde {
 	@Setter(value = AccessLevel.NONE)
 	private int p_b_id;
 	
+	//saite uz preci
+	@ManyToOne
+	@JoinColumn(name="Prece_id")
+	private Prece prece;
 	
-	//TODO sis naks no preces tabulas
-	//private int prece_id;
 	
 	@Column(name = "Bilde")
 	private String bilde;
