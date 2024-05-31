@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,9 +38,9 @@ public class Atlaide {
 	
 	@NotNull
 	@Column(name = "atlaidesApmers")
-	@Min(value = 0, message = "Atlaide apmērs nevar būt negatīvs!")
-	@Max(value = 100, message = "Atlaides apmērs nevar būt vairāk par 100!")
-	private float atlaidesApmers;
+	@PositiveOrZero(message = "Atlaides apmērs nevar būt negatīvs!")
+	@Max(value = 100, message = "Atlaides apmērs nevar būt vairāk par 100%!")
+	private int atlaidesApmers;
 
 	@NotNull
 	@Column(name = "sakumaDatums")
@@ -51,10 +52,10 @@ public class Atlaide {
 
 	@NotNull
 	@Column(name = "apraksts")
-	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju!")
+	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
 	private String apraksts;
 	
-	public Atlaide(float atlaidesApmers, LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String apraksts) {
+	public Atlaide(int atlaidesApmers, LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String apraksts) {
 		setAtlaidesApmers(atlaidesApmers);
 		setSakumaDatums(sakumaDatums);
 		setBeiguDatums(beiguDatums);
