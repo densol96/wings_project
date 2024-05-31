@@ -45,6 +45,11 @@ public class Prece {
 	@ToString.Exclude
 	private Collection<Preces_bilde> preces_bildes;
 	
+	//saite uz pirkuma_elementu
+	@OneToMany(mappedBy = "prece")
+	@ToString.Exclude
+	private Collection<Pirkuma_elements> pirkuma_elementi;
+	
 	
 	@Column(name = "Nosaukums")
 	@NotNull
