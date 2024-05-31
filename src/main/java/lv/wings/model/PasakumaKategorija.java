@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class PasakumaKategorija {
 	
 	@NotNull
 	@Column(name = "nosaukums")
+	@Size(min = 1, max = 200, message = "Kategorijas nosaukums nedrīkst saturēt mazāk par 1 vai vairāk par 200 rakstzīmēm!")
 	private String nosaukums;
 	
 	public PasakumaKategorija(String nosaukums) {

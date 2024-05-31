@@ -43,16 +43,21 @@ public class Pasakums {
 
 	@NotNull
 	@Column(name = "nosaukums")
+	@Size(min = 5, max = 300, message = "Nosaukums nedrīkst saturēt mazāk par 5 vai vairāk par 300 rakstzīmēm!")
 	private String nosaukums;
 
 	@NotNull
 	@Column(name = "vieta")
+	@Size(min = 2, max = 200, message = "Vieta nedrīkst saturēt mazāk par 2 vai vairāk par 200 rakstzīmēm!")
 	private String vieta;
 
 	@NotNull
 	@Column(name = "apraksts")
+	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
 	private String apraksts;
 
+	
+	/// Need to validate this
 	@NotNull
 	@Column(name = "keyWords")
 	private String keyWords;

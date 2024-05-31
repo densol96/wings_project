@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +32,7 @@ public class PasakumaKomentars {
 	
 	@NotNull
 	@Column(name = "komentars")
+	@Size(min = 2, max = 250, message = "Pasākuma komentārs nedrīkst saturēt mazāk par 2 vai vairāk par 250 rakstzīmēm!")
 	private String komentars;
 	
 	@NotNull
