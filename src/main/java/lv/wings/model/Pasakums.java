@@ -1,6 +1,7 @@
 package lv.wings.model;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
@@ -9,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -18,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 
 //TODO: Need to check inputs or change something and create table relations if needed  NOT FINISHED!
 @Setter
@@ -61,6 +64,14 @@ public class Pasakums {
 	@NotNull
 	@Column(name = "keyWords")
 	private String keyWords;
+	
+	
+	
+	/////// Saites //////
+	@OneToMany(mappedBy = "pasakums")
+	private Collection<PasakumaBilde> PasakumaBilde;
+	
+	
 
 	public Pasakums(LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String nosaukums, String vieta,
 			String apraksts, String keyWords) {

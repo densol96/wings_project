@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -45,6 +47,11 @@ public class PasakumaBilde {
 	@Column(name = "apraksts")
 	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
 	private String apraksts;
+	
+	
+	@ManyToOne
+	@JoinColumn(name = "idpa")
+	private Pasakums pasakums;
 	
 	public PasakumaBilde(String atsauceUzBildi, String nosaukums, String apraksts) {
 		setAtsauceUzBildi(atsauceUzBildi);
