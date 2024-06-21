@@ -37,14 +37,22 @@ public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
 
 	@Override
 	public void deleteById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		
+		//atrast driver kuru gribam dzēst
+		Pirkuma_elements elementsForDeleting = retrieveById(id);
+				
+		//dzēšam no repo un DB
+		elementsRepo.delete(elementsForDeleting);
 	}
 
 	@Override
 	public void create(Pirkuma_elements pirkuma_elements) throws Exception {
-		// TODO Auto-generated method stub
+		Pirkuma_elements existedPirkuma_elements = elementsRepo.findByPreceNosaukums(pirkuma_elements.getPrece().getNosaukums());
 		
+		//tāda pirkuma elements jau eksistē
+		if(existedPirkuma_elements != null) throw new Exception("Pirkuma elements with name: " + pirkuma_elements.getPrece().getNosaukums() + " already exists in DB!");
+				
+		//tāds pirkuma elements vēl neeksistē
+		elementsRepo.save(pirkuma_elements);
 	}
 
 	@Override

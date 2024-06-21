@@ -6,4 +6,6 @@ import lv.wings.model.Kategorijas;
 
 public interface IKategorijas_Repo extends CrudRepository<Kategorijas, Integer>{
 
+	Kategorijas findByNosaukumsAndApraksts(String nosaukums, String apraksts);
+
 }
