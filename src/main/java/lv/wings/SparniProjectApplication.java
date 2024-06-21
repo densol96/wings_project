@@ -46,9 +46,11 @@ public class SparniProjectApplication {
 	}
 
 	@Bean
+
 	public CommandLineRunner sparniDB(IPircejs_Repo pircejs_repo, IPirkums_Repo pirkums_repo,
 			IPiegades_veids_Repo piegades_veids_repo, ISamaksas_veids_Repo samaksas_veids_repo, IPasakumsRepo pasakumsRepo, IPasakumaBildeRepo pasakumaBildeRepo,
-			IPasakumaKomentarsRepo pasakumaKomentarsRepo, IPasakumaKategorija pasakumaKategorijaRepo,IAtlaideRepo atlaideRepo,IKategorijas_Repo kategorijasRepo, IPirkuma_elements_repo pirkuma_elementsRepo, 
+			IPasakumaKomentarsRepo pasakumaKomentarsRepo, IPasakumaKategorija pasakumaKategorijaRepo,
+			IAtlaideRepo atlaideRepo,IKategorijas_Repo kategorijasRepo, IPirkuma_elements_repo pirkuma_elementsRepo, 
 			IPrece_Repo preceRepo, IPreces_bilde_Repo bildeRepo) {
 
 		
@@ -83,43 +85,10 @@ public class SparniProjectApplication {
             	pirkums_repo.save(pirkums2);
             	
 
-
             	Atlaide atlaide1 = new Atlaide(10, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "Melnās piekdienas atlaides!");
-
-            	//KATEGORIJAS
-            	Kategorijas kategorija1 = new Kategorijas("Cepure","Galvas segas");
-            	Kategorijas kategorija2 = new Kategorijas("Cimdi", "Adīti cimdi");
-            	Kategorijas kategorija3 = new Kategorijas("Zeķes", "Adītas zeķes");
-            	kategorijasRepo.save(kategorija1);
-            	kategorijasRepo.save(kategorija2);
-            	kategorijasRepo.save(kategorija3);
-            	
-            	//PRECES
-            	Prece prece1 = new Prece("Adīti ziemas dūraiņi","Krustūrīenā izšūti adīti ziemas cimdi",13.60f, 6,kategorija2);
-            	Prece prece2 = new Prece("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35", 12.20f,4,kategorija3);
-            	preceRepo.save(prece1);
-            	preceRepo.save(prece2);
-            	
-            	//PIRKUMA ELEMENTS
-            	Pirkuma_elements pirkuma_elements1 = new Pirkuma_elements(prece1,2);
-            	Pirkuma_elements pirkuma_elements2 = new Pirkuma_elements(prece2,1);
-            	pirkuma_elementsRepo.save(pirkuma_elements1);
-            	pirkuma_elementsRepo.save(pirkuma_elements2);
-            	
-            	//BILDES
-            	//public Preces_bilde(String bilde, String apraksts, Prece prece)
-            	Preces_bilde bilde1 = new Preces_bilde("bilde1.jpg","Zeķes1",prece1);
-            	Preces_bilde bilde2 = new Preces_bilde("bilde2.jpg","Zeķes2",prece1);
-            	Preces_bilde bilde3 = new Preces_bilde("bilde3.jpg","Cimdi1",prece2);
-            	bildeRepo.save(bilde1);
-            	bildeRepo.save(bilde2);
-            	bildeRepo.save(bilde3);
-            	
-
-            	Atlaide atlaide11 = new Atlaide(10, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "Melnās piekdienas atlaides!");
 				Atlaide atlaide2 = new Atlaide(20, LocalDateTime.now(), LocalDateTime.now().plusDays(5), "Melnās piekdienas atlaides!");
 				Atlaide atlaide3 = new Atlaide(50, LocalDateTime.now(), LocalDateTime.now().plusDays(6), "Melnās piekdienas atlaides!");
-				atlaideRepo.save(atlaide11);
+				atlaideRepo.save(atlaide1);
 				atlaideRepo.save(atlaide2);
 				atlaideRepo.save(atlaide3);
 				PasakumaKategorija pasakumaKategorija1 = new PasakumaKategorija("Sporta spēles");
@@ -143,32 +112,31 @@ public class SparniProjectApplication {
 				pasakumsRepo.save(pasakums1);
 				pasakumsRepo.save(pasakums2);
 				pasakumsRepo.save(pasakums3);
-				PasakumaBilde bilde111 = new PasakumaBilde("bilde1.jpg", "bilde1", "laba bilde", pasakums1);
-				PasakumaBilde bilde222 = new PasakumaBilde("bilde2.jpg", "bilde2", "slikta bilde", pasakums2);
+				PasakumaBilde bilde1 = new PasakumaBilde("bilde1.jpg", "bilde1", "laba bilde", pasakums1);
+				PasakumaBilde bilde2 = new PasakumaBilde("bilde2.jpg", "bilde2", "slikta bilde", pasakums2);
 				
-				pasakumaBildeRepo.save(bilde111);
-				pasakumaBildeRepo.save(bilde222);
-
+				pasakumaBildeRepo.save(bilde1);
+				pasakumaBildeRepo.save(bilde2);
 
             	//KATEGORIJAS
-            	Kategorijas kategorija11 = new Kategorijas("Cepure","Galvas segas");
-            	Kategorijas kategorija22 = new Kategorijas("Cimdi", "Adīti cimdi");
-            	Kategorijas kategorija33 = new Kategorijas("Zeķes", "Adītas zeķes");
-            	kategorijasRepo.save(kategorija11);
-            	kategorijasRepo.save(kategorija22);
-            	kategorijasRepo.save(kategorija33);
+            	Kategorijas kategorija1 = new Kategorijas("Cepure","Galvas segas");
+            	Kategorijas kategorija2 = new Kategorijas("Cimdi", "Adīti cimdi");
+            	Kategorijas kategorija3 = new Kategorijas("Zeķes", "Adītas zeķes");
+            	kategorijasRepo.save(kategorija1);
+            	kategorijasRepo.save(kategorija2);
+            	kategorijasRepo.save(kategorija3);
             	
             	//PRECES
-            	Prece prece11 = new Prece("Adīti ziemas dūraiņi","Krustūrīenā izšūti adīti ziemas cimdi",13.60f, 6,kategorija2);
-            	Prece prece22 = new Prece("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35", 12.20f,4,kategorija3);
-            	preceRepo.save(prece11);
-            	preceRepo.save(prece22);
+            	Prece prece1 = new Prece("Adīti ziemas dūraiņi","Krustūrīenā izšūti adīti ziemas cimdi",13.60f, 6,kategorija2);
+            	Prece prece2 = new Prece("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35", 12.20f,4,kategorija3);
+            	preceRepo.save(prece1);
+            	preceRepo.save(prece2);
             	
             	//PIRKUMA ELEMENTS
-            	Pirkuma_elements pirkuma_elements11 = new Pirkuma_elements(prece1,2);
-            	Pirkuma_elements pirkuma_elements22 = new Pirkuma_elements(prece2,1);
-            	pirkuma_elementsRepo.save(pirkuma_elements11);
-            	pirkuma_elementsRepo.save(pirkuma_elements22);
+            	Pirkuma_elements pirkuma_elements1 = new Pirkuma_elements(prece1,2);
+            	Pirkuma_elements pirkuma_elements2 = new Pirkuma_elements(prece2,1);
+            	pirkuma_elementsRepo.save(pirkuma_elements1);
+            	pirkuma_elementsRepo.save(pirkuma_elements2);
             	
             	//BILDES
             	//public Preces_bilde(String bilde, String apraksts, Prece prece)
@@ -179,7 +147,6 @@ public class SparniProjectApplication {
             	bildeRepo.save(bilde22);
             	bildeRepo.save(bilde33);
             	
-
 
             }
 		};
