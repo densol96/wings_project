@@ -8,13 +8,21 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 
+import lv.wings.model.Kategorijas;
 import lv.wings.model.Piegades_veids;
 import lv.wings.model.Pircejs;
+import lv.wings.model.Pirkuma_elements;
 import lv.wings.model.Pirkums;
+import lv.wings.model.Prece;
+import lv.wings.model.Preces_bilde;
 import lv.wings.model.Samaksas_veids;
+import lv.wings.repo.IKategorijas_Repo;
 import lv.wings.repo.IPiegades_veids_Repo;
 import lv.wings.repo.IPircejs_Repo;
+import lv.wings.repo.IPirkuma_elements_repo;
 import lv.wings.repo.IPirkums_Repo;
+import lv.wings.repo.IPrece_Repo;
+import lv.wings.repo.IPreces_bilde_Repo;
 import lv.wings.repo.ISamaksas_veids_Repo;
 
 
@@ -42,7 +50,9 @@ public class SparniProjectApplication {
 	public CommandLineRunner sparniDB(IPircejs_Repo pircejs_repo, IPirkums_Repo pirkums_repo,
 			IPiegades_veids_Repo piegades_veids_repo, ISamaksas_veids_Repo samaksas_veids_repo, IPasakumsRepo pasakumsRepo, IPasakumaBildeRepo pasakumaBildeRepo,
 			IPasakumaKomentarsRepo pasakumaKomentarsRepo, IPasakumaKategorija pasakumaKategorijaRepo,
-			IAtlaideRepo atlaideRepo) {
+			IAtlaideRepo atlaideRepo,IKategorijas_Repo kategorijasRepo, IPirkuma_elements_repo pirkuma_elementsRepo, 
+			IPrece_Repo preceRepo, IPreces_bilde_Repo bildeRepo) {
+
 		
 		
 		return new CommandLineRunner() {
@@ -74,6 +84,7 @@ public class SparniProjectApplication {
             	pirkums_repo.save(pirkums1);
             	pirkums_repo.save(pirkums2);
             	
+
             	Atlaide atlaide1 = new Atlaide(10, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "Melnās piekdienas atlaides!");
 				Atlaide atlaide2 = new Atlaide(20, LocalDateTime.now(), LocalDateTime.now().plusDays(5), "Melnās piekdienas atlaides!");
 				Atlaide atlaide3 = new Atlaide(50, LocalDateTime.now(), LocalDateTime.now().plusDays(6), "Melnās piekdienas atlaides!");
@@ -106,6 +117,37 @@ public class SparniProjectApplication {
 				
 				pasakumaBildeRepo.save(bilde1);
 				pasakumaBildeRepo.save(bilde2);
+
+            	//KATEGORIJAS
+            	Kategorijas kategorija1 = new Kategorijas("Cepure","Galvas segas");
+            	Kategorijas kategorija2 = new Kategorijas("Cimdi", "Adīti cimdi");
+            	Kategorijas kategorija3 = new Kategorijas("Zeķes", "Adītas zeķes");
+            	kategorijasRepo.save(kategorija1);
+            	kategorijasRepo.save(kategorija2);
+            	kategorijasRepo.save(kategorija3);
+            	
+            	//PRECES
+            	Prece prece1 = new Prece("Adīti ziemas dūraiņi","Krustūrīenā izšūti adīti ziemas cimdi",13.60f, 6,kategorija2);
+            	Prece prece2 = new Prece("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35", 12.20f,4,kategorija3);
+            	preceRepo.save(prece1);
+            	preceRepo.save(prece2);
+            	
+            	//PIRKUMA ELEMENTS
+            	Pirkuma_elements pirkuma_elements1 = new Pirkuma_elements(prece1,2);
+            	Pirkuma_elements pirkuma_elements2 = new Pirkuma_elements(prece2,1);
+            	pirkuma_elementsRepo.save(pirkuma_elements1);
+            	pirkuma_elementsRepo.save(pirkuma_elements2);
+            	
+            	//BILDES
+            	//public Preces_bilde(String bilde, String apraksts, Prece prece)
+            	Preces_bilde bilde11 = new Preces_bilde("bilde1.jpg","Zeķes1",prece1);
+            	Preces_bilde bilde22 = new Preces_bilde("bilde2.jpg","Zeķes2",prece1);
+            	Preces_bilde bilde33 = new Preces_bilde("bilde3.jpg","Cimdi1",prece2);
+            	bildeRepo.save(bilde11);
+            	bildeRepo.save(bilde22);
+            	bildeRepo.save(bilde33);
+            	
+
             }
 		};
 		
