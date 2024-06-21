@@ -26,8 +26,13 @@ public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
 
 	@Override
 	public Pirkuma_elements retrieveById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if(id < 0) throw new Exception("Id should be positive");
+		
+		if(elementsRepo.existsById(id)) {
+			return elementsRepo.findById(id).get();
+		}else {
+			throw new Exception("Pikruma elements with this id ("+ id + ") is not in system");
+		}
 	}
 
 	@Override

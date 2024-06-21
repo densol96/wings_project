@@ -26,8 +26,13 @@ public class KategorijasServiceImpl implements IKategorijasService{
 
 	@Override
 	public Kategorijas retrieveById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if(id < 0) throw new Exception("Id should be positive");
+		
+		if(kategorijasRepo.existsById(id)) {
+			return kategorijasRepo.findById(id).get();
+		}else {
+			throw new Exception("Kategorija with this id ("+ id + ") is not in system");
+		}
 	}
 
 	@Override

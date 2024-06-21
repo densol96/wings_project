@@ -26,8 +26,13 @@ public class Preces_bildeServiceImpl implements IPreces_bildeService{
 
 	@Override
 	public Preces_bilde retrieveById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if(id < 0) throw new Exception("Id should be positive");
+		
+		if(bildeRepo.existsById(id)) {
+			return bildeRepo.findById(id).get();
+		}else {
+			throw new Exception("Preces bilde with this id ("+ id + ") is not in system");
+		}
 	}
 
 	@Override
