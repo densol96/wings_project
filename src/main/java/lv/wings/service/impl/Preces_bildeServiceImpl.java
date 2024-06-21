@@ -37,14 +37,22 @@ public class Preces_bildeServiceImpl implements IPreces_bildeService{
 
 	@Override
 	public void deleteById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		
+		//atrast preces bilde kuru gribam dzēst
+		Preces_bilde driverForDeleting = retrieveById(id);
+				
+		//dzēšam no repo un DB
+		bildeRepo.delete(driverForDeleting);
 	}
 
 	@Override
 	public void create(Preces_bilde bilde) throws Exception {
-		// TODO Auto-generated method stub
+		Preces_bilde existedPreces_bilde = bildeRepo.findByBilde(bilde.getBilde());
 		
+		//tāda bilde jau eksistē
+		if(existedPreces_bilde != null) throw new Exception("Bilde with name: " + bilde.getBilde() + " already exists in DB!");
+				
+		//tāds driver vēl neeksistē
+		bildeRepo.save(bilde);
 	}
 
 	@Override

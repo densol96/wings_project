@@ -38,14 +38,22 @@ public class PreceServiceImpl implements IPreceService{
 
 	@Override
 	public void deleteById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		
+		//atrast preci kuru gribam dzēst
+		Prece preceForDeleting = retrieveById(id);
+				
+		//dzēšam no repo un DB
+		preceRepo.delete(preceForDeleting);
 	}
 
 	@Override
 	public void create(Prece prece) throws Exception {
-		// TODO Auto-generated method stub
+		Prece existedPrece = preceRepo.findByNosaukums(prece.getNosaukums());
 		
+		//tāds pirkums jau eksistē
+		if(existedPrece != null) throw new Exception("Pirkums with name: " + prece.getNosaukums() + " already exists in DB!");
+				
+		//tāds pirkuma elements vēl neeksistē
+		preceRepo.save(prece);
 	}
 
 	@Override

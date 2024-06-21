@@ -6,4 +6,6 @@ import lv.wings.model.Preces_bilde;
 
 public interface IPreces_bilde_Repo extends CrudRepository<Preces_bilde,Integer> {
 
+	Preces_bilde findByBilde(String bilde);
+
 }

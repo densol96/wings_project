@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import lv.wings.model.Kategorijas;
 import lv.wings.repo.IKategorijas_Repo;
 import lv.wings.service.IKategorijasService;
@@ -37,13 +38,22 @@ public class KategorijasServiceImpl implements IKategorijasService{
 
 	@Override
 	public void deleteById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		
+		//atrast kategoriju kuru gribam dzēst
+		Kategorijas kategorijaForDeleting = retrieveById(id);
+				
+		//dzēšam no repo un DB
+		kategorijasRepo.delete(kategorijaForDeleting);
 	}
 
 	@Override
 	public void create(Kategorijas kategorija) throws Exception {
-		// TODO Auto-generated method stub
+		Kategorijas existedKategorija = kategorijasRepo.findByNosaukumsAndApraksts(kategorija.getNosaukums(), kategorija.getApraksts());
+				
+		//tāda kategorija jau eksistē
+		if(existedKategorija != null) throw new Exception("Kategorija with name: " + kategorija.getNosaukums() + " already exists in DB!");
+				
+		//tāds driver vēl neeksistē
+		kategorijasRepo.save(kategorija);
 		
 	}
 
