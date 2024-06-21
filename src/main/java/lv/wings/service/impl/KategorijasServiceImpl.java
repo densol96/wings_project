@@ -59,7 +59,16 @@ public class KategorijasServiceImpl implements IKategorijasService{
 
 	@Override
 	public void update(int id, Kategorijas kategorija) throws Exception {
-		// TODO Auto-generated method stub
+		//atrodu
+		Kategorijas kategorijaForUpdating = retrieveById(id);
+		
+		//izmainu
+		kategorijaForUpdating.setNosaukums(kategorija.getNosaukums());
+		kategorijaForUpdating.setApraksts(kategorija.getApraksts());
+		kategorijaForUpdating.setPreces(kategorija.getPreces());
+		
+		//saglabāju repo un DB
+		kategorijasRepo.save(kategorijaForUpdating);
 		
 	}
 
