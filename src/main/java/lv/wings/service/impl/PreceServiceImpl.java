@@ -58,8 +58,18 @@ public class PreceServiceImpl implements IPreceService{
 
 	@Override
 	public void update(int id, Prece prece) throws Exception {
-		// TODO Auto-generated method stub
+		//atrodu
+		Prece preceForUpdating = retrieveById(id);
 		
+		//izmainu
+		preceForUpdating.setApraksts(prece.getApraksts());
+		preceForUpdating.setCena(prece.getCena());
+		preceForUpdating.setDaudzums(prece.getDaudzums());
+		preceForUpdating.setKategorijas(prece.getKategorijas());
+		preceForUpdating.setNosaukums(prece.getNosaukums());
+		
+		//saglabāju repo un DB
+		preceRepo.save(preceForUpdating);
 	}
 	
 	

@@ -57,7 +57,15 @@ public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
 
 	@Override
 	public void update(int id, Pirkuma_elements pirkuma_elements) throws Exception {
-		// TODO Auto-generated method stub
+		//atrodu
+		Pirkuma_elements elementsForUpdating = retrieveById(id);
+		
+		//izmainu
+		elementsForUpdating.setPrece(pirkuma_elements.getPrece());
+		elementsForUpdating.setDaudzums(pirkuma_elements.getDaudzums());
+		
+		//saglabāju repo un DB
+		elementsRepo.save(elementsForUpdating);
 		
 	}
 

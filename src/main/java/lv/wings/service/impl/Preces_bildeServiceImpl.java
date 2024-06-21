@@ -57,7 +57,16 @@ public class Preces_bildeServiceImpl implements IPreces_bildeService{
 
 	@Override
 	public void update(int id, Preces_bilde bilde) throws Exception {
-		// TODO Auto-generated method stub
+		//atrodu
+		Preces_bilde bildeForUpdating = retrieveById(id);
+		
+		//izmainu
+		bildeForUpdating.setApraksts(bilde.getApraksts());
+		bildeForUpdating.setBilde(bilde.getBilde());
+		bildeForUpdating.setPrece(bilde.getPrece());
+		
+		//saglabāju repo un DB
+		bildeRepo.save(bildeForUpdating);
 		
 	}
 
