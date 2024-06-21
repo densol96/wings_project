@@ -71,10 +71,12 @@ public class Prece {
 	@Min(0)
 	private int daudzums;
 	
-	public Prece(String apraksts, float cena, int daudzums) {
+	public Prece(String nosaukums,String apraksts, float cena, int daudzums, Kategorijas kategorija) {
+		setNosaukums(nosaukums);
 		setApraksts(apraksts);
 		setCena(cena);
 		setDaudzums(daudzums);
+		setKategorijas(kategorija);
 	}
 	
 
