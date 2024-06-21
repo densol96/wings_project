@@ -27,8 +27,13 @@ public class PreceServiceImpl implements IPreceService{
 
 	@Override
 	public Prece retrieveById(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		if(id < 0) throw new Exception("Id should be positive");
+		
+		if(preceRepo.existsById(id)) {
+			return preceRepo.findById(id).get();
+		}else {
+			throw new Exception("Prece with this id ("+ id + ") is not in system");
+		}
 	}
 
 	@Override
