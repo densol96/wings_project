@@ -44,9 +44,10 @@ public class Preces_bilde {
 	@Size(min = 4, max = 150)
 	private String apraksts;
 	
-	public Preces_bilde(String bilde, String apraksts) {
+	public Preces_bilde(String bilde, String apraksts, Prece prece) {
 		setBilde(bilde);
 		setApraksts(apraksts);
+		setPrece(prece);
 	}
 	
 }
