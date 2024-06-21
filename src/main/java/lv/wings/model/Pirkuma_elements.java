@@ -39,4 +39,9 @@ public class Pirkuma_elements {
 	@Column(name = "Daudzums")
 	@Min(1)
 	private int daudzums;
+	
+	public Pirkuma_elements(Prece prece, int daudzums) {
+		setPrece(prece);
+		setDaudzums(daudzums);
+	}
 }
