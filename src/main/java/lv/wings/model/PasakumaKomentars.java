@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -31,24 +33,23 @@ public class PasakumaKomentars {
 	@Setter(value = AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int idpako;
-	
+
 	@NotNull
 	@Column(name = "komentars")
 	@Size(min = 2, max = 250, message = "Pasākuma komentārs nedrīkst saturēt mazāk par 2 vai vairāk par 250 rakstzīmēm!")
 	private String komentars;
-	
+
 	@NotNull
 	@Column(name = "datums")
 	private LocalDateTime datums;
-	
-	
-	@OneToMany(mappedBy = "pasakumaKomentars")
-	private Collection<Pasakums> pasakumi;
-	
-	
-	
-	public PasakumaKomentars(String komentars, LocalDateTime datums) {
+
+	@ManyToOne
+	@JoinColumn(name = "idpa")
+	private Pasakums pasakums;
+
+	public PasakumaKomentars(String komentars, LocalDateTime datums, Pasakums pasakums) {
 		setKomentars(komentars);
 		setDatums(datums);
+		setPasakums(pasakums);
 	}
 }
