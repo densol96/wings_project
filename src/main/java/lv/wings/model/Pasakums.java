@@ -26,7 +26,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 //TODO: Need to check inputs or change something and create table relations if needed  NOT FINISHED!
 @Setter
 @Getter
@@ -64,39 +63,30 @@ public class Pasakums {
 	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
 	private String apraksts;
 
-	
 	/// Need to validate this
 	@NotNull
 	@Column(name = "keyWords")
 	private String keyWords;
-	
-	
-	
+
 	/////// Saites //////
 	@OneToMany(mappedBy = "pasakums", cascade = CascadeType.ALL)
 	private Collection<PasakumaBilde> pasakumaBilde;
-	
-	
-	@ManyToOne
-	@JoinColumn(name = "idpako")
-	private PasakumaKomentars pasakumaKomentars;
-	
-	
+
+	@OneToMany(mappedBy = "pasakums", cascade = CascadeType.ALL)
+	private Collection<PasakumaKomentars> pasakumaKomentars;
+
 	@ManyToOne
 	@JoinColumn(name = "idpaka")
 	private PasakumaKategorija pasakumaKategorija;
-	
-	
 
 	public Pasakums(LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String nosaukums, String vieta,
-			String apraksts, String keyWords, PasakumaKomentars pasakumaKomentars, PasakumaKategorija pasakumaKategorija) {
+			String apraksts, String keyWords, PasakumaKategorija pasakumaKategorija) {
 		setSakumaDatums(sakumaDatums);
 		setBeiguDatums(beiguDatums);
 		setNosaukums(nosaukums);
 		setVieta(vieta);
 		setApraksts(apraksts);
 		setKeyWords(keyWords);
-		setPasakumaKomentars(pasakumaKomentars);
 		setPasakumaKategorija(pasakumaKategorija);
 	}
 
