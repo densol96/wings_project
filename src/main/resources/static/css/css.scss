@@ -209,6 +209,27 @@ body {
     }
 }
 
+//// PASAKUMS SINGLE PAGE
+.main-event-container {
+    h1,
+    h2,
+    h3,
+    p {
+        text-align: center;
+    }
+
+    .images-container {
+        padding: 50px;
+        img {
+            display: flex;
+            max-width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 0 2px $dark-grey;
+            flex-wrap: wrap;
+        }
+    }
+}
+
 @media only screen and (max-width: 1000px) {
     img.left-priev,
     img.right-priev {

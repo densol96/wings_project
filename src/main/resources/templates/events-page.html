@@ -54,6 +54,10 @@
                     <p th:text="'No '+${{event.sakumaDatums}}"></p>
                     <p th:text="'Līdz '+${{event.beiguDatums}}"></p>
                     <p th:text="${event.apraksts}"></p>
+                    <form th:action="'jaunumi/delete/'+${event.idpa}" th:method="post">
+                        <button type="submit">Dzēst</button>
+                    </form>
+                    <a class="btn-link" th:href="'/jaunumi/'+${event.idpa}">Apskatīt</a>
                 </div>
             </div>
         </div>

@@ -3,8 +3,11 @@ package lv.wings.model;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.hibernate.annotations.Cascade;
+
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -70,12 +73,14 @@ public class Pasakums {
 	
 	
 	/////// Saites //////
-	@OneToMany(mappedBy = "pasakums")
+	@OneToMany(mappedBy = "pasakums", cascade = CascadeType.ALL)
 	private Collection<PasakumaBilde> pasakumaBilde;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "idpako")
 	private PasakumaKomentars pasakumaKomentars;
+	
 	
 	@ManyToOne
 	@JoinColumn(name = "idpaka")

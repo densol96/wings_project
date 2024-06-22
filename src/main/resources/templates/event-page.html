@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title th:text="${event.nosaukums}"></title>
+        <link rel="stylesheet" href="/css/css.css" />
+        <link rel="icon" type="image/x-icon" href="/biedribas_logo.ico" />
+    </head>
+    <body>
+        <nav class="nav-bar">
+            <img class="left-priev" alt="Latvijas prievites" src="/images/prievites_nobackground.png" />
+
+            <div class="nav-info-container">
+                <img class="logo" src="/images/biedribas_logo.png" alt="Biedribas logo" />
+                <ul class="nav-options-container">
+                    <li><a href="/">Sākums</a></li>
+                    <li style="font-weight: bold"><a href="#">Jaunumi</a></li>
+                    <li><a href="/veikals">Veikals</a></li>
+                    <li><a href="/par-biedribu">Par biedrību</a></li>
+                    <li><a href="/kontakti">Kontakti</a></li>
+                </ul>
+                <form class="nav-form" method="get">
+                    <input class="nav-search" placeholder="Meklēt..." type="text" />
+                    <button type="submit">
+                        <img src="/images/search_icon.png" alt="Meklēt" />
+                    </button>
+                </form>
+            </div>
+            <img class="right-priev" alt="Latvijas prievites" src="/images/prievites_nobackground.png" />
+        </nav>
+
+        <div class="main-event-container">
+            <h1 th:text="${event.nosaukums}"></h1>
+            <h2 th:text="'Sakuma datums: '+${{event.sakumaDatums}}"></h2>
+            <h2 th:text="'Beigu datums: '+${{event.beiguDatums}}"></h2>
+            <h3 th:text="'Vieta: '+${event.vieta}"></h3>
+            <p th:text="${event.apraksts}"></p>
+
+            <div class="images-container">
+                <h1>Attēli</h1>
+                <img
+                    th:each="bilde: ${event.pasakumaBilde}"
+                    th:src="'/images/pasakumi/'+${bilde.atsauceUzBildi}"
+                    alt="${bilde.nosaukums}"
+                />
+            </div>
+        </div>
+    </body>
+</html>

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lv.wings.model.PasakumaBilde;
@@ -25,12 +26,36 @@ public class EventsController {
 	public String eventsPageDefault(Model model) {
 
 		try {
-			// ArrayList<Pasakums> allPasakumi = pasakumiRepo.selectAllPasakumi();
 			ArrayList<Pasakums> allPasakumi = pasakumsRepo.selectAllPasakumi();
-
 			model.addAttribute("events", allPasakumi);
-
 			return "events-page";
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "error-page";
+		}
+
+	}
+	
+	@GetMapping("/{id}")
+	public String getEventById(@PathVariable("id") int id, Model model) {
+
+		try {
+			Pasakums event = pasakumsRepo.selectPaskumsById(id);
+			model.addAttribute("event", event);
+			return "event-page";
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "error-page";
+		}
+
+	}
+	
+	@PostMapping("/delete/{id}")
+	public String postEventRemoveById(@PathVariable("id") int id, Model model) {
+
+		try {
+			pasakumsRepo.deletePasakumiById(id);
+			return "redirect:/jaunumi";
 		} catch (Exception e) {
 			model.addAttribute("message", e.getMessage());
 			return "error-page";
