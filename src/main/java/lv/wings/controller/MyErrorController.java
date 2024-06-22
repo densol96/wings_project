@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MyErrorController implements ErrorController {
 	@GetMapping
 	public String handleError(Model model) {
-		model.addAttribute("message", "Page not found!");
+		model.addAttribute("message", "Lapa nav atrasta!");
 		return "error-page";
 	}
 }

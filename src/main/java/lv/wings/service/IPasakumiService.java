@@ -6,13 +6,16 @@ import lv.wings.model.PasakumaBilde;
 import lv.wings.model.Pasakums;
 
 public interface IPasakumiService {
-
-	//ArrayList<Pasakums> selectAllPasakumi() throws Exception;
+	
+	Pasakums selectPaskumsById(int id) throws Exception;
 
 	ArrayList<Pasakums> selectAllPasakumi() throws Exception;
 	
 	ArrayList<Pasakums> selectAllPasakumiDescOrder() throws Exception;
 	
 	ArrayList<Pasakums> selectAllPasakumiAscOrder() throws Exception;
+	
+	void deletePasakumiById(int id) throws Exception;
+
 	
 }
