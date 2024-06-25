@@ -66,7 +66,7 @@ public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
 		Pirkuma_elements elementsForUpdating = retrieveById(id);
 		
 		//izmainu
-		elementsForUpdating.setPrece(pirkuma_elements.getPrece());
+		//elementsForUpdating.setPrece(pirkuma_elements.getPrece());
 		elementsForUpdating.setDaudzums(pirkuma_elements.getDaudzums());
 		
 		//saglabāju repo un DB
