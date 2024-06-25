@@ -17,7 +17,7 @@ public interface IPirkuma_elementsService {
 	public abstract void deleteById(int id) throws Exception;
 	
 	//insertNewPirkuma_elements- pievieno jaunu pirkuma_elementu sistēmā
-	public abstract void create(Pirkuma_elements pirkuma_elements) throws Exception;
+	public abstract void create(Pirkuma_elements pirkuma_elements, int precesID) throws Exception;
 	
 	//updatePirkuma_elementsById- rediģē esošo pirkuma_elementu
 	public abstract void update(int id, Pirkuma_elements pirkuma_elements) throws Exception;

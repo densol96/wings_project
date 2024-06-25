@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	<p>Lūdzu ievadiet pirkuma elementu!</p>
+
+	<form th:action = "@{/pirkuma/elements/add/__${precesid}__}" method = "post" th:object="${newElements}">
+		
+		<table>
+			<tr>
+				<td>Daudzums</td>
+				<td><input type="text" th:field="*{daudzums}"/></td>
+				<td th:if="${#fields.hasErrors('daudzums')}" th:errors="*{daudzums}"></td>
+			</tr>						
+		</table>
+		
+		<button type="submit">Save</button>
+		
+		
+	</form>
+
+</body>
+</html>
