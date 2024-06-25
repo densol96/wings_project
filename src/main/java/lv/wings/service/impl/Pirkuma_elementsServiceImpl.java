@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lv.wings.model.Pirkuma_elements;
 import lv.wings.repo.IPirkuma_elements_repo;
+import lv.wings.repo.IPrece_Repo;
 import lv.wings.service.IPirkuma_elementsService;
 
 @Service
@@ -14,6 +15,9 @@ public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
 
 	@Autowired
 	private IPirkuma_elements_repo elementsRepo;
+	
+	@Autowired
+	private IPrece_Repo preceRepo;
 	
 	@Override
 	public ArrayList<Pirkuma_elements> retrieveAll() throws Exception {
@@ -45,14 +49,15 @@ public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
 	}
 
 	@Override
-	public void create(Pirkuma_elements pirkuma_elements) throws Exception {
-		Pirkuma_elements existedPirkuma_elements = elementsRepo.findByPreceNosaukums(pirkuma_elements.getPrece().getNosaukums());
+	public void create(Pirkuma_elements elements, int precesID) throws Exception {
+		//atrodu preci pēc id
+		if(preceRepo.findById(precesID)==null) throw new 
+		Exception("Prece ar sekojošu id: " + precesID + " neeksistē!");
 		
-		//tāda pirkuma elements jau eksistē
-		if(existedPirkuma_elements != null) throw new Exception("Pirkuma elements with name: " + pirkuma_elements.getPrece().getNosaukums() + " already exists in DB!");
-				
-		//tāds pirkuma elements vēl neeksistē
-		elementsRepo.save(pirkuma_elements);
+		//izveidoju noklusējuma pirkuma elementu
+		Pirkuma_elements newElements = elements;
+		newElements.setPrece(preceRepo.findById(precesID).get());
+		elementsRepo.save(newElements);
 	}
 
 	@Override
