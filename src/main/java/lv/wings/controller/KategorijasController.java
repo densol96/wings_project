@@ -85,5 +85,37 @@ public class KategorijasController {
 
 	}
 	
+	@GetMapping("/update/{id}") //localhost:8080/kategorijas/update/{id}
+	public String getKategorijasUpdateById(@PathVariable("id") int id, Model model) {
+		try {
+			Kategorijas kategorijaForUpdating = kategorijasService.retrieveById(id);
+			model.addAttribute("kategorija",kategorijaForUpdating);
+			model.addAttribute("id", id);
+			return "kategorija-update-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+		
+	}
+	
+	@PostMapping("/update/{id}")
+	public String postKategorijasUpdateById(@PathVariable("id") int id, 
+			@Valid Kategorijas kategorija, BindingResult result, Model model) {
+		if(result.hasErrors()) {
+			return "kategorija-update-page";
+		}else {
+			try {
+				kategorijasService.update(id, kategorija);
+				return "redirect:/kategorijas/show/all/"+ id;
+			} catch (Exception e) {
+				model.addAttribute("mydata", e.getMessage());
+				return "error-page";
+			}
+		}
+	}
+	
+	
+	
 
 }

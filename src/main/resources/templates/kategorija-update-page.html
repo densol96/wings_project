@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	<p>Lūdzu aizpildi laukus!</p>
+
+	<form th:action = "@{/kategorijas/update/__${id}__}" method = "post" th:object="${kategorija}">
+		
+		<table>
+			<tr>
+				<td>Nosaukums</td>
+				<td><input type="text" th:field="*{nosaukums}"/></td>
+				<td th:if="${#fields.hasErrors('nosaukums')}" th:errors="*{nosaukums}"></td>
+			</tr>
+			<tr>
+				<td>Apraksts</td>
+				<td><input type="text" th:field="*{apraksts}"/></td>
+				<td th:if="${#fields.hasErrors('apraksts')}" th:errors="*{apraksts}"></td>
+			</tr>				
+		</table>
+		
+		<button type="update">Atjaunot</button>
+		
+		
+	</form>
+
+</body>
+</html>
