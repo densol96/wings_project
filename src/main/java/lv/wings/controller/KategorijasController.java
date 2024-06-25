@@ -23,7 +23,7 @@ public class KategorijasController {
 		try {
 			ArrayList<Kategorijas> allKategorijas = kategorijasService.retrieveAll();
 			model.addAttribute("mydata", allKategorijas); //padod izfiltrētās kategorijas uz katergorijas-all-page.html
-			model.addAttribute("msg","All kategorijas");
+			model.addAttribute("msg","Visas kategorijas");
 			return "kategorijas-page";
 		}catch(Exception e) {
 			model.addAttribute("mydata", e.getMessage());//padod kludas zinu uz error-page.html lapu
