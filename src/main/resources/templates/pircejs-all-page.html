@@ -1,0 +1,34 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <table border="1">
+        <tr>
+            <td><b>Pircejs ID</b></td>
+            <td><b>Vards</b></td>
+            <td><b>Uzvards</b></td>
+            <td><b>Epasts</b></td>
+            <td><b>Adrese</b></td>
+            <td><b>Personas kods</b></td>
+            <td><b>Bankas nosaukums</b></td>
+            <td><b>Bankas SWIFT kods</b></td>
+            <td><b>Bankas kods</b></td>
+        </tr>
+
+        <tr th:each="temp : ${mydata}">
+            <td th:text="${temp.getId_pirc()}"></td>
+            <td th:text="${temp.getVards()}"></td>
+            <td th:text="${temp.getUzvards()}"></td>
+            <td th:text="${temp.getEpasts()}"></td>
+            <td th:text="${temp.getAdrese()}"></td>
+            <td th:text="${temp.getPersonas_kods()}"></td>
+            <td th:text="${temp.getBankas_nosaukums()}"></td>
+            <td th:text="${temp.getBankas_SWIFT_kods()}"></td>
+            <td th:text="${temp.getBankas_kods()}"></td>
+        </tr>
+    </table>
+
+
+</body>
+
+</html>
