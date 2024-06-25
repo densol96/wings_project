@@ -1,10 +1,34 @@
 package lv.wings.controller;
 
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import lv.wings.model.Prece;
+import lv.wings.service.IPreceService;
 
 @Controller
 @RequestMapping("/prece")
 public class PreceController {
+	
+	@Autowired
+	private IPreceService preceService;
+	
+	@GetMapping("/show/all")//localhost:8080/prece/show/all
+	public String getAllPreces(Model model) {
+		try {
+			ArrayList<Prece> allPreces = preceService.retrieveAll();
+			model.addAttribute("mydata",allPreces);
+			model.addAttribute("msg", "Visas preces");
+			return "preces-all-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+	}
 
 }
