@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lv.wings.model.Prece;
@@ -27,6 +28,19 @@ public class PreceController {
 			return "preces-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+	}
+	
+	@GetMapping("/show/all/{id}")//localhost:8080/prece/show/all/{id}
+	public String getPrecesById(@PathVariable("id") int id, Model model) {
+		try {
+			Prece selectedPrece = preceService.retrieveById(id);
+			model.addAttribute("mydata",selectedPrece);
+			model.addAttribute("msg", "Preces izvēlēta pēc id");
+			return "preces-all-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata",e.getMessage());
 			return "error-page";
 		}
 	}
