@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.validation.Valid;
 import lv.wings.model.Preces_bilde;
 import lv.wings.service.IPreces_bildeService;
 
@@ -59,6 +62,38 @@ public class Preces_bildeController {
 			return "error-page";
 		}
 		
+	}
+	
+	@GetMapping("/add/{precesid}") //localhost:8080/preces/bilde/add/{id}
+	public String getPrecesBildeInsert(@PathVariable("precesid") int precesID ,Model model) {
+		try {
+			model.addAttribute("newBilde", new Preces_bilde());
+			model.addAttribute("precesid", precesID);
+			return "preces-bilde-add-page";
+		}catch (Exception e) {
+            model.addAttribute("mydata", e.getMessage());
+            return "error-page"; 
+        }
+		
+	} 
+	
+	@PostMapping("/add/{precesid}")
+	public String postPrecesBildeInsert(@PathVariable("precesid") int precesID,
+			@Valid Preces_bilde bilde, BindingResult result, Model model){
+		if (result.hasErrors()) {
+			return "preces-bilde-add-page";
+		} else {
+			try {
+				bildeService.create(bilde,precesID);
+				return "redirect:/preces/bilde/show/all/"+bilde.getP_b_id();
+			} catch (Exception e) {
+				model.addAttribute("mydata", e.getMessage());
+	            return "error-page";
+			}
+			
+			
+		}
+
 	}
 
 }

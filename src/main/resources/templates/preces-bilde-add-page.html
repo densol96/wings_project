@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	<p>Lūdzu ievadiet preces bildi!</p>
+
+	<form th:action = "@{/preces/bilde/add/__${precesid}__}" method = "post" th:object="${newBilde}">
+		
+		<table>
+			<tr>
+				<td>Bildes nosaukums</td>
+				<td><input type="text" th:field="*{bilde}"/></td>
+				<td th:if="${#fields.hasErrors('bilde')}" th:errors="*{bilde}"></td>
+			</tr>
+			<tr>
+				<td>Apraksts</td>
+				<td><input type="text" th:field="*{apraksts}"/></td>
+				<td th:if="${#fields.hasErrors('apraksts')}" th:errors="*{apraksts}"></td>
+			</tr>						
+		</table>
+		
+		<button type="submit">Save</button>
+		
+		
+	</form>
+
+</body>
+</html>

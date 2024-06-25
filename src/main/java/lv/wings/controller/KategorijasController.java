@@ -66,7 +66,7 @@ public class KategorijasController {
 		
 	}
 	
-	@GetMapping("/add")
+	@GetMapping("/add") //localhost:8080/kategorijas/add
 	public String getKategorijasInsert(Model model) {
 		model.addAttribute("kategorija", new Kategorijas());
 		return "kategorijas-add-page";

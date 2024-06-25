@@ -17,7 +17,7 @@ public interface IPreces_bildeService {
 	public abstract void deleteById(int id) throws Exception;
 	
 	//insertNewPreces_bilde- pievieno jaunu preces_bildi sistēmā
-	public abstract void create(Preces_bilde bilde) throws Exception;
+	public abstract void create(Preces_bilde bilde, int preceID) throws Exception;
 	
 	//updatePrece_bildeById- rediģē esošo preces_bildi
 	public abstract void update(int id, Preces_bilde bilde) throws Exception;

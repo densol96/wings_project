@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Preces_bilde;
+import lv.wings.repo.IPrece_Repo;
 import lv.wings.repo.IPreces_bilde_Repo;
 import lv.wings.service.IPreces_bildeService;
 
@@ -14,6 +15,9 @@ public class Preces_bildeServiceImpl implements IPreces_bildeService{
 
 	@Autowired
 	private IPreces_bilde_Repo bildeRepo;
+	
+	@Autowired
+	private IPrece_Repo preceRepo;
 	
 	@Override
 	public ArrayList<Preces_bilde> retrieveAll() throws Exception {
@@ -45,14 +49,20 @@ public class Preces_bildeServiceImpl implements IPreces_bildeService{
 	}
 
 	@Override
-	public void create(Preces_bilde bilde) throws Exception {
+	public void create(Preces_bilde bilde, int preceID) throws Exception {
 		Preces_bilde existedPreces_bilde = bildeRepo.findByBilde(bilde.getBilde());
 		
 		//tāda bilde jau eksistē
 		if(existedPreces_bilde != null) throw new Exception("Bilde with name: " + bilde.getBilde() + " already exists in DB!");
+		
+		//atrodu preci pēc id
+		if(preceRepo.findById(preceID)==null) throw new 
+		Exception("Prece ar sekojošu id: " + preceID + " neeksistē!");
 				
-		//tāds driver vēl neeksistē
-		bildeRepo.save(bilde);
+		//tāda bilde vēl neeksistē
+		Preces_bilde newBilde = bilde;
+		newBilde.setPrece(preceRepo.findById(preceID).get());
+		bildeRepo.save(newBilde);
 	}
 
 	@Override
