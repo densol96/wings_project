@@ -17,7 +17,7 @@ public interface IPreceService {
 	public abstract void deleteById(int id) throws Exception;
 	
 	//insertNewPrece- pievieno jaunu preci sistēmā
-	public abstract void create(Prece prece) throws Exception;
+	public abstract void create(Prece prece, int kategorijasID) throws Exception;
 	
 	//updatePreceById- rediģē esošo preci
 	public abstract void update(int id, Prece prece) throws Exception;

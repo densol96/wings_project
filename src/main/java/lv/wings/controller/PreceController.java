@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.validation.Valid;
 import lv.wings.model.Prece;
 import lv.wings.service.IPreceService;
 
@@ -58,7 +61,34 @@ public class PreceController {
 			model.addAttribute("mydata", e.getMessage());
 			return "error-page";
 		}
-		
+	}
+	
+	@GetMapping("/add/{kategorijasid}") //localhost:8080/prece/add/{id}
+	public String getPreceInsert(@PathVariable("kategorijasid") int kategorijasID ,Model model) {
+		try {
+			model.addAttribute("newPrece", new Prece());
+			model.addAttribute("kategorijasid", kategorijasID);
+			return "prece-add-page";
+		}catch (Exception e) {
+            model.addAttribute("mydata", e.getMessage());
+            return "error-page"; 
+        }
+	} 
+	
+	@PostMapping("/add/{kategorijasid}")
+	public String postPreceInsert(@PathVariable("kategorijasid") int kategorijasID,
+			@Valid Prece prece, BindingResult result, Model model){
+		if (result.hasErrors()) {
+			return "prece-add-page";
+		} else {
+			try {
+				preceService.create(prece,kategorijasID);
+				return "redirect:/prece/show/all/"+prece.getPrece_id();
+			} catch (Exception e) {
+				model.addAttribute("mydata", e.getMessage());
+	            return "error-page";
+			}	
+		}
 	}
 
 }

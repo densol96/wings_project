@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Prece;
+import lv.wings.repo.IKategorijas_Repo;
 import lv.wings.repo.IPrece_Repo;
 import lv.wings.service.IPreceService;
 
@@ -15,6 +16,9 @@ public class PreceServiceImpl implements IPreceService{
 
 	@Autowired
 	private IPrece_Repo preceRepo;
+	
+	@Autowired
+	private IKategorijas_Repo kategorijaRepo;
 
 	@Override
 	public ArrayList<Prece> retrieveAll() throws Exception {
@@ -46,14 +50,20 @@ public class PreceServiceImpl implements IPreceService{
 	}
 
 	@Override
-	public void create(Prece prece) throws Exception {
+	public void create(Prece prece, int kategorijasID) throws Exception {
 		Prece existedPrece = preceRepo.findByNosaukums(prece.getNosaukums());
 		
 		//tāds pirkums jau eksistē
 		if(existedPrece != null) throw new Exception("Pirkums with name: " + prece.getNosaukums() + " already exists in DB!");
 				
+		//atrodu kategoriju pēc id
+		if(kategorijaRepo.findById(kategorijasID)==null) throw new 
+		Exception("Kategorija ar sekojošu id: " + kategorijasID + " neeksistē!");
+		
 		//tāds pirkuma elements vēl neeksistē
-		preceRepo.save(prece);
+		Prece newPrece = prece;
+		newPrece.setKategorijas(kategorijaRepo.findById(kategorijasID).get());
+		preceRepo.save(newPrece);
 	}
 
 	@Override
