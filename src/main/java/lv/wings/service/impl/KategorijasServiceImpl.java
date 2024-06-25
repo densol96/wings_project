@@ -38,6 +38,8 @@ public class KategorijasServiceImpl implements IKategorijasService{
 
 	@Override
 	public void deleteById(int id) throws Exception {
+		if(retrieveById(id)==null) throw new Exception("Id ir ārpus datubāzes robežām!");
+		
 		//atrast kategoriju kuru gribam dzēst
 		Kategorijas kategorijaForDeleting = retrieveById(id);
 				

@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import jakarta.validation.Valid;
 import lv.wings.model.Kategorijas;
 import lv.wings.service.IKategorijasService;
 
@@ -32,7 +35,8 @@ public class KategorijasController {
 		}
 	}
 	
-	//TODO: Parādīt error message, ja ir ārous indeksu range
+
+	//TODO:Jāsakārtot error-page.html
 	@GetMapping("/show/all/{id}")//localhost:8080/kategorijas/show/all/{id}
 	public String getKategorijasById(@PathVariable("id") int id, Model model) {
 		try {
@@ -60,6 +64,25 @@ public class KategorijasController {
 			return "error-page";
 		}
 		
+	}
+	
+	@GetMapping("/add")
+	public String getKategorijasInsert(Model model) {
+		model.addAttribute("kategorija", new Kategorijas());
+		return "kategorijas-add-page";
+		
+	} 
+	
+	@PostMapping("/add")
+	public String postKategorijasInsert(@Valid Kategorijas kategorija, BindingResult result) throws Exception {
+		// vai ir kādi validācijas pāŗkāpumi
+		if (result.hasErrors()) {
+			return "kategorijas-add-page";
+		} else {
+			kategorijasService.create(kategorija);
+			return "redirect:/kategorijas/show/all";
+		}
+
 	}
 	
 
