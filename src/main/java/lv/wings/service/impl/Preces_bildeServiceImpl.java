@@ -73,7 +73,6 @@ public class Preces_bildeServiceImpl implements IPreces_bildeService{
 		//izmainu
 		bildeForUpdating.setApraksts(bilde.getApraksts());
 		bildeForUpdating.setBilde(bilde.getBilde());
-		bildeForUpdating.setPrece(bilde.getPrece());
 		
 		//saglabāju repo un DB
 		bildeRepo.save(bildeForUpdating);
