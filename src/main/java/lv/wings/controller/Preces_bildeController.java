@@ -74,7 +74,6 @@ public class Preces_bildeController {
             model.addAttribute("mydata", e.getMessage());
             return "error-page"; 
         }
-		
 	} 
 	
 	@PostMapping("/add/{precesid}")
@@ -89,11 +88,8 @@ public class Preces_bildeController {
 			} catch (Exception e) {
 				model.addAttribute("mydata", e.getMessage());
 	            return "error-page";
-			}
-			
-			
+			}	
 		}
-
 	}
 
 }
