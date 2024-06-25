@@ -91,4 +91,34 @@ public class Pirkuma_elementsController {
 		}
 	}
 	
+	@GetMapping("/update/{id}") //localhost:8080/pirkuma/elements/update/{id}
+	public String getElementsUpdateById(@PathVariable("id") int id, Model model) {
+		try {
+			Pirkuma_elements elementsForUpdating = elementsService.retrieveById(id);
+			model.addAttribute("elements",elementsForUpdating);
+			model.addAttribute("id", id);
+			return "pirkuma-elements-update-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+		
+	}
+	
+	@PostMapping("/update/{id}")
+	public String postElementsUpdateById(@PathVariable("id") int id, 
+			@Valid Pirkuma_elements elements, BindingResult result, Model model) {
+		if(result.hasErrors()) {
+			return "pirkuma-elements-update-page";
+		}else {
+			try {
+				elementsService.update(id, elements);
+				return "redirect:/pirkuma/elements/show/all/"+ id;
+			} catch (Exception e) {
+				model.addAttribute("mydata", e.getMessage());
+				return "error-page";
+			}
+		}
+	}
+	
 }

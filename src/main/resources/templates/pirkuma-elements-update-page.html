@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	<p>Lūdzu aizpildi laukus!</p>
+
+	<form th:action = "@{/pirkuma/elements/update/__${id}__}" method = "post" th:object="${elements}">
+		
+		<table>
+			<tr>
+				<td>Daudzums</td>
+				<td><input type="text" th:field="*{daudzums}"/></td>
+				<td th:if="${#fields.hasErrors('daudzums')}" th:errors="*{daudzums}"></td>
+			</tr>	
+		</table>
+		
+		<button type="update">Atjaunot</button>
+		
+		
+	</form>
+
+</body>
+</html>
