@@ -91,5 +91,35 @@ public class Preces_bildeController {
 			}	
 		}
 	}
+	
+	@GetMapping("/update/{id}") //localhost:8080/preces/bilde/update/{id}
+	public String getPrecesBildeUpdateById(@PathVariable("id") int id, Model model) {
+		try {
+			Preces_bilde bildeForUpdating = bildeService.retrieveById(id);
+			model.addAttribute("bilde",bildeForUpdating);
+			model.addAttribute("id", id);
+			return "preces-bilde-update-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+		
+	}
+	
+	@PostMapping("/update/{id}")
+	public String postPrecesBildeUpdateById(@PathVariable("id") int id, 
+			@Valid Preces_bilde bilde, BindingResult result, Model model) {
+		if(result.hasErrors()) {
+			return "preces-bilde-update-page";
+		}else {
+			try {
+				bildeService.update(id, bilde);
+				return "redirect:/preces/bilde/show/all/"+ id;
+			} catch (Exception e) {
+				model.addAttribute("mydata", e.getMessage());
+				return "error-page";
+			}
+		}
+	}
 
 }
