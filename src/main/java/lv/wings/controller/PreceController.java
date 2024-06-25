@@ -44,5 +44,21 @@ public class PreceController {
 			return "error-page";
 		}
 	}
+	
+	//TODO: SQL kļūda, tā pati, kas kategorijām
+	@GetMapping("/remove/{id}") //localhost:8080/prece/remove/{id}
+	public String getPreceDeleteById(@PathVariable("id") int id, Model model) {	
+		try {
+			preceService.deleteById(id);
+			ArrayList<Prece> allPreces = preceService.retrieveAll(); 
+			model.addAttribute("mydata", allPreces);
+			model.addAttribute("msg", "Visas preces izņemot izdzēsto pēc id: " + id);
+			return "preces-all-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+		
+	}
 
 }
