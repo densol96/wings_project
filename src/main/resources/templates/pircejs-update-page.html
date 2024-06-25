@@ -1,0 +1,57 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <p>Rediget pirceju</p>
+    <br>
+
+    <form th:action="@{/pircejs/update/__${id}__}" method="post" th:object="${pircejs}">
+        <table>
+            <tr>
+                <td>Vards</td>
+                <td><input type="text" th:field="*{vards}" /> </td>
+                <td th:if="${#fields.hasErrors('vards')}" th:errors="*{vards}"></td>
+            </tr>
+            <tr>
+                <td>Uzvards</td>
+                <td><input type="text" th:field="*{uzvards}" /> </td>
+                <td th:if="${#fields.hasErrors('uzvards')}" th:errors="*{uzvards}"></td>
+            </tr>
+            <tr>
+                <td>Epasts</td>
+                <td><input type="text" th:field="*{epasts}" /> </td>
+                <td th:if="${#fields.hasErrors('epasts')}" th:errors="*{epasts}"></td>
+            </tr>
+            <tr>
+                <td>Adrese</td>
+                <td><input type="text" th:field="*{adrese}" /> </td>
+                <td th:if="${#fields.hasErrors('adrese')}" th:errors="*{adrese}"></td>
+            </tr>
+            <tr>
+                <td>Personas kods</td>
+                <td><input type="text" th:field="*{personas_kods}" /> </td>
+                <td th:if="${#fields.hasErrors('personas_kods')}" th:errors="*{personas_kods}"></td>
+            </tr>
+            <tr>
+                <td>Bankas nosaukums</td>
+                <td><input type="text" th:field="*{bankas_nosaukums}" /> </td>
+                <td th:if="${#fields.hasErrors('bankas_nosaukums')}" th:errors="*{bankas_nosaukums}"></td>
+            </tr>
+            <tr>
+                <td>Bankas SWIFT kods</td>
+                <td><input type="text" th:field="*{bankas_SWIFT_kods}" /> </td>
+                <td th:if="${#fields.hasErrors('bankas_SWIFT_kods')}" th:errors="*{bankas_SWIFT_kods}"></td>
+            </tr>
+            <tr>
+                <td>Bankas kods</td>
+                <td><input type="text" th:field="*{bankas_kods}" /> </td>
+                <td th:if="${#fields.hasErrors('bankas_kods')}" th:errors="*{bankas_kods}"></td>
+            </tr>
+        </table> 
+
+        <button type="submit">Save</button>
+    </form>
+
+</body>
+
+</html>

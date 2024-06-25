@@ -30,6 +30,11 @@ public class Pirkuma_elements {
 	private int p_e_id;
 	
 	//TODO te nak pirkums ID MARKUSS
+	@Id
+	@Column(name = "Pirkums_id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Setter(value = AccessLevel.NONE)
+	private int pirkums_id;
 	
 	//saite uz preces
 	@ManyToOne

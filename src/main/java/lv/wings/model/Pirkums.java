@@ -1,6 +1,7 @@
 package lv.wings.model;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -56,6 +58,11 @@ public class Pirkums {
 	@Column(name = "Piegades_detalas")
 	private String piegades_detalas;
 	
+
+	@OneToMany(mappedBy = "pirkums")
+	@ToString.Exclude
+	private Collection<Pirkuma_elements> pirkuma_elementi;
+
 	
 	public Pirkums(Piegades_veids piegades_veids, Samaksas_veids samaksas_veids, Pircejs pircejs, LocalDateTime pasutijuma_datums, String piegades_detalas) {
 		setPiegades_veids(piegades_veids);
