@@ -32,7 +32,7 @@ public class Preces_bildeController {
 		}
 	}
 	
-	//TODO: Parādīt error message, ja ir ārous indeksu range
+
 	@GetMapping("/show/all/{id}")//localhost:8080/preces/bilde/show/all/{id}
 	public String getPrecesBildeById(@PathVariable("id") int id, Model model) {
 		try {
