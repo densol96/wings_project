@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 import lv.wings.model.Preces_bilde;
 import lv.wings.service.IPreces_bildeService;
 
@@ -33,6 +32,7 @@ public class Preces_bildeController {
 		}
 	}
 	
+	//TODO: Parādīt error message, ja ir ārous indeksu range
 	@GetMapping("/show/all/{id}")//localhost:8080/preces/bilde/show/all/{id}
 	public String getPrecesBildeById(@PathVariable("id") int id, Model model) {
 		try {
@@ -44,6 +44,21 @@ public class Preces_bildeController {
 			model.addAttribute("mydata",e.getMessage());
 			return "error-page";
 		}
+	}
+	
+	@GetMapping("/remove/{id}") //localhost:8080/preces/bilde/remove/{id}
+	public String getPrecesBildeDeleteById(@PathVariable("id") int id, Model model) {	
+		try {
+			bildeService.deleteById(id);
+			ArrayList<Preces_bilde> allBildes = bildeService.retrieveAll(); 
+			model.addAttribute("mydata", allBildes);
+			model.addAttribute("msg", "Visas preču bildes izņemot izdzēsto pēc id: " + id);
+			return "preces-bilde-all-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+		
 	}
 
 }

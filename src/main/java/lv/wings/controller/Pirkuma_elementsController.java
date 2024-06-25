@@ -45,4 +45,19 @@ public class Pirkuma_elementsController {
 		}
 	}
 	
+	@GetMapping("/remove/{id}") //localhost:8080/pirkuma/elements/remove/{id}
+	public String getPrecesElementsById(@PathVariable("id") int id, Model model) {	
+		try {
+			elementsService.deleteById(id);
+			ArrayList<Pirkuma_elements> allPirkumaElementi = elementsService.retrieveAll(); 
+			model.addAttribute("mydata", allPirkumaElementi);
+			model.addAttribute("msg", "Visi pirkuma elementi izņemot izdzēsto pēc id: " + id);
+			return "elementi-all-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+		
+	}
+	
 }

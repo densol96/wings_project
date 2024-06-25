@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 import lv.wings.model.Kategorijas;
 import lv.wings.service.IKategorijasService;
 
@@ -33,6 +32,7 @@ public class KategorijasController {
 		}
 	}
 	
+	//TODO: Parādīt error message, ja ir ārous indeksu range
 	@GetMapping("/show/all/{id}")//localhost:8080/kategorijas/show/all/{id}
 	public String getKategorijasById(@PathVariable("id") int id, Model model) {
 		try {
@@ -46,6 +46,21 @@ public class KategorijasController {
 		}
 	}
 	
+	//TODO: Neļauj izdzēst, ja ir sasaistīt foreigh key. Vajadzētu parādīt error message
+	@GetMapping("/remove/{id}") //localhost:8080/kategorijas/remove/{id}
+	public String getKategorijasDeleteById(@PathVariable("id") int id, Model model) {	
+		try {
+			kategorijasService.deleteById(id);
+			ArrayList<Kategorijas> allKategorijas = kategorijasService.retrieveAll(); 
+			model.addAttribute("mydata", allKategorijas);
+			model.addAttribute("msg", "Visas kategorijas izņemot izdzēsto pēc id: " + id);
+			return "kategorijas-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+		
+	}
 	
 
 }
