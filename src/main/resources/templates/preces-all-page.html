@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Kategorijas</title>
+        <link rel="stylesheet" href="/css/css.css" />
+        <link rel="icon" type="image/x-icon" href="/biedribas_logo.ico" />
+    </head>
+    <body>
+        <nav class="nav-bar">
+            <img class="left-priev" alt="Latvijas prievites" src="/images/prievites_nobackground.png" />
+
+            <div class="nav-info-container">
+                <img class="logo" src="/images/biedribas_logo.png" alt="Biedribas logo" />
+                <ul class="nav-options-container">
+                    <li><a href="/">Sākums</a></li>
+                    <li style="font-weight: bold"><a href="#">Jaunumi</a></li>
+                    <li><a href="/veikals">Veikals</a></li>
+                    <li><a href="/par-biedribu">Par biedrību</a></li>
+                    <li><a href="/kontakti">Kontakti</a></li>
+                </ul>
+                <form class="nav-form" method="get">
+                    <input class="nav-search" placeholder="Meklēt..." type="text" />
+                    <button type="submit">
+                        <img src="/images/search_icon.png" alt="Meklēt" />
+                    </button>
+                </form>
+            </div>
+            <img class="right-priev" alt="Latvijas prievites" src="/images/prievites_nobackground.png" />
+        </nav>
+
+ 
+        <div class="main-events-container">
+            <div class="options-container">
+                <div class="sort-container">
+                    <form method="get">
+                        <select th:onchange="if(this.value) window.location.href=this.value" id="sort">
+                            <!-- "if (this.value) window.location.href=this.value" -->
+                            <option value="" selected>Kārtot</option>
+                            <option value="/jaunumi/sort/asc">Alfabēta augošā</option>
+                            <option value="/jaunumi/sort/desc">Alfabēta dilstošā</option>
+                        </select>
+                    </form>
+                </div>
+            </div>
+<!--
+            <div class="events-container">
+                <div class="events" th:each="tempC : ${mydata}">
+                    <h2 th:text="${tempC.nosaukums}"></h2>             
+                    <p th:text="${tempC.apraksts}"></p>
+                    <form th:action="'kategorijas/delete/'+${mydata.idpa}" th:method="post">
+                        <button type="submit">Dzēst</button>
+                    </form>
+                    <a class="btn-link" th:href="'/kategorijas/'+${mydata.idpa}">Apskatīt</a>
+                </div>
+            </div>
+        </div>
+-->
+		<p th:text="${msg}"></p>
+			<table border="1">
+				<tr>
+					<td><b>Id</b></td>
+					<td><b>Nosaukums</b></td>
+					<td><b>Apraksts</b></td>
+					<td><b>Cena</b></td>
+					<td><b>Daudzums</b></td>
+					<td><b>Kategorijas nosaukums</b></td>
+				</tr>
+		
+				<tr th:each="tempC : ${mydata}">
+					<td th:text="${tempC.getPrece_id()}"></td>
+					<td th:text="${tempC.getNosaukums()}"></td>
+					<td th:text="${tempC.getApraksts()}"></td>	
+					<td th:text="${tempC.getCena()}"></td>	
+					<td th:text="${tempC.getDaudzums()}"></td>	
+					<td th:text="${tempC.getKategorijas().getNosaukums()}"></td>
+				</tr>
+		
+			</table>
+    </body>
+</html> 
+
+
+
