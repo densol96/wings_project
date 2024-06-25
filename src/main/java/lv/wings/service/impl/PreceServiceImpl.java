@@ -75,7 +75,7 @@ public class PreceServiceImpl implements IPreceService{
 		preceForUpdating.setApraksts(prece.getApraksts());
 		preceForUpdating.setCena(prece.getCena());
 		preceForUpdating.setDaudzums(prece.getDaudzums());
-		preceForUpdating.setKategorijas(prece.getKategorijas());
+		//preceForUpdating.setKategorijas(prece.getKategorijas());
 		preceForUpdating.setNosaukums(prece.getNosaukums());
 		
 		//saglabāju repo un DB

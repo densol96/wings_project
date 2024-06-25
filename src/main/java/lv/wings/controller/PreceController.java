@@ -90,5 +90,36 @@ public class PreceController {
 			}	
 		}
 	}
+	
+	//TODO: pielikt kategorijām drop down list
+	@GetMapping("/update/{id}") //localhost:8080/prece/update/{id}
+	public String getPreceUpdateById(@PathVariable("id") int id, Model model) {
+		try {
+			Prece preceForUpdating = preceService.retrieveById(id);
+			model.addAttribute("prece",preceForUpdating);
+			model.addAttribute("id", id);
+			return "prece-update-page";
+		} catch (Exception e) {
+			model.addAttribute("mydata", e.getMessage());
+			return "error-page";
+		}
+		
+	}
+	
+	@PostMapping("/update/{id}")
+	public String postPreceUpdateById(@PathVariable("id") int id, 
+			@Valid Prece prece, BindingResult result, Model model) {
+		if(result.hasErrors()) {
+			return "prece-update-page";
+		}else {
+			try {
+				preceService.update(id, prece);
+				return "redirect:/prece/show/all/"+ id;
+			} catch (Exception e) {
+				model.addAttribute("mydata", e.getMessage());
+				return "error-page";
+			}
+		}
+	}
 
 }
