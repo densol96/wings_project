@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Lūdzu ievadiet Pasākuma kategoriju!</h1>
+
+        <form th:action="@{/pasakuma-kategorija/add}" method="post" th:object="${pasakumaKategorija}">
+            <table>
+                <tr>
+                    <td>Nosaukums</td>
+                    <td><input type="text" th:field="*{nosaukums}" /></td>
+                    <td th:if="${#fields.hasErrors('nosaukums')}" th:errors="*{nosaukums}"></td>
+                </tr>
+            </table>
+
+            <button type="submit">Saglabāt</button>
+        </form>
+    </body>
+</html>

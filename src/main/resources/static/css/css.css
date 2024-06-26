@@ -194,14 +194,43 @@ body {
   text-align: center;
 }
 .main-event-container .images-container {
+  display: flex;
   padding: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px;
 }
 .main-event-container .images-container img {
-  display: flex;
   max-width: 300px;
   border-radius: 10px;
   box-shadow: 0 0 2px #333;
-  flex-wrap: wrap;
+}
+.main-event-container .comments-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  margin-bottom: 200px;
+  border: solid 1px black;
+}
+.main-event-container .comments-container .comment-container {
+  position: relative;
+  box-shadow: 0 0 2px #333;
+}
+.main-event-container .comments-container .comment-container span {
+  position: absolute;
+  top: 0;
+  transform: translateY(-100%);
+  left: 0;
+}
+.main-event-container .comments-container .insert-comment textarea {
+  font-size: 1rem;
+  width: 50%;
+  height: 50px;
+  resize: none;
+}
+.main-event-container .comments-container .insert-comment button {
+  padding: 5px 10px 5px 10px;
+  cursor: pointer;
 }
 
 @media only screen and (max-width: 1000px) {

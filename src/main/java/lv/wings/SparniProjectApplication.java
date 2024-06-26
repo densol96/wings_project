@@ -1,6 +1,8 @@
 package lv.wings;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -79,11 +81,12 @@ public class SparniProjectApplication {
 				pirkums_repo.save(pirkums1);
 				pirkums_repo.save(pirkums2);
 
-				Atlaide atlaide1 = new Atlaide(10, LocalDateTime.now(), LocalDateTime.now().plusDays(4),
+				
+				Atlaide atlaide1 = new Atlaide(10, Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 4)),
 						"Melnās piekdienas atlaides!");
-				Atlaide atlaide2 = new Atlaide(20, LocalDateTime.now(), LocalDateTime.now().plusDays(5),
+				Atlaide atlaide2 = new Atlaide(20, Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 5)),
 						"Melnās piekdienas atlaides!");
-				Atlaide atlaide3 = new Atlaide(50, LocalDateTime.now(), LocalDateTime.now().plusDays(6),
+				Atlaide atlaide3 = new Atlaide(50, Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 6)),
 						"Melnās piekdienas atlaides!");
 				atlaideRepo.save(atlaide1);
 				atlaideRepo.save(atlaide2);
@@ -95,22 +98,22 @@ public class SparniProjectApplication {
 				pasakumaKategorijaRepo.save(pasakumaKategorija1);
 				pasakumaKategorijaRepo.save(pasakumaKategorija2);
 				pasakumaKategorijaRepo.save(pasakumaKategorija3);
-
-				Pasakums pasakums1 = new Pasakums(LocalDateTime.now(), LocalDateTime.now().plusDays(20), "Pasakums 1",
+ 
+				Pasakums pasakums1 = new Pasakums(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 1)), "Pasakums 1",
 						"Liepāja", "Pasākums visiem cilvēkiem!", "vasara atpūta", pasakumaKategorija1);
-				Pasakums pasakums2 = new Pasakums(LocalDateTime.now(), LocalDateTime.now().plusDays(45), "Pasakums 2",
+				Pasakums pasakums2 = new Pasakums(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 2)), "Pasakums 2",
 						"Ventspils", "Pasākums visiem cilvēkiem!", "vasara atpūta", pasakumaKategorija2);
-				Pasakums pasakums3 = new Pasakums(LocalDateTime.now(), LocalDateTime.now().plusDays(60), "Pasakums 3",
+				Pasakums pasakums3 = new Pasakums(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 3)), "Pasakums 3",
 						"Rīga", "Pasākums visiem cilvēkiem!", "vasara beigas", pasakumaKategorija2);
 				pasakumsRepo.save(pasakums1);
 				pasakumsRepo.save(pasakums2);
 				pasakumsRepo.save(pasakums3);
 
-				PasakumaKomentars komentars1 = new PasakumaKomentars("Ļoti labs pasākums!", LocalDateTime.now(),
+				PasakumaKomentars komentars1 = new PasakumaKomentars("Ļoti labs pasākums!", Date.from(Instant.now()),
 						pasakums1);
-				PasakumaKomentars komentars2 = new PasakumaKomentars("Slikts pasākums!", LocalDateTime.now(),
+				PasakumaKomentars komentars2 = new PasakumaKomentars("Slikts pasākums!", Date.from(Instant.now()),
 						pasakums1);
-				PasakumaKomentars komentars3 = new PasakumaKomentars("Man patika!", LocalDateTime.now(), pasakums2);
+				PasakumaKomentars komentars3 = new PasakumaKomentars("Man patika!", Date.from(Instant.now()), pasakums2);
 				pasakumaKomentarsRepo.save(komentars1);
 				pasakumaKomentarsRepo.save(komentars2);
 				pasakumaKomentarsRepo.save(komentars3);

@@ -6,4 +6,6 @@ import lv.wings.model.PasakumaKomentars;
 
 public interface IPasakumaKomentarsRepo extends CrudRepository<PasakumaKomentars, Integer>{
 
+	PasakumaKomentars findByKomentars(String komentars);
+
 }

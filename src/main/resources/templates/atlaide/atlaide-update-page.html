@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+	<h1>Lūdzu ievadiet atlaidi!</h1>
+
+	<form th:action = "@{/atlaide/update/__${id}__}" method = "post" th:object="${atlaide}">
+		
+		<table>
+			<tr>
+				<td>Atlaides apmērs</td>
+				<td><input type="text" th:field="*{atlaidesApmers}"/></td>
+				<td th:if="${#fields.hasErrors('atlaidesApmers')}" th:errors="*{atlaidesApmers}"></td>
+			</tr>
+			<tr>
+				<td>Sākuma datums (dd/MM/yyyy)</td>
+				 <td><input type="text" th:field="*{sakumaDatums}"/></td> 
+				 <td th:if="${#fields.hasErrors('sakumaDatums')}" th:errors="*{sakumaDatums}"></td>
+			</tr>
+			<tr>
+				<td>Beigu datums (dd/MM/yyyy)</td>
+					 <td><input type="text" th:field="*{beiguDatums}"/></td> 
+				<td th:if="${#fields.hasErrors('beiguDatums')}" th:errors="*{beiguDatums}"></td>
+			</tr>
+			<tr>
+				<td>Apraksts</td>
+				<td><input type="text" th:field="*{apraksts}"/></td>
+				<td th:if="${#fields.hasErrors('apraksts')}" th:errors="*{apraksts}"></td>
+			</tr>
+									
+		</table>
+		
+		<button type="submit">Atjaunot</button>
+		
+		
+	</form>
+
+</body>
+</html>

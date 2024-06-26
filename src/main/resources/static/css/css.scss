@@ -219,13 +219,47 @@ body {
     }
 
     .images-container {
+        display: flex;
         padding: 50px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 30px;
         img {
-            display: flex;
             max-width: 300px;
             border-radius: 10px;
             box-shadow: 0 0 2px $dark-grey;
-            flex-wrap: wrap;
+        }
+    }
+
+    .comments-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        margin-bottom: 200px;
+        border: solid 1px black;
+        .comment-container {
+            position: relative;
+            box-shadow: 0 0 2px $dark-grey;
+
+            span {
+                position: absolute;
+                top: 0;
+                transform: translateY(-100%);
+                left: 0;
+            }
+        }
+
+        .insert-comment {
+            textarea {
+                font-size: 1rem;
+                width: 50%;
+                height: 50px;
+                resize: none;
+            }
+            button {
+                padding: 5px 10px 5px 10px;
+                cursor: pointer;
+            }
         }
     }
 }

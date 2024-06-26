@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title th:text="${event.nosaukums}"></title>
+        <title>Pasākuma komentāri</title>
         <link rel="stylesheet" href="/css/css.css" />
         <link rel="icon" type="image/x-icon" href="/biedribas_logo.ico" />
     </head>
@@ -15,7 +15,7 @@
                 <img class="logo" src="/images/biedribas_logo.png" alt="Biedribas logo" />
                 <ul class="nav-options-container">
                     <li><a href="/">Sākums</a></li>
-                    <li style="font-weight: bold"><a href="#">Jaunumi</a></li>
+                    <li><a href="/jaunumi">Jaunumi</a></li>
                     <li><a href="/veikals">Veikals</a></li>
                     <li><a href="/par-biedribu">Par biedrību</a></li>
                     <li><a href="/kontakti">Kontakti</a></li>
@@ -30,35 +30,19 @@
             <img class="right-priev" alt="Latvijas prievites" src="/images/prievites_nobackground.png" />
         </nav>
 
-        <div class="main-event-container">
-            <h1 th:text="${event.nosaukums}"></h1>
-            <h2 th:text="'Sakuma datums: '+${{event.sakumaDatums}}"></h2>
-            <h2 th:text="'Beigu datums: '+${{event.beiguDatums}}"></h2>
-            <h3 th:text="'Vieta: '+${event.vieta}"></h3>
-            <p th:text="${event.apraksts}"></p>
+        <p th:text="${msg}"></p>
+        <table border="1">
+            <tr>
+                <td><b>Id</b></td>
+                <td><b>Komentārs</b></td>
+                <td><b>Datums</b></td>
+            </tr>
 
-            <h1>Attēli</h1>
-            <div class="images-container">
-                <img
-                    th:each="bilde: ${event.pasakumaBilde}"
-                    th:src="'/images/pasakumi/'+${bilde.atsauceUzBildi}"
-                    alt="${bilde.nosaukums}"
-                />
-            </div>
-            <h1>Komentāri</h1>
-            <div class="comments-container">
-                <div th:each="komentars: ${event.pasakumaKomentars}" class="comment-container">
-                    <span th:text="${{komentars.datums}}"></span>
-                    <p th:text="${komentars.komentars}"></p>
-                </div>
-
-                <div class="insert-comment">
-                    <form action="">
-                        <textarea name="" id=""></textarea>
-                        <button>Pievienot komentāru</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+            <tr th:each="komentars : ${pasakumaKomentars}">
+                <td th:text="${komentars.getIdpako()}"></td>
+                <td th:text="${komentars.getKomentars()}"></td>
+                <td th:text="${komentars.getDatums()}"></td>
+            </tr>
+        </table>
     </body>
 </html>

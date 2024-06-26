@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Lūdzu ievadiet Pasākuma kmentāru!</h1>
+
+        <h2 th:text="${pasakumsId}"></h2>
+
+        <form th:action="@{/pasakuma-komentars/add}" method="post" th:object="${pasakumaKomentars}">
+            <table>
+                <tr>
+                    <td>Komentārs</td>
+                    <td><input type="text" th:field="*{komentars}" /></td>
+                    <td th:if="${#fields.hasErrors('komentars')}" th:errors="*{komentars}"></td>
+                </tr>
+            </table>
+
+            <button type="submit">Saglabāt</button>
+        </form>
+    </body>
+</html>

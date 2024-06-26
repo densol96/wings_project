@@ -1,8 +1,10 @@
 package lv.wings.model;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 import org.springframework.cglib.core.Local;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -44,18 +46,20 @@ public class Atlaide {
 
 	@NotNull
 	@Column(name = "sakumaDatums")
-	private LocalDateTime sakumaDatums;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date sakumaDatums;
 	
 	@NotNull
 	@Column(name = "beiguDatums")
-	private LocalDateTime beiguDatums;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date beiguDatums;
 
 	@NotNull
 	@Column(name = "apraksts")
 	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
 	private String apraksts;
 	
-	public Atlaide(int atlaidesApmers, LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String apraksts) {
+	public Atlaide(int atlaidesApmers, Date sakumaDatums, Date beiguDatums, String apraksts) {
 		setAtlaidesApmers(atlaidesApmers);
 		setSakumaDatums(sakumaDatums);
 		setBeiguDatums(beiguDatums);

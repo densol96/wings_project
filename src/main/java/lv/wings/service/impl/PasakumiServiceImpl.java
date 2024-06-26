@@ -17,7 +17,7 @@ import lv.wings.service.IPasakumiService;
 public class PasakumiServiceImpl implements IPasakumiService{
 	
 	@Autowired
-	IPasakumsRepo pasakumsRepo;
+	private IPasakumsRepo pasakumsRepo;
 	
 	
 	@Override
@@ -58,17 +58,5 @@ public class PasakumiServiceImpl implements IPasakumiService{
 		
 		pasakumsRepo.delete(pasakums);
 	}
-
-	
-
-	/*
-	@Override
-	public ArrayList<Pasakums> selectAllPasakumiWithImages() throws Exception {
-		ArrayList<Pasakums> allPasakumi = pasakumsRepo.findAllPasakumiWithImages();
-		
-		
-		return allPasakumi;
-	}
-	*/
 
 }
