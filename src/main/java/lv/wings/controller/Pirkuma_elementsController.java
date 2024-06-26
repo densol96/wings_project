@@ -63,7 +63,6 @@ public class Pirkuma_elementsController {
 		
 	}
 	
-	//TODO: Pievienot galveni
 	@GetMapping("/add/{precesid}") //localhost:8080/pirkuma/elements/add/{id}
 	public String getElementsInsert(@PathVariable("precesid") int precesID ,Model model) {
 		try {
@@ -92,7 +91,6 @@ public class Pirkuma_elementsController {
 		}
 	}
 	
-	//TODO: pievienot gaveni
 	@GetMapping("/update/{id}") //localhost:8080/pirkuma/elements/update/{id}
 	public String getElementsUpdateById(@PathVariable("id") int id, Model model) {
 		try {
