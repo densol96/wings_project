@@ -31,7 +31,7 @@ public class PreceController {
 			return "preces-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
@@ -44,7 +44,7 @@ public class PreceController {
 			return "preces-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata",e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
@@ -59,7 +59,7 @@ public class PreceController {
 			return "preces-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class PreceController {
 			return "prece-add-page";
 		}catch (Exception e) {
             model.addAttribute("mydata", e.getMessage());
-            return "error-page"; 
+            return "msg-error-page"; 
         }
 	} 
 	
@@ -86,7 +86,7 @@ public class PreceController {
 				return "redirect:/prece/show/all/"+prece.getPrece_id();
 			} catch (Exception e) {
 				model.addAttribute("mydata", e.getMessage());
-	            return "error-page";
+	            return "msg-error-page";
 			}	
 		}
 	}
@@ -101,7 +101,7 @@ public class PreceController {
 			return "prece-update-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 		
 	}
@@ -117,7 +117,7 @@ public class PreceController {
 				return "redirect:/prece/show/all/"+ id;
 			} catch (Exception e) {
 				model.addAttribute("mydata", e.getMessage());
-				return "error-page";
+				return "msg-error-page";
 			}
 		}
 	}
