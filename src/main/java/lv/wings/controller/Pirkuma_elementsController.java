@@ -31,7 +31,7 @@ public class Pirkuma_elementsController {
 			return "elementi-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
@@ -44,7 +44,7 @@ public class Pirkuma_elementsController {
 			return "elementi-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata",e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
@@ -58,11 +58,12 @@ public class Pirkuma_elementsController {
 			return "elementi-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 		
 	}
 	
+	//TODO: Pievienot galveni
 	@GetMapping("/add/{precesid}") //localhost:8080/pirkuma/elements/add/{id}
 	public String getElementsInsert(@PathVariable("precesid") int precesID ,Model model) {
 		try {
@@ -71,7 +72,7 @@ public class Pirkuma_elementsController {
 			return "pirkuma-elements-add-page";
 		}catch (Exception e) {
             model.addAttribute("mydata", e.getMessage());
-            return "error-page"; 
+            return "msg-error-page"; 
         }
 	} 
 	
@@ -86,11 +87,12 @@ public class Pirkuma_elementsController {
 				return "redirect:/pirkuma/elements/show/all/"+elements.getP_e_id();
 			} catch (Exception e) {
 				model.addAttribute("mydata", e.getMessage());
-	            return "error-page";
+	            return "msg-error-page";
 			}	
 		}
 	}
 	
+	//TODO: pievienot gaveni
 	@GetMapping("/update/{id}") //localhost:8080/pirkuma/elements/update/{id}
 	public String getElementsUpdateById(@PathVariable("id") int id, Model model) {
 		try {
@@ -100,7 +102,7 @@ public class Pirkuma_elementsController {
 			return "pirkuma-elements-update-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 		
 	}
@@ -116,7 +118,7 @@ public class Pirkuma_elementsController {
 				return "redirect:/pirkuma/elements/show/all/"+ id;
 			} catch (Exception e) {
 				model.addAttribute("mydata", e.getMessage());
-				return "error-page";
+				return "msg-error-page";
 			}
 		}
 	}
