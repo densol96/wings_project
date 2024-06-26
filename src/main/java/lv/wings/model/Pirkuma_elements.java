@@ -30,6 +30,9 @@ public class Pirkuma_elements {
 	private int p_e_id;
 	
 	//TODO te nak pirkums ID MARKUSS
+	@ManyToOne
+	@JoinColumn(name = "Pirkums_ID")
+	private Pirkums pirkums;
 	
 	//saite uz preces
 	@ManyToOne
@@ -40,7 +43,8 @@ public class Pirkuma_elements {
 	@Min(1)
 	private int daudzums;
 	
-	public Pirkuma_elements(Prece prece, int daudzums) {
+	public Pirkuma_elements(Pirkums pirkums, Prece prece, int daudzums) {
+		setPirkums(pirkums);
 		setPrece(prece);
 		setDaudzums(daudzums);
 	}

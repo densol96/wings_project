@@ -1,0 +1,28 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <table border="1">
+        <tr>
+            <td><b>Pirkums ID</b></td>
+            <td><b>Piegades veids</b></td>
+            <td><b>Samaksas veids</b></td>
+            <td><b>Pircejs</b></td>
+            <td><b>Pasutijuma datums</b></td>
+            <td><b>Piegades detalas</b></td>
+        </tr>
+
+        <tr th:each="temp : ${mydata}">
+            <td th:text="${temp.getPirkumsID()}"></td>
+            <td th:text="${temp.getPiegadesVeids().getNosaukums()}"></td>
+            <td th:text="${temp.getSamaksasVeids().getNosaukums()}"></td>
+            <td th:text="${temp.getPircejs().getVards()}"></td>
+            <td th:text="${temp.getPasutijumaDatums()}"></td>
+            <td th:text="${temp.getPiegadesDetalas()}"></td>
+        </tr>
+    </table>
+
+
+</body>
+
+</html>

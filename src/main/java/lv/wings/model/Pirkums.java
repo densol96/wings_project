@@ -1,6 +1,7 @@
 package lv.wings.model;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -27,42 +29,47 @@ import lombok.ToString;
 public class Pirkums {
 	
 	@Id
-	@Column(name = "Pirkums_ID")
+	@Column(name = "PirkumsID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int pirkums_ID;
+	private int pirkumsID;
 	
 
 	@ManyToOne
-	@JoinColumn(name = "PV_ID")
-	private Piegades_veids piegades_veids;
+	@JoinColumn(name = "PVID")
+	private Piegades_veids piegadesVeids;
 	
 	
 	@ManyToOne
-	@JoinColumn(name = "SV_ID")
-	private Samaksas_veids samaksas_veids;
+	@JoinColumn(name = "SVID")
+	private Samaksas_veids samaksasVeids;
 	
 	
 	@OneToOne
-	@JoinColumn(name = "Pircejs_ID")
+	@JoinColumn(name = "PircejsID")
 	private Pircejs pircejs;
 	
 	
-	@Column(name = "Pasutijuma_datums")
+	@Column(name = "PasutijumaDatums")
 	@NotNull
-	private LocalDateTime pasutijuma_datums;
+	private LocalDateTime pasutijumaDatums;
 	
 	
-	@Column(name = "Piegades_detalas")
-	private String piegades_detalas;
+	@Column(name = "PiegadesDetalas")
+	private String piegadesDetalas;
 	
+
+	@OneToMany(mappedBy = "pirkums")
+	@ToString.Exclude
+	private Collection<Pirkuma_elements> pirkumaElementi;
+
 	
-	public Pirkums(Piegades_veids piegades_veids, Samaksas_veids samaksas_veids, Pircejs pircejs, LocalDateTime pasutijuma_datums, String piegades_detalas) {
-		setPiegades_veids(piegades_veids);
-		setSamaksas_veids(samaksas_veids);
+	public Pirkums(Piegades_veids piegadesVeids, Samaksas_veids samaksasVeids, Pircejs pircejs, LocalDateTime pasutijumaDatums, String piegadesDetalas) {
+		setPiegadesVeids(piegadesVeids);
+		setSamaksasVeids(samaksasVeids);
 		setPircejs(pircejs);
-		setPasutijuma_datums(pasutijuma_datums);
-		setPiegades_detalas(piegades_detalas);
+		setPasutijumaDatums(pasutijumaDatums);
+		setPiegadesDetalas(piegadesDetalas);
 	}
 
 }
