@@ -37,12 +37,12 @@ public class Pirkums {
 
 	@ManyToOne
 	@JoinColumn(name = "PV_ID")
-	private Piegades_veids piegades_veids;
+	private Piegades_veids piegadesVeids;
 	
 	
 	@ManyToOne
 	@JoinColumn(name = "SV_ID")
-	private Samaksas_veids samaksas_veids;
+	private Samaksas_veids samaksasVeids;
 	
 	
 	@OneToOne
@@ -50,26 +50,26 @@ public class Pirkums {
 	private Pircejs pircejs;
 	
 	
-	@Column(name = "Pasutijuma_datums")
+	@Column(name = "PasutijumaDatums")
 	@NotNull
-	private LocalDateTime pasutijuma_datums;
+	private LocalDateTime pasutijumaDatums;
 	
 	
-	@Column(name = "Piegades_detalas")
-	private String piegades_detalas;
+	@Column(name = "PiegadesDetalas")
+	private String piegadesDetalas;
 	
 
 	@OneToMany(mappedBy = "pirkums")
 	@ToString.Exclude
-	private Collection<Pirkuma_elements> pirkuma_elementi;
+	private Collection<Pirkuma_elements> pirkumaElementi;
 
 	
-	public Pirkums(Piegades_veids piegades_veids, Samaksas_veids samaksas_veids, Pircejs pircejs, LocalDateTime pasutijuma_datums, String piegades_detalas) {
-		setPiegades_veids(piegades_veids);
-		setSamaksas_veids(samaksas_veids);
+	public Pirkums(Piegades_veids piegadesVeids, Samaksas_veids samaksasVeids, Pircejs pircejs, LocalDateTime pasutijumaDatums, String piegadesDetalas) {
+		setPiegadesVeids(piegadesVeids);
+		setSamaksasVeids(samaksasVeids);
 		setPircejs(pircejs);
-		setPasutijuma_datums(pasutijuma_datums);
-		setPiegades_detalas(piegades_detalas);
+		setPasutijumaDatums(pasutijumaDatums);
+		setPiegadesDetalas(piegadesDetalas);
 	}
 
 }

@@ -30,7 +30,7 @@ public class SamaksasVeidsController {
             model.addAttribute("mydata", allsv);
             return "sv-all-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -43,7 +43,7 @@ public class SamaksasVeidsController {
             model.addAttribute("mydata", sv);
             return "sv-one-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -57,7 +57,7 @@ public class SamaksasVeidsController {
             model.addAttribute("mydata", allsv);
             return "sv-all-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -79,7 +79,7 @@ public class SamaksasVeidsController {
                 svService.insertSamaksasVeids(sv);
                 return "redirect:/samaksas/veids/show/all";
             } catch (Exception e) {
-                model.addAttribute("mydata", e.getMessage());
+                model.addAttribute("message", e.getMessage());
                 return "error-page";
             }
         }
@@ -94,7 +94,7 @@ public class SamaksasVeidsController {
             model.addAttribute("id", id);
             return "sv-update-page";
         } catch (Exception e){
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -109,7 +109,7 @@ public class SamaksasVeidsController {
                 svService.updateSamaksasVeidsById(id, sv);
                 return "redirect:/samaksas/veids/show/all/" + id;
             } catch (Exception e) {
-                model.addAttribute("mydata", e.getMessage());
+                model.addAttribute("message", e.getMessage());
                 return "error-page";
             }
         }

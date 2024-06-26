@@ -38,7 +38,7 @@ public class Samaksas_veids {
 	private String piezimes;
 		
 	
-	@OneToMany(mappedBy = "samaksas_veids")
+	@OneToMany(mappedBy = "samaksasVeids")
 	@ToString.Exclude
 	private Collection<Pirkums> pirkumi;
 		

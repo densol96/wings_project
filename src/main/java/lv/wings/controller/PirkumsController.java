@@ -31,7 +31,7 @@ public class PirkumsController {
             model.addAttribute("mydata", allpirkums);
             return "pirkums-all-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -44,7 +44,7 @@ public class PirkumsController {
             model.addAttribute("mydata", pirkums);
             return "pirkums-one-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -58,7 +58,7 @@ public class PirkumsController {
             model.addAttribute("mydata", allpirkums);
             return "pirkums-all-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -80,7 +80,7 @@ public class PirkumsController {
                 pirkumsService.insertNewPirkums(pirkums);
                 return "redirect:/pirkums/show/all";
             } catch (Exception e) {
-                model.addAttribute("mydata", e.getMessage());
+                model.addAttribute("message", e.getMessage());
                 return "error-page";
             }
         }

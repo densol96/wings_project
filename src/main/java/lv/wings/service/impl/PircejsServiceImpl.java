@@ -42,7 +42,7 @@ public class PircejsServiceImpl implements IPircejsService{
 
     @Override
     public void insertNewPircejs(Pircejs pircejs) throws Exception {
-       Pircejs pircejsExist = pircejsRepo.findByBankas_SWIFT_kodsAndBankas_kods(pircejs.getBankas_SWIFT_kods(), pircejs.getBankas_kods());
+       Pircejs pircejsExist = pircejsRepo.findByBankasSwiftKodsAndBankasKods(pircejs.getBankasSwiftKods(), pircejs.getBankasKods());
 
         if(pircejsExist == null) {
             pircejsRepo.save(pircejs);
@@ -59,10 +59,10 @@ public class PircejsServiceImpl implements IPircejsService{
         pircejsToUpdate.setVards(pircejs.getVards());
         pircejsToUpdate.setUzvards(pircejs.getUzvards());
         pircejsToUpdate.setAdrese(pircejs.getAdrese());
-        pircejsToUpdate.setPersonas_kods(pircejs.getPersonas_kods());
-        pircejsToUpdate.setBankas_nosaukums(pircejs.getBankas_nosaukums());
-        pircejsToUpdate.setBankas_kods(pircejs.getBankas_kods());
-        pircejsToUpdate.setBankas_SWIFT_kods(pircejs.getBankas_SWIFT_kods());
+        pircejsToUpdate.setPersonasKods(pircejs.getPersonasKods());
+        pircejsToUpdate.setBankasNosaukums(pircejs.getBankasNosaukums());
+        pircejsToUpdate.setBankasKods(pircejs.getBankasKods());
+        pircejsToUpdate.setBankasSwiftKods(pircejs.getBankasSwiftKods());
     }
     
 }
