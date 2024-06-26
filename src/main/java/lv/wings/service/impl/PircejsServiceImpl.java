@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Pircejs;
+import lv.wings.model.Pirkums;
 import lv.wings.repo.IPircejs_Repo;
+import lv.wings.repo.IPirkums_Repo;
 import lv.wings.service.IPircejsService;
 
 @Service
@@ -14,6 +16,9 @@ public class PircejsServiceImpl implements IPircejsService{
 
     @Autowired
     private IPircejs_Repo pircejsRepo;
+
+    @Autowired 
+    private IPirkums_Repo pirkumsRepo;
 
     @Override
     public ArrayList<Pircejs> selectAllPircejs() throws Exception {
@@ -36,6 +41,13 @@ public class PircejsServiceImpl implements IPircejsService{
     @Override
     public void deletePircejsById(int idpirc) throws Exception {
         Pircejs pircejsToDelete = selectPircejsById(idpirc);
+
+        ArrayList<Pirkums> pirkumi = pirkumsRepo.findByPircejs(pircejsToDelete);
+        
+        for(int i = 0; i < pirkumi.size(); i++) {
+            pirkumi.get(i).setPircejs(null);
+            pirkumsRepo.save(pirkumi.get(i));
+        }
 
         pircejsRepo.delete(pircejsToDelete);
     }

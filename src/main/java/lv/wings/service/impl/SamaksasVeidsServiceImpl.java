@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lv.wings.model.Pirkums;
 import lv.wings.model.Samaksas_veids;
+import lv.wings.repo.IPirkums_Repo;
 import lv.wings.repo.ISamaksas_veids_Repo;
 import lv.wings.service.ISamaksasVeidsService;
 
@@ -13,7 +15,11 @@ import lv.wings.service.ISamaksasVeidsService;
 @Service
 public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
 
-    @Autowired ISamaksas_veids_Repo svRepo;
+    @Autowired 
+    private ISamaksas_veids_Repo svRepo;
+
+    @Autowired 
+    private IPirkums_Repo pirkumsRepo;
 
 
     @Override
@@ -38,7 +44,12 @@ public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
     public void deleteSamaksasVeidsById(int svID) throws Exception {
         Samaksas_veids svToDelete = selectSamaksasVeidsById(svID);
 
-
+        ArrayList<Pirkums> pirkumi = pirkumsRepo.findBySamaksasVeids(svToDelete);
+        
+        for(int i = 0; i < pirkumi.size(); i++) {
+            pirkumi.get(i).setSamaksasVeids(null);
+            pirkumsRepo.save(pirkumi.get(i));
+        }
 
         svRepo.delete(svToDelete);
     }
