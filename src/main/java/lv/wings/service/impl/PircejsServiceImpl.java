@@ -23,19 +23,19 @@ public class PircejsServiceImpl implements IPircejsService{
     }
 
     @Override
-    public Pircejs selectPircejsById(int id_pirc) throws Exception {
-        if(id_pirc < 0) throw new Exception("ID ir negativs");
+    public Pircejs selectPircejsById(int idpirc) throws Exception {
+        if(idpirc < 0) throw new Exception("ID ir negativs");
 
-        if(pircejsRepo.existsById(id_pirc)){
-            return pircejsRepo.findById(id_pirc).get();
+        if(pircejsRepo.existsById(idpirc)){
+            return pircejsRepo.findById(idpirc).get();
         } else {
-            throw new Exception("Pircejs ar ID [" + id_pirc + "] neeksiste");
+            throw new Exception("Pircejs ar ID [" + idpirc + "] neeksiste");
         }
     }
 
     @Override
-    public void deletePircejsById(int id_pirc) throws Exception {
-        Pircejs pircejsToDelete = selectPircejsById(id_pirc);
+    public void deletePircejsById(int idpirc) throws Exception {
+        Pircejs pircejsToDelete = selectPircejsById(idpirc);
 
         pircejsRepo.delete(pircejsToDelete);
     }
@@ -53,8 +53,8 @@ public class PircejsServiceImpl implements IPircejsService{
     }
 
     @Override
-    public void updatePircejsById(int id_pirc, Pircejs pircejs) throws Exception {
-        Pircejs pircejsToUpdate = selectPircejsById(id_pirc);
+    public void updatePircejsById(int idpirc, Pircejs pircejs) throws Exception {
+        Pircejs pircejsToUpdate = selectPircejsById(idpirc);
 
         pircejsToUpdate.setVards(pircejs.getVards());
         pircejsToUpdate.setUzvards(pircejs.getUzvards());

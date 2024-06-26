@@ -4,13 +4,13 @@
 
     <table border="1">
         <tr>
-            <td><b>pv_ID</b></td>
+            <td><b>pvID</b></td>
             <td><b>Nosaukums</b></td>
             <td><b>Piezimes</b></td>
         </tr>
 
         <tr th:each="temp : ${mydata}">
-            <td th:text="${temp.getPv_ID()}"></td>
+            <td th:text="${temp.getPvID()}"></td>
             <td th:text="${temp.getNosaukums()}"></td>
             <td th:text="${temp.getApraksts()}"></td>
         </tr>

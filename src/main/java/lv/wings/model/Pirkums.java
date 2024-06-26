@@ -29,24 +29,24 @@ import lombok.ToString;
 public class Pirkums {
 	
 	@Id
-	@Column(name = "Pirkums_ID")
+	@Column(name = "PirkumsID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int pirkums_ID;
+	private int pirkumsID;
 	
 
 	@ManyToOne
-	@JoinColumn(name = "PV_ID")
+	@JoinColumn(name = "PVID")
 	private Piegades_veids piegadesVeids;
 	
 	
 	@ManyToOne
-	@JoinColumn(name = "SV_ID")
+	@JoinColumn(name = "SVID")
 	private Samaksas_veids samaksasVeids;
 	
 	
 	@OneToOne
-	@JoinColumn(name = "Pircejs_ID")
+	@JoinColumn(name = "PircejsID")
 	private Pircejs pircejs;
 	
 	

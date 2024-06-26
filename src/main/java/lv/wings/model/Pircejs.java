@@ -24,10 +24,10 @@ import lombok.ToString;
 public class Pircejs {
 
 	@Id
-	@Column(name = "Pircejs_ID")
+	@Column(name = "PircejsID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int id_pirc;
+	private int idpirc;
 	
 	
 	@Column(name = "Vards")

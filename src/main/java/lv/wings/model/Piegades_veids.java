@@ -24,10 +24,10 @@ import lombok.ToString;
 public class Piegades_veids {
 	
 	@Id
-	@Column(name = "PV_ID")
+	@Column(name = "PVID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int pv_ID;
+	private int pvID;
 	
 	
 	//TODO iespejams papildus anotacijas
