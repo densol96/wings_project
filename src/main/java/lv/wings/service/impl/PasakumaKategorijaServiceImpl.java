@@ -37,6 +37,8 @@ public class PasakumaKategorijaServiceImpl implements IPasakumaKategorijaService
 	@Override
 	public void deleteById(int id) throws Exception {
 		PasakumaKategorija pasakumaKategorija = retrieveById(id);
+		
+		if (pasakumaKategorija == null) throw new Exception("Id neekstistē!");
 
 		pasakumaKategorijaRepo.delete(pasakumaKategorija);
 
@@ -58,6 +60,7 @@ public class PasakumaKategorijaServiceImpl implements IPasakumaKategorijaService
 	@Override
 	public void update(int id, PasakumaKategorija pasakumaKategorija) throws Exception {
 		PasakumaKategorija foundPasakumaKategorija = retrieveById(id);
+		if (foundPasakumaKategorija == null) throw new Exception("Pasākuma kategorija neeksistē!");
 
 		foundPasakumaKategorija.setNosaukums(pasakumaKategorija.getNosaukums());
 

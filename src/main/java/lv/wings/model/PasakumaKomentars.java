@@ -42,7 +42,6 @@ public class PasakumaKomentars {
 	@Size(min = 2, max = 250, message = "Pasākuma komentārs nedrīkst saturēt mazāk par 2 vai vairāk par 250 rakstzīmēm!")
 	private String komentars;
 
-	@NotNull
 	@Column(name = "datums")
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date datums;

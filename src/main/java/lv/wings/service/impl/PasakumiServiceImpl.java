@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.PasakumaBilde;
+import lv.wings.model.PasakumaKategorija;
 import lv.wings.model.Pasakums;
 import lv.wings.repo.IPasakumaBildeRepo;
 import lv.wings.repo.IPasakumsRepo;
@@ -58,5 +59,35 @@ public class PasakumiServiceImpl implements IPasakumiService{
 		
 		pasakumsRepo.delete(pasakums);
 	}
+
+	@Override
+	public void create(Pasakums pasakums) throws Exception {
+		Pasakums existedPasakums = pasakumsRepo.findByNosaukums(pasakums.getNosaukums());
+
+		if (existedPasakums != null)
+			throw new Exception("Pasākuma  ar nosaukumu: " + pasakums.getNosaukums() + " atrodas DB!");
+
+		pasakumsRepo.save(pasakums);
+		
+	}
+
+	@Override
+	public void update(int id, Pasakums pasakums) throws Exception {
+         Pasakums foundPasakums = pasakumsRepo.findByIdpa(id);
+		
+		if (foundPasakums == null) throw new Exception("Pasākums neeksistē!");
+
+		foundPasakums.setSakumaDatums(pasakums.getSakumaDatums());
+		foundPasakums.setBeiguDatums(pasakums.getBeiguDatums());
+		foundPasakums.setNosaukums(pasakums.getNosaukums());
+		foundPasakums.setVieta(pasakums.getVieta());
+		foundPasakums.setApraksts(pasakums.getApraksts());
+		foundPasakums.setKeyWords(pasakums.getKeyWords());
+
+		pasakumsRepo.save(foundPasakums);
+
+		
+	}
+	
 
 }

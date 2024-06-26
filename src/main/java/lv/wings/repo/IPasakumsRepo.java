@@ -15,4 +15,6 @@ public interface IPasakumsRepo extends CrudRepository<Pasakums, Integer> {
 
 	ArrayList<Pasakums> findAllByOrderByIdpaAsc();
 
+	Pasakums findByNosaukums(String nosaukums);
+
 }
