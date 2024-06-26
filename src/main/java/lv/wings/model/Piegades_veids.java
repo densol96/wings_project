@@ -39,7 +39,7 @@ public class Piegades_veids {
 	private String apraksts;
 	
 	
-	@OneToMany(mappedBy = "piegades_veids")
+	@OneToMany(mappedBy = "piegadesVeids")
 	@ToString.Exclude
 	private Collection<Pirkums> pirkumi;
 	

@@ -25,22 +25,22 @@ public class PirkumsServiceImpl implements IPirkumsService{
 
 
     @Override
-    public Pirkums selectPirkumsById(int pirkums_ID) throws Exception {
+    public Pirkums selectPirkumsById(int pirkumsID) throws Exception {
         
-        if(pirkums_ID < 0) throw new Exception("ID ir negativs");
+        if(pirkumsID < 0) throw new Exception("ID ir negativs");
 
-        if(pirkumsRepo.existsById(pirkums_ID)){
-            return pirkumsRepo.findById(pirkums_ID).get();
+        if(pirkumsRepo.existsById(pirkumsID)){
+            return pirkumsRepo.findById(pirkumsID).get();
         } else {
-            throw new Exception("Pirkums ar ID [" + pirkums_ID + "] neeksiste");
+            throw new Exception("Pirkums ar ID [" + pirkumsID + "] neeksiste");
         }
 
     }
 
 
     @Override
-    public void deletePirkumsById(int pirkums_ID) throws Exception {
-        Pirkums pirkumsToDelete = selectPirkumsById(pirkums_ID);
+    public void deletePirkumsById(int pirkumsID) throws Exception {
+        Pirkums pirkumsToDelete = selectPirkumsById(pirkumsID);
 
         pirkumsRepo.delete(pirkumsToDelete);
     }
@@ -55,7 +55,7 @@ public class PirkumsServiceImpl implements IPirkumsService{
 
 
     @Override
-    public void updatePirkumsById(int pirkums_ID, Pirkums pirkums) {
+    public void updatePirkumsById(int pirkumsID, Pirkums pirkums) {
         
 
 

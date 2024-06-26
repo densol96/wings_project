@@ -31,7 +31,7 @@ public class PircejsController {
             model.addAttribute("mydata", allpircejs);
             return "pircejs-all-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -44,7 +44,7 @@ public class PircejsController {
             model.addAttribute("mydata", pircejs);
             return "pircejs-one-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -58,7 +58,7 @@ public class PircejsController {
             model.addAttribute("mydata", allpircejs);
             return "pircejs-all-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -80,7 +80,7 @@ public class PircejsController {
                 pircejsService.insertNewPircejs(pircejs);
                 return "redirect:/pircejs/show/all";
             } catch (Exception e) {
-                model.addAttribute("mydata", e.getMessage());
+                model.addAttribute("message", e.getMessage());
                 return "error-page";
             }
         }
@@ -95,7 +95,7 @@ public class PircejsController {
             model.addAttribute("id", id);
             return "pircejs-update-page";
         } catch (Exception e){
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -110,7 +110,7 @@ public class PircejsController {
                 pircejsService.updatePircejsById(id, pircejs);
                 return "redirect:/pircejs/show/all/" + id;
             } catch (Exception e) {
-                model.addAttribute("mydata", e.getMessage());
+                model.addAttribute("message", e.getMessage());
                 return "error-page";
             }
         }

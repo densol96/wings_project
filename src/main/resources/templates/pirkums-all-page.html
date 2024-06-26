@@ -13,12 +13,12 @@
         </tr>
 
         <tr th:each="temp : ${mydata}">
-            <td th:text="${mydata.getPirkums_ID()}"></td>
-            <td th:text="${mydata.getPiegades_veids().getNosaukums()}"></td>
-            <td th:text="${mydata.getSamaksas_veids().getNosaukums()}"></td>
-            <td th:text="${mydata.getPircejs().getVards()}"></td>
-            <td th:text="${mydata.getPasutijuma_datums()}"></td>
-            <td th:text="${mydata.getPiegades_detalas()}"></td>
+            <td th:text="${temp.getPirkums_ID()}"></td>
+            <td th:text="${temp.getPiegadesVeids().getNosaukums()}"></td>
+            <td th:text="${temp.getSamaksasVeids().getNosaukums()}"></td>
+            <td th:text="${temp.getPircejs().getVards()}"></td>
+            <td th:text="${temp.getPasutijumaDatums()}"></td>
+            <td th:text="${temp.getPiegadesDetalas()}"></td>
         </tr>
     </table>
 

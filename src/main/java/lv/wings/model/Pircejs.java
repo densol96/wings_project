@@ -57,41 +57,41 @@ public class Pircejs {
 	
 	
 	//TODO REGEX
-	@Column(name = "Personas_kods")
+	@Column(name = "PersonasKods")
 	@NotNull
-	private String personas_kods;
+	private String personasKods;
 	
 	
 	//TODO REGEX
-	@Column(name = "Bankas_nosaukums")
+	@Column(name = "BankasNosaukums")
 	@NotNull
-	private String bankas_nosaukums;
-	
-	
-	//TODO REGEX
-	//Mainigais int ?
-	@Column(name = "Bankas_SWIFT_kods")
-	@NotNull
-	private String bankas_SWIFT_kods;
+	private String bankasNosaukums;
 	
 	
 	//TODO REGEX
 	//Mainigais int ?
-	@Column(name = "Bankas_kods")
+	@Column(name = "BankasSwiftKods")
 	@NotNull
-	private String bankas_kods;
+	private String bankasSwiftKods;
 	
 	
-	public Pircejs(String vards, String uzvards, String epasts, String adrese, String personas_kods,
-			String bankas_nosaukums, String bankas_swift_kods, String bankas_kods) {
+	//TODO REGEX
+	//Mainigais int ?
+	@Column(name = "BankasKods")
+	@NotNull
+	private String bankasKods;
+	
+	
+	public Pircejs(String vards, String uzvards, String epasts, String adrese, String personasKods,
+			String bankasNosaukums, String bankasSwiftKods, String bankasKods) {
 		setVards(vards);
 		setUzvards(uzvards);
 		setEpasts(epasts);
 		setAdrese(adrese);
-		setPersonas_kods(personas_kods);
-		setBankas_nosaukums(bankas_nosaukums);
-		setBankas_SWIFT_kods(bankas_swift_kods);
-		setBankas_kods(bankas_kods);
+		setPersonasKods(personasKods);
+		setBankasNosaukums(bankasNosaukums);
+		setBankasSwiftKods(bankasSwiftKods);
+		setBankasKods(bankasKods);
 	}
 	
 	

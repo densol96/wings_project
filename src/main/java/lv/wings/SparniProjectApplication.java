@@ -139,8 +139,8 @@ public class SparniProjectApplication {
 				preceRepo.save(prece2);
 
 				// PIRKUMA ELEMENTS
-				Pirkuma_elements pirkuma_elements1 = new Pirkuma_elements(prece1, 2);
-				Pirkuma_elements pirkuma_elements2 = new Pirkuma_elements(prece2, 1);
+				Pirkuma_elements pirkuma_elements1 = new Pirkuma_elements(pirkums1, prece1, 2);
+				Pirkuma_elements pirkuma_elements2 = new Pirkuma_elements(pirkums2, prece2, 1);
 				pirkuma_elementsRepo.save(pirkuma_elements1);
 				pirkuma_elementsRepo.save(pirkuma_elements2);
 

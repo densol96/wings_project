@@ -31,7 +31,7 @@ public class PiegadesVeidsController {
             model.addAttribute("mydata", allpv);
             return "pv-all-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -44,7 +44,7 @@ public class PiegadesVeidsController {
             model.addAttribute("mydata", pv);
             return "pv-one-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -58,7 +58,7 @@ public class PiegadesVeidsController {
             model.addAttribute("mydata", allpv);
             return "pv-all-page";
         } catch (Exception e) {
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -80,7 +80,7 @@ public class PiegadesVeidsController {
                 pvService.insertNewPiegadesVeids(pv);
                 return "redirect:/piegades/veids/show/all";
             } catch (Exception e) {
-                model.addAttribute("mydata", e.getMessage());
+                model.addAttribute("message", e.getMessage());
                 return "error-page";
             }
         }
@@ -95,7 +95,7 @@ public class PiegadesVeidsController {
             model.addAttribute("id", id);
             return "pv-update-page";
         } catch (Exception e){
-            model.addAttribute("mydata", e.getMessage());
+            model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
@@ -110,7 +110,7 @@ public class PiegadesVeidsController {
                 pvService.updatePiegadesVeidsById(id, pv);
                 return "redirect:/piegades/veids/show/all/" + id;
             } catch (Exception e) {
-                model.addAttribute("mydata", e.getMessage());
+                model.addAttribute("message", e.getMessage());
                 return "error-page";
             }
         }
