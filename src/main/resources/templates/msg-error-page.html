@@ -29,26 +29,7 @@
             </div>
             <img class="right-priev" alt="Latvijas prievites" src="/images/prievites_nobackground.png" />
         </nav>
-        <p>Lūdzu aizpildi laukus!</p>
-
-	<form th:action = "@{/kategorijas/update/__${id}__}" method = "post" th:object="${kategorija}">
-		
-		<table>
-			<tr>
-				<td>Nosaukums</td>
-				<td><input type="text" th:field="*{nosaukums}"/></td>
-				<td th:if="${#fields.hasErrors('nosaukums')}" th:errors="*{nosaukums}"></td>
-			</tr>
-			<tr>
-				<td>Apraksts</td>
-				<td><input type="text" th:field="*{apraksts}"/></td>
-				<td th:if="${#fields.hasErrors('apraksts')}" th:errors="*{apraksts}"></td>
-			</tr>				
-		</table>
-		
-		<button type="update">Atjaunot</button>
-		
-		
-	</form>
+        <h1 style="text-align: center">Saskaraties ar problēmu:</h1>
+        <h1 style="text-align: center" th:text="${mydata}"></h1>
     </body>
 </html>

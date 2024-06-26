@@ -31,12 +31,11 @@ public class KategorijasController {
 			return "kategorijas-page";
 		}catch(Exception e) {
 			model.addAttribute("mydata", e.getMessage());//padod kludas zinu uz error-page.html lapu
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
 
-	//TODO:Jāsakārtot error-page.html
 	@GetMapping("/show/all/{id}")//localhost:8080/kategorijas/show/all/{id}
 	public String getKategorijasById(@PathVariable("id") int id, Model model) {
 		try {
@@ -46,7 +45,7 @@ public class KategorijasController {
 			return "kategorijas-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata",e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
@@ -61,7 +60,7 @@ public class KategorijasController {
 			return "kategorijas-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 		
 	}
@@ -85,6 +84,7 @@ public class KategorijasController {
 
 	}
 	
+	//TODO: pielikt galveni
 	@GetMapping("/update/{id}") //localhost:8080/kategorijas/update/{id}
 	public String getKategorijasUpdateById(@PathVariable("id") int id, Model model) {
 		try {
@@ -94,7 +94,7 @@ public class KategorijasController {
 			return "kategorija-update-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 		
 	}
@@ -110,7 +110,7 @@ public class KategorijasController {
 				return "redirect:/kategorijas/show/all/"+ id;
 			} catch (Exception e) {
 				model.addAttribute("mydata", e.getMessage());
-				return "error-page";
+				return "msg-error-page";
 			}
 		}
 	}
