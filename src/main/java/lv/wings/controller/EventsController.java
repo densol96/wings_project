@@ -21,6 +21,7 @@ import lv.wings.service.IPasakumiService;
 public class EventsController {
 	@Autowired
 	private IPasakumiService pasakumsRepo;
+	
 
 	@GetMapping("")
 	public String eventsPageDefault(Model model) {
@@ -84,18 +85,5 @@ public class EventsController {
 
 	}
 
-	
-
-	/*
-	 * @GetMapping("/jaunumi") public String eventsPage(Model model) {
-	 * 
-	 * try { ArrayList<Pasakums> allPasakumi = pasakumiRepo.selectAllPasakumi();
-	 * model.addAttribute("events", allPasakumi);
-	 * 
-	 * return "events-page"; } catch (Exception e) { model.addAttribute("message",
-	 * e.getMessage()); return "error-page"; }
-	 * 
-	 * }
-	 */
 
 }

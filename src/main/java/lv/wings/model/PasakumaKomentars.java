@@ -2,6 +2,9 @@ package lv.wings.model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,13 +44,14 @@ public class PasakumaKomentars {
 
 	@NotNull
 	@Column(name = "datums")
-	private LocalDateTime datums;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date datums;
 
 	@ManyToOne
 	@JoinColumn(name = "idpa")
 	private Pasakums pasakums;
 
-	public PasakumaKomentars(String komentars, LocalDateTime datums, Pasakums pasakums) {
+	public PasakumaKomentars(String komentars, Date datums, Pasakums pasakums) {
 		setKomentars(komentars);
 		setDatums(datums);
 		setPasakums(pasakums);

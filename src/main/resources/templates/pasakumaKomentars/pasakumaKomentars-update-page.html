@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>Lūdzu atjaunot pasākuma kategoriju!</h1>
+
+        <form th:action="@{/pasakuma-komentars/update/__${id}__}" method="post" th:object="${pasakumaKomentars}">
+            <table>
+                <tr>
+                    <td>Nosaukums</td>
+                    <td><input type="text" th:field="*{komentars}" /></td>
+                    <td th:if="${#fields.hasErrors('komentars')}" th:errors="*{komentars}"></td>
+                </tr>
+            </table>
+
+            <button type="submit">Atjaunot</button>
+        </form>
+    </body>
+</html>

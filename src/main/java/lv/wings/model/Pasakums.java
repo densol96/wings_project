@@ -2,8 +2,10 @@ package lv.wings.model;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 
 import org.hibernate.annotations.Cascade;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 
@@ -42,11 +44,13 @@ public class Pasakums {
 
 	@NotNull
 	@Column(name = "sakumadatums")
-	private LocalDateTime sakumaDatums; /// sukumaDatums also includes time.
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date sakumaDatums; /// sukumaDatums also includes time.
 
 	@NotNull
 	@Column(name = "beigudatums")
-	private LocalDateTime beiguDatums;
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	private Date beiguDatums;
 
 	@NotNull
 	@Column(name = "nosaukums")
@@ -79,7 +83,7 @@ public class Pasakums {
 	@JoinColumn(name = "idpaka")
 	private PasakumaKategorija pasakumaKategorija;
 
-	public Pasakums(LocalDateTime sakumaDatums, LocalDateTime beiguDatums, String nosaukums, String vieta,
+	public Pasakums(Date sakumaDatums, Date beiguDatums, String nosaukums, String vieta,
 			String apraksts, String keyWords, PasakumaKategorija pasakumaKategorija) {
 		setSakumaDatums(sakumaDatums);
 		setBeiguDatums(beiguDatums);
