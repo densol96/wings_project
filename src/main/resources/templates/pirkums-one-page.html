@@ -1,0 +1,16 @@
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+
+    <p>Viens pirkums</p>
+    <br>
+    <p th:text="${mydata.getPirkumsID()}"></p>
+    <p th:text="${mydata.getPiegadesVeids().getNosaukums()}"></p>
+    <p th:text="${mydata.getSamaksasVeids().getNosaukums()}"></p>
+    <p th:text="${mydata.getPircejs().getVards()}"></p>
+    <p th:text="${mydata.getPasutijumaDatums()}"></p>
+    <p th:text="${mydata.getPiegadesDetalas()}"></p>
+
+</body>
+
+</html>

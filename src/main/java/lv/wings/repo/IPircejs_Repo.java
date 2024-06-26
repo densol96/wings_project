@@ -6,4 +6,6 @@ import lv.wings.model.Pircejs;
 
 public interface IPircejs_Repo extends CrudRepository<Pircejs, Integer>{
 
+    Pircejs findByBankasSwiftKodsAndBankasKods(String bankasSwiftKods, String bankasKods);
+
 }
