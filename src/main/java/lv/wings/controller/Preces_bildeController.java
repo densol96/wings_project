@@ -31,7 +31,7 @@ public class Preces_bildeController {
 			return "preces-bilde-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata",e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
@@ -45,7 +45,7 @@ public class Preces_bildeController {
 			return "preces-bilde-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata",e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 	}
 	
@@ -59,7 +59,7 @@ public class Preces_bildeController {
 			return "preces-bilde-all-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 		
 	}
@@ -72,7 +72,7 @@ public class Preces_bildeController {
 			return "preces-bilde-add-page";
 		}catch (Exception e) {
             model.addAttribute("mydata", e.getMessage());
-            return "error-page"; 
+            return "msg-error-page"; 
         }
 	} 
 	
@@ -87,7 +87,7 @@ public class Preces_bildeController {
 				return "redirect:/preces/bilde/show/all/"+bilde.getP_b_id();
 			} catch (Exception e) {
 				model.addAttribute("mydata", e.getMessage());
-	            return "error-page";
+	            return "msg-error-page";
 			}	
 		}
 	}
@@ -101,7 +101,7 @@ public class Preces_bildeController {
 			return "preces-bilde-update-page";
 		} catch (Exception e) {
 			model.addAttribute("mydata", e.getMessage());
-			return "error-page";
+			return "msg-error-page";
 		}
 		
 	}
@@ -117,7 +117,7 @@ public class Preces_bildeController {
 				return "redirect:/preces/bilde/show/all/"+ id;
 			} catch (Exception e) {
 				model.addAttribute("mydata", e.getMessage());
-				return "error-page";
+				return "msg-error-page";
 			}
 		}
 	}

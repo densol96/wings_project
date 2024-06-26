@@ -84,7 +84,6 @@ public class KategorijasController {
 
 	}
 	
-	//TODO: pielikt galveni
 	@GetMapping("/update/{id}") //localhost:8080/kategorijas/update/{id}
 	public String getKategorijasUpdateById(@PathVariable("id") int id, Model model) {
 		try {
