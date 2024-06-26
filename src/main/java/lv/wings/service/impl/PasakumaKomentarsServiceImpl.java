@@ -17,7 +17,7 @@ import lv.wings.service.IPasakumaKomentarsService;
 public class PasakumaKomentarsServiceImpl implements IPasakumaKomentarsService {
 	@Autowired
 	private IPasakumaKomentarsRepo pasakumaKomentarsRepo;
-	
+
 	@Autowired
 	private IPasakumsRepo pasakumsRepo;
 
@@ -44,6 +44,8 @@ public class PasakumaKomentarsServiceImpl implements IPasakumaKomentarsService {
 	@Override
 	public void deleteById(int id) throws Exception {
 		PasakumaKomentars pasakumaKomentars = retrieveById(id);
+		if (pasakumaKomentars == null)
+			throw new Exception("Id neekstistē!");
 
 		pasakumaKomentarsRepo.delete(pasakumaKomentars);
 
@@ -58,9 +60,10 @@ public class PasakumaKomentarsServiceImpl implements IPasakumaKomentarsService {
 	@Override
 	public void update(int id, PasakumaKomentars pasakumaKomentars) throws Exception {
 		PasakumaKomentars foundPasakumaKomentars = retrieveById(id);
+		if (pasakumaKomentars == null)
+			throw new Exception("Komentārs neekstistē!");
 
 		foundPasakumaKomentars.setKomentars(pasakumaKomentars.getKomentars());
-		
 
 		pasakumaKomentarsRepo.save(foundPasakumaKomentars);
 	}

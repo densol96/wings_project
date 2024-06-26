@@ -37,6 +37,7 @@ public class AtlaideServiceImpl implements IAtlaideService{
 	@Override
 	public void deleteById(int id) throws Exception {
 	  Atlaide atlaide = retrieveById(id);
+	  if (atlaide == null) throw new Exception("Id neekstistē!");
 	  
 	  atlaideRepo.delete(atlaide);
 		
@@ -54,6 +55,7 @@ public class AtlaideServiceImpl implements IAtlaideService{
 	@Override
 	public void update(int id, Atlaide atlaide) throws Exception {
 		Atlaide foundAtlaide = retrieveById(id);
+		 if (atlaide == null) throw new Exception("Atlaide neekstistē!");
 		
 		foundAtlaide.setApraksts(atlaide.getApraksts());
 		foundAtlaide.setAtlaidesApmers(atlaide.getAtlaidesApmers());

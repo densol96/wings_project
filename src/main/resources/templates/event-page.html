@@ -53,8 +53,9 @@
                 </div>
 
                 <div class="insert-comment">
-                    <form action="">
-                        <textarea name="" id=""></textarea>
+                    <form th:action="@{/jaunumi/__${id}__}" method="post" th:object="${pasakumaKomentars}">
+                        <textarea name="" id="" th:field="*{komentars}" ></textarea>
+                        <p th:if="${#fields.hasErrors('komentars')}" th:errors="*{komentars}"></p>
                         <button>Pievienot komentāru</button>
                     </form>
                 </div>

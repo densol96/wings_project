@@ -38,6 +38,7 @@ public class PasakumaBildeServiceImpl implements IPasakumaBildeService {
 	@Override
 	public void deleteById(int id) throws Exception {
 		PasakumaBilde pasakumaBilde = retrieveById(id);
+		if (pasakumaBilde == null) throw new Exception("Id neekstistē!");
 		pasakumaBildeRepo.delete(pasakumaBilde);
 
 	}
@@ -56,6 +57,8 @@ public class PasakumaBildeServiceImpl implements IPasakumaBildeService {
 	@Override
 	public void update(int id, PasakumaBilde pasakumaBilde) throws Exception {
 		PasakumaBilde foundPasakumaBilde = retrieveById(id);
+		
+		if (foundPasakumaBilde == null) throw new Exception("Id neekstistē!");
 
 		foundPasakumaBilde.setAtsauceUzBildi(pasakumaBilde.getAtsauceUzBildi());
 		foundPasakumaBilde.setNosaukums(pasakumaBilde.getNosaukums());

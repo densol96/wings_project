@@ -66,14 +66,14 @@ public class PasakumaKomentarsController {
 		}
 	}
 
-	@GetMapping("/add/{pasakumsId}")
-	public String getPasakumaKomentarsInsert(@PathVariable("pasakumsId") int pasakumsId, Model model) {
+	/*
+	@GetMapping("/add")
+	public String getPasakumaKomentarsInsert(Model model) {
 
 		try {
-			Pasakums pasakums = pasakumsRepo.selectPaskumsById(pasakumsId);
-			PasakumaKomentars pasakumaKomentars = new PasakumaKomentars();
-			pasakumaKomentars.setPasakums(pasakums);
-			model.addAttribute("pasakumaKomentars", pasakumaKomentars);
+			//Pasakums pasakums = pasakumsRepo.selectPaskumsById(pasakumsId);
+			model.addAttribute("pasakumaKomentars", new PasakumaKomentars());
+			//model.addAttribute("pasakumsId", pasakumsId);
 			
 			return "pasakumaKomentars/pasakumaKomentars-add-page";
 
@@ -85,17 +85,62 @@ public class PasakumaKomentarsController {
 	}
 
 	@PostMapping("/add")
-	public String postPasakumaKomentarsInsert(@Valid PasakumaKomentars pasakumaKomentars, BindingResult result)
+	public String postPasakumaKomentarsInsert( @Valid PasakumaKomentars pasakumaKomentars, BindingResult result, Model model)
 			throws Exception {
 
 		if (result.hasErrors()) {
 			return "pasakumaKomentars/pasakumaKomentars-add-page";
 		} else {
-			pasakumaKomentarsRepo.create(pasakumaKomentars);
-			return "redirect:/pasakuma-komentars/show/all";
+			try {
+				//pasakumaKomentars.setPasakums(pasakumsRepo.selectPaskumsById(pasakumsId));
+				pasakumaKomentarsRepo.create(pasakumaKomentars);
+				return "redirect:/pasakuma-komentars/show/all";
+			} catch (Exception e) {
+				model.addAttribute("message", e.getMessage());
+	            return "error-page";
+			}	
 		}
 
 	}
+	*/
+	
+	@GetMapping("/add/{pasakumsId}")
+	public String getPasakumaKomentarsInsert(@PathVariable("pasakumsId") int pasakumsId, Model model) {
+
+		try {
+			Pasakums pasakums = pasakumsRepo.selectPaskumsById(pasakumsId);
+			model.addAttribute("pasakumaKomentars", new PasakumaKomentars());
+			model.addAttribute("pasakumsId", pasakumsId);
+			return "pasakumaKomentars/pasakumaKomentars-add-page";
+
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+			return "error-page";
+		}
+
+	}
+	
+	
+	@PostMapping("/add/{pasakumsId}")
+	public String postPasakumaKomentarsInsert(@PathVariable("pasakumsId") int pasakumsId, @Valid PasakumaKomentars pasakumaKomentars, BindingResult result, Model model) throws Exception {
+		if (result.hasErrors()) {
+			return "pasakumaKomentars/pasakumaKomentars-add-page";
+		}
+		
+		try {
+			Pasakums pasakums = pasakumsRepo.selectPaskumsById(pasakumsId);
+			pasakumaKomentars.setPasakums(pasakums);
+			pasakumaKomentarsRepo.create(pasakumaKomentars);
+			return "redirect:/pasakuma-komentars/show/all";
+			
+		} catch (Exception e) {
+			model.addAttribute("message", e.getMessage());
+            return "error-page";
+		}
+				
+	}
+	
+	
 
 	@GetMapping("/update/{id}")
 	public String getPasakumaKomentarsUpdateById(@PathVariable("id") int id, Model model) {
