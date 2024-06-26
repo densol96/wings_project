@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Piegades_veids;
+import lv.wings.model.Pirkums;
 import lv.wings.repo.IPiegades_veids_Repo;
+import lv.wings.repo.IPirkums_Repo;
 import lv.wings.service.IPiegadesVeidsService;
 
 @Service
@@ -14,6 +16,9 @@ public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
 
     @Autowired
     private IPiegades_veids_Repo pvRepo;
+
+    @Autowired 
+    private IPirkums_Repo pirkumsRepo;
 
 
     @Override
@@ -37,6 +42,13 @@ public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
     @Override
     public void deletePiegadesVeidsById(int pvID) throws Exception {
         Piegades_veids pvToDelete = selectPiegadesVeidsById(pvID);
+
+        ArrayList<Pirkums> pirkumi = pirkumsRepo.findByPiegadesVeids(pvToDelete);
+        
+        for(int i = 0; i < pirkumi.size(); i++) {
+            pirkumi.get(i).setPiegadesVeids(null);
+            pirkumsRepo.save(pirkumi.get(i));
+        }
 
         pvRepo.delete(pvToDelete);
     }
