@@ -24,10 +24,10 @@ import lombok.ToString;
 public class Samaksas_veids {
 	
 	@Id
-	@Column(name = "SV_ID")
+	@Column(name = "SVID")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int sv_ID;
+	private int svID;
 	
 	//TODO iespejams papildus anotacijas
 	@Column(name = "Nosaukums")

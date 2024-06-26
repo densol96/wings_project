@@ -24,19 +24,19 @@ public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
     }
 
     @Override
-    public Piegades_veids selectPiegadesVeidsById(int pv_ID) throws Exception {
-        if(pv_ID < 0) throw new Exception("ID ir negativs");
+    public Piegades_veids selectPiegadesVeidsById(int pvID) throws Exception {
+        if(pvID < 0) throw new Exception("ID ir negativs");
 
-        if(pvRepo.existsById(pv_ID)){
-            return pvRepo.findById(pv_ID).get();
+        if(pvRepo.existsById(pvID)){
+            return pvRepo.findById(pvID).get();
         } else {
-            throw new Exception("Piegades veids ar ID [" + pv_ID+ "] neeksiste");
+            throw new Exception("Piegades veids ar ID [" + pvID+ "] neeksiste");
         }
     }
 
     @Override
-    public void deletePiegadesVeidsById(int pv_ID) throws Exception {
-        Piegades_veids pvToDelete = selectPiegadesVeidsById(pv_ID);
+    public void deletePiegadesVeidsById(int pvID) throws Exception {
+        Piegades_veids pvToDelete = selectPiegadesVeidsById(pvID);
 
         pvRepo.delete(pvToDelete);
     }
@@ -53,8 +53,8 @@ public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
     }
 
     @Override
-    public void updatePiegadesVeidsById(int pv_ID, Piegades_veids pv) throws Exception {
-        Piegades_veids pvToUpdate = selectPiegadesVeidsById(pv_ID);
+    public void updatePiegadesVeidsById(int pvID, Piegades_veids pv) throws Exception {
+        Piegades_veids pvToUpdate = selectPiegadesVeidsById(pvID);
 
         pvToUpdate.setNosaukums(pv.getNosaukums());
         pvToUpdate.setApraksts(pv.getApraksts());

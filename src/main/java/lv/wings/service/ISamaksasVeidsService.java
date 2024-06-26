@@ -8,11 +8,11 @@ public interface ISamaksasVeidsService {
     
     public abstract ArrayList<Samaksas_veids> selectAllSamaksasVeids() throws Exception;
 
-    public abstract Samaksas_veids selectSamaksasVeidsById(int sv_ID) throws Exception;
+    public abstract Samaksas_veids selectSamaksasVeidsById(int svID) throws Exception;
 
-    public abstract void deleteSamaksasVeidsById(int sv_ID) throws Exception;
+    public abstract void deleteSamaksasVeidsById(int svID) throws Exception;
 
     public abstract void insertSamaksasVeids(Samaksas_veids sv) throws Exception;
 
-    public abstract void updateSamaksasVeidsById(int sv_ID, Samaksas_veids sv) throws Exception;
+    public abstract void updateSamaksasVeidsById(int svID, Samaksas_veids sv) throws Exception;
 }

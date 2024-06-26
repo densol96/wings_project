@@ -24,19 +24,21 @@ public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
     }
 
     @Override
-    public Samaksas_veids selectSamaksasVeidsById(int sv_ID) throws Exception {
-        if(sv_ID < 0) throw new Exception("ID ir negativs");
+    public Samaksas_veids selectSamaksasVeidsById(int svID) throws Exception {
+        if(svID < 0) throw new Exception("ID ir negativs");
 
-        if(svRepo.existsById(sv_ID)){
-            return svRepo.findById(sv_ID).get();
+        if(svRepo.existsById(svID)){
+            return svRepo.findById(svID).get();
         } else {
-            throw new Exception("Samaksas veids ar ID [" + sv_ID+ "] neeksiste");
+            throw new Exception("Samaksas veids ar ID [" + svID + "] neeksiste");
         }
     }
 
     @Override
-    public void deleteSamaksasVeidsById(int sv_ID) throws Exception {
-        Samaksas_veids svToDelete = selectSamaksasVeidsById(sv_ID);
+    public void deleteSamaksasVeidsById(int svID) throws Exception {
+        Samaksas_veids svToDelete = selectSamaksasVeidsById(svID);
+
+
 
         svRepo.delete(svToDelete);
     }
@@ -53,8 +55,8 @@ public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
     }
 
     @Override
-    public void updateSamaksasVeidsById(int sv_ID, Samaksas_veids sv) throws Exception{
-        Samaksas_veids svToUpdate = selectSamaksasVeidsById(sv_ID);
+    public void updateSamaksasVeidsById(int svID, Samaksas_veids sv) throws Exception{
+        Samaksas_veids svToUpdate = selectSamaksasVeidsById(svID);
 
         svToUpdate.setNosaukums(sv.getNosaukums());
         svToUpdate.setPiezimes(sv.getPiezimes());
