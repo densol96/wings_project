@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lv.wings.model.Pirkuma_elements;
 import lv.wings.model.Pirkums;
+import lv.wings.repo.IPirkuma_elements_repo;
 import lv.wings.repo.IPirkums_Repo;
 import lv.wings.service.IPirkumsService;
 
@@ -14,6 +16,9 @@ public class PirkumsServiceImpl implements IPirkumsService{
     
     @Autowired
     private IPirkums_Repo pirkumsRepo;
+
+    @Autowired
+	private IPirkuma_elements_repo elementsRepo;
 
 
     @Override
@@ -41,6 +46,13 @@ public class PirkumsServiceImpl implements IPirkumsService{
     @Override
     public void deletePirkumsById(int pirkumsID) throws Exception {
         Pirkums pirkumsToDelete = selectPirkumsById(pirkumsID);
+
+        ArrayList<Pirkuma_elements> pirkumaElementi = elementsRepo.findByPirkums(pirkumsToDelete);
+        
+        for(int i = 0; i < pirkumaElementi.size(); i++) {
+            pirkumaElementi.get(i).setPirkums(null);
+            elementsRepo.save(pirkumaElementi.get(i));
+        }
 
         pirkumsRepo.delete(pirkumsToDelete);
     }
