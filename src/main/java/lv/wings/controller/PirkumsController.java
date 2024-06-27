@@ -12,8 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
+import lv.wings.model.Piegades_veids;
+import lv.wings.model.Pircejs;
 import lv.wings.model.Pirkums;
+import lv.wings.model.Samaksas_veids;
+import lv.wings.service.IPiegadesVeidsService;
+import lv.wings.service.IPircejsService;
 import lv.wings.service.IPirkumsService;
+import lv.wings.service.ISamaksasVeidsService;
 
 
 @Controller
@@ -22,6 +28,15 @@ public class PirkumsController {
     
     @Autowired
     private IPirkumsService pirkumsService;
+
+    @Autowired
+    private IPiegadesVeidsService pvService;
+
+    @Autowired
+    private ISamaksasVeidsService svService;
+
+    @Autowired
+    private IPircejsService pircejsService;
 
 
     @GetMapping("/show/all")
@@ -42,7 +57,7 @@ public class PirkumsController {
         try {
             Pirkums pirkums = pirkumsService.selectPirkumsById(id);
             model.addAttribute("mydata", pirkums);
-            return "pirkums-one-page";
+            return "pirkums-all-page";
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             return "error-page";
@@ -66,8 +81,19 @@ public class PirkumsController {
 
     @GetMapping("/add")
     public String getAddPirkums(Model model) {
-        model.addAttribute("pirkums", new Pirkums());
-        return "pirkums-add-page";
+        try {
+            ArrayList<Samaksas_veids> samaksasVeidi = svService.selectAllSamaksasVeids();
+            ArrayList<Piegades_veids> piegadesVeidi = pvService.selectAllPiegadesVeids();
+            ArrayList<Pircejs> pirceji = pircejsService.selectAllPircejs();
+            model.addAttribute("pirkums", new Pirkums());
+            model.addAttribute("samaksasVeidi", samaksasVeidi);
+            model.addAttribute("piegadesVeidi", piegadesVeidi);
+            model.addAttribute("pirceji", pirceji);
+            return "pirkums-add-page";
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+            return "error-page";
+        }
     }
 
 
