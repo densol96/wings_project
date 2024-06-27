@@ -60,7 +60,8 @@
 		<p th:text="${msg}"></p>
 			<table border="1">
 				<tr>
-					<td><b>Pirkuma Id</b></td>
+					<td><b>Pirkuma Elementa Id</b></td>
+                    <td><b>Pirkuma id</b></td>
 					<td><b>Preces id</b></td>
 					<td><b>Preces nosaukums</b></td>
 					<td><b>Daudzums</b></td>
@@ -68,6 +69,7 @@
 		
 				<tr th:each="tempC : ${mydata}">
 					<td th:text="${tempC.getP_e_id()}"></td>
+                    <td th:text="${tempC.getPirkums()} ? ${tempC.getPirkums().getPirkumsID()} : 'null'"></td>
 					<td th:text="${tempC.getPrece().getPrece_id()}"></td>
 					<td th:text="${tempC.getPrece().getNosaukums()}"></td>	
 					<td th:text="${tempC.getDaudzums()}"></td>		

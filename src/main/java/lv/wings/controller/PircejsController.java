@@ -42,7 +42,7 @@ public class PircejsController {
         try {
             Pircejs pircejs = pircejsService.selectPircejsById(id);
             model.addAttribute("mydata", pircejs);
-            return "pircejs-one-page";
+            return "pircejs-all-page";
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             return "error-page";
