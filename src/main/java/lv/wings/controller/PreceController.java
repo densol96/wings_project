@@ -48,7 +48,6 @@ public class PreceController {
 		}
 	}
 	
-	//TODO: SQL kļūda, tā pati, kas kategorijām
 	@GetMapping("/remove/{id}") //localhost:8080/prece/remove/{id}
 	public String getPreceDeleteById(@PathVariable("id") int id, Model model) {	
 		try {
