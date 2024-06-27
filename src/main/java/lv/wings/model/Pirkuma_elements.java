@@ -31,7 +31,7 @@ public class Pirkuma_elements {
 	
 	//TODO te nak pirkums ID MARKUSS
 	@ManyToOne
-	@JoinColumn(name = "Pirkums_ID")
+	@JoinColumn(name = "PirkumsID")
 	private Pirkums pirkums;
 	
 	//saite uz preces

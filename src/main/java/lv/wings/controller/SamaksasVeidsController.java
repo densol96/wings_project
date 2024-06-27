@@ -41,7 +41,7 @@ public class SamaksasVeidsController {
         try {
             Samaksas_veids sv = svService.selectSamaksasVeidsById(id);
             model.addAttribute("mydata", sv);
-            return "sv-one-page";
+            return "sv-all-page";
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             return "error-page";

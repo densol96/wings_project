@@ -42,7 +42,7 @@ public class PiegadesVeidsController {
         try {
             Piegades_veids pv = pvService.selectPiegadesVeidsById(id);
             model.addAttribute("mydata", pv);
-            return "pv-one-page";
+            return "pv-all-page";
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             return "error-page";
