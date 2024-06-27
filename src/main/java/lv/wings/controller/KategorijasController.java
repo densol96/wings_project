@@ -49,7 +49,6 @@ public class KategorijasController {
 		}
 	}
 	
-	//TODO: Neļauj izdzēst, ja ir sasaistīt foreigh key. Vajadzētu parādīt error message
 	@GetMapping("/remove/{id}") //localhost:8080/kategorijas/remove/{id}
 	public String getKategorijasDeleteById(@PathVariable("id") int id, Model model) {	
 		try {
