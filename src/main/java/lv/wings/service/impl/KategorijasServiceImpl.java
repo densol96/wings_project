@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 
 import lv.wings.model.Kategorijas;
+import lv.wings.model.Prece;
 import lv.wings.repo.IKategorijas_Repo;
+import lv.wings.repo.IPrece_Repo;
 import lv.wings.service.IKategorijasService;
 
 @Service
@@ -15,6 +17,9 @@ public class KategorijasServiceImpl implements IKategorijasService{
 	
 	@Autowired
 	private IKategorijas_Repo kategorijasRepo;
+	
+	@Autowired
+	private IPrece_Repo preceRepo;
 
 	@Override
 	public ArrayList<Kategorijas> retrieveAll() throws Exception {
@@ -42,6 +47,13 @@ public class KategorijasServiceImpl implements IKategorijasService{
 		
 		//atrast kategoriju kuru gribam dzēst
 		Kategorijas kategorijaForDeleting = retrieveById(id);
+		
+		ArrayList<Prece> preces = preceRepo.findByKategorijas(kategorijaForDeleting);
+		
+		for(int i = 0; i < preces.size();i++) {
+			preces.get(i).setKategorijas(null);
+			preceRepo.save(preces.get(i));
+		}
 				
 		//dzēšam no repo un DB
 		kategorijasRepo.delete(kategorijaForDeleting);

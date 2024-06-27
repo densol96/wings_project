@@ -46,7 +46,7 @@
 					<td th:text="${tempC.getApraksts()}"></td>	
 					<td th:text="${tempC.getCena()}"></td>	
 					<td th:text="${tempC.getDaudzums()}"></td>	
-					<td th:text="${tempC.getKategorijas().getNosaukums()}"></td>
+					<td th:text="${tempC.getKategorijas()} ? ${tempC.getKategorijas().getNosaukums()} : 'null'"></td>
 				</tr>
 		
 			</table>
