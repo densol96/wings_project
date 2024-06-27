@@ -22,6 +22,7 @@ public class Preces_bildeController {
 	@Autowired
 	private IPreces_bildeService bildeService;
 	
+	
 	@GetMapping("show/all") //localhost:8080/preces/bilde/show/all
 	public String getAllPrecesBildes(Model model) {
 		try {
