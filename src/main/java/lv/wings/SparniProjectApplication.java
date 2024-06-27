@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+
 import lv.wings.model.Kategorijas;
 import lv.wings.model.Piegades_veids;
 import lv.wings.model.Pircejs;
@@ -45,7 +46,6 @@ public class SparniProjectApplication {
 	}
 
 	@Bean
-
 	public CommandLineRunner sparniDB(IPircejs_Repo pircejs_repo, IPirkums_Repo pirkums_repo,
 			IPiegades_veids_Repo piegades_veids_repo, ISamaksas_veids_Repo samaksas_veids_repo,
 			IPasakumsRepo pasakumsRepo, IPasakumaBildeRepo pasakumaBildeRepo,
