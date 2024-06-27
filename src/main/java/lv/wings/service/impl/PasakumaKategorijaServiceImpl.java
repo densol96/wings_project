@@ -6,13 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.PasakumaKategorija;
+import lv.wings.model.Pasakums;
 import lv.wings.repo.IPasakumaKategorija;
+import lv.wings.repo.IPasakumsRepo;
 import lv.wings.service.IPasakumaKategorijaService;
 
 @Service
 public class PasakumaKategorijaServiceImpl implements IPasakumaKategorijaService {
 	@Autowired
 	IPasakumaKategorija pasakumaKategorijaRepo;
+
+	@Autowired
+	IPasakumsRepo pasakumsRepo;
 
 	@Override
 	public ArrayList<PasakumaKategorija> retrieveAll() throws Exception {
@@ -39,6 +44,14 @@ public class PasakumaKategorijaServiceImpl implements IPasakumaKategorijaService
 		PasakumaKategorija pasakumaKategorija = retrieveById(id);
 		
 		if (pasakumaKategorija == null) throw new Exception("Id neekstistē!");
+
+		ArrayList<Pasakums> pasakumi = pasakumsRepo.findByPasakumaKategorija(pasakumaKategorija);
+
+		for(int i = 0; i < pasakumi.size(); i++) {
+			pasakumi.get(i).setPasakumaKategorija(null);
+			pasakumsRepo.save(pasakumi.get(i));
+		}
+
 
 		pasakumaKategorijaRepo.delete(pasakumaKategorija);
 

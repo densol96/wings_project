@@ -75,6 +75,8 @@ public class PircejsServiceImpl implements IPircejsService{
         pircejsToUpdate.setBankasNosaukums(pircejs.getBankasNosaukums());
         pircejsToUpdate.setBankasKods(pircejs.getBankasKods());
         pircejsToUpdate.setBankasSwiftKods(pircejs.getBankasSwiftKods());
+
+        pircejsRepo.save(pircejsToUpdate);
     }
     
 }
