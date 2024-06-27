@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 
 import lv.wings.model.Pirkuma_elements;
 import lv.wings.model.Prece;
+import lv.wings.model.Preces_bilde;
 import lv.wings.repo.IKategorijas_Repo;
 import lv.wings.repo.IPirkuma_elements_repo;
 import lv.wings.repo.IPrece_Repo;
+import lv.wings.repo.IPreces_bilde_Repo;
 import lv.wings.service.IPreceService;
 
 
@@ -24,6 +26,9 @@ public class PreceServiceImpl implements IPreceService{
 	
 	@Autowired
 	private IPirkuma_elements_repo elementsRepo;
+	
+	@Autowired
+	private IPreces_bilde_Repo bildeRepo;
 
 	@Override
 	public ArrayList<Prece> retrieveAll() throws Exception {
@@ -50,11 +55,20 @@ public class PreceServiceImpl implements IPreceService{
 		//atrast preci kuru gribam dzēst
 		Prece preceForDeleting = retrieveById(id);
 		
+		//Ja tiek dzēsts pirkuma elements, tad pirkuma elementā prece tiek setota kā null
 		ArrayList<Pirkuma_elements> pirkumaElementi = elementsRepo.findByPrece(preceForDeleting);
 		
 		for(int i = 0; i < pirkumaElementi.size(); i++) {
 			pirkumaElementi.get(i).setPrece(null);
 			elementsRepo.save(pirkumaElementi.get(i));
+		}
+		
+		//Ja tiek dzēsta preces bilde, tad preces bildē prece tiek setota kā null
+		ArrayList<Preces_bilde> bildes = bildeRepo.findByPrece(preceForDeleting);
+				
+		for(int i = 0; i < bildes.size(); i++) {
+			bildes.get(i).setPrece(null);
+			bildeRepo.save(bildes.get(i));
 		}
 		
 		//dzēšam no repo un DB

@@ -42,7 +42,7 @@
 					<td th:text="${tempC.getP_b_id()}"></td>
 					<td th:text="${tempC.getBilde()}"></td>
 					<td th:text="${tempC.getApraksts()}"></td>
-					<td th:text="${tempC.getPrece().getPrece_id()}"></td>			
+					<td th:text="${tempC.getPrece()} ? ${tempC.getPrece().getPrece_id()} : 'null'"></td>			
 				</tr>
 		
 			</table>
