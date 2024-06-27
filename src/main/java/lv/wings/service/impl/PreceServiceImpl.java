@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lv.wings.model.Pirkuma_elements;
 import lv.wings.model.Prece;
 import lv.wings.repo.IKategorijas_Repo;
+import lv.wings.repo.IPirkuma_elements_repo;
 import lv.wings.repo.IPrece_Repo;
 import lv.wings.service.IPreceService;
 
@@ -19,6 +21,9 @@ public class PreceServiceImpl implements IPreceService{
 	
 	@Autowired
 	private IKategorijas_Repo kategorijaRepo;
+	
+	@Autowired
+	private IPirkuma_elements_repo elementsRepo;
 
 	@Override
 	public ArrayList<Prece> retrieveAll() throws Exception {
@@ -44,7 +49,14 @@ public class PreceServiceImpl implements IPreceService{
 	public void deleteById(int id) throws Exception {
 		//atrast preci kuru gribam dzēst
 		Prece preceForDeleting = retrieveById(id);
-				
+		
+		ArrayList<Pirkuma_elements> pirkumaElementi = elementsRepo.findByPrece(preceForDeleting);
+		
+		for(int i = 0; i < pirkumaElementi.size(); i++) {
+			pirkumaElementi.get(i).setPrece(null);
+			elementsRepo.save(pirkumaElementi.get(i));
+		}
+		
 		//dzēšam no repo un DB
 		preceRepo.delete(preceForDeleting);
 	}
