@@ -35,7 +35,7 @@ public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
 		if(elementsRepo.existsById(id)) {
 			return elementsRepo.findById(id).get();
 		}else {
-			throw new Exception("Pikruma elements with this id ("+ id + ") is not in system");
+			throw new Exception("Pirkuma elements with this id ("+ id + ") is not in system");
 		}
 	}
 
