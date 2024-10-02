@@ -9,6 +9,7 @@ mvnw.cmd
 .env
 
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -37,4 +38,6 @@ build/
 ### VS Code ###
 .vscode/
 
+### Node modules
+/front-end-react/node_modules
 
