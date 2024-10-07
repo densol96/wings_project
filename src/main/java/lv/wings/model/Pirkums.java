@@ -45,13 +45,12 @@ public class Pirkums {
 	private Samaksas_veids samaksasVeids;
 	
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "PircejsID")
 	private Pircejs pircejs;
 	
 	
 	@Column(name = "PasutijumaDatums")
-	@NotNull
 	private LocalDateTime pasutijumaDatums;
 	
 	

@@ -44,7 +44,7 @@
                         <td>Piegades veids</td>
                         <td><select th:field="*{piegadesVeids}">
                             <option value=""></option>
-                            <option th:each="pv : ${piegadesVeidi}" th:value="${pv}" th:text="${pv.getNosaukums()}">
+                            <option th:each="pv : ${piegadesVeidi}" th:value="${pv}" th:text="${pv.getNosaukums()}"></option>
                         </select></td>
                     </tr>
 
@@ -52,7 +52,7 @@
                         <td>Samaksas veids</td>
                         <td><select th:field="*{samaksasVeids}">
                             <option value=""></option>
-                            <option th:each="sv : ${samaksasVeidi}" th:value="${sv}" th:text="${sv.getNosaukums()}">
+                            <option th:each="sv : ${samaksasVeidi}" th:value="${sv}" th:text="${sv.getNosaukums()}"></option>
                         </select></td>
                     </tr>
 
@@ -60,7 +60,7 @@
                         <td>Pircejs</td>
                         <td><select th:field="*{pircejs}">
                             <option value=""></option>
-                            <option th:each="p : ${pirceji}" th:value="${p}" th:text="${p.getVards()}">
+                            <option th:each="p : ${pirceji}" th:value="${p}" th:text="${p.getVards()}"></option>
                         </select></td>
                     </tr>
 
@@ -68,6 +68,14 @@
                         <td>Piegades detalas</td>
                         <td><input type="text" th:field="*{piegadesDetalas}" /> </td>
                         <td th:if="${#fields.hasErrors('piegadesDetalas')}" th:errors="*{piegadesDetalas}"></td>
+                    </tr>
+
+                    <tr>
+                        <td>Pautijuma datums</td>
+                        <td><select th:field="*{pasutijumaDatums}">
+                            <option value=""></option>
+                            <option th:value="${pasutijumaDatums}" th:text="${pasutijumaDatums}"></option>
+                        </select></td>
                     </tr>
 
             </table>
