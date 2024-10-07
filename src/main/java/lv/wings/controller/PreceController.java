@@ -3,6 +3,9 @@ package lv.wings.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Prece;
+import lv.wings.poi.PoiController;
 import lv.wings.service.IPreceService;
 
 @Controller
@@ -45,6 +49,42 @@ public class PreceController {
 		} catch (Exception e) {
 			model.addAttribute("mydata",e.getMessage());
 			return "msg-error-page";
+		}
+	}
+
+	@GetMapping("/download/all")//localhost:8080/prece/download/all
+	public ResponseEntity<byte[]> downloadPreces() {
+		try {
+			ArrayList<Prece> allPreces = preceService.retrieveAll();
+			//iegūt faila baitus no preces ar visiem pieejamiem laukiem
+			byte[] fileBytes = PoiController.buildMultiple("preces", allPreces, new String[]{});
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDispositionFormData("attachment", "query_results.xlsx");
+
+			return ResponseEntity.ok().headers(headers).body(fileBytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@GetMapping("/download/all/{id}")//localhost:8080/prece/download/all/{id}
+	public ResponseEntity<byte[]> downloadPrecesById(@PathVariable("id") int id) {
+		try {
+			Prece selectedPrece = preceService.retrieveById(id);
+			//iegūt faila baitus no preces ar definētiem laukiem
+			byte[] fileBytes = PoiController.buildSingle("prece-"+id, selectedPrece, new String[]{"prece_id", "nosaukums", "cena", "daudzums"});
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDispositionFormData("attachment", "query_results.xlsx");
+
+			return ResponseEntity.ok().headers(headers).body(fileBytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.notFound().build();
 		}
 	}
 	

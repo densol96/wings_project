@@ -20,6 +20,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lv.wings.poi.PoiMeta;
 
 @Getter
 @Setter
@@ -65,6 +66,7 @@ public class Prece {
 
 	@Column(name = "Cena")
 	@Min(0)
+	@PoiMeta(name="Cena (EUR)", valueFormat="{} EUR")
 	private float cena;
 	
 	@Column(name = "Daudzums")
