@@ -1,9 +1,15 @@
 package lv.wings.model;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,6 +33,7 @@ import lombok.ToString;
 @ToString
 @Table(name="PreceTable")
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Prece {
 	
 	@Id
@@ -70,6 +77,14 @@ public class Prece {
 	@Column(name = "Daudzums")
 	@Min(0)
 	private int daudzums;
+	
+	
+	@CreatedDate
+	@Column(nullable = false,updatable = false)
+	private LocalDateTime createDate;
+	@LastModifiedDate
+	@Column(insertable = false)
+	private LocalDateTime lastModified;
 	
 	public Prece(String nosaukums,String apraksts, float cena, int daudzums, Kategorijas kategorija) {
 		setNosaukums(nosaukums);
