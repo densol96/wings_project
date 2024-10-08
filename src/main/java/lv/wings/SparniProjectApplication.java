@@ -171,13 +171,13 @@ public class SparniProjectApplication {
 				
 				PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 				
-				MyUser u1 = new MyUser("annija.user", encoder.encode("123"),a1);
+				MyUser u1 = new MyUser("annija.user", encoder.encode("123"),a2);
 				userRepo.save(u1);
 				
-				MyUser u2 = new MyUser("annija.admin", encoder.encode("456"),a2);
+				MyUser u2 = new MyUser("annija.admin", encoder.encode("456"),a1);
 				userRepo.save(u2);
 				
-				MyUser u3 = new MyUser("user.user", encoder.encode("789"),a1);
+				MyUser u3 = new MyUser("user.user", encoder.encode("789"),a2);
 				userRepo.save(u3);
 
 			}

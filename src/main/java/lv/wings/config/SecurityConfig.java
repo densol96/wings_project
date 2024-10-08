@@ -2,14 +2,11 @@ package lv.wings.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -17,30 +14,18 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 	
 	@Bean
-	public UserDetailsManager createDemoUser() {
-		
+	public MyUserDetailsMenager getDetailsService() {
+		return new MyUserDetailsMenager();
+	}
+	
+	@Bean
+	public DaoAuthenticationProvider createProvider() {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 		
-		UserDetails details1 = User.builder()
-				.username("annija.user")
-				.password(encoder.encode("123"))
-				.authorities("USER")
-				.build();
-		
-		UserDetails details2 = User.builder()
-				.username("annija.admin")
-				.password(encoder.encode("456"))
-				.authorities("ADMIN")
-				.build();
-		
-		UserDetails details3 = User.builder()
-				.username("user.user")
-				.password(encoder.encode("789"))
-				.authorities("USER")
-				.build();
-		
-		return new InMemoryUserDetailsManager(details1, details2, details3);
-		
+		provider.setPasswordEncoder(encoder);
+		provider.setUserDetailsService(getDetailsService());
+		return provider;
 	}
 
 	@Bean
