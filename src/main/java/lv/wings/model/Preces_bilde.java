@@ -63,7 +63,7 @@ public class Preces_bilde {
 	private LocalDateTime lastModified;
 	
 	@CreatedBy
-	//@Column(nullable = false,updatable = false)
+	@Column(updatable = false)
 	private Integer createdBy;
 	
 	@LastModifiedBy

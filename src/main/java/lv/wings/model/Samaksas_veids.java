@@ -60,7 +60,7 @@ public class Samaksas_veids {
 	private LocalDateTime lastModified;
 	
 	@CreatedBy
-	//@Column(nullable = false,updatable = false)
+	@Column(updatable = false)
 	private Integer createdBy;
 	
 	@LastModifiedBy
