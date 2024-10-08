@@ -1,0 +1,42 @@
+package lv.wings.model.security;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Setter
+@Getter
+@NoArgsConstructor
+@ToString
+@Entity
+@Table(name="WingsUser")
+public class MyUser {
+	
+	@Id
+	@Column(name = "UserId")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Setter(value = AccessLevel.NONE)
+	private int prece_id;
+	
+	@Column(name = "Username")
+	private String username;
+	
+	@Column(name = "Password")
+	private String password;
+
+	public MyUser(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
+	
+	
+}
