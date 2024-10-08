@@ -2,6 +2,10 @@ package lv.wings.model;
 
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -48,6 +52,7 @@ public class PasakumaBilde {
 	private String apraksts;
 
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "idpa")
 	private Pasakums pasakums;
 

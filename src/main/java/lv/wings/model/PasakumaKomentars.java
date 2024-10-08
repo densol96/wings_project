@@ -6,6 +6,10 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -46,7 +50,9 @@ public class PasakumaKomentars {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date datums;
 
+	
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "idpa")
 	private Pasakums pasakums;
 

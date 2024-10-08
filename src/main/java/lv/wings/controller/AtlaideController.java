@@ -3,6 +3,8 @@ package lv.wings.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,15 +17,34 @@ import jakarta.validation.Valid;
 import lv.wings.model.Atlaide;
 import lv.wings.model.Kategorijas;
 import lv.wings.service.IAtlaideService;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+
+@RestController
 @RequestMapping("/atlaide")
 public class AtlaideController {
 	
 	@Autowired
 	private IAtlaideService atlaidesRepo;
+
+
+	@GetMapping(value = "/show/all", produces = "application/json")
+	public ArrayList<Atlaide> getAtlaides() {
+		ArrayList<Atlaide> atlaides = new ArrayList<>();
+		Atlaide at1 = new Atlaide();
+		Atlaide at2 = new Atlaide();
+		Atlaide at3 = new Atlaide();
+		atlaides.add(at1);
+		atlaides.add(at2);
+		atlaides.add(at3);
+		
+		return atlaides;
+	}
 	
 	
+	
+	/* 
 	@GetMapping("/show/all")
 	public String getAllAtlaides(Model model) {
 		try {
@@ -38,7 +59,6 @@ public class AtlaideController {
 	}
 	
 	
-
 	@GetMapping("/show/all/{id}")
 	public String getAtlaideById(@PathVariable("id") int id, Model model) {
 		try {
@@ -110,5 +130,6 @@ public class AtlaideController {
 		
 	}
 	
+	*/
 
 }

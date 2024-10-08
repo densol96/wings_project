@@ -1,9 +1,8 @@
-package lv.wings.controller;
+/* package lv.wings.controller;
 
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,17 +12,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.Atlaide;
-import lv.wings.model.PasakumaBilde;
 import lv.wings.model.PasakumaKomentars;
 import lv.wings.model.Pasakums;
-import lv.wings.service.IPasakumaBildeService;
 import lv.wings.service.IPasakumaKomentarsService;
 import lv.wings.service.IPasakumiService;
 
 @Controller
 @RequestMapping("/jaunumi")
 public class EventsController {
+
+	
 	@Autowired
 	private IPasakumiService pasakumsRepo;
 
@@ -169,3 +167,4 @@ public class EventsController {
 	}
 
 }
+ */

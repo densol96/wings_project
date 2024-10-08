@@ -1,7 +1,10 @@
-import React from 'react'
+import React from "react";
+import Title from "./Title";
 
 export default function Contacts() {
   return (
-    <div>Kontakti</div>
-  )
+    <>
+      <Title title={"Kontakti"} />
+    </>
+  );
 }
