@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,25 +18,23 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name="WingsUser")
-public class MyUser {
+@Table(name="WingsAuthority")
+public class MyAuthority {
 	
 	@Id
-	@Column(name = "UserId")
+	@Column(name = "AuthorityId")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int prece_id;
+	private int authorityId;
 	
-	@Column(name = "Username")
-	private String username;
-	
-	@Column(name = "Password")
-	private String password;
+	@Column(name = "Title")
+	@Pattern(regexp = "[A-Z]{4,7}")
+	private String title;
 
-	public MyUser(String username, String password) {
-		this.username = username;
-		this.password = password;
+	public MyAuthority(@Pattern(regexp = "[A-Z]{4,7}") String title) {
+		this.title = title;
 	}
+	
 	
 	
 }
