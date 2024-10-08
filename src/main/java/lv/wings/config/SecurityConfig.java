@@ -44,44 +44,59 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) {
+	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(auth->auth
-				.requestMatchers("/par-biedribu").anonymous()
+				.requestMatchers("/par-biedribu").permitAll()
 				.requestMatchers("/atlaide/**").hasAuthority("ADMIN")
-				.requestMatchers("/kontakti").anonymous()
-				.requestMatchers("/jaunumi").anonymous()
-				.requestMatchers("/jaunumi/{id}").anonymous()
+				.requestMatchers("/kontakti").permitAll()
+				.requestMatchers("/jaunumi").permitAll()
+				.requestMatchers("/jaunumi/{id}").permitAll()
 				.requestMatchers("/jaunumi/delete/{id}").hasAuthority("ADMIN")
-				.requestMatchers("/jaunumi/sort/{sortType}").anonymous()
+				.requestMatchers("/jaunumi/sort/{sortType}").permitAll()
 				.requestMatchers("/jaunumi/add").hasAuthority("ADMIN")
 				.requestMatchers("/jaunumi/update/{id}").hasAuthority("ADMIN")
-				.requestMatchers("/").anonymous()
-				.requestMatchers("/kategorijas/show/all/**").anonymous()
+				.requestMatchers("/").permitAll()
+				.requestMatchers("/kategorijas/show/all/**").permitAll()
 				.requestMatchers("/kategorijas/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/kategorijas/add").hasAuthority("ADMIN")
 				.requestMatchers("/kategorijas/update/{id}").hasAuthority("ADMIN")
-				.requestMatchers("/error").anonymous()
+				.requestMatchers("/error").permitAll()
 				.requestMatchers("/pasakuma-bilde").permitAll() //TODO: izrunāt ko ar šo endpointu darām
-				.requestMatchers("/pasakuma-kategorija/show/all/**").anonymous()
+				.requestMatchers("/pasakuma-kategorija/show/all/**").permitAll()
 				.requestMatchers("/pasakuma-kategorija/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/pasakuma-kategorija/add").hasAuthority("ADMIN")
 				.requestMatchers("/pasakuma-kategorija/update/{id}").hasAuthority("ADMIN")
-				.requestMatchers("/pasakuma-komentars/show/all/**").anonymous()
+				.requestMatchers("/pasakuma-komentars/show/all/**").permitAll()
 				.requestMatchers("/pasakuma-komentars/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/pasakuma-komentars/add/{pasakumsId}").hasAuthority("ADMIN")
 				.requestMatchers("/pasakuma-komentars/update/{id}").hasAuthority("ADMIN")
-				.requestMatchers("/piegades/veids/show/all/**").anonymous()
+				.requestMatchers("/piegades/veids/show/all/**").permitAll()
 				.requestMatchers("/piegades/veids/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/piegades/veids/add").hasAuthority("ADMIN")
 				.requestMatchers("/piegades/update/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/pircejs/**").hasAuthority("ADMIN")
 				.requestMatchers("/pirkuma/elements/**").hasAuthority("ADMIN") //TODO iespējams šeit vajag access uz pirkuma elementu by id picējam
-				.requestMatchers("/pirkums/show/all").anonymous() //TODO pārrunat šo endpontu
-				.requestMatchers("/pirkums/show/all/{id}").anonymous() //TODO pārrunat šo endpontu
+				.requestMatchers("/pirkums/show/all").permitAll() //TODO pārrunat šo endpontu
+				.requestMatchers("/pirkums/show/all/{id}").permitAll() //TODO pārrunat šo endpontu
 				.requestMatchers("/pirkums/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/pirkums/add").hasAuthority("ADMIN")
-				
-				)
+				.requestMatchers("/prece/show/all/**").permitAll()
+				.requestMatchers("/prece/remove/{id}").hasAuthority("ADMIN")
+				.requestMatchers("/prece/add/{kategorijasid}").hasAuthority("ADMIN")
+				.requestMatchers("/prece/update/{id}").hasAuthority("ADMIN")
+				.requestMatchers("/preces/bilde/show/all/**").permitAll()
+				.requestMatchers("/preces/bilde/remove/{id}").hasAuthority("ADMIN")
+				.requestMatchers("/preces/bilde/add/{precesid}").hasAuthority("ADMIN")
+				.requestMatchers("/preces/bilde/update/{id}").hasAuthority("ADMIN")
+				.requestMatchers("/samaksas/veids/show/all/**").permitAll()
+				.requestMatchers("/samaksas/veids/remove/{id}").hasAuthority("ADMIN")
+				.requestMatchers("/samaksas/veids/add").hasAuthority("ADMIN")
+				.requestMatchers("/samaksas/veids/update/{id}").hasAuthority("ADMIN")
+				);
+		
+		http.formLogin(auth->auth.permitAll());
+		
+		return http.build();
 	}
 
 }
