@@ -27,7 +27,7 @@ public class MyUser {
 	@Column(name = "UserId")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int prece_id;
+	private int userId;
 	
 	@Column(name = "Username")
 	private String username;

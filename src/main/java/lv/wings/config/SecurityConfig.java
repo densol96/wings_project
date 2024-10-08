@@ -83,5 +83,10 @@ public class SecurityConfig {
 		
 		return http.build();
 	}
+	
+//	@Bean
+//	public AuditorAware<Integer> auditorAware(){
+//		return new ApplicationAuditAware();
+//	}
 
 }

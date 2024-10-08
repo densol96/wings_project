@@ -44,7 +44,7 @@ import lv.wings.repo.IPasakumaKomentarsRepo;
 import lv.wings.repo.IPasakumsRepo;
 
 @SpringBootApplication
-@EnableJpaAuditing
+//@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class SparniProjectApplication {
 
 	public static void main(String[] args) {
