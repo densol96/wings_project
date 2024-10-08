@@ -1,10 +1,10 @@
 import React from "react";
 import Title from "./Title";
 
-export default function About() {
+export default function MainPage() {
   return (
     <>
-      <Title title={"Par biedrību!"} />
+      <Title title={"Sākumlapa"} />
     </>
   );
 }

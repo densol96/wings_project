@@ -2,6 +2,8 @@ package lv.wings.model;
 
 import java.util.Collection;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,6 +39,7 @@ public class PasakumaKategorija {
 	private String nosaukums;
 	
 	@OneToMany(mappedBy = "pasakumaKategorija")
+	@JsonIgnore
 	private Collection<Pasakums> kategorijas;
 	
 	public PasakumaKategorija(String nosaukums) {
