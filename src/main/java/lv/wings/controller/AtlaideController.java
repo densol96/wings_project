@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Atlaide;
-import lv.wings.model.Kategorijas;
 import lv.wings.service.IAtlaideService;
 
 @Controller

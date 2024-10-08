@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.Atlaide;
 import lv.wings.model.PasakumaBilde;
-import lv.wings.service.IAtlaideService;
 import lv.wings.service.IPasakumaBildeService;
 
 @Controller
