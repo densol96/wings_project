@@ -1,19 +1,21 @@
 package lv.wings.model;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.Date;
 
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -30,6 +32,7 @@ import lombok.ToString;
 @Table(name = "pasakumuKomentari")
 @ToString
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class PasakumaKomentars {
 	@Column(name = "idpako")
 	@Id
@@ -49,6 +52,14 @@ public class PasakumaKomentars {
 	@ManyToOne
 	@JoinColumn(name = "idpa")
 	private Pasakums pasakums;
+	
+	@LastModifiedDate
+	@Column(insertable = false)
+	private LocalDateTime lastModifiedByAdmin;
+	
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 
 	public PasakumaKomentars(String komentars, Date datums, Pasakums pasakums) {
 		setKomentars(komentars);

@@ -3,8 +3,13 @@ package lv.wings.model;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,6 +31,7 @@ import lombok.ToString;
 @ToString
 @Table(name = "Pirkums_Table")
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Pirkums {
 	
 	@Id
@@ -62,6 +68,14 @@ public class Pirkums {
 	@OneToMany(mappedBy = "pirkums")
 	@ToString.Exclude
 	private Collection<Pirkuma_elements> pirkumaElementi;
+	
+	@LastModifiedDate
+	@Column(insertable = false)
+	private LocalDateTime lastModifiedByAdmin;
+	
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 
 	
 	public Pirkums(Piegades_veids piegadesVeids, Samaksas_veids samaksasVeids, Pircejs pircejs, LocalDateTime pasutijumaDatums, String piegadesDetalas) {
