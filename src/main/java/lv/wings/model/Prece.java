@@ -28,7 +28,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import lv.wings.model.security.MyUser;
 
 @Getter
 @Setter
