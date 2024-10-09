@@ -9,8 +9,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-
+import lv.wings.model.Atlaide;
 import lv.wings.model.Kategorijas;
+import lv.wings.model.PasakumaBilde;
+import lv.wings.model.PasakumaKategorija;
+import lv.wings.model.PasakumaKomentars;
+import lv.wings.model.Pasakums;
 import lv.wings.model.Piegades_veids;
 import lv.wings.model.Pircejs;
 import lv.wings.model.Pirkuma_elements;
@@ -18,7 +22,12 @@ import lv.wings.model.Pirkums;
 import lv.wings.model.Prece;
 import lv.wings.model.Preces_bilde;
 import lv.wings.model.Samaksas_veids;
+import lv.wings.repo.IAtlaideRepo;
 import lv.wings.repo.IKategorijas_Repo;
+import lv.wings.repo.IPasakumaBildeRepo;
+import lv.wings.repo.IPasakumaKategorija;
+import lv.wings.repo.IPasakumaKomentarsRepo;
+import lv.wings.repo.IPasakumsRepo;
 import lv.wings.repo.IPiegades_veids_Repo;
 import lv.wings.repo.IPircejs_Repo;
 import lv.wings.repo.IPirkuma_elements_repo;
@@ -26,17 +35,6 @@ import lv.wings.repo.IPirkums_Repo;
 import lv.wings.repo.IPrece_Repo;
 import lv.wings.repo.IPreces_bilde_Repo;
 import lv.wings.repo.ISamaksas_veids_Repo;
-
-import lv.wings.model.Atlaide;
-import lv.wings.model.PasakumaBilde;
-import lv.wings.model.PasakumaKategorija;
-import lv.wings.model.PasakumaKomentars;
-import lv.wings.model.Pasakums;
-import lv.wings.repo.IAtlaideRepo;
-import lv.wings.repo.IPasakumaBildeRepo;
-import lv.wings.repo.IPasakumaKategorija;
-import lv.wings.repo.IPasakumaKomentarsRepo;
-import lv.wings.repo.IPasakumsRepo;
 
 @SpringBootApplication
 public class SparniProjectApplication {
@@ -144,8 +142,10 @@ public class SparniProjectApplication {
 				// PIRKUMA ELEMENTS
 				Pirkuma_elements pirkuma_elements1 = new Pirkuma_elements(pirkums1, prece1, 2);
 				Pirkuma_elements pirkuma_elements2 = new Pirkuma_elements(pirkums2, prece2, 1);
+				Pirkuma_elements pirkuma_elements3 = new Pirkuma_elements(pirkums2, prece1, 1);
 				pirkuma_elementsRepo.save(pirkuma_elements1);
 				pirkuma_elementsRepo.save(pirkuma_elements2);
+				pirkuma_elementsRepo.save(pirkuma_elements3);
 
 				// BILDES
 				// public Preces_bilde(String bilde, String apraksts, Prece prece)

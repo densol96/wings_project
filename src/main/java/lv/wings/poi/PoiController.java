@@ -4,12 +4,23 @@ import java.io.ByteArrayOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xwpf.usermodel.XWPFTable.XWPFBorderType;
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
+
+import lv.wings.model.Pirkuma_elements;
+import lv.wings.model.Pirkums;
 
 public class PoiController {
 	public static <T> byte[] buildSingle(String tabname, T source, String[] fields) throws Exception{
@@ -179,6 +190,109 @@ public class PoiController {
 		outputStream.close();
 		return outputStream.toByteArray();
 	}
+
+	public static byte[] buildInvoice(String filename, Pirkums source) throws Exception{
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		XWPFDocument document = new XWPFDocument();
+
+		XWPFParagraph paragraph;
+		XWPFRun run;
+
+		XWPFTable table;
+		List<XWPFTableRow> tableRows;
+
+		paragraph = document.createParagraph();
+		run = paragraph.createRun();
+		run.setText("Pirkums\n");
+		run.setFontSize(32);
+		
+		table = document.createTable(1,3);
+		table.setWidth("100%");
+		table.setCellMargins(100,200,100,200);
+		table.setBottomBorder(XWPFBorderType.NONE, 0, 0, "000000");
+		table.setTopBorder(XWPFBorderType.NONE, 0, 0, "000000");
+		table.setLeftBorder(XWPFBorderType.NONE, 0, 0, "000000");
+		table.setRightBorder(XWPFBorderType.NONE, 0, 0, "000000");
+		//table.setInsideVBorder(XWPFBorderType.NONE, 0, 0, "000000");
+
+		tableRows = table.getRows();
+		paragraph = tableRows.get(0).getCell(0).getParagraphArray(0);
+		run = paragraph.createRun();
+		run.setText(source.getPircejs().getPersonasKods());
+		run.addBreak();
+		run.setText(source.getPircejs().getAdrese());
+		
+		paragraph = tableRows.get(0).getCell(1).getParagraphArray(0);
+		paragraph.setAlignment(ParagraphAlignment.RIGHT);
+		run = paragraph.createRun();
+		run.setText("Pasūtījuma Datums");
+		run.addBreak();
+		run.setText(source.getPasutijumaDatums().toString());
+		run.addBreak();
+		run.setText("Pasūtījuma ID");
+		run.addBreak();
+		run.setText(source.getPirkumsID()+"");
+		run.addBreak();
+
+		paragraph = tableRows.get(0).getCell(2).getParagraphArray(0);
+		run = paragraph.createRun();
+		run.setText("Veikala nosaukums");
+		run.addBreak();
+		run.setText("Veilaka adrese");
+		run.addBreak();
+		run.setText("Cita informācija");
+
+		paragraph = document.createParagraph();
+		run = paragraph.createRun();
+		run.addBreak();
+		run.addBreak();
+		
+		List<Pirkuma_elements> pirkumaElementi = (List<Pirkuma_elements>) source.getPirkumaElementi();
+
+		table = document.createTable(2+pirkumaElementi.size() ,3);
+		table.setWidth("100%");
+		table.setCellMargins(100,200,100,200);
+		tableRows = table.getRows();
+		paragraph = tableRows.get(0).getCell(0).getParagraphArray(0);
+		paragraph.createRun().setText("Prece");
+		paragraph.setAlignment(ParagraphAlignment.CENTER);
+		paragraph = tableRows.get(0).getCell(1).getParagraphArray(0);
+		paragraph.createRun().setText("Skaits");
+		paragraph.setAlignment(ParagraphAlignment.CENTER);
+		paragraph = tableRows.get(0).getCell(2).getParagraphArray(0);
+		paragraph.createRun().setText("Summa");
+		paragraph.setAlignment(ParagraphAlignment.CENTER);
+		float summ = 0;
+
+		for(int i = 0; i < pirkumaElementi.size(); i++){
+			int daudzums = pirkumaElementi.get(i).getDaudzums();
+			float cena = pirkumaElementi.get(i).getPrece().getCena();
+
+			tableRows.get(i+1).getCell(0).getParagraphArray(0).createRun().setText(pirkumaElementi.get(i).getPrece().getNosaukums()+"");
+			tableRows.get(i+1).getCell(1).getParagraphArray(0).createRun().setText(daudzums+"");
+			tableRows.get(i+1).getCell(2).getParagraphArray(0).createRun().setText(cena+"");
+			summ += daudzums * cena;
+		}
+		
+		paragraph = tableRows.get(table.getNumberOfRows()-1).getCell(1).getParagraphArray(0);
+		paragraph.createRun().setText("Summa:");
+		paragraph.setAlignment(ParagraphAlignment.RIGHT);
+
+		run = tableRows.get(table.getNumberOfRows()-1).getCell(2).getParagraphArray(0).createRun();
+		run.setText(summ+"");
+		run.setBold(true);
+
+		/*XWPFHeader head = document.createHeader(HeaderFooterType.DEFAULT);
+		head.createParagraph().createRun().setText("header");
+
+		XWPFFooter foot = document.createFooter(HeaderFooterType.DEFAULT);
+		foot.createParagraph().createRun().setText("footer");*/
+
+		document.write(outputStream);
+		document.close();
+		outputStream.close();
+		return outputStream.toByteArray();
+	} 
 
 	// kadsLauka_piemērs -> getKadsLauka_piemērs
 	private static String formatToGetterStyle(String str){
