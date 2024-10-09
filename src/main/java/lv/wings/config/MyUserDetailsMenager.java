@@ -23,7 +23,7 @@ public class MyUserDetailsMenager implements UserDetailsManager{
 		if(userFromDB == null) {
 			throw new UsernameNotFoundException(username + " is not found in system");
 		}else {
-			MyUserDetails details = new MyUserDetails(userFromDB);
+			MyUserDetails details = new  MyUserDetails(userFromDB);
 			return details;
 		}
 	}

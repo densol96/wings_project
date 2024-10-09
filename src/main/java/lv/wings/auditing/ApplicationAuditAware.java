@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import lv.wings.model.security.MyUser;
@@ -13,29 +14,17 @@ import org.springframework.data.domain.AuditorAware;
 public class ApplicationAuditAware implements AuditorAware<Integer>{
 
 	@Override
-	public Optional<Integer> getCurrentAuditor() {
-		Authentication authentication = SecurityContextHolder
-				.getContext()
-				.getAuthentication();
-		if(authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-			return Optional.empty();
-		}
+	public Optional<Integer> getCurrentAuditor(){
 		
-		MyUser userPrincipal = (MyUser) authentication.getPrincipal();
-		return Optional.ofNullable(userPrincipal.getUserId());
-		
-	}
+		return Optional.ofNullable(SecurityContextHolder.getContext())
+				.map(SecurityContext::getAuthentication)
+				.filter(Authentication::isAuthenticated)
+				.map(Authentication::getPrincipal)
+				.filter(principal -> principal instanceof MyUser)
+				.map(MyUser.class::cast)
+				.map(MyUser::getUserId);
 	
-//	@Override
-//	public Optional<MyUser> getCurrentAuditor(){
-//		
-//		return Optional.ofNullable(SecurityContextHolder.getContext())
-//				.map(SecurityContext::getAuthentication)
-//				.filter(Authentication::isAuthenticated)
-//				.map(Authentication::getPrincipal)
-//				.map(MyUser.class::cast);
-//	
-//	}
+	}
 	
 
 }

@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import lv.wings.model.security.MyUser;
 
-
 public class MyUserDetails implements UserDetails{
 
 	private MyUser user;
