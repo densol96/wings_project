@@ -61,7 +61,7 @@ public class SecurityConfig {
 				.requestMatchers("/piegades/veids/show/all/**").permitAll()
 				.requestMatchers("/piegades/veids/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/piegades/veids/add").hasAuthority("ADMIN")
-				.requestMatchers("/piegades/update/{id}").hasAuthority("ADMIN")
+				.requestMatchers("/piegades/veids/update/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/pircejs/**").hasAuthority("ADMIN")
 				.requestMatchers("/pirkuma/elements/**").hasAuthority("ADMIN") //TODO iespējams šeit vajag access uz pirkuma elementu by id picējam
 				.requestMatchers("/pirkums/show/all").permitAll() //TODO pārrunat šo endpontu
