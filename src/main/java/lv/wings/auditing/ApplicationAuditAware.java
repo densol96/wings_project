@@ -16,21 +16,27 @@ public class ApplicationAuditAware implements AuditorAware<Integer>{
 	@Override
 	public Optional<Integer> getCurrentAuditor(){
 				
+		//retrieves the Authentication object. Gets details about current user
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-	    if (authentication == null || !authentication.isAuthenticated() 
-	            || authentication instanceof AnonymousAuthenticationToken) {
+		//checking if the user is authenticated
+	    if (authentication == null //no authentication information is available, so the user is considered unauthenticated
+	    		|| !authentication.isAuthenticated() //user isn't fully authenticated
+	            || authentication instanceof AnonymousAuthenticationToken) { //user is anonymous
 	        return Optional.empty();
 	    }
 
+	    //retrieves the principal object from the Authentication instance
 	    Object principal = authentication.getPrincipal();
 	    
+	    //retrieves all information from logged in user
 	    if (principal instanceof MyUserDetails) {
 	        MyUserDetails userDetails = (MyUserDetails) principal;
 	        MyUser myUser = userDetails.getMyUser(); // Get MyUser from MyUserDetails
 	        return Optional.ofNullable(myUser.getUserId());
 	    }
 
+	    //returns null if not authenticated
 	    return Optional.empty();
 	    
 	
