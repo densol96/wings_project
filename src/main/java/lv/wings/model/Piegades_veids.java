@@ -60,14 +60,14 @@ public class Piegades_veids {
 	@Column(insertable = false)
 	private LocalDateTime lastModified;
 	
-	@CreatedBy
-	//@Column(nullable = false,updatable = false)
-	//@Column(updatable = false)
-	private Integer createdBy;
-	
-	@LastModifiedBy
-	@Column(insertable = false)
-	private Integer lastModifiedBy;
+//	@CreatedBy
+//	//@Column(nullable = false,updatable = false)
+//	//@Column(updatable = false)
+//	private Integer createdBy;
+//	
+//	@LastModifiedBy
+//	@Column(insertable = false)
+//	private Integer lastModifiedBy;
 	
 	
 	public Piegades_veids(String nosaukums, String apraksts) {

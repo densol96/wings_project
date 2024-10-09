@@ -2,6 +2,8 @@ package lv.wings.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -9,8 +11,12 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import lv.wings.auditing.ApplicationAuditAware;
+import lv.wings.model.security.MyUser;
+
 @Configuration
 @EnableWebSecurity
+@EnableJpaAuditing
 public class SecurityConfig {
 	
 	@Bean
@@ -84,9 +90,9 @@ public class SecurityConfig {
 		return http.build();
 	}
 	
-//	@Bean
-//	public AuditorAware<Integer> auditorAware(){
-//		return new ApplicationAuditAware();
-//	}
+	@Bean
+	public AuditorAware<Integer> auditorAware(){
+		return new ApplicationAuditAware();
+	}
 
 }
