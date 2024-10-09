@@ -1,15 +1,11 @@
 package lv.wings.service.impl;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.PasakumaBilde;
-import lv.wings.model.PasakumaKategorija;
 import lv.wings.model.Pasakums;
-import lv.wings.repo.IPasakumaBildeRepo;
 import lv.wings.repo.IPasakumsRepo;
 import lv.wings.service.IPasakumiService;
 
