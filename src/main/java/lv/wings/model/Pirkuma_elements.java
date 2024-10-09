@@ -60,9 +60,9 @@ public class Pirkuma_elements {
 	@Column(insertable = false)
 	private LocalDateTime lastModifiedByAdmin;
 	
-	@LastModifiedBy
-	@Column(insertable = false)
-	private Integer lastModifiedBy;
+//	@LastModifiedBy
+//	@Column(insertable = false)
+//	private Integer lastModifiedBy;
 	
 	public Pirkuma_elements(Pirkums pirkums, Prece prece, int daudzums) {
 		setPirkums(pirkums);

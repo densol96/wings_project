@@ -95,13 +95,13 @@ public class Pasakums {
 	@Column(insertable = false)
 	private LocalDateTime lastModified;
 	
-	@CreatedBy
-	//@Column(updatable = false)
-	private Integer createdBy;
-	
-	@LastModifiedBy
-	@Column(insertable = false)
-	private Integer lastModifiedBy;
+//	@CreatedBy
+//	//@Column(updatable = false)
+//	private Integer createdBy;
+//	
+//	@LastModifiedBy
+//	@Column(insertable = false)
+//	private Integer lastModifiedBy;
 
 	public Pasakums(Date sakumaDatums, Date beiguDatums, String nosaukums, String vieta,
 			String apraksts, String keyWords, PasakumaKategorija pasakumaKategorija) {
