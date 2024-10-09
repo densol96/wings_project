@@ -98,9 +98,9 @@ public class Pircejs {
 	@Column(insertable = false)
 	private LocalDateTime lastModifiedByAdmin;
 	
-//	@LastModifiedBy
-//	@Column(insertable = false)
-//	private Integer lastModifiedBy;
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 	
 	
 	public Pircejs(String vards, String uzvards, String epasts, String adrese, String personasKods,

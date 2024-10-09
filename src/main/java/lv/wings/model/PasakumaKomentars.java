@@ -57,9 +57,9 @@ public class PasakumaKomentars {
 	@Column(insertable = false)
 	private LocalDateTime lastModifiedByAdmin;
 	
-//	@LastModifiedBy
-//	@Column(insertable = false)
-//	private Integer lastModifiedBy;
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 
 	public PasakumaKomentars(String komentars, Date datums, Pasakums pasakums) {
 		setKomentars(komentars);

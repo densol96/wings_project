@@ -67,13 +67,13 @@ public class PasakumaBilde {
 	@Column(insertable = false)
 	private LocalDateTime lastModified;
 	
-//	@CreatedBy
-//	//@Column(updatable = false)
-//	private Integer createdBy;
-//	
-//	@LastModifiedBy
-//	@Column(insertable = false)
-//	private Integer lastModifiedBy;
+	@CreatedBy
+	@Column(updatable = false)
+	private Integer createdBy;
+	
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 
 	public PasakumaBilde(String atsauceUzBildi, String nosaukums, String apraksts, Pasakums pasakums) {
 		setAtsauceUzBildi(atsauceUzBildi);
