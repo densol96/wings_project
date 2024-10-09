@@ -91,7 +91,7 @@ public class Pircejs {
 	private String bankasKods;
 	
 	@CreatedDate
-	@Column(nullable = false,updatable = false)
+	@Column(nullable = false, updatable = false)
 	private LocalDateTime createDate;
 	
 	@LastModifiedDate

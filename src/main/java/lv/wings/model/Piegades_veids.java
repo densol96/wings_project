@@ -62,7 +62,7 @@ public class Piegades_veids {
 	
 	@CreatedBy
 	//@Column(nullable = false,updatable = false)
-	@Column(updatable = false)
+	//@Column(updatable = false)
 	private Integer createdBy;
 	
 	@LastModifiedBy
