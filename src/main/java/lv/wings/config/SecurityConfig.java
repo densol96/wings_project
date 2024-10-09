@@ -15,7 +15,6 @@ import lv.wings.auditing.ApplicationAuditAware;
 
 @Configuration
 @EnableWebSecurity
-@EnableJpaAuditing
 public class SecurityConfig {
 	
 	@Bean
