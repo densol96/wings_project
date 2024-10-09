@@ -73,9 +73,9 @@ public class Pirkums {
 	@Column(insertable = false)
 	private LocalDateTime lastModifiedByAdmin;
 	
-//	@LastModifiedBy
-//	@Column(insertable = false)
-//	private Integer lastModifiedBy;
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 
 	
 	public Pirkums(Piegades_veids piegadesVeids, Samaksas_veids samaksasVeids, Pircejs pircejs, LocalDateTime pasutijumaDatums, String piegadesDetalas) {

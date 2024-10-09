@@ -56,13 +56,13 @@ public class PasakumaKategorija {
 	@Column(insertable = false)
 	private LocalDateTime lastModified;
 	
-//	@CreatedBy
-//	//@Column(updatable = false)
-//	private Integer createdBy;
-//	
-//	@LastModifiedBy
-//	@Column(insertable = false)
-//	private Integer lastModifiedBy;
+	@CreatedBy
+	@Column(updatable = false)
+	private Integer createdBy;
+	
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 	
 	public PasakumaKategorija(String nosaukums) {
 		setNosaukums(nosaukums);
