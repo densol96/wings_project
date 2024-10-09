@@ -177,7 +177,7 @@ public class SparniProjectApplication {
 				MyUser u2 = new MyUser("annija.admin", encoder.encode("456"),a1);
 				userRepo.save(u2);
 				
-				MyUser u3 = new MyUser("user.user", encoder.encode("789"),a2);
+				MyUser u3 = new MyUser("admin", encoder.encode("123"),a1);
 				userRepo.save(u3);
 
 			}
