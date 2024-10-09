@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import lv.wings.model.security.MyUser;
 
-@SuppressWarnings("serial")//i need to tahe this off
+
 public class MyUserDetails implements UserDetails{
 
 	private MyUser user;
