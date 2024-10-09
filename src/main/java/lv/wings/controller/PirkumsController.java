@@ -3,6 +3,9 @@ package lv.wings.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +19,7 @@ import lv.wings.model.Piegades_veids;
 import lv.wings.model.Pircejs;
 import lv.wings.model.Pirkums;
 import lv.wings.model.Samaksas_veids;
+import lv.wings.poi.PoiController;
 import lv.wings.service.IPiegadesVeidsService;
 import lv.wings.service.IPircejsService;
 import lv.wings.service.IPirkumsService;
@@ -63,6 +67,24 @@ public class PirkumsController {
             return "error-page";
         }
     }
+
+    @GetMapping("/download/all/{id}")//localhost:8080/pirkums/download/all/{id}
+	public ResponseEntity<byte[]> downloadPrecesById(@PathVariable("id") int id) {
+		try {
+			Pirkums pirkums = pirkumsService.selectPirkumsById(id);
+			//iegūt faila baitus no preces ar definētiem laukiem
+			byte[] fileBytes = PoiController.buildInvoice("pirkums-"+id, pirkums);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDispositionFormData("attachment", "invoice-"+id+".docx");
+
+			return ResponseEntity.ok().headers(headers).body(fileBytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.notFound().build();
+		}
+	}
 
 
     @GetMapping("/remove/{id}")
