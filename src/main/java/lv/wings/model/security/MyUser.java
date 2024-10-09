@@ -27,7 +27,7 @@ public class MyUser {
 	@Column(name = "UserId")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int userId;
+	private Integer userId;
 	
 	@Column(name = "Username")
 	private String username;
@@ -44,6 +44,11 @@ public class MyUser {
 		this.password = password;
 		this.authority = authority;
 	}
+	
+	//necessary for ApplicationAuditAware
+	public Integer getUserId() {
+        return userId;
+    }
 
 	
 	

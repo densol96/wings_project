@@ -17,6 +17,11 @@ public class MyUserDetails implements UserDetails{
 		user = inputUser; //TODO pārbaudīt uz not null
 	}
 	
+	//necessary for ApplicationAuditAware
+	public MyUser getMyUser() {
+        return user;
+    }
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
