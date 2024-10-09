@@ -66,7 +66,7 @@ public class Kategorijas {
 	private LocalDateTime lastModified;
 	
 	@CreatedBy
-	@Column(updatable = false)
+	//@Column(updatable = false)
 	private Integer createdBy;
 	
 	@LastModifiedBy

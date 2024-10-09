@@ -74,7 +74,7 @@ public class Atlaide {
 	private LocalDateTime lastModified;
 	
 	@CreatedBy
-	@Column(updatable = false)
+	//@Column(updatable = false)
 	private Integer createdBy;
 	
 	@LastModifiedBy

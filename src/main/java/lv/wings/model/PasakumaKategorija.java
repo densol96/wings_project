@@ -57,7 +57,7 @@ public class PasakumaKategorija {
 	private LocalDateTime lastModified;
 	
 	@CreatedBy
-	@Column(updatable = false)
+	//@Column(updatable = false)
 	private Integer createdBy;
 	
 	@LastModifiedBy
