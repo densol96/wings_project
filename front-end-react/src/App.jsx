@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import News from "./components/news/News";
 import Shop from "./components/Shop";
@@ -9,7 +9,7 @@ import PageNotFound from "./components/errors/PageNotFound";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./components/admin/AdminDashboard";
 import AdminNews from "./components/admin/AdminNews";
-import AdminProducts from "./components/admin/AdminProducts"
+import AdminProducts from "./components/admin/AdminProducts";
 import SingleNews from "./components/news/SingleNews";
 
 /// Izveido react router, lai pareizi darbotos SPA
@@ -21,21 +21,20 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route index element={<MainPage />} />
 
-            <Route path="/news" element={<News />} /> 
-            <Route path="/news/show/:id" element={<SingleNews />}></Route>
+            <Route path="/news" element={<News />} />
+            <Route path="/news/show/:id" element={<SingleNews />} />
 
             <Route path="/shop" element={<Shop />} />
             <Route path="/about" element={<About />} />
             <Route path="/contacts" element={<Contacts />} />
 
             <Route path="/admin" element={<AdminLayout />}>
-              <Route path="/admin" element={<AdminDashboard/>}></Route>
+              <Route path="/admin" element={<AdminDashboard />}></Route>
               <Route path="/admin/products" element={<AdminProducts />}></Route>
               <Route path="/admin/news" element={<AdminNews />}></Route>
             </Route>
             <Route path="*" element={<PageNotFound />} />
           </Route>
-          
         </Routes>
       </BrowserRouter>
     </>

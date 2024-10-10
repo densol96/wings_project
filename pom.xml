@@ -96,7 +96,7 @@
                         <goal>npm</goal>
                     </goals>
                     <configuration>
-                        <arguments>install</arguments>
+                        <arguments>ci</arguments>
 						<workingDirectory>./front-end-react</workingDirectory>
                     </configuration>
                 </execution>
