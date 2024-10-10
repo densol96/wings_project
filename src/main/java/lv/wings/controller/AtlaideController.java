@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController
+@Controller
 @RequestMapping("/atlaide")
 public class AtlaideController {
 	
@@ -44,7 +44,7 @@ public class AtlaideController {
 	
 	
 	
-	/* 
+	 
 	@GetMapping("/show/all")
 	public String getAllAtlaides(Model model) {
 		try {
@@ -129,7 +129,4 @@ public class AtlaideController {
 		
 		
 	}
-	
-	*/
-
 }
