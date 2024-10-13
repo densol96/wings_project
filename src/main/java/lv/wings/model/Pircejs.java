@@ -32,14 +32,14 @@ public class Pircejs {
 	
 	@Column(name = "Vards")
 	@NotNull
-	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ ]+", message = "Tikai burti un atstarpes ir atlautas")
+	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ' ]+", message = "Tikai burti un atstarpes ir atlautas")
 	@Size(max = 20, min = 2)
 	private String vards;
 	
 	
 	@Column(name = "Uzvards")
 	@NotNull
-	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ ]+", message = "Tikai burti un atstarpes ir atlautas")
+	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ' ]+", message = "Tikai burti un atstarpes ir atlautas")
 	@Size(max = 20, min = 2)
 	private String uzvards;
 	

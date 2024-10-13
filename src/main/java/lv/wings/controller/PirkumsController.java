@@ -1,5 +1,6 @@
 package lv.wings.controller;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,6 +112,7 @@ public class PirkumsController {
             model.addAttribute("samaksasVeidi", samaksasVeidi);
             model.addAttribute("piegadesVeidi", piegadesVeidi);
             model.addAttribute("pirceji", pirceji);
+            model.addAttribute("pasutijumaDatums", LocalDateTime.now());
             return "pirkums-add-page";
         } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
@@ -122,9 +124,15 @@ public class PirkumsController {
     @PostMapping("/add")
     public String postAddPirkums(@Valid Pirkums pirkums, BindingResult result, Model model) {
         if(result.hasErrors()) {
+            System.out.println(pirkums.getPiegadesVeids());
+            System.out.println(pirkums.getSamaksasVeids());
+            System.out.println(pirkums.getPircejs());
+            System.out.println(pirkums.getPiegadesDetalas());
+            System.out.println(pirkums.getPasutijumaDatums());
             return "pirkums-add-page";
         } else {
             try {
+                System.out.println("aaaab");
                 pirkumsService.insertNewPirkums(pirkums);
                 return "redirect:/pirkums/show/all";
             } catch (Exception e) {
