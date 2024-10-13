@@ -3,6 +3,9 @@ package lv.wings.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Pircejs;
+import lv.wings.poi.PoiController;
 import lv.wings.service.IPircejsService;
 
 
@@ -48,6 +52,23 @@ public class PircejsController {
             return "error-page";
         }
     }
+
+    @GetMapping("/download/all")//localhost:8080/pircejs/download/all
+	public ResponseEntity<byte[]> downloadPreces() {
+		try {
+			ArrayList<Pircejs> allpircejs = pircejsService.selectAllPircejs();
+			byte[] fileBytes = PoiController.buildMultiple("pirceji", allpircejs, new String[]{});
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDispositionFormData("attachment", "query_results.xlsx");
+
+			return ResponseEntity.ok().headers(headers).body(fileBytes);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.notFound().build();
+		}
+	}
 
 
     @GetMapping("/remove/{id}")
