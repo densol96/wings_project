@@ -2,8 +2,15 @@ package lv.wings.model;
 
 import java.time.LocalDateTime;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,6 +32,7 @@ import lombok.ToString;
 @Table(name = "pasakumaBildes")
 @ToString
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class PasakumaBilde {
 	@Column(name = "idpab")
 	@Id
@@ -50,6 +58,22 @@ public class PasakumaBilde {
 	@ManyToOne
 	@JoinColumn(name = "idpa")
 	private Pasakums pasakums;
+	
+	@CreatedDate
+	@Column(nullable = false,updatable = false)
+	private LocalDateTime createDate;
+	
+	@LastModifiedDate
+	@Column(insertable = false)
+	private LocalDateTime lastModified;
+	
+	@CreatedBy
+	@Column(updatable = false)
+	private Integer createdBy;
+	
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 
 	public PasakumaBilde(String atsauceUzBildi, String nosaukums, String apraksts, Pasakums pasakums) {
 		setAtsauceUzBildi(atsauceUzBildi);

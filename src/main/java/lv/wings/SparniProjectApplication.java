@@ -10,8 +10,10 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lv.wings.model.Atlaide;
 import lv.wings.model.Kategorijas;
 import lv.wings.model.PasakumaBilde;
 import lv.wings.model.PasakumaKategorija;
@@ -24,7 +26,8 @@ import lv.wings.model.Pirkums;
 import lv.wings.model.Prece;
 import lv.wings.model.Preces_bilde;
 import lv.wings.model.Samaksas_veids;
-import lv.wings.repo.IAtlaideRepo;
+import lv.wings.model.security.MyAuthority;
+import lv.wings.model.security.MyUser;
 import lv.wings.repo.IKategorijas_Repo;
 import lv.wings.repo.IPasakumaBildeRepo;
 import lv.wings.repo.IPasakumaKategorija;
@@ -38,6 +41,8 @@ import lv.wings.repo.IPrece_Repo;
 import lv.wings.repo.IPreces_bilde_Repo;
 import lv.wings.repo.ISamaksas_veids_Repo;
 import net.datafaker.Faker;
+import lv.wings.repo.security.IMyAuthorityRepo;
+import lv.wings.repo.security.IMyUserRepo;
 import lv.wings.model.Atlaide;
 import lv.wings.model.PasakumaBilde;
 import lv.wings.model.PasakumaKategorija;
@@ -50,6 +55,7 @@ import lv.wings.repo.IPasakumaKomentarsRepo;
 import lv.wings.repo.IPasakumsRepo;
 
 @SpringBootApplication
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class SparniProjectApplication {
 
 	public static void main(String[] args) {
@@ -62,7 +68,7 @@ public class SparniProjectApplication {
 			IPasakumsRepo pasakumsRepo, IPasakumaBildeRepo pasakumaBildeRepo,
 			IPasakumaKomentarsRepo pasakumaKomentarsRepo, IPasakumaKategorija pasakumaKategorijaRepo,
 			IAtlaideRepo atlaideRepo, IKategorijas_Repo kategorijasRepo, IPirkuma_elements_repo pirkuma_elementsRepo,
-			IPrece_Repo preceRepo, IPreces_bilde_Repo bildeRepo) {
+			IPrece_Repo preceRepo, IPreces_bilde_Repo bildeRepo, IMyAuthorityRepo authRepo, IMyUserRepo userRepo) {
 
 		return new CommandLineRunner() {
 
@@ -203,6 +209,24 @@ public class SparniProjectApplication {
 				bildeRepo.save(bilde11);
 				bildeRepo.save(bilde22);
 				bildeRepo.save(bilde33);
+				
+				//USER & AUTHORITY
+				MyAuthority a1 = new MyAuthority("ADMIN");
+				authRepo.save(a1);
+				
+				MyAuthority a2 = new MyAuthority("USER"); //TODO: jāizrunā vai šādu lomu vajag
+				authRepo.save(a2);
+				
+				PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+				
+				MyUser u1 = new MyUser("annija.user", encoder.encode("123"),a2);
+				userRepo.save(u1);
+				
+				MyUser u2 = new MyUser("annija.admin", encoder.encode("456"),a1);
+				userRepo.save(u2);
+				
+				MyUser u3 = new MyUser("admin", encoder.encode("123"),a1);
+				userRepo.save(u3);
 
 			}
 		};

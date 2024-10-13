@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Atlaide;
-import lv.wings.model.Kategorijas;
 import lv.wings.repo.IAtlaideRepo;
 import lv.wings.service.IAtlaideService;
 

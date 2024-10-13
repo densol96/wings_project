@@ -1,7 +1,15 @@
 package lv.wings.model;
 
+import java.time.LocalDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,6 +29,7 @@ import lombok.ToString;
 @ToString
 @Table(name = "Pircejs_Table")
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Pircejs {
 
 	@Id
@@ -80,6 +89,18 @@ public class Pircejs {
 	@Column(name = "BankasKods")
 	@NotNull
 	private String bankasKods;
+	
+	@CreatedDate
+	@Column(nullable = false, updatable = false)
+	private LocalDateTime createDate;
+	
+	@LastModifiedDate
+	@Column(insertable = false)
+	private LocalDateTime lastModifiedByAdmin;
+	
+	@LastModifiedBy
+	@Column(insertable = false)
+	private Integer lastModifiedBy;
 	
 	
 	public Pircejs(String vards, String uzvards, String epasts, String adrese, String personasKods,

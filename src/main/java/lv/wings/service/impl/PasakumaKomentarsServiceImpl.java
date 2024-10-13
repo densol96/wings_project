@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.PasakumaKomentars;
-import lv.wings.model.Pasakums;
 import lv.wings.repo.IPasakumaKomentarsRepo;
 import lv.wings.repo.IPasakumsRepo;
 import lv.wings.service.IPasakumaKomentarsService;
