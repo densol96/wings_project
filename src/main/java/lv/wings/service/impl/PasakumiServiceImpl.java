@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Pasakums;
 import lv.wings.repo.IPasakumsRepo;
 import lv.wings.service.IPasakumiService;
@@ -27,9 +28,10 @@ public class PasakumiServiceImpl implements IPasakumiService{
 	}
 	
 	@Override
-	public ArrayList<Pasakums> selectAllPasakumi() throws Exception {
+	public ArrayList<Pasakums> selectAllPasakumi() throws NoContentException {
+
 		ArrayList<Pasakums> allPasakumi = (ArrayList<Pasakums>) pasakumsRepo.findAll();
-		if (allPasakumi.isEmpty()) throw new Exception("Datubāzē nav ievadīts neviens pasākums!");
+		if (allPasakumi.isEmpty()) throw new NoContentException("Pagaidām nav jaunumu vai pasākumu!");
 		
 		return allPasakumi;
 	}
@@ -37,6 +39,7 @@ public class PasakumiServiceImpl implements IPasakumiService{
 	@Override
 	public ArrayList<Pasakums> selectAllPasakumiDescOrder() throws Exception {
 		ArrayList<Pasakums> allPasakumi = (ArrayList<Pasakums>) pasakumsRepo.findAllByOrderByIdpaDesc();
+
 		if (allPasakumi.isEmpty()) throw new Exception("Datubāzē nav ievadīts neviens pasākums!");
 		return allPasakumi;
 	}
