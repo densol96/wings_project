@@ -36,6 +36,8 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(auth->auth
 				//.requestMatchers("/").permitAll()
 				.requestMatchers("/**").permitAll()
+				.requestMatchers("/api/**").permitAll()
+				.requestMatchers("/admin/**").hasAuthority("ADMIN")
 				/*.requestMatchers("api/news").permitAll()
 				.requestMatchers("/news").permitAll()
 				.requestMatchers("/par-biedribu").permitAll()
