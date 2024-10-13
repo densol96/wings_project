@@ -2,7 +2,9 @@ package lv.wings;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -35,6 +37,17 @@ import lv.wings.repo.IPirkums_Repo;
 import lv.wings.repo.IPrece_Repo;
 import lv.wings.repo.IPreces_bilde_Repo;
 import lv.wings.repo.ISamaksas_veids_Repo;
+import net.datafaker.Faker;
+import lv.wings.model.Atlaide;
+import lv.wings.model.PasakumaBilde;
+import lv.wings.model.PasakumaKategorija;
+import lv.wings.model.PasakumaKomentars;
+import lv.wings.model.Pasakums;
+import lv.wings.repo.IAtlaideRepo;
+import lv.wings.repo.IPasakumaBildeRepo;
+import lv.wings.repo.IPasakumaKategorija;
+import lv.wings.repo.IPasakumaKomentarsRepo;
+import lv.wings.repo.IPasakumsRepo;
 
 @SpringBootApplication
 public class SparniProjectApplication {
@@ -55,12 +68,7 @@ public class SparniProjectApplication {
 
 			@Override
 			public void run(String... args) throws Exception {
-				Pircejs pircejs1 = new Pircejs("Markuss", "Blumbergs", "random1@gmail.com", "Talsi, Street 1",
-						"000000-00001", "Liela banka", "246810", "Bankas kods 123");
-				Pircejs pircejs2 = new Pircejs("Lauris", "Kairo", "random2@gmail.com", "Liepaja, Street 4",
-						"000000-00002", "Liela banka", "123456", "Bankas kods 321");
-				pircejs_repo.save(pircejs1);
-				pircejs_repo.save(pircejs2);
+
 
 				Piegades_veids piegades_veids1 = new Piegades_veids("Piegades Veids1", "Apraksts1");
 				Piegades_veids piegades_veids2 = new Piegades_veids("Piegades Veids2", "Apraksts2");
@@ -72,9 +80,49 @@ public class SparniProjectApplication {
 				samaksas_veids_repo.save(samaksas_veids1);
 				samaksas_veids_repo.save(samaksas_veids2);
 
+
+				Faker faker = new Faker();
+
+				for(int i = 0; i < 500; i++) {
+					String dfVards = faker.name().firstName();
+					String dfUzvards = faker.name().lastName();
+					String dfEpasts = faker.expression("#{regexify '[A-Za-z0-9]{6,10}'}") + "@gmail.com";
+					String dfAdrese = faker.address().cityName() + ", " + faker.address().buildingNumber();
+					String dfPersonasKods = faker.expression("#{regexify '[0-9]{6}-[0-9]{5}'}");
+					String dfBankasNosaukums = faker.expression("#{options.option 'Liela banka', 'Maza banka', 'XL banka' 'XS banka'}");
+					String dfBankasSwiftKods = faker.expression("#{regexify '[0-9]{6}'}");
+					String dfBankasKods = "Bankas kods " + faker.expression("#{numerify '###'}");
+
+					Pircejs dfPircejs = new Pircejs(dfVards, dfUzvards, dfEpasts, dfAdrese,
+													dfPersonasKods, dfBankasNosaukums, dfBankasSwiftKods, dfBankasKods);
+
+					pircejs_repo.save(dfPircejs);
+
+					String d = faker.date().future(300, TimeUnit.HOURS, "YYYY-MM-dd hh:mm");
+        			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        			LocalDateTime dateTime = LocalDateTime.parse(d, formatter);
+
+					Pirkums newPirkums;
+					if(Integer.parseInt(faker.expression("#{numerify '#'}")) > 5) {
+						newPirkums = new Pirkums(piegades_veids1, samaksas_veids2, dfPircejs, dateTime,
+						"Nav detalas");
+					} else {
+						newPirkums = new Pirkums(piegades_veids2, samaksas_veids1, dfPircejs, dateTime,
+						"Lielas detalas");
+					}
+					pirkums_repo.save(newPirkums);
+				}
+
+				Pircejs pircejs1 = new Pircejs("Markuss", "Blumbergs", "random1@gmail.com", "Talsi, Street 1",
+						"000000-00001", "Liela banka", "246810", "Bankas kods 123");
+				Pircejs pircejs2 = new Pircejs("Lauris", "Kairo", "random2@gmail.com", "Liepaja, Street 4",
+						"000000-00002", "Liela banka", "123456", "Bankas kods 321");
+				pircejs_repo.save(pircejs1);
+				pircejs_repo.save(pircejs2);
+
 				Pirkums pirkums1 = new Pirkums(piegades_veids1, samaksas_veids1, pircejs1, LocalDateTime.now(),
 						"Nav detalas");
-				Pirkums pirkums2 = new Pirkums(piegades_veids2, samaksas_veids2, pircejs2, LocalDateTime.now(),
+				Pirkums pirkums2 = new Pirkums(piegades_veids2, samaksas_veids2, pircejs1, LocalDateTime.now(),
 						"Nav detalas");
 				pirkums_repo.save(pirkums1);
 				pirkums_repo.save(pirkums2);
