@@ -14,31 +14,40 @@ import SingleNews from "./components/news/SingleNews";
 
 /// Izveido react router, lai pareizi darbotos SPA
 function App() {
-  return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<MainPage />} />
+	return (
+		<>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<Layout />}>
+						<Route index element={<MainPage />} />
 
-            <Route path="/news" element={<News />} />
-            <Route path="/news/show/:id" element={<SingleNews />} />
+						<Route path="/news" element={<News />} />
+						<Route path="/news/show/:id" element={<SingleNews />} />
 
-            <Route path="/shop" element={<Shop />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contacts" element={<Contacts />} />
+						<Route path="/shop" element={<Shop />} />
+						<Route path="/about" element={<About />} />
+						<Route path="/contacts" element={<Contacts />} />
 
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route path="/admin" element={<AdminDashboard />}></Route>
-              <Route path="/admin/products" element={<AdminProducts />}></Route>
-              <Route path="/admin/news" element={<AdminNews />}></Route>
-            </Route>
-            <Route path="*" element={<PageNotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </>
-  );
+						<Route path="/admin" element={<AdminLayout />}>
+							<Route
+								path="/admin"
+								element={<AdminDashboard />}
+							></Route>
+							<Route
+								path="/admin/products"
+								element={<AdminProducts />}
+							></Route>
+							<Route
+								path="/admin/news"
+								element={<AdminNews />}
+							></Route>
+						</Route>
+						<Route path="*" element={<PageNotFound />} />
+					</Route>
+				</Routes>
+			</BrowserRouter>
+		</>
+	);
 }
 
 export default App;
