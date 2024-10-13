@@ -65,7 +65,6 @@ public class PreceController {
 
 			return ResponseEntity.ok().headers(headers).body(fileBytes);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return ResponseEntity.notFound().build();
 		}
 	}
@@ -83,7 +82,6 @@ public class PreceController {
 
 			return ResponseEntity.ok().headers(headers).body(fileBytes);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return ResponseEntity.notFound().build();
 		}
 	}

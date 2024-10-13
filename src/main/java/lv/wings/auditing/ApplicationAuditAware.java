@@ -2,14 +2,13 @@ package lv.wings.auditing;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import lv.wings.config.MyUserDetails;
 import lv.wings.model.security.MyUser;
-
-import org.springframework.data.domain.AuditorAware;
 
 public class ApplicationAuditAware implements AuditorAware<Integer>{
 
@@ -30,8 +29,7 @@ public class ApplicationAuditAware implements AuditorAware<Integer>{
 	    Object principal = authentication.getPrincipal();
 	    
 	    //retrieves all information from logged in user
-	    if (principal instanceof MyUserDetails) {
-	        MyUserDetails userDetails = (MyUserDetails) principal;
+	    if (principal instanceof MyUserDetails userDetails) {
 	        MyUser myUser = userDetails.getMyUser(); // Get MyUser from MyUserDetails
 	        return Optional.ofNullable(myUser.getUserId());
 	    }
