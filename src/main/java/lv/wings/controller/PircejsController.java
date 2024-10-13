@@ -65,7 +65,6 @@ public class PircejsController {
 
 			return ResponseEntity.ok().headers(headers).body(fileBytes);
 		} catch (Exception e) {
-			e.printStackTrace();
 			return ResponseEntity.notFound().build();
 		}
 	}
