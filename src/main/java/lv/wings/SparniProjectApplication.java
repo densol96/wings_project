@@ -14,7 +14,12 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import lv.wings.model.Atlaide;
 import lv.wings.model.Kategorijas;
+import lv.wings.model.PasakumaBilde;
+import lv.wings.model.PasakumaKategorija;
+import lv.wings.model.PasakumaKomentars;
+import lv.wings.model.Pasakums;
 import lv.wings.model.Piegades_veids;
 import lv.wings.model.Pircejs;
 import lv.wings.model.Pirkuma_elements;
@@ -24,7 +29,12 @@ import lv.wings.model.Preces_bilde;
 import lv.wings.model.Samaksas_veids;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
+import lv.wings.repo.IAtlaideRepo;
 import lv.wings.repo.IKategorijas_Repo;
+import lv.wings.repo.IPasakumaBildeRepo;
+import lv.wings.repo.IPasakumaKategorija;
+import lv.wings.repo.IPasakumaKomentarsRepo;
+import lv.wings.repo.IPasakumsRepo;
 import lv.wings.repo.IPiegades_veids_Repo;
 import lv.wings.repo.IPircejs_Repo;
 import lv.wings.repo.IPirkuma_elements_repo;
@@ -32,19 +42,9 @@ import lv.wings.repo.IPirkums_Repo;
 import lv.wings.repo.IPrece_Repo;
 import lv.wings.repo.IPreces_bilde_Repo;
 import lv.wings.repo.ISamaksas_veids_Repo;
-import net.datafaker.Faker;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
-import lv.wings.model.Atlaide;
-import lv.wings.model.PasakumaBilde;
-import lv.wings.model.PasakumaKategorija;
-import lv.wings.model.PasakumaKomentars;
-import lv.wings.model.Pasakums;
-import lv.wings.repo.IAtlaideRepo;
-import lv.wings.repo.IPasakumaBildeRepo;
-import lv.wings.repo.IPasakumaKategorija;
-import lv.wings.repo.IPasakumaKomentarsRepo;
-import lv.wings.repo.IPasakumsRepo;
+import net.datafaker.Faker;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
