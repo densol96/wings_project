@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.Atlaide;
 import lv.wings.model.PasakumaBilde;
 import lv.wings.repo.IPasakumaBildeRepo;
 import lv.wings.service.IPasakumaBildeService;

@@ -2,7 +2,6 @@ package lv.wings.service;
 
 import java.util.ArrayList;
 
-import lv.wings.model.PasakumaBilde;
 import lv.wings.model.PasakumaKategorija;
 
 public interface IPasakumaKategorijaService {

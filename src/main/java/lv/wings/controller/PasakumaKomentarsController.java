@@ -12,11 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.PasakumaKategorija;
 import lv.wings.model.PasakumaKomentars;
 import lv.wings.model.Pasakums;
-import lv.wings.repo.IPasakumsRepo;
-import lv.wings.service.IPasakumaKategorijaService;
 import lv.wings.service.IPasakumaKomentarsService;
 import lv.wings.service.IPasakumiService;
 

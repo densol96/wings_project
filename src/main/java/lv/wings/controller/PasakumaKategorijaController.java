@@ -12,10 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.Atlaide;
 import lv.wings.model.PasakumaKategorija;
-import lv.wings.repo.IPasakumaKategorija;
-import lv.wings.service.IAtlaideService;
 import lv.wings.service.IPasakumaKategorijaService;
 
 @Controller
