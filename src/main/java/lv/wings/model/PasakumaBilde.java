@@ -8,6 +8,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -56,6 +58,7 @@ public class PasakumaBilde {
 	private String apraksts;
 
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "idpa")
 	private Pasakums pasakums;
 	

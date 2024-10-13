@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 
-
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -12,10 +11,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,6 +32,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+
 
 //TODO: Need to check inputs or change something and create table relations if needed  NOT FINISHED!
 @Setter
@@ -77,13 +80,16 @@ public class Pasakums {
 	private String keyWords;
 
 	/////// Saites //////
-	@OneToMany(mappedBy = "pasakums", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "pasakums", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Collection<PasakumaBilde> pasakumaBilde;
 
-	@OneToMany(mappedBy = "pasakums", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "pasakums", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JsonIgnore
 	private Collection<PasakumaKomentars> pasakumaKomentars;
 
 	@ManyToOne
+	@JsonIgnore
 	@JoinColumn(name = "idpaka")
 	private PasakumaKategorija pasakumaKategorija;
 	
@@ -104,7 +110,7 @@ public class Pasakums {
 	private Integer lastModifiedBy;
 
 	public Pasakums(Date sakumaDatums, Date beiguDatums, String nosaukums, String vieta,
-			String apraksts, String keyWords, PasakumaKategorija pasakumaKategorija) {
+		String apraksts, String keyWords, PasakumaKategorija pasakumaKategorija) {
 		setSakumaDatums(sakumaDatums);
 		setBeiguDatums(beiguDatums);
 		setNosaukums(nosaukums);

@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -46,6 +48,7 @@ public class PasakumaKategorija {
 	private String nosaukums;
 	
 	@OneToMany(mappedBy = "pasakumaKategorija")
+	@JsonIgnore
 	private Collection<Pasakums> kategorijas;
 	
 	@CreatedDate

@@ -1,4 +1,4 @@
-package lv.wings.controller;
+/* package lv.wings.controller;
 
 import java.util.ArrayList;
 
@@ -20,6 +20,8 @@ import lv.wings.service.IPasakumiService;
 @Controller
 @RequestMapping("/jaunumi")
 public class EventsController {
+
+	
 	@Autowired
 	private IPasakumiService pasakumsRepo;
 
@@ -165,3 +167,4 @@ public class EventsController {
 	}
 
 }
+ */
