@@ -34,6 +34,10 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(auth->auth
+				//.requestMatchers("/").permitAll()
+				.requestMatchers("/**").permitAll()
+				/*.requestMatchers("api/news").permitAll()
+				.requestMatchers("/news").permitAll()
 				.requestMatchers("/par-biedribu").permitAll()
 				.requestMatchers("/atlaide/**").hasAuthority("ADMIN")
 				.requestMatchers("/kontakti").permitAll()
@@ -43,7 +47,6 @@ public class SecurityConfig {
 				.requestMatchers("/jaunumi/sort/{sortType}").permitAll()
 				.requestMatchers("/jaunumi/add").hasAuthority("ADMIN")
 				.requestMatchers("/jaunumi/update/{id}").hasAuthority("ADMIN")
-				.requestMatchers("/").permitAll()
 				.requestMatchers("/kategorijas/show/all/**").permitAll()
 				.requestMatchers("/kategorijas/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/kategorijas/add").hasAuthority("ADMIN")
@@ -80,7 +83,7 @@ public class SecurityConfig {
 				.requestMatchers("/samaksas/veids/show/all/**").permitAll()
 				.requestMatchers("/samaksas/veids/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/samaksas/veids/add").hasAuthority("ADMIN")
-				.requestMatchers("/samaksas/veids/update/{id}").hasAuthority("ADMIN")
+				.requestMatchers("/samaksas/veids/update/{id}").hasAuthority("ADMIN")*/
 				);
 		
 		http.formLogin(auth->auth.permitAll());

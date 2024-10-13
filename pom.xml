@@ -121,7 +121,7 @@
                         <goal>npm</goal>
                     </goals>
                     <configuration>
-                        <arguments>ci</arguments>
+                        <arguments>install</arguments>
 						<workingDirectory>./front-end-react</workingDirectory>
                     </configuration>
                 </execution>
