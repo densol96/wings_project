@@ -29,18 +29,13 @@ function App() {
 						<Route path="/contacts" element={<Contacts />} />
 
 						<Route path="/admin" element={<AdminLayout />}>
+							<Route index element={<AdminDashboard />} />
+
 							<Route
-								path="/admin"
-								element={<AdminDashboard />}
-							></Route>
-							<Route
-								path="/admin/products"
+								path="products"
 								element={<AdminProducts />}
 							></Route>
-							<Route
-								path="/admin/news"
-								element={<AdminNews />}
-							></Route>
+							<Route path="news" element={<AdminNews />}></Route>
 						</Route>
 						<Route path="*" element={<PageNotFound />} />
 					</Route>
