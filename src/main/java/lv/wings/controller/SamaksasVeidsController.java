@@ -13,20 +13,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Samaksas_veids;
-import lv.wings.service.ISamaksasVeidsService;
+import lv.wings.service.ICRUDService;
 
 @Controller
 @RequestMapping("/samaksas/veids")
 public class SamaksasVeidsController {
     
     @Autowired
-    private ISamaksasVeidsService svService;
+    private ICRUDService<Samaksas_veids> svService;
 
 
     @GetMapping("/show/all")
     public String getShowAllSV(Model model){
         try {
-            ArrayList<Samaksas_veids> allsv = svService.selectAllSamaksasVeids();
+            ArrayList<Samaksas_veids> allsv = svService.retrieveAll();
             model.addAttribute("mydata", allsv);
             return "sv-all-page";
         } catch (Exception e) {
@@ -39,7 +39,7 @@ public class SamaksasVeidsController {
     @GetMapping("/show/all/{id}")
     public String getShowOneSV(@PathVariable("id") int id, Model model){
         try {
-            Samaksas_veids sv = svService.selectSamaksasVeidsById(id);
+            Samaksas_veids sv = svService.retrieveById(id);
             model.addAttribute("mydata", sv);
             return "sv-all-page";
         } catch (Exception e) {
@@ -52,8 +52,8 @@ public class SamaksasVeidsController {
     @GetMapping("/remove/{id}")
     public String getDeleteOneSV(@PathVariable("id") int id, Model model){
         try {
-            svService.deleteSamaksasVeidsById(id);
-            ArrayList<Samaksas_veids> allsv = svService.selectAllSamaksasVeids();
+            svService.deleteById(id);
+            ArrayList<Samaksas_veids> allsv = svService.retrieveAll();
             model.addAttribute("mydata", allsv);
             return "sv-all-page";
         } catch (Exception e) {
@@ -76,7 +76,7 @@ public class SamaksasVeidsController {
             return "sv-add-page";
         } else {
             try {
-                svService.insertSamaksasVeids(sv);
+                svService.create(sv);
                 return "redirect:/samaksas/veids/show/all";
             } catch (Exception e) {
                 model.addAttribute("message", e.getMessage());
@@ -89,7 +89,7 @@ public class SamaksasVeidsController {
     @GetMapping("/update/{id}")
     public String getUpdateSV(@PathVariable("id") int id, Model model) {
         try {
-            Samaksas_veids svToUpdate = svService.selectSamaksasVeidsById(id);
+            Samaksas_veids svToUpdate = svService.retrieveById(id);
             model.addAttribute("sv", svToUpdate);
             model.addAttribute("id", id);
             return "sv-update-page";
@@ -106,7 +106,7 @@ public class SamaksasVeidsController {
             return "sv-update-page";
         } else {
             try {
-                svService.updateSamaksasVeidsById(id, sv);
+                svService.update(id, sv);
                 return "redirect:/samaksas/veids/show/all/" + id;
             } catch (Exception e) {
                 model.addAttribute("message", e.getMessage());

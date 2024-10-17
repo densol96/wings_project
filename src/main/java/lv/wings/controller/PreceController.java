@@ -17,14 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 import lv.wings.model.Prece;
 import lv.wings.poi.PoiController;
-import lv.wings.service.IPreceService;
+import lv.wings.service.ICRUDInsertedService;
+import lv.wings.service.ICRUDService;
 
 @Controller
 @RequestMapping("/prece")
 public class PreceController {
 	
 	@Autowired
-	private IPreceService preceService;
+	private ICRUDInsertedService<Prece> preceService;
 	
 	@GetMapping("/show/all")//localhost:8080/prece/show/all
 	public String getAllPreces(Model model) {

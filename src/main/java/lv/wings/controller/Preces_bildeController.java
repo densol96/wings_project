@@ -13,14 +13,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Preces_bilde;
-import lv.wings.service.IPreces_bildeService;
+import lv.wings.service.ICRUDInsertedService;
+import lv.wings.service.ICRUDService;
 
 @Controller
 @RequestMapping("/preces/bilde")
 public class Preces_bildeController {
 	
 	@Autowired
-	private IPreces_bildeService bildeService;
+	private ICRUDInsertedService<Preces_bilde> bildeService;
 	
 	@GetMapping("show/all") //localhost:8080/preces/bilde/show/all
 	public String getAllPrecesBildes(Model model) {

@@ -10,43 +10,43 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import lv.wings.model.Pirkums;
-import lv.wings.service.IPirkumsService;
+import lv.wings.service.ICRUDService;
 
 @SpringBootTest
 public class PirkumsServiceTest {
     
     @Autowired
-    IPirkumsService pirkumsService;
+    ICRUDService<Pirkums> pirkumsService;
 
 
     @Test
     void selectAllPirkumiTest() throws Exception {
-        ArrayList<Pirkums> pirkumi = pirkumsService.selectAllPirkums(); 
+        ArrayList<Pirkums> pirkumi = pirkumsService.retrieveAll(); 
         assertNotNull(pirkumi);
     }
 
     @Test
     void selectOnePirkumsTest() throws Exception {
-        Pirkums pirkums = pirkumsService.selectPirkumsById(1);
+        Pirkums pirkums = pirkumsService.retrieveById(1);
         assertNotNull(pirkums);
     }
 
     @Test
     void deletePirkumsTest() throws Exception {
-        pirkumsService.deletePirkumsById(444);
-        assertThrowsExactly(Exception.class, () -> pirkumsService.selectPirkumsById(444));
+        pirkumsService.deleteById(444);
+        assertThrowsExactly(Exception.class, () -> pirkumsService.retrieveById(444));
     }
 
 
     @Test
     void insertPirkumsTest() throws Exception {
-        ArrayList<Pirkums> oldPirkumi = pirkumsService.selectAllPirkums();
+        ArrayList<Pirkums> oldPirkumi = pirkumsService.retrieveAll();
         int oldAmount = oldPirkumi.size();
         
         Pirkums pirkums = new Pirkums();
-        pirkumsService.insertNewPirkums(pirkums);
+        pirkumsService.create(pirkums);
 
-        ArrayList<Pirkums> newPirkumi = pirkumsService.selectAllPirkums();
+        ArrayList<Pirkums> newPirkumi = pirkumsService.retrieveAll();
         int newAmount = newPirkumi.size();
 
         assertNotEquals(oldAmount, newAmount);
@@ -56,10 +56,10 @@ public class PirkumsServiceTest {
     @Test
     void updatePirkumsTest() throws Exception {
         Pirkums pirkums = new Pirkums();
-        Pirkums oldPirkums = pirkumsService.selectPirkumsById(1);
+        Pirkums oldPirkums = pirkumsService.retrieveById(1);
 
-        pirkumsService.updatePirkumsById(1, pirkums);
-        Pirkums newPirkums = pirkumsService.selectPirkumsById(1);
+        pirkumsService.update(1, pirkums);
+        Pirkums newPirkums = pirkumsService.retrieveById(1);
 
         assertNotEquals(newPirkums, oldPirkums);
     }

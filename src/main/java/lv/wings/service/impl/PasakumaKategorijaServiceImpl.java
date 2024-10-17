@@ -9,10 +9,10 @@ import lv.wings.model.PasakumaKategorija;
 import lv.wings.model.Pasakums;
 import lv.wings.repo.IPasakumaKategorija;
 import lv.wings.repo.IPasakumsRepo;
-import lv.wings.service.IPasakumaKategorijaService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class PasakumaKategorijaServiceImpl implements IPasakumaKategorijaService {
+public class PasakumaKategorijaServiceImpl implements ICRUDService<PasakumaKategorija> {
 	@Autowired
 	IPasakumaKategorija pasakumaKategorijaRepo;
 

@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 import lv.wings.model.PasakumaKomentars;
 import lv.wings.repo.IPasakumaKomentarsRepo;
 import lv.wings.repo.IPasakumsRepo;
-import lv.wings.service.IPasakumaKomentarsService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class PasakumaKomentarsServiceImpl implements IPasakumaKomentarsService {
+public class PasakumaKomentarsServiceImpl implements ICRUDService<PasakumaKomentars> {
 	@Autowired
 	private IPasakumaKomentarsRepo pasakumaKomentarsRepo;
 
