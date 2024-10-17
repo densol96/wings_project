@@ -12,6 +12,7 @@ export default {
 			},
 			transitionProperty: {
 				width: "width",
+				height: "height",
 			},
 
 			fontFamily: {
@@ -24,6 +25,13 @@ export default {
 
 			colors: {
 				"light-nav": "#fbe9d0",
+			},
+			borderWidth: {
+				1: "1px",
+			},
+
+			backdropBlur: {
+				nano: "1px",
 			},
 		},
 	},
