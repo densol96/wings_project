@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Atlaide;
-import lv.wings.service.IAtlaideService;
+import lv.wings.service.ICRUDService;
 
 
 @Controller
@@ -21,7 +21,7 @@ import lv.wings.service.IAtlaideService;
 public class AtlaideController {
 	
 	@Autowired
-	private IAtlaideService atlaidesRepo;
+	private ICRUDService<Atlaide> atlaidesRepo;
 
 
 	@GetMapping(value = "/show/all", produces = "application/json")

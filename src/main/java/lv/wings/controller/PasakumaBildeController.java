@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.PasakumaBilde;
-import lv.wings.service.IPasakumaBildeService;
+import lv.wings.service.ICRUDService;
 
 @Controller
 @RequestMapping("/pasakuma-bilde")
 public class PasakumaBildeController {
 	@Autowired
-	private IPasakumaBildeService pasakumaBildeRepo;
+	private ICRUDService<PasakumaBilde> pasakumaBildeRepo;
 	
 	
 	@GetMapping("/show/all")

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Piegades_veids;
-import lv.wings.service.IPiegadesVeidsService;
+import lv.wings.service.ICRUDService;
 
 
 @Controller
@@ -21,13 +21,13 @@ import lv.wings.service.IPiegadesVeidsService;
 public class PiegadesVeidsController {
     
     @Autowired
-    private IPiegadesVeidsService pvService;
+    private ICRUDService<Piegades_veids> pvService;
 
 
     @GetMapping("/show/all")
     public String getShowAllPV(Model model){
         try {
-            ArrayList<Piegades_veids> allpv = pvService.selectAllPiegadesVeids();
+            ArrayList<Piegades_veids> allpv = pvService.retrieveAll();
             model.addAttribute("mydata", allpv);
             return "pv-all-page";
         } catch (Exception e) {
@@ -40,7 +40,7 @@ public class PiegadesVeidsController {
     @GetMapping("/show/all/{id}")
     public String getShowOnePV(@PathVariable("id") int id, Model model){
         try {
-            Piegades_veids pv = pvService.selectPiegadesVeidsById(id);
+            Piegades_veids pv = pvService.retrieveById(id);
             model.addAttribute("mydata", pv);
             return "pv-all-page";
         } catch (Exception e) {
@@ -53,8 +53,8 @@ public class PiegadesVeidsController {
     @GetMapping("/remove/{id}")
     public String getDeleteOnePV(@PathVariable("id") int id, Model model){
         try {
-            pvService.deletePiegadesVeidsById(id);
-            ArrayList<Piegades_veids> allpv = pvService.selectAllPiegadesVeids();
+            pvService.deleteById(id);
+            ArrayList<Piegades_veids> allpv = pvService.retrieveAll();
             model.addAttribute("mydata", allpv);
             return "pv-all-page";
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class PiegadesVeidsController {
             return "pv-add-page";
         } else {
             try {
-                pvService.insertNewPiegadesVeids(pv);
+                pvService.create(pv);
                 return "redirect:/piegades/veids/show/all";
             } catch (Exception e) {
                 model.addAttribute("message", e.getMessage());
@@ -90,7 +90,7 @@ public class PiegadesVeidsController {
     @GetMapping("/update/{id}")
     public String getUpdatePV(@PathVariable("id") int id, Model model) {
         try {
-            Piegades_veids pvToUpdate = pvService.selectPiegadesVeidsById(id);
+            Piegades_veids pvToUpdate = pvService.retrieveById(id);
             model.addAttribute("pv", pvToUpdate);
             model.addAttribute("id", id);
             return "pv-update-page";
@@ -107,7 +107,7 @@ public class PiegadesVeidsController {
             return "pv-update-page";
         } else {
             try {
-                pvService.updatePiegadesVeidsById(id, pv);
+                pvService.update(id, pv);
                 return "redirect:/piegades/veids/show/all/" + id;
             } catch (Exception e) {
                 model.addAttribute("message", e.getMessage());

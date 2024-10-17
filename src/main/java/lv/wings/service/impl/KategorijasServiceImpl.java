@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import lv.wings.model.Kategorijas;
 import lv.wings.model.Prece;
 import lv.wings.repo.IKategorijas_Repo;
 import lv.wings.repo.IPrece_Repo;
-import lv.wings.service.IKategorijasService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class KategorijasServiceImpl implements IKategorijasService{
+public class KategorijasServiceImpl implements ICRUDService<Kategorijas>{
 	
 	@Autowired
 	private IKategorijas_Repo kategorijasRepo;

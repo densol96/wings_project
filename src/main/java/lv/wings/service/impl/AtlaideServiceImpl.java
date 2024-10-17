@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import lv.wings.model.Atlaide;
 import lv.wings.repo.IAtlaideRepo;
-import lv.wings.service.IAtlaideService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class AtlaideServiceImpl implements IAtlaideService{
+public class AtlaideServiceImpl implements ICRUDService<Atlaide>{
 	@Autowired
 	private IAtlaideRepo atlaideRepo;
 

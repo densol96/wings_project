@@ -9,10 +9,10 @@ import lv.wings.model.Pircejs;
 import lv.wings.model.Pirkums;
 import lv.wings.repo.IPircejs_Repo;
 import lv.wings.repo.IPirkums_Repo;
-import lv.wings.service.IPircejsService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class PircejsServiceImpl implements IPircejsService{
+public class PircejsServiceImpl implements ICRUDService<Pircejs>{
 
     @Autowired
     private IPircejs_Repo pircejsRepo;
@@ -21,14 +21,14 @@ public class PircejsServiceImpl implements IPircejsService{
     private IPirkums_Repo pirkumsRepo;
 
     @Override
-    public ArrayList<Pircejs> selectAllPircejs() throws Exception {
+    public ArrayList<Pircejs> retrieveAll() throws Exception {
        if(pircejsRepo.count() == 0) throw new Exception("Nav neviena pirceja");
 
         return (ArrayList<Pircejs>) pircejsRepo.findAll();
     }
 
     @Override
-    public Pircejs selectPircejsById(int idpirc) throws Exception {
+    public Pircejs retrieveById(int idpirc) throws Exception {
         if(idpirc < 0) throw new Exception("ID ir negativs");
 
         if(pircejsRepo.existsById(idpirc)){
@@ -39,8 +39,8 @@ public class PircejsServiceImpl implements IPircejsService{
     }
 
     @Override
-    public void deletePircejsById(int idpirc) throws Exception {
-        Pircejs pircejsToDelete = selectPircejsById(idpirc);
+    public void deleteById(int idpirc) throws Exception {
+        Pircejs pircejsToDelete = retrieveById(idpirc);
 
         ArrayList<Pirkums> pirkumi = pirkumsRepo.findByPircejs(pircejsToDelete);
         
@@ -53,7 +53,7 @@ public class PircejsServiceImpl implements IPircejsService{
     }
 
     @Override
-    public void insertNewPircejs(Pircejs pircejs) throws Exception {
+    public void create(Pircejs pircejs) throws Exception {
        Pircejs pircejsExist = pircejsRepo.findByBankasSwiftKodsAndBankasKods(pircejs.getBankasSwiftKods(), pircejs.getBankasKods());
 
         if(pircejsExist == null) {
@@ -65,8 +65,8 @@ public class PircejsServiceImpl implements IPircejsService{
     }
 
     @Override
-    public void updatePircejsById(int idpirc, Pircejs pircejs) throws Exception {
-        Pircejs pircejsToUpdate = selectPircejsById(idpirc);
+    public void update(int idpirc, Pircejs pircejs) throws Exception {
+        Pircejs pircejsToUpdate = retrieveById(idpirc);
 
         pircejsToUpdate.setVards(pircejs.getVards());
         pircejsToUpdate.setUzvards(pircejs.getUzvards());

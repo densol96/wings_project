@@ -8,18 +8,19 @@ import org.springframework.stereotype.Service;
 import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Pasakums;
 import lv.wings.repo.IPasakumsRepo;
-import lv.wings.service.IPasakumiService;
+import lv.wings.service.ICRUDService;
+import lv.wings.service.IPasakumiFilteringService;
 
 
 @Service
-public class PasakumiServiceImpl implements IPasakumiService{
+public class PasakumiServiceImpl implements ICRUDService<Pasakums>, IPasakumiFilteringService{
 	
 	@Autowired
 	private IPasakumsRepo pasakumsRepo;
 	
 	
 	@Override
-	public Pasakums selectPaskumsById(int id) throws Exception {
+	public Pasakums retrieveById(int id) throws Exception {
 		if (id < 1) throw new Exception("Id ir jābūt pozitīvam!");
 		Pasakums foundPasakums = pasakumsRepo.findByIdpa(id);
 		if (foundPasakums == null) throw new Exception("Jaunums ar id: "+id +" nav atrasts!");
@@ -28,7 +29,7 @@ public class PasakumiServiceImpl implements IPasakumiService{
 	}
 	
 	@Override
-	public ArrayList<Pasakums> selectAllPasakumi() throws NoContentException {
+	public ArrayList<Pasakums> retrieveAll() throws NoContentException {
 
 		ArrayList<Pasakums> allPasakumi = (ArrayList<Pasakums>) pasakumsRepo.findAll();
 		if (allPasakumi.isEmpty()) throw new NoContentException("Pagaidām nav jaunumu vai pasākumu!");
@@ -52,7 +53,7 @@ public class PasakumiServiceImpl implements IPasakumiService{
 	}
 
 	@Override
-	public void deletePasakumiById(int id) throws Exception {
+	public void deleteById(int id) throws Exception {
 		Pasakums pasakums = pasakumsRepo.findByIdpa(id);
 		if (pasakums == null) throw new Exception("Pasākums ar id:"+id +" neeksistē!");
 		
