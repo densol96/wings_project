@@ -17,14 +17,14 @@ import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Pasakums;
 import lv.wings.responses.ApiArrayListResponse;
 import lv.wings.responses.ApiResponse;
-import lv.wings.service.IPasakumiService;
+import lv.wings.service.ICRUDService;
 
 @RestController
 @RequestMapping(value = "/api/news")
 public class NewsController {
 
 	@Autowired
-	private IPasakumiService pasakumsRepo;
+	private ICRUDService<Pasakums> pasakumsRepo;
 
 	// @Autowired
 	// private IPasakumaKomentarsService pasakumaKomentarsRepo;
@@ -33,7 +33,7 @@ public class NewsController {
 	public ResponseEntity<ApiArrayListResponse<Pasakums>> getAllNews() {
 
 		try {
-			ArrayList<Pasakums> allPasakumi = pasakumsRepo.selectAllPasakumi();
+			ArrayList<Pasakums> allPasakumi = pasakumsRepo.retrieveAll();
 
 			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allPasakumi));
 		} catch (NoContentException e) {
@@ -48,7 +48,7 @@ public class NewsController {
 	public ResponseEntity<ApiResponse<Pasakums>> getSingleNews(@PathVariable("id") int id) {
 
 		try {
-			return ResponseEntity.ok(new ApiResponse<>(null, pasakumsRepo.selectPaskumsById(id)));
+			return ResponseEntity.ok(new ApiResponse<>(null, pasakumsRepo.retrieveById(id)));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {

@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Pirkuma_elements;
-import lv.wings.service.IPirkuma_elementsService;
+import lv.wings.service.ICRUDInsertedService;
 
 @Controller
 @RequestMapping("/pirkuma/elements")
 public class Pirkuma_elementsController {
 
 	@Autowired
-	private IPirkuma_elementsService elementsService;
+	private ICRUDInsertedService<Pirkuma_elements> elementsService;
 	
 	@GetMapping("/show/all")//localhost:8080/pirkuma/elements/show/all
 	public String getAllPirkumaElementi(Model model) {

@@ -13,14 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.Kategorijas;
-import lv.wings.service.IKategorijasService;
+import lv.wings.service.ICRUDService;
 
 @Controller
 @RequestMapping("/kategorijas")
 public class KategorijasController {
 	
 	@Autowired
-	private IKategorijasService kategorijasService;
+	private ICRUDService<Kategorijas> kategorijasService;
 	
 	@GetMapping("/show/all") //localhost:8080/kategorijas/show/all
 	public String getAllKategorijas(Model model) {

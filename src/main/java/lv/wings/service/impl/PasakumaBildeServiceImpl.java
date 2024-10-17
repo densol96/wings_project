@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 
 import lv.wings.model.PasakumaBilde;
 import lv.wings.repo.IPasakumaBildeRepo;
-import lv.wings.service.IPasakumaBildeService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class PasakumaBildeServiceImpl implements IPasakumaBildeService {
+public class PasakumaBildeServiceImpl implements ICRUDService<PasakumaBilde> {
 	@Autowired
 	private IPasakumaBildeRepo pasakumaBildeRepo;
 

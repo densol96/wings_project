@@ -14,17 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 import lv.wings.model.PasakumaKomentars;
 import lv.wings.model.Pasakums;
-import lv.wings.service.IPasakumaKomentarsService;
-import lv.wings.service.IPasakumiService;
+import lv.wings.service.ICRUDService;
 
 @Controller
 @RequestMapping("/pasakuma-komentars")
 public class PasakumaKomentarsController {
 	@Autowired
-	private IPasakumaKomentarsService pasakumaKomentarsRepo;
+	private ICRUDService<PasakumaKomentars> pasakumaKomentarsRepo;
 
 	@Autowired
-	private IPasakumiService pasakumsRepo;
+	private ICRUDService<Pasakums> pasakumsRepo;
 
 	@GetMapping("/show/all")
 	public String getAllPasakumaKomentars(Model model) {
@@ -105,7 +104,7 @@ public class PasakumaKomentarsController {
 	public String getPasakumaKomentarsInsert(@PathVariable("pasakumsId") int pasakumsId, Model model) {
 
 		try {
-			Pasakums pasakums = pasakumsRepo.selectPaskumsById(pasakumsId);
+			Pasakums pasakums = pasakumsRepo.retrieveById(pasakumsId);
 			model.addAttribute("pasakumaKomentars", new PasakumaKomentars());
 			model.addAttribute("pasakumsId", pasakumsId);
 			return "pasakumaKomentars/pasakumaKomentars-add-page";
@@ -125,7 +124,7 @@ public class PasakumaKomentarsController {
 		}
 		
 		try {
-			Pasakums pasakums = pasakumsRepo.selectPaskumsById(pasakumsId);
+			Pasakums pasakums = pasakumsRepo.retrieveById(pasakumsId);
 			pasakumaKomentars.setPasakums(pasakums);
 			pasakumaKomentarsRepo.create(pasakumaKomentars);
 			return "redirect:/pasakuma-komentars/show/all";
