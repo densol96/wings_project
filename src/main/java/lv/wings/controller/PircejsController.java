@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import jakarta.validation.Valid;
 import lv.wings.model.Pircejs;
 import lv.wings.poi.PoiController;
-import lv.wings.service.IPircejsService;
+import lv.wings.service.ICRUDService;
 
 
 @Controller
@@ -25,13 +25,13 @@ import lv.wings.service.IPircejsService;
 public class PircejsController {
     
     @Autowired
-    private IPircejsService pircejsService;
+    private ICRUDService<Pircejs> pircejsService;
 
 
     @GetMapping("/show/all")
     public String getShowAllPircejs(Model model){
         try {
-            ArrayList<Pircejs> allpircejs = pircejsService.selectAllPircejs();
+            ArrayList<Pircejs> allpircejs = pircejsService.retrieveAll();
             model.addAttribute("mydata", allpircejs);
             return "pircejs-all-page";
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class PircejsController {
     @GetMapping("/show/all/{id}")
     public String getShowOnePircejs(@PathVariable("id") int id, Model model){
         try {
-            Pircejs pircejs = pircejsService.selectPircejsById(id);
+            Pircejs pircejs = pircejsService.retrieveById(id);
             model.addAttribute("mydata", pircejs);
             return "pircejs-all-page";
         } catch (Exception e) {
@@ -56,7 +56,7 @@ public class PircejsController {
     @GetMapping("/download/all")//localhost:8080/pircejs/download/all
 	public ResponseEntity<byte[]> downloadPreces() {
 		try {
-			ArrayList<Pircejs> allpircejs = pircejsService.selectAllPircejs();
+			ArrayList<Pircejs> allpircejs = pircejsService.retrieveAll();
 			byte[] fileBytes = PoiController.buildMultiple("pirceji", allpircejs, new String[]{});
 
 			HttpHeaders headers = new HttpHeaders();
@@ -73,8 +73,8 @@ public class PircejsController {
     @GetMapping("/remove/{id}")
     public String getDeleteOnePircejs(@PathVariable("id") int id, Model model){
         try {
-            pircejsService.deletePircejsById(id);
-            ArrayList<Pircejs> allpircejs = pircejsService.selectAllPircejs();
+            pircejsService.deleteById(id);
+            ArrayList<Pircejs> allpircejs = pircejsService.retrieveAll();
             model.addAttribute("mydata", allpircejs);
             return "pircejs-all-page";
         } catch (Exception e) {
@@ -97,7 +97,7 @@ public class PircejsController {
             return "pircejs-add-page";
         } else {
             try {
-                pircejsService.insertNewPircejs(pircejs);
+                pircejsService.create(pircejs);
                 return "redirect:/pircejs/show/all";
             } catch (Exception e) {
                 model.addAttribute("message", e.getMessage());
@@ -110,7 +110,7 @@ public class PircejsController {
     @GetMapping("/update/{id}")
     public String getUpdatePircejs(@PathVariable("id") int id, Model model) {
         try {
-            Pircejs pircejsToUpdate = pircejsService.selectPircejsById(id);
+            Pircejs pircejsToUpdate = pircejsService.retrieveById(id);
             model.addAttribute("pircejs", pircejsToUpdate);
             model.addAttribute("id", id);
             return "pircejs-update-page";
@@ -127,7 +127,7 @@ public class PircejsController {
             return "pircejs-update-page";
         } else {
             try {
-                pircejsService.updatePircejsById(id, pircejs);
+                pircejsService.update(id, pircejs);
                 return "redirect:/pircejs/show/all/" + id;
             } catch (Exception e) {
                 model.addAttribute("message", e.getMessage());

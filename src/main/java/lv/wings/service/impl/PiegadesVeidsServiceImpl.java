@@ -9,10 +9,10 @@ import lv.wings.model.Piegades_veids;
 import lv.wings.model.Pirkums;
 import lv.wings.repo.IPiegades_veids_Repo;
 import lv.wings.repo.IPirkums_Repo;
-import lv.wings.service.IPiegadesVeidsService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
+public class PiegadesVeidsServiceImpl implements ICRUDService<Piegades_veids> {
 
     @Autowired
     private IPiegades_veids_Repo pvRepo;
@@ -22,14 +22,14 @@ public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
 
 
     @Override
-    public ArrayList<Piegades_veids> selectAllPiegadesVeids() throws Exception {
+    public ArrayList<Piegades_veids> retrieveAll() throws Exception {
         if(pvRepo.count() == 0) throw new Exception("Nav neviena piegades veida");
 
         return (ArrayList<Piegades_veids>) pvRepo.findAll();
     }
 
     @Override
-    public Piegades_veids selectPiegadesVeidsById(int pvID) throws Exception {
+    public Piegades_veids retrieveById(int pvID) throws Exception {
         if(pvID < 0) throw new Exception("ID ir negativs");
 
         if(pvRepo.existsById(pvID)){
@@ -40,8 +40,8 @@ public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
     }
 
     @Override
-    public void deletePiegadesVeidsById(int pvID) throws Exception {
-        Piegades_veids pvToDelete = selectPiegadesVeidsById(pvID);
+    public void deleteById(int pvID) throws Exception {
+        Piegades_veids pvToDelete = retrieveById(pvID);
 
         ArrayList<Pirkums> pirkumi = pirkumsRepo.findByPiegadesVeids(pvToDelete);
         
@@ -54,7 +54,7 @@ public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
     }
 
     @Override
-    public void insertNewPiegadesVeids(Piegades_veids pv) throws Exception {
+    public void create(Piegades_veids pv) throws Exception {
         Piegades_veids pvExist = pvRepo.findByNosaukums(pv.getNosaukums());
 
         if(pvExist == null) {
@@ -65,8 +65,8 @@ public class PiegadesVeidsServiceImpl implements IPiegadesVeidsService {
     }
 
     @Override
-    public void updatePiegadesVeidsById(int pvID, Piegades_veids pv) throws Exception {
-        Piegades_veids pvToUpdate = selectPiegadesVeidsById(pvID);
+    public void update(int pvID, Piegades_veids pv) throws Exception {
+        Piegades_veids pvToUpdate = retrieveById(pvID);
 
         pvToUpdate.setNosaukums(pv.getNosaukums());
         pvToUpdate.setApraksts(pv.getApraksts());

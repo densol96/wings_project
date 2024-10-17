@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import lv.wings.model.Pirkuma_elements;
 import lv.wings.repo.IPirkuma_elements_repo;
 import lv.wings.repo.IPrece_Repo;
-import lv.wings.service.IPirkuma_elementsService;
+import lv.wings.service.ICRUDInsertedService;
 
 @Service
-public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
+public class Pirkuma_elementsServiceImpl implements ICRUDInsertedService<Pirkuma_elements>{
 
 	@Autowired
 	private IPirkuma_elements_repo elementsRepo;
@@ -46,6 +46,17 @@ public class Pirkuma_elementsServiceImpl implements IPirkuma_elementsService{
 				
 		//dzēšam no repo un DB
 		elementsRepo.delete(elementsForDeleting);
+	}
+
+	@Override
+	public void create(Pirkuma_elements elements) throws Exception {
+		//atrodu preci pēc id
+		if(preceRepo.findById(elements.getPrece().getPrece_id())==null) throw new 
+		Exception("Prece ar sekojošu id: " + elements.getPrece().getPrece_id() + " neeksistē!");
+		
+		//izveidoju noklusējuma pirkuma elementu
+		Pirkuma_elements newElements = elements;
+		elementsRepo.save(newElements);
 	}
 
 	@Override

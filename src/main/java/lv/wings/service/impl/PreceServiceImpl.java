@@ -12,11 +12,11 @@ import lv.wings.repo.IKategorijas_Repo;
 import lv.wings.repo.IPirkuma_elements_repo;
 import lv.wings.repo.IPrece_Repo;
 import lv.wings.repo.IPreces_bilde_Repo;
-import lv.wings.service.IPreceService;
+import lv.wings.service.ICRUDInsertedService;
 
 
 @Service
-public class PreceServiceImpl implements IPreceService{
+public class PreceServiceImpl implements ICRUDInsertedService<Prece>{
 
 	@Autowired
 	private IPrece_Repo preceRepo;
@@ -73,6 +73,22 @@ public class PreceServiceImpl implements IPreceService{
 		
 		//dzēšam no repo un DB
 		preceRepo.delete(preceForDeleting);
+	}
+
+	@Override
+	public void create(Prece prece) throws Exception {
+		Prece existedPrece = preceRepo.findByNosaukums(prece.getNosaukums());
+		
+		//tāds pirkums jau eksistē
+		if(existedPrece != null) throw new Exception("Pirkums with name: " + prece.getNosaukums() + " already exists in DB!");
+				
+		//atrodu kategoriju pēc id
+		if(kategorijaRepo.findById(prece.getKategorijas().getKategorijas_id())==null) throw new 
+		Exception("Kategorija ar sekojošu id: " + prece.getKategorijas().getKategorijas_id() + " neeksistē!");
+		
+		//tāds pirkuma elements vēl neeksistē
+		Prece newPrece = prece;
+		preceRepo.save(newPrece);
 	}
 
 	@Override

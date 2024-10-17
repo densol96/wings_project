@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import lv.wings.model.Preces_bilde;
 import lv.wings.repo.IPrece_Repo;
 import lv.wings.repo.IPreces_bilde_Repo;
-import lv.wings.service.IPreces_bildeService;
+import lv.wings.service.ICRUDInsertedService;
 
 @Service
-public class Preces_bildeServiceImpl implements IPreces_bildeService{
+public class Preces_bildeServiceImpl implements ICRUDInsertedService<Preces_bilde>{
 
 	@Autowired
 	private IPreces_bilde_Repo bildeRepo;
@@ -46,6 +46,22 @@ public class Preces_bildeServiceImpl implements IPreces_bildeService{
 				
 		//dzēšam no repo un DB
 		bildeRepo.delete(driverForDeleting);
+	}
+
+	@Override
+	public void create(Preces_bilde bilde) throws Exception {
+		Preces_bilde existedPreces_bilde = bildeRepo.findByBilde(bilde.getBilde());
+		
+		//tāda bilde jau eksistē
+		if(existedPreces_bilde != null) throw new Exception("Bilde with name: " + bilde.getBilde() + " already exists in DB!");
+		
+		//atrodu preci pēc id
+		if(preceRepo.findById(bilde.getPrece().getPrece_id())==null) throw new 
+		Exception("Prece ar sekojošu id: " + bilde.getPrece().getPrece_id() + " neeksistē!");
+				
+		//tāda bilde vēl neeksistē
+		Preces_bilde newBilde = bilde;
+		bildeRepo.save(newBilde);
 	}
 
 	@Override

@@ -9,11 +9,11 @@ import lv.wings.model.Pirkums;
 import lv.wings.model.Samaksas_veids;
 import lv.wings.repo.IPirkums_Repo;
 import lv.wings.repo.ISamaksas_veids_Repo;
-import lv.wings.service.ISamaksasVeidsService;
+import lv.wings.service.ICRUDService;
 
 
 @Service
-public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
+public class SamaksasVeidsServiceImpl implements ICRUDService<Samaksas_veids> {
 
     @Autowired 
     private ISamaksas_veids_Repo svRepo;
@@ -23,14 +23,14 @@ public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
 
 
     @Override
-    public ArrayList<Samaksas_veids> selectAllSamaksasVeids() throws Exception {
+    public ArrayList<Samaksas_veids> retrieveAll() throws Exception {
         if(svRepo.count() == 0) throw new Exception("Nav neviena samaksas veida");
 
         return (ArrayList<Samaksas_veids>) svRepo.findAll();
     }
 
     @Override
-    public Samaksas_veids selectSamaksasVeidsById(int svID) throws Exception {
+    public Samaksas_veids retrieveById(int svID) throws Exception {
         if(svID < 0) throw new Exception("ID ir negativs");
 
         if(svRepo.existsById(svID)){
@@ -41,8 +41,8 @@ public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
     }
 
     @Override
-    public void deleteSamaksasVeidsById(int svID) throws Exception {
-        Samaksas_veids svToDelete = selectSamaksasVeidsById(svID);
+    public void deleteById(int svID) throws Exception {
+        Samaksas_veids svToDelete = retrieveById(svID);
 
         ArrayList<Pirkums> pirkumi = pirkumsRepo.findBySamaksasVeids(svToDelete);
         
@@ -55,7 +55,7 @@ public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
     }
 
     @Override
-    public void insertSamaksasVeids(Samaksas_veids sv) throws Exception {
+    public void create(Samaksas_veids sv) throws Exception {
         Samaksas_veids svExist = svRepo.findByNosaukums(sv.getNosaukums());
 
         if(svExist == null) {
@@ -66,8 +66,8 @@ public class SamaksasVeidsServiceImpl implements ISamaksasVeidsService {
     }
 
     @Override
-    public void updateSamaksasVeidsById(int svID, Samaksas_veids sv) throws Exception{
-        Samaksas_veids svToUpdate = selectSamaksasVeidsById(svID);
+    public void update(int svID, Samaksas_veids sv) throws Exception{
+        Samaksas_veids svToUpdate = retrieveById(svID);
 
         svToUpdate.setNosaukums(sv.getNosaukums());
         svToUpdate.setPiezimes(sv.getPiezimes());

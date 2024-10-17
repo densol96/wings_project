@@ -9,10 +9,10 @@ import lv.wings.model.Pirkuma_elements;
 import lv.wings.model.Pirkums;
 import lv.wings.repo.IPirkuma_elements_repo;
 import lv.wings.repo.IPirkums_Repo;
-import lv.wings.service.IPirkumsService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class PirkumsServiceImpl implements IPirkumsService{
+public class PirkumsServiceImpl implements ICRUDService<Pirkums>{
     
     @Autowired
     private IPirkums_Repo pirkumsRepo;
@@ -22,7 +22,7 @@ public class PirkumsServiceImpl implements IPirkumsService{
 
 
     @Override
-    public ArrayList<Pirkums> selectAllPirkums() throws Exception {
+    public ArrayList<Pirkums> retrieveAll() throws Exception {
         if(pirkumsRepo.count() == 0) throw new Exception("Nav neviena pirkuma");
 
         return (ArrayList<Pirkums>) pirkumsRepo.findAll();
@@ -30,7 +30,7 @@ public class PirkumsServiceImpl implements IPirkumsService{
 
 
     @Override
-    public Pirkums selectPirkumsById(int pirkumsID) throws Exception {
+    public Pirkums retrieveById(int pirkumsID) throws Exception {
         
         if(pirkumsID < 0) throw new Exception("ID ir negativs");
 
@@ -44,8 +44,8 @@ public class PirkumsServiceImpl implements IPirkumsService{
 
 
     @Override
-    public void deletePirkumsById(int pirkumsID) throws Exception {
-        Pirkums pirkumsToDelete = selectPirkumsById(pirkumsID);
+    public void deleteById(int pirkumsID) throws Exception {
+        Pirkums pirkumsToDelete = retrieveById(pirkumsID);
 
         ArrayList<Pirkuma_elements> pirkumaElementi = elementsRepo.findByPirkums(pirkumsToDelete);
         
@@ -59,7 +59,7 @@ public class PirkumsServiceImpl implements IPirkumsService{
 
 
     @Override
-    public void insertNewPirkums(Pirkums pirkums) throws Exception {
+    public void create(Pirkums pirkums) throws Exception {
         
         pirkumsRepo.save(pirkums);
 
@@ -67,7 +67,7 @@ public class PirkumsServiceImpl implements IPirkumsService{
 
 
     @Override
-    public void updatePirkumsById(int pirkumsID, Pirkums pirkums) {
+    public void update(int pirkumsID, Pirkums pirkums) {
         
 
 

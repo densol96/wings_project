@@ -21,33 +21,29 @@ import lv.wings.model.Pircejs;
 import lv.wings.model.Pirkums;
 import lv.wings.model.Samaksas_veids;
 import lv.wings.poi.PoiController;
-import lv.wings.service.IPiegadesVeidsService;
-import lv.wings.service.IPircejsService;
-import lv.wings.service.IPirkumsService;
-import lv.wings.service.ISamaksasVeidsService;
-
+import lv.wings.service.ICRUDService;
 
 @Controller
 @RequestMapping("/pirkums")
 public class PirkumsController {
     
     @Autowired
-    private IPirkumsService pirkumsService;
+    private ICRUDService<Pirkums> pirkumsService;
 
     @Autowired
-    private IPiegadesVeidsService pvService;
+    private ICRUDService<Piegades_veids> pvService;
 
     @Autowired
-    private ISamaksasVeidsService svService;
+    private ICRUDService<Samaksas_veids> svService;
 
     @Autowired
-    private IPircejsService pircejsService;
+    private ICRUDService<Pircejs> pircejsService;
 
 
     @GetMapping("/show/all")
     public String getShowAllPirkums(Model model){
         try {
-            ArrayList<Pirkums> allpirkums = pirkumsService.selectAllPirkums();
+            ArrayList<Pirkums> allpirkums = pirkumsService.retrieveAll();
             model.addAttribute("mydata", allpirkums);
             return "pirkums-all-page";
         } catch (Exception e) {
@@ -60,7 +56,7 @@ public class PirkumsController {
     @GetMapping("/show/all/{id}")
     public String getShowOnePirkums(@PathVariable("id") int id, Model model){
         try {
-            Pirkums pirkums = pirkumsService.selectPirkumsById(id);
+            Pirkums pirkums = pirkumsService.retrieveById(id);
             model.addAttribute("mydata", pirkums);
             return "pirkums-all-page";
         } catch (Exception e) {
@@ -72,7 +68,7 @@ public class PirkumsController {
     @GetMapping("/download/all/{id}")//localhost:8080/pirkums/download/all/{id}
 	public ResponseEntity<byte[]> downloadPrecesById(@PathVariable("id") int id) {
 		try {
-			Pirkums pirkums = pirkumsService.selectPirkumsById(id);
+			Pirkums pirkums = pirkumsService.retrieveById(id);
 			//iegūt faila baitus no preces ar definētiem laukiem
 			byte[] fileBytes = PoiController.buildInvoice("pirkums-"+id, pirkums);
 
@@ -90,8 +86,8 @@ public class PirkumsController {
     @GetMapping("/remove/{id}")
     public String getDeleteOnePirkums(@PathVariable("id") int id, Model model){
         try {
-            pirkumsService.deletePirkumsById(id);
-            ArrayList<Pirkums> allpirkums = pirkumsService.selectAllPirkums();
+            pirkumsService.deleteById(id);
+            ArrayList<Pirkums> allpirkums = pirkumsService.retrieveAll();
             model.addAttribute("mydata", allpirkums);
             return "pirkums-all-page";
         } catch (Exception e) {
@@ -104,9 +100,9 @@ public class PirkumsController {
     @GetMapping("/add")
     public String getAddPirkums(Model model) {
         try {
-            ArrayList<Samaksas_veids> samaksasVeidi = svService.selectAllSamaksasVeids();
-            ArrayList<Piegades_veids> piegadesVeidi = pvService.selectAllPiegadesVeids();
-            ArrayList<Pircejs> pirceji = pircejsService.selectAllPircejs();
+            ArrayList<Samaksas_veids> samaksasVeidi = svService.retrieveAll();
+            ArrayList<Piegades_veids> piegadesVeidi = pvService.retrieveAll();
+            ArrayList<Pircejs> pirceji = pircejsService.retrieveAll();
             model.addAttribute("pirkums", new Pirkums());
             model.addAttribute("samaksasVeidi", samaksasVeidi);
             model.addAttribute("piegadesVeidi", piegadesVeidi);
@@ -132,7 +128,7 @@ public class PirkumsController {
         } else {
             try {
                 System.out.println("aaaab");
-                pirkumsService.insertNewPirkums(pirkums);
+                pirkumsService.create(pirkums);
                 return "redirect:/pirkums/show/all";
             } catch (Exception e) {
                 model.addAttribute("message", e.getMessage());
