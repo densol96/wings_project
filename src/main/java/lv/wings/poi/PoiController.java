@@ -19,8 +19,8 @@ import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTable.XWPFBorderType;
 import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-import lv.wings.model.Pirkuma_elements;
-import lv.wings.model.Pirkums;
+import lv.wings.model.PurchaseElement;
+import lv.wings.model.Purchase;
 
 public class PoiController {
 	public static <T> byte[] buildSingle(String tabname, T source, String[] fields) throws Exception{
@@ -191,7 +191,7 @@ public class PoiController {
 		return outputStream.toByteArray();
 	}
 
-	public static byte[] buildInvoice(String filename, Pirkums source) throws Exception{
+	public static byte[] buildInvoice(String filename, Purchase source) throws Exception{
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		XWPFDocument document = new XWPFDocument();
 
@@ -218,27 +218,27 @@ public class PoiController {
 		tableRows = table.getRows();
 		paragraph = tableRows.get(0).getCell(0).getParagraphArray(0);
 		run = paragraph.createRun();
-		run.setText(source.getPircejs().getPersonasKods());
-		run.addBreak();
-		run.setText(source.getPircejs().getAdrese());
+		// run.setText(source.getPircejs().getPersonasKods());
+		// run.addBreak();
+		run.setText(source.getCustomer().getAdress());
 		
 		paragraph = tableRows.get(0).getCell(1).getParagraphArray(0);
 		paragraph.setAlignment(ParagraphAlignment.RIGHT);
 		run = paragraph.createRun();
 		run.setText("Pasūtījuma Datums");
 		run.addBreak();
-		run.setText(source.getPasutijumaDatums().toString());
+		run.setText(source.getDeliveryDate().toString());
 		run.addBreak();
 		run.setText("Pasūtījuma ID");
 		run.addBreak();
-		run.setText(source.getPirkumsID()+"");
+		run.setText(source.getPurchaseId()+"");
 		run.addBreak();
 
 		paragraph = tableRows.get(0).getCell(2).getParagraphArray(0);
 		run = paragraph.createRun();
 		run.setText("Veikala nosaukums");
 		run.addBreak();
-		run.setText("Veilaka adrese");
+		run.setText("Veikala adrese");
 		run.addBreak();
 		run.setText("Cita informācija");
 
@@ -247,9 +247,9 @@ public class PoiController {
 		run.addBreak();
 		run.addBreak();
 		
-		List<Pirkuma_elements> pirkumaElementi = (List<Pirkuma_elements>) source.getPirkumaElementi();
+		List<PurchaseElement> purchaseElements = (List<PurchaseElement>) source.getPurchaseElement();
 
-		table = document.createTable(2+pirkumaElementi.size() ,3);
+		table = document.createTable(2+purchaseElements.size() ,3);
 		table.setWidth("100%");
 		table.setCellMargins(100,200,100,200);
 		tableRows = table.getRows();
@@ -264,14 +264,14 @@ public class PoiController {
 		paragraph.setAlignment(ParagraphAlignment.CENTER);
 		float summ = 0;
 
-		for(int i = 0; i < pirkumaElementi.size(); i++){
-			int daudzums = pirkumaElementi.get(i).getDaudzums();
-			float cena = pirkumaElementi.get(i).getPrece().getCena();
+		for(int i = 0; i < purchaseElements.size(); i++){
+			int amount = purchaseElements.get(i).getAmount();
+			float price = purchaseElements.get(i).getProduct().getPrice();
 
-			tableRows.get(i+1).getCell(0).getParagraphArray(0).createRun().setText(pirkumaElementi.get(i).getPrece().getNosaukums()+"");
-			tableRows.get(i+1).getCell(1).getParagraphArray(0).createRun().setText(daudzums+"");
-			tableRows.get(i+1).getCell(2).getParagraphArray(0).createRun().setText(cena+"");
-			summ += daudzums * cena;
+			tableRows.get(i+1).getCell(0).getParagraphArray(0).createRun().setText(purchaseElements.get(i).getProduct().getTitle()+"");
+			tableRows.get(i+1).getCell(1).getParagraphArray(0).createRun().setText(amount+"");
+			tableRows.get(i+1).getCell(2).getParagraphArray(0).createRun().setText(price+"");
+			summ += amount * price;
 		}
 		
 		paragraph = tableRows.get(table.getNumberOfRows()-1).getCell(1).getParagraphArray(0);
