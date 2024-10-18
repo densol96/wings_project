@@ -1,6 +1,6 @@
 import Title from "../Title";
 import { useAllData } from "../../hooks/dataHooks";
-import LoadingSpinner from "../../assets/LoadingSpinner";
+import LoadingSpinner from "../assets/LoadingSpinner";
 
 export default function News() {
 	const { data, loading, error } = useAllData(
