@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lv.wings.exceptions.NoContentException;
-import lv.wings.model.Pasakums;
+import lv.wings.model.Event;
 import lv.wings.responses.ApiArrayListResponse;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;
@@ -24,16 +24,16 @@ import lv.wings.service.ICRUDService;
 public class NewsController {
 
 	@Autowired
-	private ICRUDService<Pasakums> pasakumsRepo;
+	private ICRUDService<Event> pasakumsRepo;
 
 	// @Autowired
 	// private IPasakumaKomentarsService pasakumaKomentarsRepo;
 
 	@GetMapping(value = "")
-	public ResponseEntity<ApiArrayListResponse<Pasakums>> getAllNews() {
+	public ResponseEntity<ApiArrayListResponse<Event>> getAllNews() {
 
 		try {
-			ArrayList<Pasakums> allPasakumi = pasakumsRepo.retrieveAll();
+			ArrayList<Event> allPasakumi = pasakumsRepo.retrieveAll();
 
 			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allPasakumi));
 		} catch (NoContentException e) {
@@ -45,7 +45,7 @@ public class NewsController {
 	}
 
 	@GetMapping(value = "/show/{id}")
-	public ResponseEntity<ApiResponse<Pasakums>> getSingleNews(@PathVariable("id") int id) {
+	public ResponseEntity<ApiResponse<Event>> getSingleNews(@PathVariable("id") int id) {
 
 		try {
 			return ResponseEntity.ok(new ApiResponse<>(null, pasakumsRepo.retrieveById(id)));
@@ -57,7 +57,7 @@ public class NewsController {
 	}
 
 	@PostMapping(value = "/add")
-	public ResponseEntity<?> postAddNews(@Valid @RequestBody Pasakums pasakums /*,BindingResult result*/) {
+	public ResponseEntity<?> postAddNews(@Valid @RequestBody Event pasakums /*,BindingResult result*/) {
 		/* 
 		if (result.hasErrors()) {
 			 This show error because of wrong date formats need to fix

@@ -12,76 +12,75 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import lv.wings.model.Piegades_veids;
-import lv.wings.model.Pircejs;
-import lv.wings.model.Pirkums;
-import lv.wings.model.Samaksas_veids;
-import lv.wings.repo.IPiegades_veids_Repo;
-import lv.wings.repo.IPircejs_Repo;
-import lv.wings.repo.IPirkums_Repo;
-import lv.wings.repo.ISamaksas_veids_Repo;
+import lv.wings.model.DeliveryType;
+import lv.wings.model.Customer;
+import lv.wings.model.Purchase;
+import lv.wings.model.PaymentType;
+import lv.wings.repo.IDeliveryTypeRepo;
+import lv.wings.repo.ICustomerRepo;
+import lv.wings.repo.IPurchaseRepo;
+import lv.wings.repo.IPaymentTypeRepo;
 
 @SpringBootTest
 public class RepoFindByTest {
     
     @Autowired
-    private IPircejs_Repo pircejs_Repo;
+    private ICustomerRepo customerRepo;
 
     @Autowired
-    private IPiegades_veids_Repo piegades_veids_Repo;
+    private IDeliveryTypeRepo deliveryTypeRepo;
 
     @Autowired
-    private ISamaksas_veids_Repo samaksas_veids_Repo;
+    private IPaymentTypeRepo paymentTypeRepo;
 
     @Autowired
-    private IPirkums_Repo pirkums_Repo;
+    private IPurchaseRepo purchaseRepo;
 
     @Test
     @Order(3)
     public void findMarkussTest() {
-        Pircejs markuss = new Pircejs("Markuss", "Blumbergs", "random1@gmail.com", "Talsi, Street 1",
-        "000000-00001", "Liela banka", "246810", "Bankas kods 123");    
-        Pircejs found = pircejs_Repo.findByBankasSwiftKodsAndBankasKods(markuss.getBankasSwiftKods(), markuss.getBankasKods());
+        Customer markuss = new Customer("Markuss", "Blumbergs", "random1@gmail.com", "Talsi, Street 1");    
+        Customer found = customerRepo.findByNameAndSurname(markuss.getName(), markuss.getSurname());
 
-        assertEquals(markuss.getVards(), found.getVards());
+        assertEquals(markuss.getName(), found.getSurname());
     }
 
     @Test
     @Order(2)
     @Disabled
-    public void findPiegadesVeidsTest() {
-        Piegades_veids pv1 = new Piegades_veids("Piegades Veids1", "Apraksts1");
-        Piegades_veids found = piegades_veids_Repo.findByNosaukums(pv1.getNosaukums());
+    public void findDeliveryTypeTest() {
+        DeliveryType deliveryType1 = new DeliveryType("Piegades Veids1", "Apraksts1");
+        DeliveryType found = deliveryTypeRepo.findByTitle(deliveryType1.getTitle());
 
-        assertEquals(pv1.getNosaukums(), found.getNosaukums());
+        assertEquals(deliveryType1.getTitle(), found.getTitle());
     }
 
 
     @Test
     @Order(1)
-    public void findSamaksasVeidsTest() {
-        Samaksas_veids sv1 = new Samaksas_veids("Samaksas Veids 1", "Piezimes1");
-        Samaksas_veids found = samaksas_veids_Repo.findByNosaukums(sv1.getNosaukums());
+    public void findPaymentTypeTest() {
+        PaymentType paymentType1 = new PaymentType("Samaksas Veids 1", "Piezimes1");
+        PaymentType found = paymentTypeRepo.findByTitle(paymentType1.getTitle());
 
-        assertEquals(sv1.getNosaukums(), found.getNosaukums());
+        assertEquals(paymentType1.getTitle(), found.getTitle());
     }
 
 
     @Test
     @Order(4)
-    public void findPirkumsTest() {
-        Pircejs markuss = pircejs_Repo.findByBankasSwiftKodsAndBankasKods("246810", "Bankas kods 123");
-        Piegades_veids pv1 = piegades_veids_Repo.findByNosaukums("Piegades Veids1");
-        Samaksas_veids sv1 = samaksas_veids_Repo.findByNosaukums("Samaksas Veids1");
+    public void findPurchaseTest() {
+        Customer markuss = customerRepo.findByNameAndSurname("Markuss", "Blumbergs");
+        DeliveryType deliveryType1 = deliveryTypeRepo.findByTitle("Piegades Veids1");
+        PaymentType paymentType1 = paymentTypeRepo.findByTitle("Samaksas Veids1");
 
-        ArrayList<Pirkums> findPirkumsWithPircejs = pirkums_Repo.findByPircejs(markuss);
-        ArrayList<Pirkums> findPirkumsWithPiegadesVeids = pirkums_Repo.findByPiegadesVeids(pv1);
-        ArrayList<Pirkums> findPirkumsWithSamaksasVeids = pirkums_Repo.findBySamaksasVeids(sv1);
+        ArrayList<Purchase> findPirkumsWithCustomer = purchaseRepo.findByCustomer(markuss);
+        ArrayList<Purchase> findPirkumsWithDeliveryType = purchaseRepo.findByDeliveryType(deliveryType1);
+        ArrayList<Purchase> findPirkumsWithPaymentType = purchaseRepo.findByPaymentType(paymentType1);
 
         assertAll( "pirkumi",
-            () -> assertNotNull(findPirkumsWithPircejs),
-            () -> assertNotNull(findPirkumsWithPiegadesVeids),
-            () -> assertNotNull(findPirkumsWithSamaksasVeids)
+            () -> assertNotNull(findPirkumsWithCustomer),
+            () -> assertNotNull(findPirkumsWithDeliveryType),
+            () -> assertNotNull(findPirkumsWithPaymentType)
         ); 
     }
     

@@ -14,34 +14,30 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lv.wings.model.Atlaide;
-import lv.wings.model.Kategorijas;
-import lv.wings.model.PasakumaBilde;
-import lv.wings.model.PasakumaKategorija;
-import lv.wings.model.PasakumaKomentars;
-import lv.wings.model.Pasakums;
-import lv.wings.model.Piegades_veids;
-import lv.wings.model.Pircejs;
-import lv.wings.model.Pirkuma_elements;
-import lv.wings.model.Pirkums;
-import lv.wings.model.Prece;
-import lv.wings.model.Preces_bilde;
-import lv.wings.model.Samaksas_veids;
+import lv.wings.model.EventPicture;
+import lv.wings.model.EventCategory;
+import lv.wings.model.Event;
+import lv.wings.model.DeliveryType;
+import lv.wings.model.Customer;
+import lv.wings.model.PurchaseElement;
+import lv.wings.model.Purchase;
+import lv.wings.model.Product;
+import lv.wings.model.ProductCategory;
+import lv.wings.model.ProductPicture;
+import lv.wings.model.PaymentType;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
-import lv.wings.repo.IAtlaideRepo;
-import lv.wings.repo.IKategorijas_Repo;
-import lv.wings.repo.IPasakumaBildeRepo;
-import lv.wings.repo.IPasakumaKategorija;
-import lv.wings.repo.IPasakumaKomentarsRepo;
-import lv.wings.repo.IPasakumsRepo;
-import lv.wings.repo.IPiegades_veids_Repo;
-import lv.wings.repo.IPircejs_Repo;
-import lv.wings.repo.IPirkuma_elements_repo;
-import lv.wings.repo.IPirkums_Repo;
-import lv.wings.repo.IPrece_Repo;
-import lv.wings.repo.IPreces_bilde_Repo;
-import lv.wings.repo.ISamaksas_veids_Repo;
+import lv.wings.repo.ICustomerRepo;
+import lv.wings.repo.IDeliveryTypeRepo;
+import lv.wings.repo.IEventPictureRepo;
+import lv.wings.repo.IEventRepo;
+import lv.wings.repo.IEventCategory;
+import lv.wings.repo.IPaymentTypeRepo;
+import lv.wings.repo.IProductCategoryRepo;
+import lv.wings.repo.IProductPictureRepo;
+import lv.wings.repo.IProductRepo;
+import lv.wings.repo.IPurchaseElementRepo;
+import lv.wings.repo.IPurchaseRepo;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
 import net.datafaker.Faker;
@@ -55,12 +51,11 @@ public class SparniProjectApplication {
 	}
 
 	@Bean
-	public CommandLineRunner sparniDB(IPircejs_Repo pircejs_repo, IPirkums_Repo pirkums_repo,
-			IPiegades_veids_Repo piegades_veids_repo, ISamaksas_veids_Repo samaksas_veids_repo,
-			IPasakumsRepo pasakumsRepo, IPasakumaBildeRepo pasakumaBildeRepo,
-			IPasakumaKomentarsRepo pasakumaKomentarsRepo, IPasakumaKategorija pasakumaKategorijaRepo,
-			IAtlaideRepo atlaideRepo, IKategorijas_Repo kategorijasRepo, IPirkuma_elements_repo pirkuma_elementsRepo,
-			IPrece_Repo preceRepo, IPreces_bilde_Repo bildeRepo, IMyAuthorityRepo authRepo, IMyUserRepo userRepo) {
+	public CommandLineRunner sparniDB(ICustomerRepo customerRepo, IPurchaseRepo purchaseRepo,
+			IDeliveryTypeRepo deliveryTypeRepo, IPaymentTypeRepo paymentTypeRepo,
+			IEventRepo eventRepo, IEventPictureRepo eventPictureRepo, IEventCategory eventCategoryRepo,
+			IProductCategoryRepo productCategoryRepo, IPurchaseElementRepo purchaseElementRepo,
+			IProductRepo productRepo, IProductPictureRepo productPictureRepo, IMyAuthorityRepo authRepo, IMyUserRepo userRepo) {
 
 		return new CommandLineRunner() {
 
@@ -68,139 +63,117 @@ public class SparniProjectApplication {
 			public void run(String... args) throws Exception {
 
 
-				Piegades_veids piegades_veids1 = new Piegades_veids("Piegades Veids1", "Apraksts1");
-				Piegades_veids piegades_veids2 = new Piegades_veids("Piegades Veids2", "Apraksts2");
-				piegades_veids_repo.save(piegades_veids1);
-				piegades_veids_repo.save(piegades_veids2);
+				DeliveryType deliveryType1 = new DeliveryType("Piegades Veids1", "Apraksts1");
+				DeliveryType deliveryType2 = new DeliveryType("Piegades Veids2", "Apraksts2");
+				deliveryTypeRepo.save(deliveryType1);
+				deliveryTypeRepo.save(deliveryType2);
 
-				Samaksas_veids samaksas_veids1 = new Samaksas_veids("Samaksas Veids 1", "Piezimes1");
-				Samaksas_veids samaksas_veids2 = new Samaksas_veids("Samaksas Veids 2", "Piezimes2");
-				samaksas_veids_repo.save(samaksas_veids1);
-				samaksas_veids_repo.save(samaksas_veids2);
+				PaymentType paymentType1 = new PaymentType("Samaksas Veids 1", "Piezimes1");
+				PaymentType paymentType2 = new PaymentType("Samaksas Veids 2", "Piezimes2");
+				paymentTypeRepo.save(paymentType1);
+				paymentTypeRepo.save(paymentType2);
 
 
 				Faker faker = new Faker();
 
 				for(int i = 0; i < 500; i++) {
-					String dfVards = faker.name().firstName();
-					String dfUzvards = faker.name().lastName();
-					String dfEpasts = faker.expression("#{regexify '[A-Za-z0-9]{6,10}'}") + "@gmail.com";
-					String dfAdrese = faker.address().cityName() + ", " + faker.address().buildingNumber();
-					String dfPersonasKods = faker.expression("#{regexify '[0-9]{6}-[0-9]{5}'}");
-					String dfBankasNosaukums = faker.expression("#{options.option 'Liela banka', 'Maza banka', 'XL banka' 'XS banka'}");
-					String dfBankasSwiftKods = faker.expression("#{regexify '[0-9]{6}'}");
-					String dfBankasKods = "Bankas kods " + faker.expression("#{numerify '###'}");
+					String dfName = faker.name().firstName();
+					String dfSurname = faker.name().lastName();
+					String dfEmail = faker.expression("#{regexify '[A-Za-z0-9]{6,10}'}") + "@gmail.com";
+					String dfAdress = faker.address().cityName() + ", " + faker.address().buildingNumber();
+					// String dfPersonasKods = faker.expression("#{regexify '[0-9]{6}-[0-9]{5}'}");
+					// String dfBankasNosaukums = faker.expression("#{options.option 'Liela banka', 'Maza banka', 'XL banka' 'XS banka'}");
+					// String dfBankasSwiftKods = faker.expression("#{regexify '[0-9]{6}'}");
+					// String dfBankasKods = "Bankas kods " + faker.expression("#{numerify '###'}");
 
-					Pircejs dfPircejs = new Pircejs(dfVards, dfUzvards, dfEpasts, dfAdrese,
-													dfPersonasKods, dfBankasNosaukums, dfBankasSwiftKods, dfBankasKods);
+					Customer dfCustomer = new Customer(dfName, dfSurname, dfEmail, dfAdress);
 
-					pircejs_repo.save(dfPircejs);
+					customerRepo.save(dfCustomer);
 
 					String d = faker.date().future(300, TimeUnit.HOURS, "YYYY-MM-dd hh:mm");
         			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         			LocalDateTime dateTime = LocalDateTime.parse(d, formatter);
 
-					Pirkums newPirkums;
+					Purchase newPurchase;
 					if(Integer.parseInt(faker.expression("#{numerify '#'}")) > 5) {
-						newPirkums = new Pirkums(piegades_veids1, samaksas_veids2, dfPircejs, dateTime,
+						newPurchase = new Purchase(deliveryType1, paymentType2, dfCustomer, dateTime,
 						"Nav detalas");
 					} else {
-						newPirkums = new Pirkums(piegades_veids2, samaksas_veids1, dfPircejs, dateTime,
+						newPurchase = new Purchase(deliveryType2, paymentType1, dfCustomer, dateTime,
 						"Lielas detalas");
 					}
-					pirkums_repo.save(newPirkums);
+					purchaseRepo.save(newPurchase);
 				}
 
-				Pircejs pircejs1 = new Pircejs("Markuss", "Blumbergs", "random1@gmail.com", "Talsi, Street 1",
-						"000000-00001", "Liela banka", "246810", "Bankas kods 123");
-				Pircejs pircejs2 = new Pircejs("Lauris", "Kairo", "random2@gmail.com", "Liepaja, Street 4",
-						"000000-00002", "Liela banka", "123456", "Bankas kods 321");
-				pircejs_repo.save(pircejs1);
-				pircejs_repo.save(pircejs2);
+				Customer customer1 = new Customer("Markuss", "Blumbergs", "random1@gmail.com", "Talsi, Street 1");
+				Customer customer2 = new Customer("Lauris", "Kairo", "random2@gmail.com", "Liepaja, Street 4");
+				customerRepo.save(customer1);
+				customerRepo.save(customer2);
 
-				Pirkums pirkums1 = new Pirkums(piegades_veids1, samaksas_veids1, pircejs1, LocalDateTime.now(),
+				Purchase purchase1 = new Purchase(deliveryType1, paymentType1, customer1, LocalDateTime.now(),
 						"Nav detalas");
-				Pirkums pirkums2 = new Pirkums(piegades_veids2, samaksas_veids2, pircejs1, LocalDateTime.now(),
+				Purchase purchase2 = new Purchase(deliveryType2, paymentType2, customer1, LocalDateTime.now(),
 						"Nav detalas");
-				pirkums_repo.save(pirkums1);
-				pirkums_repo.save(pirkums2);
+				purchaseRepo.save(purchase1);
+				purchaseRepo.save(purchase2);
 
-				
-				Atlaide atlaide1 = new Atlaide(10, Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 4)),
-						"Melnās piekdienas atlaides!");
-				Atlaide atlaide2 = new Atlaide(20, Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 5)),
-						"Melnās piekdienas atlaides!");
-				Atlaide atlaide3 = new Atlaide(50, Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 6)),
-						"Melnās piekdienas atlaides!");
-				atlaideRepo.save(atlaide1);
-				atlaideRepo.save(atlaide2);
-				atlaideRepo.save(atlaide3);
-				PasakumaKategorija pasakumaKategorija1 = new PasakumaKategorija("Sporta spēles");
-				PasakumaKategorija pasakumaKategorija2 = new PasakumaKategorija("Vasaras svētki");
-				PasakumaKategorija pasakumaKategorija3 = new PasakumaKategorija("Līgo");
+				EventCategory eventCategory1 = new EventCategory("Sporta spēles");
+				EventCategory eventCategory2 = new EventCategory("Vasaras svētki");
+				EventCategory eventCategory3 = new EventCategory("Līgo");
 
-				pasakumaKategorijaRepo.save(pasakumaKategorija1);
-				pasakumaKategorijaRepo.save(pasakumaKategorija2);
-				pasakumaKategorijaRepo.save(pasakumaKategorija3);
+				eventCategoryRepo.save(eventCategory1);
+				eventCategoryRepo.save(eventCategory2);
+				eventCategoryRepo.save(eventCategory3);
  
-				Pasakums pasakums1 = new Pasakums(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 1)), "Pasakums 1",
-						"Liepāja", "Pasākums visiem cilvēkiem!", "vasara atpūta", pasakumaKategorija1);
-				Pasakums pasakums2 = new Pasakums(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 2)), "Pasakums 2",
-						"Ventspils", "Pasākums visiem cilvēkiem!", "vasara atpūta", pasakumaKategorija2);
-				Pasakums pasakums3 = new Pasakums(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 3)), "Pasakums 3",
-						"Rīga", "Pasākums visiem cilvēkiem!", "vasara beigas", pasakumaKategorija2);
-				pasakumsRepo.save(pasakums1);
-				pasakumsRepo.save(pasakums2);
-				pasakumsRepo.save(pasakums3);
+				Event pasakums1 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 1)), "Pasakums 1",
+						"Liepāja", "Pasākums visiem cilvēkiem!", "vasara atpūta", eventCategory1);
+				Event pasakums2 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 2)), "Pasakums 2",
+						"Ventspils", "Pasākums visiem cilvēkiem!", "vasara atpūta", eventCategory2);
+				Event pasakums3 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 3)), "Pasakums 3",
+						"Rīga", "Pasākums visiem cilvēkiem!", "vasara beigas", eventCategory2);
+				eventRepo.save(pasakums1);
+				eventRepo.save(pasakums2);
+				eventRepo.save(pasakums3);
 
-				PasakumaKomentars komentars1 = new PasakumaKomentars("Ļoti labs pasākums!", Date.from(Instant.now()),
-						pasakums1);
-				PasakumaKomentars komentars2 = new PasakumaKomentars("Slikts pasākums!", Date.from(Instant.now()),
-						pasakums1);
-				PasakumaKomentars komentars3 = new PasakumaKomentars("Man patika!", Date.from(Instant.now()), pasakums2);
-				pasakumaKomentarsRepo.save(komentars1);
-				pasakumaKomentarsRepo.save(komentars2);
-				pasakumaKomentarsRepo.save(komentars3);
-
-				PasakumaBilde bilde1 = new PasakumaBilde("bilde1.jpg", "bilde1", "laba bilde", pasakums1);
-				PasakumaBilde bilde2 = new PasakumaBilde("bilde2.jpg", "bilde2", "slikta bilde", pasakums2);
-				PasakumaBilde bilde3 = new PasakumaBilde("bilde3.jpg", "bilde3", "laba bilde", pasakums1);
-				pasakumaBildeRepo.save(bilde1);
-				pasakumaBildeRepo.save(bilde2);
-				pasakumaBildeRepo.save(bilde3);
+				EventPicture bilde1 = new EventPicture("bilde1.jpg", "bilde1", "laba bilde", pasakums1);
+				EventPicture bilde2 = new EventPicture("bilde2.jpg", "bilde2", "slikta bilde", pasakums2);
+				EventPicture bilde3 = new EventPicture("bilde3.jpg", "bilde3", "laba bilde", pasakums1);
+				eventPictureRepo.save(bilde1);
+				eventPictureRepo.save(bilde2);
+				eventPictureRepo.save(bilde3);
 
 				// KATEGORIJAS
-				Kategorijas kategorija1 = new Kategorijas("Cepure", "Galvas segas");
-				Kategorijas kategorija2 = new Kategorijas("Cimdi", "Adīti cimdi");
-				Kategorijas kategorija3 = new Kategorijas("Zeķes", "Adītas zeķes");
-				kategorijasRepo.save(kategorija1);
-				kategorijasRepo.save(kategorija2);
-				kategorijasRepo.save(kategorija3);
+				ProductCategory kategorija1 = new ProductCategory("Cepure", "Galvas segas");
+				ProductCategory kategorija2 = new ProductCategory("Cimdi", "Adīti cimdi");
+				ProductCategory kategorija3 = new ProductCategory("Zeķes", "Adītas zeķes");
+				productCategoryRepo.save(kategorija1);
+				productCategoryRepo.save(kategorija2);
+				productCategoryRepo.save(kategorija3);
 
 				// PRECES
-				Prece prece1 = new Prece("Adīti ziemas dūraiņi", "Krustūrīenā izšūti adīti ziemas cimdi", 13.60f, 6,
+				Product product1 = new Product("Adīti ziemas dūraiņi", "Krustūrīenā izšūti adīti ziemas cimdi", 13.60f, 6,
 						kategorija2);
-				Prece prece2 = new Prece("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35", 12.20f, 4,
+				Product product2 = new Product("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35", 12.20f, 4,
 						kategorija3);
-				preceRepo.save(prece1);
-				preceRepo.save(prece2);
+				productRepo.save(product1);
+				productRepo.save(product2);
 
 				// PIRKUMA ELEMENTS
-				Pirkuma_elements pirkuma_elements1 = new Pirkuma_elements(pirkums1, prece1, 2);
-				Pirkuma_elements pirkuma_elements2 = new Pirkuma_elements(pirkums2, prece2, 1);
-				Pirkuma_elements pirkuma_elements3 = new Pirkuma_elements(pirkums2, prece1, 1);
-				pirkuma_elementsRepo.save(pirkuma_elements1);
-				pirkuma_elementsRepo.save(pirkuma_elements2);
-				pirkuma_elementsRepo.save(pirkuma_elements3);
+				PurchaseElement purchaseElement1 = new PurchaseElement(purchase1, product1, 2);
+				PurchaseElement purchaseElement2 = new PurchaseElement(purchase2, product2, 1);
+				PurchaseElement purchaseElement3 = new PurchaseElement(purchase2, product1, 1);
+				purchaseElementRepo.save(purchaseElement1);
+				purchaseElementRepo.save(purchaseElement2);
+				purchaseElementRepo.save(purchaseElement3);
 
 				// BILDES
-				// public Preces_bilde(String bilde, String apraksts, Prece prece)
-				Preces_bilde bilde11 = new Preces_bilde("bilde1.jpg", "Zeķes1", prece1);
-				Preces_bilde bilde22 = new Preces_bilde("bilde2.jpg", "Zeķes2", prece1);
-				Preces_bilde bilde33 = new Preces_bilde("bilde3.jpg", "Cimdi1", prece2);
-				bildeRepo.save(bilde11);
-				bildeRepo.save(bilde22);
-				bildeRepo.save(bilde33);
+				// public Preces_bilde(String bilde, String apraksts, Prece product)
+				ProductPicture bilde11 = new ProductPicture("bilde1.jpg", "Zeķes1", product1);
+				ProductPicture bilde22 = new ProductPicture("bilde2.jpg", "Zeķes2", product1);
+				ProductPicture bilde33 = new ProductPicture("bilde3.jpg", "Cimdi1", product2);
+				productPictureRepo.save(bilde11);
+				productPictureRepo.save(bilde22);
+				productPictureRepo.save(bilde33);
 				
 				//USER & AUTHORITY
 				MyAuthority a1 = new MyAuthority("ADMIN");
