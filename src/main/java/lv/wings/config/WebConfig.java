@@ -22,13 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/{spring:(?!static|api)[^\\.]*}")
                 .setViewName("forward:/index.html");
-        registry.addViewController("/*/{spring:(?!static|api)[^\\.]*}")
-                .setViewName("forward:/index.html");
-        registry.addViewController("/*/*/{spring:(?!static|api)[^\\.]*}")
-                .setViewName("forward:/index.html");
-        registry.addViewController("/*/*/*/{spring:(?!static|api)[^\\.]*}")
-                .setViewName("forward:/index.html");
-        registry.addViewController("/*/*/*/*/{spring:(?!static|api)[^\\.]*}")
+        registry.addViewController("/**/{spring:(?!static|api)[^\\.]*}")
                 .setViewName("forward:/index.html");
     }
 }
