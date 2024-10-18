@@ -2,7 +2,9 @@ import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useAllData } from "../../hooks/dataHooks";
-import LoadingSpinner from "../../assets/LoadingSpinner";
+import LoadingSpinner from "../assets/LoadingSpinner";
+
+
 
 export default function AdminNews() {
 	const { data, loading, error, setData } = useAllData(
