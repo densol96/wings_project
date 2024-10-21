@@ -13,12 +13,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lv.wings.model.security.MyUser;
-
+import org.springframework.beans.factory.annotation.Value;
 
 
 @Service
 public class JwtService {
-        private String SECRET_KEY = "${JWT_SECRET_KEY}";
+        @Value("${JWT_SECRET_KEY}")
+        private String SECRET_KEY;
 
         public String extractUsername(String token){
             return extractClaim(token, Claims::getSubject);
@@ -57,6 +58,7 @@ public class JwtService {
                             .issuedAt(new Date(System.currentTimeMillis()))
                             .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) // 5 minutes for testing
                             .signWith(getSigningKey())
+                            .claim("role", user.getAuthority().getTitle())
                             .compact();
             return token;
         }
