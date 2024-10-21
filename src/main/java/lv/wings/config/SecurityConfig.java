@@ -3,24 +3,40 @@ package lv.wings.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import lv.wings.auditing.ApplicationAuditAware;
+import lv.wings.filter.JwtAuthFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+	private final MyUserDetailsMenager userDetailManager;
+	private final JwtAuthFilter jwtAuthFilter;
+
+	public SecurityConfig(MyUserDetailsMenager userDetailsMenager, JwtAuthFilter jwtAuthFilter){
+		this.userDetailManager = userDetailsMenager;
+		this.jwtAuthFilter = jwtAuthFilter;
+	}
+	 
 	
-	@Bean
 	public MyUserDetailsMenager getDetailsService() {
 		return new MyUserDetailsMenager();
 	}
-	
+		
+	/* 
 	@Bean
 	public DaoAuthenticationProvider createProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -30,14 +46,27 @@ public class SecurityConfig {
 		provider.setUserDetailsService(getDetailsService());
 		return provider;
 	}
-
+		*/
 	@Bean
 	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
-		http.authorizeHttpRequests(auth->auth
+		return http.csrf(AbstractHttpConfigurer::disable)
+				.authorizeHttpRequests(auth-> 
+				 auth.requestMatchers("/admin/**").hasAuthority("ADMIN")
+				.anyRequest()
+				.permitAll()
+				)
+				//.formLogin(form -> form.loginPage("/login").permitAll())
+				
+				.userDetailsService(userDetailManager)
+				.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+				.build();
+
+		//http.authorizeHttpRequests(auth->auth
 				//.requestMatchers("/").permitAll()
-				.requestMatchers("/**").permitAll()
-				.requestMatchers("/api/**").permitAll()
-				.requestMatchers("/admin/**").hasAuthority("ADMIN")
+				//.requestMatchers("/**").permitAll()
+				//.requestMatchers("/api/**").permitAll()
+				//.requestMatchers("/admin/**").hasAuthority("ADMIN")
 				/*.requestMatchers("api/news").permitAll()
 				.requestMatchers("/news").permitAll()
 				.requestMatchers("/par-biedribu").permitAll()
@@ -86,16 +115,30 @@ public class SecurityConfig {
 				.requestMatchers("/samaksas/veids/remove/{id}").hasAuthority("ADMIN")
 				.requestMatchers("/samaksas/veids/add").hasAuthority("ADMIN")
 				.requestMatchers("/samaksas/veids/update/{id}").hasAuthority("ADMIN")*/
-				);
+			//	);
 		
-		http.formLogin(auth->auth.permitAll());
+		//http.formLogin(auth->auth.permitAll());
 		
-		return http.build();
+		//return http.build();
 	}
+
+
+	@Bean
+	public PasswordEncoder passwordEncoder(){
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean 
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+		return config.getAuthenticationManager();
+	}
+
+
 	
 	@Bean
 	public AuditorAware<Integer> auditorAware(){
 		return new ApplicationAuditAware();
 	}
+	
 
 }

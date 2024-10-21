@@ -14,6 +14,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import io.jsonwebtoken.security.Password;
 import lv.wings.model.Atlaide;
 import lv.wings.model.Kategorijas;
 import lv.wings.model.PasakumaBilde;
@@ -81,7 +82,7 @@ public class SparniProjectApplication {
 
 				Faker faker = new Faker();
 
-				for(int i = 0; i < 500; i++) {
+				for(int i = 0; i < 5; i++) {
 					String dfVards = faker.name().firstName();
 					String dfUzvards = faker.name().lastName();
 					String dfEpasts = faker.expression("#{regexify '[A-Za-z0-9]{6,10}'}") + "@gmail.com";
@@ -211,6 +212,7 @@ public class SparniProjectApplication {
 				
 				PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 				
+
 				MyUser u1 = new MyUser("annija.user", encoder.encode("123"),a2);
 				userRepo.save(u1);
 				
