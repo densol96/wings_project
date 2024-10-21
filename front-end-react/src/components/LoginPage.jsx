@@ -1,7 +1,9 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function LoginPage() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -22,7 +24,8 @@ export default function LoginPage() {
 
                 const token = response.data.token;
                 localStorage.setItem("token", token);
-                history.pushState("/admin")
+                //history.pushState("/admin")
+                navigate("/admin")
             } catch (error) {
                 console.log(error);
             }
