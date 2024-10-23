@@ -4,8 +4,6 @@ import { useState } from "react";
 import { useAllData } from "../../hooks/dataHooks";
 import LoadingSpinner from "../assets/LoadingSpinner";
 
-
-
 export default function AdminNews() {
 	const { data, loading, error, setData } = useAllData(
 		"http://localhost:8080/api/news",
@@ -31,10 +29,12 @@ export default function AdminNews() {
 	const handleSubmit = async e => {
 		e.preventDefault();
 		try {
-			const token = localStorage.getItem("token")
-			await axios.post("http://localhost:8080/api/news/add", form, {headers: {
-				"Authorization": `Bearer ${token}`
-			}});
+			const token = localStorage.getItem("token");
+			await axios.post("http://localhost:8080/api/news/add", form, {
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			});
 
 			setData(prev => ({ ...prev, result: [...prev.result, form] }));
 
@@ -42,8 +42,8 @@ export default function AdminNews() {
 				nosaukums: "",
 				vieta: "",
 				apraksts: "",
-				sakumaDatums: null,
-				beiguDatums: null,
+				sakumaDatums: new Date(),
+				beiguDatums: new Date(),
 				keyWords: "majasdarbs1",
 			});
 		} catch (error) {

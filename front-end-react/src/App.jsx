@@ -1,5 +1,5 @@
-import { BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
-import {jwtDecode} from 'jwt-decode';
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import MainPage from "./components/MainPage";
 import News from "./components/news/News";
 import Shop from "./components/Shop";
@@ -16,28 +16,25 @@ import LoginPage from "./components/LoginPage";
 
 /// Izveido react router, lai pareizi darbotos SPA
 function App() {
-
-
 	const isAuthenticated = () => {
-		const token = localStorage.getItem('token');
+		const token = localStorage.getItem("token");
 		if (!token) return false;
-	
+
 		try {
 			const decodedToken = jwtDecode(token);
-	
-		
+
 			if (decodedToken.exp * 1000 < Date.now()) {
 				return false; // Token has expired
 			}
-	
+
 			/*
 			const userRoles = decodedToken.roles || decodedToken.authorities;
 			if (userRoles && userRoles.includes('ROLE_ADMIN')) {
 				return true;
 			}
 			*/
-	
-			return true; 
+
+			return true;
 		} catch (error) {
 			console.error("Invalid token", error);
 			return false;
@@ -46,7 +43,6 @@ function App() {
 
 	return (
 		<>
-		
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Layout />}>
@@ -59,10 +55,16 @@ function App() {
 						<Route path="/about" element={<About />} />
 						<Route path="/contacts" element={<Contacts />} />
 
-						
-						<Route path="/admin" element={isAuthenticated() ? <AdminLayout /> : <Navigate to={"/login"}/>}>
-
-
+						<Route
+							path="/admin"
+							element={
+								isAuthenticated() ? (
+									<AdminLayout />
+								) : (
+									<Navigate to={"/login"} />
+								)
+							}
+						>
 							<Route index element={<AdminDashboard />} />
 
 							<Route
@@ -73,7 +75,16 @@ function App() {
 						</Route>
 						<Route path="*" element={<PageNotFound />} />
 					</Route>
-					<Route path="/login" element={<LoginPage />} />
+					<Route
+						path="/login"
+						element={
+							isAuthenticated() ? (
+								<Navigate to={"/admin"} />
+							) : (
+								<LoginPage />
+							)
+						}
+					/>
 				</Routes>
 			</BrowserRouter>
 		</>
