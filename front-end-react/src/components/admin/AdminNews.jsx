@@ -31,7 +31,10 @@ export default function AdminNews() {
 	const handleSubmit = async e => {
 		e.preventDefault();
 		try {
-			await axios.post("http://localhost:8080/api/news/add", form);
+			const token = localStorage.getItem("token")
+			await axios.post("http://localhost:8080/api/news/add", form, {headers: {
+				"Authorization": `Bearer ${token}`
+			}});
 
 			setData(prev => ({ ...prev, result: [...prev.result, form] }));
 

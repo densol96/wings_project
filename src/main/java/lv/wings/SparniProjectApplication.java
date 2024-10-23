@@ -83,7 +83,7 @@ public class SparniProjectApplication {
 
 				Faker faker = new Faker();
 
-				for(int i = 0; i < 5; i++) {
+				for(int i = 0; i < 450; i++) {
 					String dfVards = faker.name().firstName();
 					String dfUzvards = faker.name().lastName();
 					String dfEpasts = faker.expression("#{regexify '[A-Za-z0-9]{6,10}'}") + "@gmail.com";
