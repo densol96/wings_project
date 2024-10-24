@@ -1,0 +1,16 @@
+package lv.wings.repo;
+
+import java.util.ArrayList;
+
+import org.springframework.data.repository.CrudRepository;
+
+import lv.wings.model.Product;
+import lv.wings.model.ProductPicture;
+
+public interface IProductPictureRepo extends CrudRepository<ProductPicture,Integer> {
+
+	ProductPicture findByPicture(String picture);
+	
+	ArrayList<ProductPicture> findByProduct(Product product);
+
+}
