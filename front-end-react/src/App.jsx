@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import MainPage from "./components/MainPage";
-import News from "./components/news/News";
+import Events from "./components/events/Events";
 import Shop from "./components/Shop";
 import About from "./components/About";
 import Contacts from "./components/Contacts";
@@ -9,9 +9,9 @@ import Layout from "./components/Layout";
 import PageNotFound from "./components/errors/PageNotFound";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./components/admin/AdminDashboard";
-import AdminNews from "./components/admin/AdminNews";
+import AdminEvents from "./components/admin/AdminEvents";
 import AdminProducts from "./components/admin/AdminProducts";
-import SingleNews from "./components/news/SingleNews";
+import SingleEvent from "./components/events/SingleEvent";
 import LoginPage from "./components/LoginPage";
 
 /// Izveido react router, lai pareizi darbotos SPA
@@ -48,8 +48,8 @@ function App() {
 					<Route path="/" element={<Layout />}>
 						<Route index element={<MainPage />} />
 
-						<Route path="/news" element={<News />} />
-						<Route path="/news/show/:id" element={<SingleNews />} />
+						<Route path="/events" element={<Events />} />
+						<Route path="/events/show/:id" element={<SingleEvent />} />
 
 						<Route path="/shop" element={<Shop />} />
 						<Route path="/about" element={<About />} />
@@ -71,7 +71,7 @@ function App() {
 								path="products"
 								element={<AdminProducts />}
 							></Route>
-							<Route path="news" element={<AdminNews />}></Route>
+							<Route path="events" element={<AdminEvents />}></Route>
 						</Route>
 						<Route path="*" element={<PageNotFound />} />
 					</Route>

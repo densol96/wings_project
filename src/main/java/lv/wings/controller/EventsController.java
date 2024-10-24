@@ -1,3 +1,81 @@
+package lv.wings.controller;
+
+import java.util.ArrayList;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.validation.Valid;
+import lv.wings.exceptions.NoContentException;
+import lv.wings.model.Event;
+import lv.wings.responses.ApiArrayListResponse;
+import lv.wings.responses.ApiResponse;
+import lv.wings.service.ICRUDService;
+
+@RestController
+@RequestMapping(value = "/api/events")
+public class EventsController {
+
+	@Autowired
+	private ICRUDService<Event> eventsRepo;
+
+	// @Autowired
+	// private IPasakumaKomentarsService pasakumaKomentarsRepo;
+
+	@GetMapping(value = "")
+	public ResponseEntity<ApiArrayListResponse<Event>> getAllNews() {
+
+		try {
+			ArrayList<Event> allEvents = eventsRepo.retrieveAll();
+
+			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allEvents));
+		} catch (NoContentException e) {
+			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+
+	}
+
+	@GetMapping(value = "/show/{id}")
+	public ResponseEntity<ApiResponse<Event>> getSingleNews(@PathVariable("id") int id) {
+
+		try {
+			return ResponseEntity.ok(new ApiResponse<>(null, eventsRepo.retrieveById(id)));
+		} catch (NoContentException e) {
+			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
+	@PostMapping(value = "/add")
+	public ResponseEntity<?> postAddNews(@Valid @RequestBody Event event /*,BindingResult result*/) {
+		/* 
+		if (result.hasErrors()) {
+			 This show error because of wrong date formats need to fix
+			return ResponseEntity.badRequest().body(result.getAllErrors());
+		}
+			*/
+		try {
+			eventsRepo.create(event);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Jaunums - pasakums izveidots");
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Kļūda: " + e.getMessage());
+		}
+	}
+
+}
+
+
+
 /* package lv.wings.controller;
 
 import java.util.ArrayList;

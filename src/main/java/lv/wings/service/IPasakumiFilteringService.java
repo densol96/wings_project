@@ -2,10 +2,10 @@ package lv.wings.service;
 
 import java.util.ArrayList;
 
-import lv.wings.model.Pasakums;
+import lv.wings.model.Event;
 
 public interface IPasakumiFilteringService {
-	ArrayList<Pasakums> selectAllPasakumiDescOrder() throws Exception;
+	ArrayList<Event> selectAllEventsDescOrder() throws Exception;
 
-	ArrayList<Pasakums> selectAllPasakumiAscOrder() throws Exception;
+	ArrayList<Event> selectAllEventsAscOrder() throws Exception;
 }

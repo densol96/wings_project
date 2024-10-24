@@ -10,7 +10,7 @@ export default function AdminNavbar() {
 			<nav className="flex gap-10 text-3xl p-5">
 				<Link to={"/admin"}>Statistika</Link>
 				<Link to={"/admin/products"}>Preces</Link>
-				<Link to={"/admin/news"}>Jaunumi</Link>
+				<Link to={"/admin/events"}>Jaunumi</Link>
 			</nav>
 		</div>
 	);

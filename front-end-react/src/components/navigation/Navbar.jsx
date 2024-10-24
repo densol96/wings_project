@@ -52,7 +52,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 					</li>
 					<li>
 						<NavLink
-							to={"/news"}
+							to={"/events"}
 							className={({ isActive }) =>
 								isActive
 									? classOptions.active
