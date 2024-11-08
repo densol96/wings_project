@@ -58,7 +58,6 @@ public class JwtService {
                             .issuedAt(new Date(System.currentTimeMillis()))
                             .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) // 5 minutes for testing
                             .signWith(getSigningKey())
-                            .claim("role", user.getAuthority().getTitle())
                             .compact();
             return token;
         }

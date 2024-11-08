@@ -52,6 +52,7 @@ public class SecurityConfig {
 		return http.csrf(AbstractHttpConfigurer::disable)
 				.authorizeHttpRequests(auth-> 
 				 auth.requestMatchers("/admin/**").hasAuthority("ADMIN")
+				 .requestMatchers("/api/events/add").hasAuthority("ADMIN")
 				.anyRequest()
 				.permitAll()
 				)
