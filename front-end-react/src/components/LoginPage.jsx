@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, redirect } from "react-router-dom";
+import {setToken} from "../utils/Auth";
 
 export default function LoginPage({ isAuthenticated }) {
 	const [username, setUsername] = useState("");
@@ -23,7 +24,7 @@ export default function LoginPage({ isAuthenticated }) {
 			});
 
 			const token = response.data.token;
-			localStorage.setItem("token", token);
+			setToken(token);
 
 			window.location.reload();
 		} catch (error) {
