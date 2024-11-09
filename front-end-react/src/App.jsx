@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import MainPage from "./components/MainPage";
 import Events from "./components/events/Events";
 import Shop from "./components/Shop";
@@ -9,15 +8,18 @@ import Layout from "./components/Layout";
 import PageNotFound from "./components/errors/PageNotFound";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminDashboard from "./components/admin/AdminDashboard";
-import AdminEvents from "./components/admin/AdminEvents";
+import AdminEvents, {AdminCreateEvent} from "./components/admin/AdminEvents";
 import AdminProducts from "./components/admin/AdminProducts";
 import SingleEvent from "./components/events/SingleEvent";
 import LoginPage from "./components/LoginPage";
+import {isAuthenticated, getToken } from "./utils/Auth";
 
 /// Izveido react router, lai pareizi darbotos SPA
 function App() {
+	/*
 	const isAuthenticated = () => {
-		const token = localStorage.getItem("token");
+		const token = getToken();
+
 		if (!token) return false;
 
 		try {
@@ -27,12 +29,12 @@ function App() {
 				return false; // Token has expired
 			}
 
-			/*
+			
 			const userRoles = decodedToken.roles || decodedToken.authorities;
 			if (userRoles && userRoles.includes('ROLE_ADMIN')) {
 				return true;
 			}
-			*/
+			
 
 			return true;
 		} catch (error) {
@@ -40,6 +42,7 @@ function App() {
 			return false;
 		}
 	};
+	*/
 
 	return (
 		<>
@@ -54,8 +57,9 @@ function App() {
 						<Route path="/shop" element={<Shop />} />
 						<Route path="/about" element={<About />} />
 						<Route path="/contacts" element={<Contacts />} />
-
-						<Route
+						<Route path="*" element={<PageNotFound />} />
+					</Route>
+					<Route
 							path="/admin"
 							element={
 								isAuthenticated() ? (
@@ -67,14 +71,9 @@ function App() {
 						>
 							<Route index element={<AdminDashboard />} />
 
-							<Route
-								path="products"
-								element={<AdminProducts />}
-							></Route>
-							<Route path="events" element={<AdminEvents />}></Route>
+							<Route path="events/add" element={<AdminCreateEvent />}></Route>
+							<Route path="products"element={<AdminProducts />}></Route>
 						</Route>
-						<Route path="*" element={<PageNotFound />} />
-					</Route>
 					<Route
 						path="/login"
 						element={

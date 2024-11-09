@@ -55,23 +55,6 @@ public class EventsController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
-
-	@PostMapping(value = "/add")
-	public ResponseEntity<?> postAddNews(@Valid @RequestBody Event event /*,BindingResult result*/) {
-		/* 
-		if (result.hasErrors()) {
-			 This show error because of wrong date formats need to fix
-			return ResponseEntity.badRequest().body(result.getAllErrors());
-		}
-			*/
-		try {
-			eventsRepo.create(event);
-			return ResponseEntity.status(HttpStatus.CREATED).body("Jaunums - pasakums izveidots");
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Kļūda: " + e.getMessage());
-		}
-	}
-
 }
 
 
