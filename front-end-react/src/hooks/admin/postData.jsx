@@ -5,8 +5,9 @@ import axios from "axios";
 export async function createEvent(form) {
 
    try {
-      const response =  await axios.post("http://localhost:8080/admin/api/events/add", form, {
+      const response =  await axios.post("http://localhost:8080/admin/api/events/create", form, {
       headers: {
+         "Content-Type": "multipart/form-data",
          Authorization: `Bearer ${getToken()}`,
       },
      })

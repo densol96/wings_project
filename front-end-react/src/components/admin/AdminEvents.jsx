@@ -233,20 +233,38 @@ export function AdminCreateEvent(){
 		startDate: new Date(),
 		endDate: new Date(),
 		keyWords: "sparni",
+		images: [],
 	});
 
 	const handleSubmit = async e => {
 		e.preventDefault();
+
+		const formData = new FormData();
+	
+		formData.append("event", new Blob([JSON.stringify({
+			title: form.title,
+			location: form.location,
+			description: form.description,
+			startDate: form.startDate,
+			endDate: form.endDate,
+			keyWords: form.keyWords
+		})], { type: "application/json" }));
+	
+		
+		form.images.forEach(img=> {
+			formData.append(`images`, img);
+		})
+		
 		
 		try {
-		 	const result = await createEvent(form);
+		 	const result = await createEvent(formData);
 			setInputErrors([])
-			setResponseMsg(result.data);
+			setResponseMsg(result.data.message);
 		} catch (error) {
-			if (error.response && error.response.data){
-				setInputErrors(error.response.data);
+			if (error.response && error.response.data.result){
+				setInputErrors(error.response.data.result);
 			}
-			console.error(error);
+			console.log(error);
 		}
 		
 
@@ -257,6 +275,7 @@ export function AdminCreateEvent(){
 			startDate: new Date(),
 			endDate: new Date(),
 			keyWords: "sparni",
+			images: [],
 		});
 	};
 
@@ -281,6 +300,33 @@ export function AdminCreateEvent(){
 		}))
 	}
 
+	const handleImageChange = e => {
+
+		const find = form.images.find(image => image.name === e.target.files[0].name)
+		if (!find){
+		form.images.push(...e.target.files);
+
+			
+		setForm({
+			...form,
+			images: Array.from(form.images),
+		})
+
+		} else {
+			alert("Attēls jau ir pievienots!");
+		}
+	
+		
+		
+	}
+
+	const handleRemoveImage = (name) => {
+		setForm(prev => ({
+			...prev,
+			images: form.images.filter(img => img.name !== name),
+		}))
+	}
+
 
 	return (
 		<>
@@ -302,6 +348,7 @@ export function AdminCreateEvent(){
 								type="text"
 								name="title"
 								id="title"
+								required
 								value={form.title}
 								onChange={handleChange}
 								className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
@@ -318,6 +365,7 @@ export function AdminCreateEvent(){
 								type="text"
 								name="location"
 								id="location"
+								required
 								value={form.location}
 								onChange={handleChange}
 								className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
@@ -372,10 +420,14 @@ export function AdminCreateEvent(){
 								name="description"
 								id="description"
 								value={form.description}
+								required
 								onChange={handleChange}
 								className="w-full resize-none rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
 							></textarea>
 							<div className="max-w-xl">
+								<div className="p-4">
+									 {form.images.length > 0 && form.images.map(img => <ImageElement name={img.name} handleRemoveImage={handleRemoveImage}/>)} 
+								</div>
 								<label className="flex justify-center w-full h-32 px-4 transition bg-white border-2 border-gray-300 border-dashed rounded-md appearance-none cursor-pointer hover:border-gray-400 focus:outline-none">
 									<span className="flex items-center space-x-2">
 										<svg
@@ -393,13 +445,16 @@ export function AdminCreateEvent(){
 											/>
 										</svg>
 										<span className="font-medium text-gray-600">
-											Pārvietot attēlus
+											Pievienot attēlu
 										</span>
 									</span>
 									<input
 										type="file"
-										name="file_upload"
+										name="file_upload[]"
+										multiple
+										accept="image/*"
 										className="hidden"
+										onChange={handleImageChange}
 									/>
 								</label>
 							</div>
@@ -414,22 +469,22 @@ export function AdminCreateEvent(){
 						</div>
 					</form>
 
-				{/* 	<div className="px-16 mb-4">
-						{inputErrors &&
-							inputErrors.map(error => {
-								return (
-									<>
-										<li className="text-md font-bold text-red-500 text-sm">
-											{error.defaultMessage}
-										</li>
-									</>
-								);
-							})}
-					</div> */}
+				
 				</div>
 			</div>
 		</div>
 		</>
 	)
 
+}
+
+
+/// This need style upgrade
+function ImageElement({name, handleRemoveImage}){
+	return (
+		<div className="flex gap-x-10">
+			<h2>{name}</h2>
+			<button className="border-2 p-5" onClick={() => handleRemoveImage(name)} type="button">dzēst</button>
+		</div>
+	)
 }
