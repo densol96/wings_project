@@ -1,33 +1,43 @@
 package lv.wings.mail.impl;
 
-import java.util.Properties;
-
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.stereotype.Service;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lv.wings.mail.MailSender;
 
-@Service
+@Component
 public class MailSenderImpl implements MailSender{
+	@Autowired
+    private JavaMailSender emailSender;
 
-	@Override
-	@Bean
-	public JavaMailSender getJavaMailSender() throws Exception{
-		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.gmail.com");
-		mailSender.setPort(587);
-		
-		mailSender.setUsername("my.gmail@gmail.com");
-		mailSender.setPassword("password");
-		
-		Properties props = mailSender.getJavaMailProperties();
-		props.put("mail.transport.protocol", "smtp");
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.debug", "true");
-		
-		return mailSender;
-	}
+    @Override
+    public void sendMessage(String to, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage(); 
+        message.setFrom("noreply@wings.com");
+        message.setTo(to); 
+        message.setSubject(subject); 
+        message.setText(text);
+        emailSender.send(message);
+    }
+
+    @Override
+    public void sendMessage(String to, String subject, String text, String filename, ByteArrayResource attachement) throws MessagingException {
+        MimeMessage message = emailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
+
+        helper.setFrom("noreply@wings.com");
+        helper.setTo(to); 
+        helper.setSubject(subject); 
+        helper.setText(text);
+        
+        helper.addAttachment(filename, attachement);
+
+        emailSender.send(message);
+    }
 }
