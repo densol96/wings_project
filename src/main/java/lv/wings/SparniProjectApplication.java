@@ -12,27 +12,26 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lv.wings.model.EventPicture;
-import lv.wings.model.EventCategory;
-import lv.wings.model.Event;
-import lv.wings.model.DeliveryType;
 import lv.wings.model.Customer;
-import lv.wings.model.PurchaseElement;
-import lv.wings.model.Purchase;
+import lv.wings.model.DeliveryType;
+import lv.wings.model.Event;
+import lv.wings.model.EventCategory;
+import lv.wings.model.EventPicture;
+import lv.wings.model.PaymentType;
 import lv.wings.model.Product;
 import lv.wings.model.ProductCategory;
 import lv.wings.model.ProductPicture;
-import lv.wings.model.PaymentType;
+import lv.wings.model.Purchase;
+import lv.wings.model.PurchaseElement;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
 import lv.wings.repo.ICustomerRepo;
 import lv.wings.repo.IDeliveryTypeRepo;
+import lv.wings.repo.IEventCategory;
 import lv.wings.repo.IEventPictureRepo;
 import lv.wings.repo.IEventRepo;
-import lv.wings.repo.IEventCategory;
 import lv.wings.repo.IPaymentTypeRepo;
 import lv.wings.repo.IProductCategoryRepo;
 import lv.wings.repo.IProductPictureRepo;
@@ -77,7 +76,7 @@ public class SparniProjectApplication {
 
 				Faker faker = new Faker();
 
-				for(int i = 0; i < 500; i++) {
+				for(int i = 0; i < 50; i++) {
 					String dfName = faker.name().firstName();
 					String dfSurname = faker.name().lastName();
 					String dfEmail = faker.expression("#{regexify '[A-Za-z0-9]{6,10}'}") + "@gmail.com";

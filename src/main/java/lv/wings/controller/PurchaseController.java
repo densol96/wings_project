@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.DeliveryType;
+import lv.wings.mail.MailSender;
 import lv.wings.model.Customer;
-import lv.wings.model.Purchase;
+import lv.wings.model.DeliveryType;
 import lv.wings.model.PaymentType;
+import lv.wings.model.Purchase;
 import lv.wings.poi.PoiController;
 import lv.wings.service.ICRUDService;
 
@@ -27,6 +29,9 @@ import lv.wings.service.ICRUDService;
 @RequestMapping("/pirkums")
 public class PurchaseController {
     
+    @Autowired
+    private MailSender mailSender;
+
     @Autowired
     private ICRUDService<Purchase> purchaseService;
 
@@ -65,6 +70,8 @@ public class PurchaseController {
         }
     }
 
+
+
     @GetMapping("/download/all/{id}")//localhost:8080/pirkums/download/all/{id}
 	public ResponseEntity<byte[]> downloadPurchaseById(@PathVariable("id") int id) {
 		try {
@@ -78,6 +85,30 @@ public class PurchaseController {
 
 			return ResponseEntity.ok().headers(headers).body(fileBytes);
 		} catch (Exception e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+    @GetMapping("/purchace/{id}")//localhost:8080/pirkums/purchace/{id}
+	public ResponseEntity<String> performPurchaseById(@PathVariable("id") int id) {
+		try {
+            System.out.println("smth");
+			Purchase purchase = purchaseService.retrieveById(id);
+            System.out.println(purchase.getDeliveryDetails());
+            
+			//iegūt faila baitus no preces ar definētiem laukiem
+			byte[] fileBytes = PoiController.buildInvoice("pirkums-"+id, purchase);
+
+            mailSender.sendMessage(/*purchase.getCustomer().getEmail()*/"viktors.idk@gmail.com", "Delivery", "some contents", "invoice-"+id+".docx", new ByteArrayResource(fileBytes));
+
+			/*HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDispositionFormData("attachment", "invoice-"+id+".docx");*/
+
+			return ResponseEntity.ok()/*.headers(headers)*/.body("Success");
+		} catch (Exception e) {
+            System.out.println("rip");
+            e.printStackTrace();
 			return ResponseEntity.notFound().build();
 		}
 	}
