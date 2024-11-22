@@ -1,6 +1,7 @@
 package lv.wings.mail.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -15,6 +16,14 @@ import lv.wings.mail.MailSender;
 public class MailSenderImpl implements MailSender{
 	@Autowired
     private JavaMailSender emailSender;
+
+    @Value("${MAIL_DESTINATION_EMAIL}")
+    private String destinationEmail;
+
+    @Override
+	public String getDestinationEmail(){
+		return this.destinationEmail;
+	}
 
     @Override
     public void sendMessage(String to, String subject, String text) {
