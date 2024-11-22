@@ -23,6 +23,7 @@ import lv.wings.model.DeliveryType;
 import lv.wings.model.PaymentType;
 import lv.wings.model.Purchase;
 import lv.wings.poi.PoiController;
+import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;
 
 @Controller
@@ -90,7 +91,7 @@ public class PurchaseController {
 	}
 
     @GetMapping("/purchace/{id}")//localhost:8080/pirkums/purchace/{id}
-	public ResponseEntity<String> performPurchaseById(@PathVariable("id") int id) {
+	public ResponseEntity<ApiResponse<Boolean>> performPurchaseById(@PathVariable("id") int id) {
 		try {
             System.out.println("smth");
 			Purchase purchase = purchaseService.retrieveById(id);
@@ -99,17 +100,11 @@ public class PurchaseController {
 			//iegūt faila baitus no preces ar definētiem laukiem
 			byte[] fileBytes = PoiController.buildInvoice("pirkums-"+id, purchase);
 
-            mailSender.sendMessage(/*purchase.getCustomer().getEmail()*/"viktors.idk@gmail.com", "Delivery", "some contents", "invoice-"+id+".docx", new ByteArrayResource(fileBytes));
-
-			/*HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			headers.setContentDispositionFormData("attachment", "invoice-"+id+".docx");*/
-
-			return ResponseEntity.ok()/*.headers(headers)*/.body("Success");
+            mailSender.sendMessage(/*purchase.getCustomer().getEmail()*/mailSender.getDestinationEmail(), "Delivery", "some contents", "invoice-"+id+".docx", new ByteArrayResource(fileBytes));
+			return ResponseEntity.ok().body(new ApiResponse<>(null, true));
 		} catch (Exception e) {
             System.out.println("rip");
-            e.printStackTrace();
-			return ResponseEntity.notFound().build();
+			return ResponseEntity.ok().body(new ApiResponse<>(null, false));
 		}
 	}
 
