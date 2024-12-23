@@ -3,12 +3,14 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.Purchase;
 import lv.wings.model.PaymentType;
-import lv.wings.repo.IPurchaseRepo;
+import lv.wings.model.Purchase;
 import lv.wings.repo.IPaymentTypeRepo;
+import lv.wings.repo.IPurchaseRepo;
 import lv.wings.service.ICRUDService;
 
 
@@ -27,6 +29,12 @@ public class PaymentTypeServiceImpl implements ICRUDService<PaymentType> {
         if(paymentTypeRepo.count() == 0) throw new Exception("Nav neviena samaksas veida");
 
         return (ArrayList<PaymentType>) paymentTypeRepo.findAll();
+    }
+
+    @Override
+    public Page<PaymentType> retrieveAll(Pageable pageable) throws Exception {
+        if(paymentTypeRepo.count() == 0) throw new Exception("Nav neviena samaksas veida");
+        return (Page<PaymentType>) paymentTypeRepo.findAll(pageable);
     }
 
     @Override
