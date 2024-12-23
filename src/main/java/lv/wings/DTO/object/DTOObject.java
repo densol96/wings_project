@@ -4,5 +4,5 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class DTOObject {
-
+	public void onFinish(Object source){}
 }

@@ -78,7 +78,6 @@ public class DTOMapper {
 								addMethod = method;
 								break;
 							}
-							System.out.println("hasm: " + method.getName());
 						}
 						if(addMethod == null){
 							System.out.println("add method not found: ");
@@ -104,15 +103,14 @@ public class DTOMapper {
 			}
 		}
 
+		response.onFinish(target);
 		return response;
 	}
 
 	private static Method getGetMethod(Field field, Method[] methods){
 		String fieldName = field.getName();
 		String getterName = "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
-		System.out.println("Search of: " + getterName);
 		for (Method method : methods) {
-			System.out.println("Compare to: " + method.getName());
 			if(method.getName().equals(getterName)) return method;
 		}
 		return null;

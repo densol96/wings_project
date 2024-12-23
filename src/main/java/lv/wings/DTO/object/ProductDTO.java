@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
+import lv.wings.model.Product;
 
 @Getter
 @Setter
@@ -21,4 +22,11 @@ public class ProductDTO extends DTOObject {
 	public float price;
 
 	public int amount;
+
+	public int imageCount;
+
+	@Override
+	public void onFinish(Object source) {
+		this.imageCount = ((Product) source).getProductPicture().size();
+	}
 }
