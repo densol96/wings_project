@@ -3,11 +3,13 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.ProductPicture;
-import lv.wings.repo.IProductRepo;
 import lv.wings.repo.IProductPictureRepo;
+import lv.wings.repo.IProductRepo;
 import lv.wings.service.ICRUDInsertedService;
 
 @Service
@@ -26,6 +28,12 @@ public class ProductPictureServiceImpl implements ICRUDInsertedService<ProductPi
 				
 		//pretējā gadījumā sameklēt visus ierakstus no repo
 		return (ArrayList<ProductPicture>) productPictureRepo.findAll();
+	}
+
+	@Override
+	public Page<ProductPicture> retrieveAll(Pageable pageable) throws Exception {
+		if(productPictureRepo.count()==0) throw new Exception("There are no product pictures");
+		return (Page<ProductPicture>)  productPictureRepo.findAll(pageable);
 	}
 
 	@Override
@@ -56,8 +64,8 @@ public class ProductPictureServiceImpl implements ICRUDInsertedService<ProductPi
 		if(existedProductPicture != null) throw new Exception("Picture with name: " + productPicture.getPicture() + " already exists");
 		
 		//atrodu preci pēc id
-		if(productRepo.findById(productPicture.getProduct().getProductId())==null) throw new 
-		Exception("Prece ar sekojošu id: " + productPicture.getProduct().getProductId() + " neeksistē!");
+		if(productRepo.findById(productPicture.getProduct().getProductId()).isEmpty())
+			throw new Exception("Prece ar sekojošu id: " + productPicture.getProduct().getProductId() + " neeksistē!");
 				
 		productPictureRepo.save(productPicture);
 	}
@@ -70,8 +78,8 @@ public class ProductPictureServiceImpl implements ICRUDInsertedService<ProductPi
 		if(existedProductPicture != null) throw new Exception("Picture with name: " + productPicture.getPicture() + " already exists");
 		
 		//atrodu preci pēc id
-		if(productRepo.findById(id)==null) throw new 
-		Exception("Product with id: " + id + " does not exist!");
+		if(productRepo.findById(id).isEmpty())
+			throw new Exception("Product with id: " + id + " does not exist!");
 				
 		//tāda bilde vēl neeksistē
 		ProductPicture newPicture = productPicture;
