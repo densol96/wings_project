@@ -32,9 +32,12 @@ public class DTOMapper {
 
 		//loop through all the fields
 		for(Field resourceField : resourceFields){
-
+			DTOMeta dtoMeta = resourceField.getAnnotation(DTOMeta.class);
+			if(dtoMeta != null){
+				if(dtoMeta.ignore()) continue;
+			}
 			//get the corresponding getter
-			Method targetMethod = getGetMethod(resourceField, targetMethods);
+			Method targetMethod = getGetMethod(resourceField, targetMethods, dtoMeta);
 			if(targetMethod == null){
 				continue;
 			}
@@ -107,8 +110,12 @@ public class DTOMapper {
 		return response;
 	}
 
-	private static Method getGetMethod(Field field, Method[] methods){
+	private static Method getGetMethod(Field field, Method[] methods, DTOMeta dtoMeta){
 		String fieldName = field.getName();
+		if(dtoMeta != null && !dtoMeta.sourceField().isEmpty()){
+			fieldName = dtoMeta.sourceField();
+		} 
+
 		String getterName = "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
 		for (Method method : methods) {
 			if(method.getName().equals(getterName)) return method;
