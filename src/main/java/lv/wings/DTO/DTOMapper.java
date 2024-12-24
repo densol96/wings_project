@@ -10,17 +10,25 @@ import lv.wings.DTO.object.DTOObject;
 
 public class DTOMapper {
 	public static <T extends DTOObject> ArrayList<T> mapMany(Class<T> responseType, Object[] targets) throws Exception{
+		return mapMany(responseType, targets, new String[0]);
+	}
+
+	public static <T extends DTOObject> ArrayList<T> mapMany(Class<T> responseType, Object[] targets, String[] ignoreFields) throws Exception{
 		ArrayList<T> response = new ArrayList<>();
 		
 
 		for(Object target: targets){
-			response.add(map(responseType, target));
+			response.add(map(responseType, target, ignoreFields));
 		}
 
 		return response;
 	}
 
 	public static <T extends DTOObject> T map(Class<T> responseType, Object target) throws Exception{
+		return map(responseType, target, new String[0]);
+	}
+
+	public static <T extends DTOObject> T map(Class<T> responseType, Object target, String[] ignoreFields) throws Exception{
 		T response = responseType.getConstructor().newInstance();
 
 		Class<?> targetClass = target.getClass();
@@ -31,7 +39,12 @@ public class DTOMapper {
 		Method[] targetMethods = targetClass.getMethods();
 
 		//loop through all the fields
-		for(Field resourceField : resourceFields){
+		fieldLoop: for(Field resourceField : resourceFields){
+			String fieldName = resourceField.getName();
+			for(String ignoreField : ignoreFields){
+				if(fieldName.equals(ignoreField)) continue fieldLoop;
+			}
+
 			DTOMeta dtoMeta = resourceField.getAnnotation(DTOMeta.class);
 			if(dtoMeta != null){
 				if(dtoMeta.ignore()) continue;
@@ -91,7 +104,7 @@ public class DTOMapper {
 						Object[] allContentsAsArray = (Object[]) toArrayMethod.invoke(executionResult);
 						//fill up the new collection with new content
 						for (Object elem : allContentsAsArray) {
-							addMethod.invoke(newObj, map((Class<T>) newFieldCollectionContentType, elem));
+							addMethod.invoke(newObj, map((Class<T>) newFieldCollectionContentType, elem, flatterIgnoreFields(fieldName, ignoreFields)));
 						}
 					}
 
@@ -101,7 +114,7 @@ public class DTOMapper {
 					
 					//set the propery with the new DTO class
 					Class<?> newFieldClass = (Class<?>) fieldType;
-					resourceField.set(response, map((Class<T>) newFieldClass, executionResult));
+					resourceField.set(response, map((Class<T>) newFieldClass, executionResult, flatterIgnoreFields(fieldName, ignoreFields)));
 				}
 			}
 		}
@@ -121,5 +134,20 @@ public class DTOMapper {
 			if(method.getName().equals(getterName)) return method;
 		}
 		return null;
+	}
+
+	private static String[] flatterIgnoreFields(String fieldName, String[] ignoreFields){
+		ArrayList<String> fields = new ArrayList<>();
+
+		String searchSeq = fieldName + '.';
+		int sliceLength = searchSeq.length();
+
+		for (String ignoreField : ignoreFields) {
+			if(ignoreField.startsWith(searchSeq)){
+				fields.add(ignoreField.substring(sliceLength));
+			}
+		}
+
+		return fields.toArray(new String[fields.size()]);
 	}
 }
