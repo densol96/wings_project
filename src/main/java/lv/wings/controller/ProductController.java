@@ -32,7 +32,7 @@ public class ProductController {
 	public ResponseEntity<ArrayList<ProductDTO>> getDTOd() {
 		try {
 			ArrayList<Product> allProducts = productService.retrieveAll();
-			return ResponseEntity.ok(DTOMapper.mapMany(ProductDTO.class, allProducts.toArray()));
+			return ResponseEntity.ok(DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(), new String[]{"title", "productPicture.id"}));
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
