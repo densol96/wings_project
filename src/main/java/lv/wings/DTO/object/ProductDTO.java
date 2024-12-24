@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
+import lv.wings.DTO.DTOMeta;
 import lv.wings.model.Product;
 
 @Getter
 @Setter
 public class ProductDTO extends DTOObject {
-	public int productId;
+	@DTOMeta(sourceField="productId")
+	public int id;
 
 	public ProductCategoryDTO productCategory;
 	
@@ -23,6 +25,7 @@ public class ProductDTO extends DTOObject {
 
 	public int amount;
 
+	@DTOMeta(ignore=true)
 	public int imageCount;
 
 	@Override
