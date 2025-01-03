@@ -3,10 +3,12 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.ProductCategory;
 import lv.wings.model.Product;
+import lv.wings.model.ProductCategory;
 import lv.wings.repo.IProductCategoryRepo;
 import lv.wings.repo.IProductRepo;
 import lv.wings.service.ICRUDService;
@@ -27,6 +29,14 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 		
 		//pretējā gadījumā sameklēt visus ierakstus no repo
 		return (ArrayList<ProductCategory>) productCategoriesRepo.findAll();
+	}
+
+	@Override
+	public Page<ProductCategory> retrieveAll(Pageable pageable) throws Exception {
+	
+		if(productCategoriesRepo.count()==0) throw new Exception("Product category table is empty");
+		
+		return (Page<ProductCategory>) productCategoriesRepo.findAll(pageable);
 	}
 
 	@Override

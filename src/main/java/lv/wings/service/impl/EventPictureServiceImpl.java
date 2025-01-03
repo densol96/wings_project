@@ -3,6 +3,8 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.EventPicture;
@@ -20,6 +22,13 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 			throw new Exception("There are no event pictures in the database");
 
 		return (ArrayList<EventPicture>) eventPictureRepo.findAll();
+	}
+
+	@Override
+	public Page<EventPicture> retrieveAll(Pageable pageable) throws Exception {
+		if (eventPictureRepo.count() == 0)
+			throw new Exception("There are no event pictures in the database");
+		return (Page<EventPicture>) eventPictureRepo.findAll(pageable);
 	}
 
 	@Override
