@@ -1,10 +1,10 @@
-package lv.wings.DTO.object;
+package lv.wings.dto.object;
 
 import java.util.ArrayList;
 
 import lombok.Getter;
 import lombok.Setter;
-import lv.wings.DTO.DTOMeta;
+import lv.wings.dto.DTOMeta;
 import lv.wings.model.Product;
 
 @Getter

@@ -1,4 +1,4 @@
-package lv.wings.DTO;
+package lv.wings.dto;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

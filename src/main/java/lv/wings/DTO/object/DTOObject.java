@@ -1,4 +1,4 @@
-package lv.wings.DTO.object;
+package lv.wings.dto.object;
 
 import lombok.NoArgsConstructor;
 
