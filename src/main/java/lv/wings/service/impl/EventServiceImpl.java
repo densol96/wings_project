@@ -3,6 +3,8 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lv.wings.dto.post.EventDTO;
@@ -18,17 +20,7 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	
 	@Autowired
 	private IEventRepo eventRepo;
-	
-	
-	@Override
-	public Event retrieveById(int id) throws Exception {
-		if (id < 1) throw new Exception("Invalid ID");
-		Event foundEvent = eventRepo.findByEventId(id);
-		if (foundEvent  == null) throw new Exception("Event with the id: (" + id + ") does not exist!");
-		
-		return foundEvent;
-	}
-	
+
 	@Override
 	public ArrayList<Event> retrieveAll() throws NoContentException {
 		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAll();
@@ -38,6 +30,23 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	}
 
 
+	@Override
+	public Page<Event> retrieveAll(Pageable pageable) throws NoContentException {
+		Page<Event> events = (Page<Event>) eventRepo.findAll(pageable);
+		if (events.isEmpty()) throw new NoContentException("There are no events");
+		
+		return events;
+	}
+
+	@Override
+	public Event retrieveById(int id) throws Exception {
+		if (id < 1) throw new Exception("Invalid ID");
+		Event foundEvent = eventRepo.findByEventId(id);
+		if (foundEvent  == null) throw new Exception("Event with the id: (" + id + ") does not exist!");
+		
+		return foundEvent;
+	}
+	
 	@Override
 	public ArrayList<Event> selectAllEventsDescOrder() throws Exception {
 		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAllByOrderByEventIdDesc();

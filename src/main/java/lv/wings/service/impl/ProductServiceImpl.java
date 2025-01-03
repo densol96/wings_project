@@ -3,15 +3,17 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.PurchaseElement;
 import lv.wings.model.Product;
 import lv.wings.model.ProductPicture;
+import lv.wings.model.PurchaseElement;
 import lv.wings.repo.IProductCategoryRepo;
-import lv.wings.repo.IPurchaseElementRepo;
-import lv.wings.repo.IProductRepo;
 import lv.wings.repo.IProductPictureRepo;
+import lv.wings.repo.IProductRepo;
+import lv.wings.repo.IPurchaseElementRepo;
 import lv.wings.service.ICRUDInsertedService;
 
 
@@ -37,6 +39,12 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>{
 				
 		//pretējā gadījumā sameklēt visus ierakstus no repo
 		return (ArrayList<Product>) productRepo.findAll();
+	}
+
+	@Override
+	public Page<Product> retrieveAll(Pageable pageable) throws Exception{
+		if(productRepo.count()==0) throw new Exception("There are no products");
+		return (Page<Product>) productRepo.findAll(pageable);
 	}
 
 	@Override
@@ -83,8 +91,8 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>{
 		if(existedProduct != null) throw new Exception("Product with name: " + product.getTitle() + " already exists");
 				
 		//atrodu kategoriju pēc id
-		if(productCategoryRepo.findById(product.getProductCategory().getProductCategoryId())==null) throw new 
-		Exception("Product Category with id: " + product.getProductCategory().getProductCategoryId() + " does not exist");
+		if(productCategoryRepo.findById(product.getProductCategory().getProductCategoryId()).isEmpty()) 
+			throw new Exception("Product Category with id: " + product.getProductCategory().getProductCategoryId() + " does not exist");
 		
 		//tāds pirkuma elements vēl neeksistē
 		Product newProduct = product;
@@ -99,8 +107,8 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>{
 		if(existedProduct != null) throw new Exception("Product with name: " + product.getTitle() + " already exists");
 				
 		//atrodu kategoriju pēc id
-		if(productCategoryRepo.findById(id)==null) throw new 
-		Exception("Product Category with id: " + id + " does not exist");
+		if(productCategoryRepo.findById(id).isEmpty())
+			throw new Exception("Product Category with id: " + id + " does not exist");
 		
 		//tāds pirkuma elements vēl neeksistē
 		Product newProduct = product;

@@ -3,6 +3,8 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Customer;
@@ -25,6 +27,12 @@ public class CustomerServiceImpl implements ICRUDService<Customer>{
        if(customerRepo.count() == 0) throw new Exception("There are no customers");
 
         return (ArrayList<Customer>) customerRepo.findAll();
+    }
+
+    @Override
+    public Page<Customer> retrieveAll(Pageable pageable) throws Exception {
+       if(customerRepo.count() == 0) throw new Exception("There are no customers");
+        return (Page<Customer>) customerRepo.findAll(pageable);
     }
 
     @Override

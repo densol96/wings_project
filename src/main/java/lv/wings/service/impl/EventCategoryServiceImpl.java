@@ -3,10 +3,12 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.EventCategory;
 import lv.wings.model.Event;
+import lv.wings.model.EventCategory;
 import lv.wings.repo.IEventCategory;
 import lv.wings.repo.IEventRepo;
 import lv.wings.service.ICRUDService;
@@ -25,6 +27,13 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 			throw new Exception("There are no event categories in the database");
 
 		return (ArrayList<EventCategory>) eventCategoryRepo.findAll();
+	}
+
+	@Override
+	public Page<EventCategory> retrieveAll(Pageable pageable) throws Exception {
+		if (eventCategoryRepo.count() == 0)
+			throw new Exception("There are no event categories in the database");
+		return (Page<EventCategory>) eventCategoryRepo.findAll(pageable);
 	}
 
 	@Override

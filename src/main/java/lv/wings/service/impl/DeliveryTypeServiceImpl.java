@@ -3,6 +3,8 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.DeliveryType;
@@ -26,6 +28,12 @@ public class DeliveryTypeServiceImpl implements ICRUDService<DeliveryType> {
         if(deliveryTypeRepo.count() == 0) throw new Exception("There are no delivery types");
 
         return (ArrayList<DeliveryType>) deliveryTypeRepo.findAll();
+    }
+
+    @Override
+    public Page<DeliveryType> retrieveAll(Pageable pageable) throws Exception {
+        if(deliveryTypeRepo.count() == 0) throw new Exception("There are no delivery types");
+        return (Page<DeliveryType>) deliveryTypeRepo.findAll(pageable);
     }
 
     @Override

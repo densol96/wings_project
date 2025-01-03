@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
+import lv.wings.DTO.DTOMapper;
+import lv.wings.DTO.object.ProductDTO;
 import lv.wings.model.Product;
 import lv.wings.poi.PoiController;
 import lv.wings.service.ICRUDInsertedService;
-import lv.wings.service.ICRUDService;
 
 @Controller
 @RequestMapping("/prece")
@@ -27,6 +28,30 @@ public class ProductController {
 	@Autowired
 	private ICRUDInsertedService<Product> productService;
 	
+	@GetMapping("/getmapped")//localhost:8080/prece/show/all
+	public ResponseEntity<ArrayList<ProductDTO>> getDTOd() {
+		try {
+			ArrayList<Product> allProducts = productService.retrieveAll();
+			return ResponseEntity.ok(DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(), new String[]{"title", "productPicture.id"}));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@GetMapping("/getmapped/{id}")//localhost:8080/prece/show/all
+	public ResponseEntity<ProductDTO> getDTOdSingle(@PathVariable("id") int id) {
+		try {
+			Product selectedProduct = productService.retrieveById(id);
+			return ResponseEntity.ok(DTOMapper.map(ProductDTO.class, selectedProduct));
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+			return ResponseEntity.notFound().build();
+		}
+	}
+
 	@GetMapping("/show/all")//localhost:8080/prece/show/all
 	public String getAllProducts(Model model) {
 		try {
