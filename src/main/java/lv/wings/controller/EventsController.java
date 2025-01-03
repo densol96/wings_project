@@ -1,6 +1,7 @@
 package lv.wings.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
+import lv.wings.dto.post.EventDTO;
+import lv.wings.dto.post.GetEventPictureDTO;
 import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Event;
+import lv.wings.model.EventPicture;
 import lv.wings.responses.ApiArrayListResponse;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;
@@ -24,37 +27,68 @@ import lv.wings.service.ICRUDService;
 public class EventsController {
 
 	@Autowired
-	private ICRUDService<Event> eventsRepo;
+	private ICRUDService<Event> eventsService;
 
-	// @Autowired
-	// private IPasakumaKomentarsService pasakumaKomentarsRepo;
+	@Autowired ICRUDService<EventPicture> eventsPictureService;
 
 	@GetMapping(value = "")
-	public ResponseEntity<ApiArrayListResponse<Event>> getAllNews() {
+	public ResponseEntity<ApiResponse<?>> getAllEvents() {
 
 		try {
-			ArrayList<Event> allEvents = eventsRepo.retrieveAll();
+			ArrayList<Event> allEvents = eventsService.retrieveAll();
+		
+			ArrayList<EventDTO> eventsDTO = new ArrayList<EventDTO>();
 
-			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allEvents));
+			for (Event event : allEvents){
+				Collection<GetEventPictureDTO> eventsPicturesDTO = new ArrayList<GetEventPictureDTO>();
+
+				for (EventPicture picture : event.getEventPictures()){
+					GetEventPictureDTO eventPicture = new GetEventPictureDTO();
+					eventPicture.setTitle(picture.getTitle());
+					eventPicture.setPicture_reference(picture.getReferenceToPicture());
+					eventPicture.setId(picture.getEventPicturesId());
+					eventPicture.setDescription((picture.getDescription()));
+
+					eventsPicturesDTO.add(eventPicture);
+				}
+
+				EventDTO eventDTO = new EventDTO();
+				eventDTO.setId(event.getEventId());
+				eventDTO.setLocation(event.getLocation());
+				eventDTO.setDescription(event.getDescription());
+				eventDTO.setStartDate(event.getStartDate());
+				eventDTO.setEndDate(event.getEndDate());
+				eventDTO.setKeyWords(event.getKeyWords());
+				eventDTO.setEventCategoryId(event.getEventCategory().getEventCategoryId());
+				eventDTO.setTitle(event.getTitle());
+				eventDTO.setEventPictures(eventsPicturesDTO);
+
+		
+				eventsDTO.add(eventDTO);
+			}
+
+			return ResponseEntity.ok(new ApiResponse<>(null, eventsDTO));
 		} catch (NoContentException e) {
-			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			return ResponseEntity.internalServerError().body(
+				new ApiResponse<>(e.getMessage(), null)
+			);
 		}
 
 	}
 
-	@GetMapping(value = "/show/{id}")
+	/* @GetMapping(value = "/show/{id}")
 	public ResponseEntity<ApiResponse<Event>> getSingleNews(@PathVariable("id") int id) {
 
 		try {
-			return ResponseEntity.ok(new ApiResponse<>(null, eventsRepo.retrieveById(id)));
+			return ResponseEntity.ok(new ApiResponse<>(null, eventsService.retrieveById(id)));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-	}
+	} */
 }
 
 

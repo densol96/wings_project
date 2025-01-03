@@ -56,7 +56,7 @@ public class JwtService {
             String token = Jwts.builder()
                             .subject(user.getUsername())
                             .issuedAt(new Date(System.currentTimeMillis()))
-                            .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) // 5 minutes for testing
+                            .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * (24*60)))
                             .signWith(getSigningKey())
                             .compact();
             return token;

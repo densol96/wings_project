@@ -10,7 +10,7 @@ export const useAllData = url => {
 		const getAllData = async () => {
 			try {
 				const response = await axios.get(url);
-				response.data.result.reverse();
+
 				setData(response.data);
 			} catch (error) {
 				setError(error);

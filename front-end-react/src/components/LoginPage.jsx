@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, redirect } from "react-router-dom";
-import {setToken} from "../utils/Auth";
+import { setToken } from "../utils/Auth";
 
 export default function LoginPage({ isAuthenticated }) {
 	const [username, setUsername] = useState("");

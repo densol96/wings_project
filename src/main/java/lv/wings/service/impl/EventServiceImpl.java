@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import lv.wings.dto.post.EventDTO;
 import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Event;
 import lv.wings.repo.IEventRepo;
@@ -30,12 +31,12 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	
 	@Override
 	public ArrayList<Event> retrieveAll() throws NoContentException {
-
 		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAll();
 		if (events.isEmpty()) throw new NoContentException("There are no events");
 		
 		return events;
 	}
+
 
 	@Override
 	public ArrayList<Event> selectAllEventsDescOrder() throws Exception {
@@ -73,9 +74,9 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 
 	@Override
 	public void update(int id, Event event) throws Exception {
-         Event foundEvent = eventRepo.findByEventId(id);
+         Event foundEvent = eventRepo.findByEventId(event.getEventId());
 		
-		if (foundEvent== null) throw new Exception("Event with (id:" + id + ") does not exist");
+		if (foundEvent == null) throw new Exception("Event with (id:" + id + ") does not exist");
 
 		foundEvent.setStartDate(event.getStartDate());
 		foundEvent.setEndDate(event.getEndDate());

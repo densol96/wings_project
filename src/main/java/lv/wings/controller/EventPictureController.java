@@ -3,6 +3,8 @@ package lv.wings.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,17 +14,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
+import lv.wings.exceptions.NoContentException;
+import lv.wings.model.EventCategory;
 import lv.wings.model.EventPicture;
+import lv.wings.responses.ApiArrayListResponse;
 import lv.wings.service.ICRUDService;
 
 @Controller
-@RequestMapping("/pasakuma-bilde")
+@RequestMapping("/api/event-pictures")
 public class EventPictureController {
 	@Autowired
 	private ICRUDService<EventPicture> eventPictureRepo;
 	
-	
-	@GetMapping("/show/all")
+	@GetMapping(value = "")
+	public ResponseEntity<ApiArrayListResponse<EventPicture>> getAllPictures() {
+
+		try {
+			ArrayList<EventPicture> allEventPictures = eventPictureRepo.retrieveAll();
+
+			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allEventPictures));
+		} catch (NoContentException e) {
+			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+
+	}
+	/* 
+	@GetMapping("")
 	public String getAllEventPictures(Model model) {
 		try {
 			ArrayList<EventPicture> allEventPictures = eventPictureRepo.retrieveAll();
@@ -34,7 +53,7 @@ public class EventPictureController {
 			return "error-page";
 		}
 	}
-	
+	*/
 	
 
 	@GetMapping("/show/all/{id}")

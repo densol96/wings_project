@@ -38,8 +38,9 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	public void deleteById(int id) throws Exception {
 		EventPicture eventPicture = retrieveById(id);
 		if (eventPicture == null) throw new Exception("Event picture with the id: (" + id + ") does not exist!");
-		eventPictureRepo.delete(eventPicture);
 
+		System.out.println(eventPicture.getReferenceToPicture());
+		eventPictureRepo.delete(eventPicture);
 	}
 
 	@Override
