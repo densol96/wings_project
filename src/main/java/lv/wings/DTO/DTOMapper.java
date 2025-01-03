@@ -1,4 +1,4 @@
-package lv.wings.DTO;
+package lv.wings.dto;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -6,7 +6,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-import lv.wings.DTO.object.DTOObject;
+import lv.wings.dto.object.DTOObject;
 
 public class DTOMapper {
 	public static <T extends DTOObject> ArrayList<T> mapMany(Class<T> responseType, Object[] targets) throws Exception{

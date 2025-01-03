@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.DTO.DTOMapper;
-import lv.wings.DTO.object.ProductDTO;
+import lv.wings.dto.DTOMapper;
+import lv.wings.dto.object.ProductDTO;
 import lv.wings.model.Product;
 import lv.wings.poi.PoiController;
 import lv.wings.service.ICRUDInsertedService;
