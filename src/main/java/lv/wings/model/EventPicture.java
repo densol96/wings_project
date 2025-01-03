@@ -8,8 +8,10 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -49,7 +51,7 @@ public class EventPicture {
 
 	@NotNull
 	@Column(name = "title")
-	@Size(min = 2, max = 200, message = "Kategorijas nosaukums nedrīkst saturēt mazāk par 1 vai vairāk par 100 rakstzīmēm!")
+	@Size(min = 2, max = 200, message = "Nosaukums nedrīkst saturēt mazāk par 2 vai vairāk par 200 rakstzīmēm!")
 	private String title;
 
 	@NotNull
@@ -59,7 +61,7 @@ public class EventPicture {
 
 	//TODO
 	@ManyToOne
-	@JsonIgnore
+	@JsonBackReference
 	@JoinColumn(name = "event_id")
 	private Event event;
 	

@@ -1,5 +1,7 @@
 package lv.wings.responses;
 
+
+
 public class ApiResponse <T> {
 
     private String message;

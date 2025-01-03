@@ -3,6 +3,8 @@ package lv.wings.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,17 +14,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
+import lv.wings.exceptions.NoContentException;
+import lv.wings.model.Event;
 import lv.wings.model.EventCategory;
+import lv.wings.responses.ApiArrayListResponse;
 import lv.wings.service.ICRUDService;
 
 @Controller
-@RequestMapping("/pasakuma-kategorija")
+@RequestMapping("/api/event-categories")
 public class EventCategoryController {
 	
 	@Autowired
 	private ICRUDService<EventCategory> eventCategoryRepo;
-	
-	
+
+	@GetMapping(value = "")
+	public ResponseEntity<ApiArrayListResponse<EventCategory>> getAllCategories() {
+
+		try {
+			ArrayList<EventCategory> allEventCategories = eventCategoryRepo.retrieveAll();
+
+			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allEventCategories));
+		} catch (NoContentException e) {
+			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+
+	}
+	/*
 	@GetMapping("/show/all")
 	public String getAllEventCategories(Model model) {
 		try {
@@ -35,6 +54,8 @@ public class EventCategoryController {
 			return "error-page";
 		}
 	}
+
+	*/
 	
 	
 

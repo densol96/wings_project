@@ -50,15 +50,18 @@ public class SecurityConfig {
 		*/
 	@Bean
 	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
-		return http.csrf(AbstractHttpConfigurer::disable)
+		return http.csrf(csrf -> csrf.disable())
+				.cors(Customizer.withDefaults())
 				.authorizeHttpRequests(auth-> 
 				 auth.requestMatchers("/admin/**").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/events/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/events-categories/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/events-pictures/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/events-pictures/create-delete").hasAuthority("ADMIN")
 				.anyRequest()
 				.permitAll()
 				)
-				//.formLogin(form -> form.loginPage("/login").permitAll())
-				
 				.userDetailsService(userDetailManager)
 				.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)

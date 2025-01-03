@@ -1,20 +1,18 @@
 import { jwtDecode } from "jwt-decode";
 
-
 export const isAuthenticated = () => {
-    
-		const token = getToken();
-		
-		if (!token) return false;
+	const token = getToken();
 
-		try {
-			const decodedToken = jwtDecode(token);
+	if (!token) return false;
 
-			if (decodedToken.exp * 1000 < Date.now()) {
-				return false; // Token has expired
-			}
+	try {
+		const decodedToken = jwtDecode(token);
 
-			/*
+		if (decodedToken.exp * 1000 < Date.now()) {
+			return false; // Token has expired
+		}
+
+		/*
             NEED TOP CHECK FOR ROLE??
 			const userRoles = decodedToken.roles || decodedToken.authorities;
 			if (userRoles && userRoles.includes('ROLE_ADMIN')) {
@@ -22,21 +20,17 @@ export const isAuthenticated = () => {
 			}
 			*/
 
-			return true;
-		} catch (error) {
-			console.error("Invalid token", error);
-			return false;
-		}
-	
+		return true;
+	} catch (error) {
+		console.error("Invalid token", error);
+		return false;
+	}
 };
 
-
 export const getToken = () => {
-    return localStorage.getItem("token");
-}
+	return localStorage.getItem("token");
+};
 
-export const setToken = (token) => {
-    localStorage.setItem("token", token);
-}
-
-
+export const setToken = token => {
+	localStorage.setItem("token", token);
+};
