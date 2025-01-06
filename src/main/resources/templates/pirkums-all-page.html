@@ -45,7 +45,7 @@
             </tr>
     
             <tr th:each="temp : ${mydata}">
-                <td th:text="${temp.getPirkumsID()}"></td>
+                <td th:text="${temp.getPurchaseId()}"></td>
                 <td th:text="${temp.getPiegadesVeids()} ? ${temp.getPiegadesVeids().getNosaukums()} : 'null'"></td>
                 <td th:text="${temp.getSamaksasVeids} ? ${temp.getSamaksasVeids().getNosaukums()} : 'null'"></td>
                 <td th:text="${temp.getPircejs()} ? ${temp.getPircejs().getVards()} : 'null'"></td>
