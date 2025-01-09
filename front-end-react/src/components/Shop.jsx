@@ -20,11 +20,11 @@ export default function Shop() {
 
 
 				<div class="grid grid-cols-7 mb-5">
-					<div class="col-start-2 col-span-1 mx-auto bg-light-nav">
+					<div class="col-start-2 col-span-1 mx-auto bg-light-nav shadow-md rounded-md">
 						<Categories />
 					</div>
 					
-					<div class="col-end-7 col-span-4 mx-auto bg-light-nav">
+					<div class="col-end-7 col-span-4 mx-auto bg-light-nav shadow-md rounded-md">
 						<AllProducts />
 					</div>
 				</div>
