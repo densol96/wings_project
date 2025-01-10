@@ -12,7 +12,6 @@ export default function Delivery() {
             <main className="content-start">
                 <div class="grid grid-cols-2 place-items-center gap-x-0">
                     <DeliveryTypes />
-                    <DeliveryTypes />
                 </div>
             </main>
         </>

@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import MainPage from "./components/MainPage";
 import Events from "./components/events/Events";
 import Shop from "./components/Shop";
+import ProductView from "./components/shop/ProductView";
 import Delivery from "./components/delivery/Delivery";
 import About from "./components/About";
 import Contacts from "./components/Contacts";
@@ -53,6 +54,7 @@ function App() {
 						<Route path="/events/show/:id" element={<SingleEvent />} />
 
 						<Route path="/shop" element={<Shop />} />
+						<Route path="/shop/show/:id" element={<ProductView />} />
 						<Route path="/delivery" element={<Delivery />} />
 						<Route path="/about" element={<About />} />
 						<Route path="/contacts" element={<Contacts />} />
