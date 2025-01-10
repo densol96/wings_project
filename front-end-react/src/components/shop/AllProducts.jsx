@@ -23,20 +23,6 @@ export default function AllProducts() {
 
     return (
         <>
-            {/* <div class="grid grid-cols-5">
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />
-                <ShopProduct />   
-            </div> */}
 
             <div class="grid grid-cols-5">
                 {data.result.map((n, i) => {
@@ -53,7 +39,7 @@ export default function AllProducts() {
     );
 }
 
-
+// TODO Change photo logic
 function ProductCard({ data }) {
 
     return (
