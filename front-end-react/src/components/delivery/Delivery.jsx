@@ -3,6 +3,7 @@ import Title from "../Title";
 import DeliveryTypes from "./DeliveryTypes";
 
 export default function Delivery() {
+
     return (
         
         <>
@@ -10,8 +11,8 @@ export default function Delivery() {
             <hr></hr>
             <main className="content-start">
                 <div class="grid grid-cols-2 place-items-center gap-x-0">
-                    <DeliveryTypes deliverytypeId={"1"}/>
-                    <DeliveryTypes deliverytypeId={"2"}/>
+                    <DeliveryTypes />
+                    <DeliveryTypes />
                 </div>
             </main>
         </>

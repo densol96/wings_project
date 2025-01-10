@@ -23,7 +23,7 @@ public class DeliveryTypesController {
     @Autowired
     private ICRUDService<DeliveryType> deliveryTypeService;
 
-    @GetMapping(value = "")
+    @GetMapping(value = "/show/all")
 	public ResponseEntity<ApiArrayListResponse<DeliveryType>> getAllDeliveryTypes() {
 
 		try {
