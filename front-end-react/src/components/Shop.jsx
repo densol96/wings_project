@@ -1,6 +1,5 @@
 import React from "react";
 import Title from "./Title";
-import Product from "./shop/Product"
 import Categories from "./shop/Categories";
 import AllProducts from "./shop/AllProducts";
 
