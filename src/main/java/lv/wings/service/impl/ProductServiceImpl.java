@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Product;
+import lv.wings.model.ProductCategory;
 import lv.wings.model.ProductPicture;
 import lv.wings.model.PurchaseElement;
 import lv.wings.repo.IProductCategoryRepo;
@@ -15,10 +16,11 @@ import lv.wings.repo.IProductPictureRepo;
 import lv.wings.repo.IProductRepo;
 import lv.wings.repo.IPurchaseElementRepo;
 import lv.wings.service.ICRUDInsertedService;
+import lv.wings.service.IProductsFilterService;
 
 
 @Service
-public class ProductServiceImpl implements ICRUDInsertedService<Product>{
+public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProductsFilterService{
 
 	@Autowired
 	private IProductRepo productRepo;
@@ -130,6 +132,19 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>{
 		
 		//saglabāju repo un DB
 		productRepo.save(productForUpdating);
+	}
+
+	@Override
+	public ArrayList<Product> selectAllByProductCategory(int categoryId) throws Exception {
+		ProductCategory productCategory = productCategoryRepo.findById(categoryId).get();
+		ArrayList<Product> products = new ArrayList<>();
+		if(productCategory != null) {
+			products = (ArrayList<Product>) productRepo.findByProductCategory(productCategory);
+			if (products.isEmpty()) throw new Exception("There are no products");
+			return products;
+		}
+
+		return products;
 	}
 	
 	
