@@ -15,6 +15,7 @@ import lv.wings.model.Product;
 import lv.wings.responses.ApiArrayListResponse;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;
+import lv.wings.service.IProductsFilterService;
 
 
 @RestController
@@ -23,6 +24,9 @@ public class ProductAPI {
 
     @Autowired
     private ICRUDService<Product> productService;
+
+    @Autowired
+    private IProductsFilterService productFilteringService;
 
     @GetMapping(value = "/show/all")
 	public ResponseEntity<ApiArrayListResponse<Product>> getProducts() {
@@ -50,5 +54,20 @@ public class ProductAPI {
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
+	}
+
+    @GetMapping(value = "/show/category/{categoryid}")
+	public ResponseEntity<ApiArrayListResponse<Product>> getProductsByCategory(@PathVariable("categoryid") int categoryId) {
+
+		try {
+			ArrayList<Product> allProducts = productFilteringService.selectAllByProductCategory(categoryId);
+
+			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allProducts));
+		} catch (NoContentException e) {
+			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+
 	}
 }
