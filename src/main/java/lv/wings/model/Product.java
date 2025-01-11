@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -53,11 +55,13 @@ public class Product {
 	//saite uz bildi
 	@OneToMany(mappedBy = "product")
 	@ToString.Exclude
+	@JsonIgnore
 	private Collection<ProductPicture> productPicture;
 	
 	//saite uz pirkuma_elementu
 	@OneToMany(mappedBy = "product")
 	@ToString.Exclude
+	@JsonIgnore
 	private Collection<PurchaseElement> purchaseElement;
 	
 	@Column(name = "title")
@@ -82,18 +86,22 @@ public class Product {
 	
 	@CreatedDate
 	@Column(nullable = false,updatable = false)
+	@JsonIgnore
 	private LocalDateTime createDate;
 	
 	@LastModifiedDate
 	@Column(insertable = false)
+	@JsonIgnore
 	private LocalDateTime lastModified;
 	
 	@CreatedBy
 	@Column(updatable = false)
+	@JsonIgnore
 	private Integer createdBy;
 	
 	@LastModifiedBy
 	@Column(insertable = false)
+	@JsonIgnore
 	private Integer lastModifiedBy;
 	
 	public Product(String title, String description, float price, int amount, ProductCategory productCategory) {
