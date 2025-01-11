@@ -9,6 +9,7 @@ mvnw.cmd
 .env
 
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -37,4 +38,13 @@ build/
 ### VS Code ###
 .vscode/
 
+### node node_modules and build folder
+/front-end-react/node_modules
+/front-end-react/node
+/front-end-react/dist
+/src/main/resources/static/assets
+/src/main/resources/static/index.html
+
+# uploaded images
+/uploads
 
