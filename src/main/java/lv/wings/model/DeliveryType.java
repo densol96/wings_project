@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -51,22 +53,27 @@ public class DeliveryType {
 	//TODO
 	@OneToMany(mappedBy = "deliveryType")
 	@ToString.Exclude
+	@JsonIgnore
 	private Collection<Purchase> purchases;
 	
 	@CreatedDate
 	@Column(nullable = false,updatable = false)
+	@JsonIgnore
 	private LocalDateTime createDate;
 	
 	@LastModifiedDate
 	@Column(insertable = false)
+	@JsonIgnore
 	private LocalDateTime lastModified;
 	
 	@CreatedBy
 	@Column(updatable = false)
+	@JsonIgnore
 	private Integer createdBy;
 	
 	@LastModifiedBy
 	@Column(insertable = false)
+	@JsonIgnore
 	private Integer lastModifiedBy;
 	
 	
