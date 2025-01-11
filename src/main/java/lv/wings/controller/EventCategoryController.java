@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.exceptions.NoContentException;
-import lv.wings.model.Event;
 import lv.wings.model.EventCategory;
 import lv.wings.responses.ApiArrayListResponse;
 import lv.wings.service.ICRUDService;

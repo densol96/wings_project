@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lv.wings.dto.DTOMapper;
+import lv.wings.dto.object.DTOObject;
 import lv.wings.dto.object.EventDTO;
 import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Event;
@@ -62,6 +63,8 @@ public class EventsController {
 			ArrayList<Event> allEvents = eventsService.retrieveAll();
 			ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toArray(),
 					new String[] { "eventCategory.events" });
+			
+					
 
 			return ResponseEntity.ok(new ApiResponse<>(null, eventsDTO));
 		} catch (NoContentException e) {

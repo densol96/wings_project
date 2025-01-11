@@ -7,7 +7,8 @@ import lv.wings.model.EventPicture;
 
 public interface IEventPictureRepo extends CrudRepository<EventPicture, Integer>, PagingAndSortingRepository<EventPicture, Integer>{
 
-	EventPicture findByTitle(String title);
+	//EventPicture findByTitle(String title);
+	EventPicture findByReferenceToPicture(String reference);
 	
 	
 }

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.dto.post.EventDTO;
 import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Event;
 import lv.wings.repo.IEventRepo;
