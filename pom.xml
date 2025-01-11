@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.3.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<relativePath/>
 	</parent>
 	<groupId>lv.wings</groupId>
 	<artifactId>sparni_project</artifactId>
@@ -17,6 +17,29 @@
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.3.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.3.0</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -50,11 +73,52 @@
 			<scope>test</scope>
 		</dependency>
 		
-		<!-- live update dependency-->
+		<!-- live update dependency
 		<dependency> 
         <groupId>org.springframework.boot</groupId> 
         <artifactId>spring-boot-devtools</artifactId> 
         </dependency>
+		-->
+
+		<!-- https://mvnrepository.com/artifact/net.datafaker/datafaker -->
+		<dependency>
+			<groupId>net.datafaker</groupId>
+			<artifactId>datafaker</artifactId>
+			<version>2.3.1</version>
+		</dependency>
+        
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
+		<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+				<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.12.6</version>
+		</dependency>
+
+				<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-impl -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+
+				<!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-jackson -->
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.12.6</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		
+
+
         
 	</dependencies>
 
@@ -72,6 +136,72 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			 <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.15.1</version>
+            <executions>
+                <execution>
+                    <id>install node and npm</id>
+                    <goals>
+                        <goal>install-node-and-npm</goal>
+                    </goals>
+                    <configuration>
+						<workingDirectory>./front-end-react</workingDirectory>
+                        <nodeVersion>v20.18.0</nodeVersion> 
+                        <npmVersion>10.8.2</npmVersion>
+                    </configuration>
+                </execution>
+				<execution>
+                    <id>npm install</id>
+                    <goals>
+                        <goal>npm</goal>
+                    </goals>
+                    <configuration>
+                        <arguments>install</arguments>
+						<workingDirectory>./front-end-react</workingDirectory>
+                    </configuration>
+                </execution>
+				<execution>
+                    <id>npm run build</id>
+                    <goals>
+                        <goal>npm</goal>
+                    </goals>
+                    <configuration>
+                        <arguments>run build</arguments>
+						<workingDirectory>./front-end-react</workingDirectory>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+		
+        <plugin>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.3.1</version>
+            <executions>
+                <execution>
+                    <id>copy-front-end-react-dist</id>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>copy-resources</goal>
+                    </goals>
+                    <configuration>
+                         <outputDirectory>./src/main/resources/static</outputDirectory> 
+						<resources>
+							 <resource>
+                            	<directory>./front-end-react/dist</directory> 
+                                <includes>
+                                    <include>**/*</include>
+                                </includes>
+                            </resource>
+						</resources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+		
 		</plugins>
 	</build>
 
