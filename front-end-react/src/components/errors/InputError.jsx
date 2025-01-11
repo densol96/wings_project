@@ -23,17 +23,11 @@ export default function InputError({ errors }) {
 									/>
 								</svg>
 							</div>
-							<p className="px-6 py-4 text-red-900 font-semibold text-lg">
-								Kļūda!
-							</p>
+							<p className="px-6 py-4 text-red-900 font-semibold text-lg">Kļūda!</p>
 						</div>
 						<div className="px-16 mb-4">
 							{errors.map(error => {
-								return (
-									<li className="text-md font-bold text-red-500 text-sm">
-										{error}
-									</li>
-								);
+								return <li className="text-md font-bold text-red-500 text-sm">{error}</li>;
 							})}
 						</div>
 					</div>

@@ -56,9 +56,17 @@ public class SecurityConfig {
 				 auth.requestMatchers("/admin/**").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/**").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/events/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/events").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/events-categories/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/events-categories").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/events-pictures/**").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/events-pictures/create-delete").hasAuthority("ADMIN")
+				 
+				 .requestMatchers("/admin/api/products-categories/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/products-pictures/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/products/**").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/products").hasAuthority("ADMIN")
+
 				.anyRequest()
 				.permitAll()
 				)

@@ -30,21 +30,11 @@ export default function SingleNews() {
 		<>
 			{news && (
 				<>
-					<h2 className="text-2xl font-bold text-center">
-						{news.title}
-					</h2>
-					<h2 className="text-2xl font-bold text-center">
-						{news.startDate}
-					</h2>
-					<h2 className="text-2xl font-bold text-center">
-						{news.endDate}
-					</h2>
-					<h2 className="text-2xl font-bold text-center">
-						{news.location}
-					</h2>
-					<h2 className="text-2xl font-bold text-center">
-						{news.description}
-					</h2>
+					<h2 className="text-2xl font-bold text-center">{news.title}</h2>
+					<h2 className="text-2xl font-bold text-center">{news.startDate}</h2>
+					<h2 className="text-2xl font-bold text-center">{news.endDate}</h2>
+					<h2 className="text-2xl font-bold text-center">{news.location}</h2>
+					<h2 className="text-2xl font-bold text-center">{news.description}</h2>
 				</>
 			)}
 		</>

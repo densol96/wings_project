@@ -1,17 +1,16 @@
 package lv.wings.dto.object;
 
-import java.util.ArrayList;
-
 import lombok.Getter;
 import lombok.Setter;
 import lv.wings.dto.DTOMeta;
 
+
 @Getter
 @Setter
-public class EventCategoryDTO extends DTOObject {
-	@DTOMeta(sourceField = "eventCategoryId")
+public class EventPictureDTO extends DTOObject {
+	@DTOMeta(sourceField = "eventPicturesId")
 	public int id;
+	public String referenceToPicture;
 	public String title;
-
-	public ArrayList<EventDTO> events;
+	// public String description;
 }

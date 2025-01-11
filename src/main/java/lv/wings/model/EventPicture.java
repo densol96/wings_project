@@ -56,7 +56,7 @@ public class EventPicture {
 
 	@NotNull
 	@Column(name = "description")
-	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
+	@Size(min = 0, max = 150, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
 	private String description;
 
 	//TODO
