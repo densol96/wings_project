@@ -34,35 +34,35 @@ function Modal() {
 			onClick={closeModal}
 			>
 
-			<div
-				class="bg-white p-6 rounded-lg w-96"
-				onClick={(e) => e.stopPropagation()} // Wont close if clicks inside the box
-			>
-				<h2 class="text-xl font-semibold mb-4">Grozs</h2>
-				<div>
-				{productsCount > 0 ?
-					<>
-					{cart.items.map((currentProduct, idx) => (
-						<Cart key={idx} id={currentProduct.id} quantity={currentProduct.quantity} />
-					))}
-
-					<h1>Cena: {cart.getTotalCost().toFixed(2)}</h1>
-					</>
-				:
-					<h1>Nav pirkuma grozā</h1>
-				}
-				</div>
-
-				<div class="mt-4 flex justify-end">
-				<button
-					onClick={closeModal}
-					class="px-4 py-2 bg-red-500 text-white rounded-md"
+				<div
+					class="bg-white p-6 rounded-lg w-96"
+					onClick={(e) => e.stopPropagation()} // Wont close if clicks inside the box
 				>
-					X
-				</button>
-				</div>
+					<h2 class="text-xl font-semibold mb-4">Grozs</h2>
+					<div>
+						{productsCount > 0 ?
+							<>
+							{cart.items.map((currentProduct, idx) => (
+								<Cart key={idx} id={currentProduct.id} quantity={currentProduct.quantity} />
+							))}
 
-			</div>
+							<h1>Cena: {cart.getTotalCost().toFixed(2)}</h1>
+							</>
+						:
+							<h1>Nav pirkuma grozā</h1>
+						}
+					</div>
+
+					<div class="mt-4 flex justify-end">
+						<button
+							onClick={closeModal}
+							class="px-4 py-2 bg-red-500 text-white rounded-md"
+						>
+							X
+						</button>
+					</div>
+
+				</div>
 			</div>
 		)}
     </div>
