@@ -3,6 +3,8 @@ import Title from "../Title";
 import { useAllData } from "../../hooks/dataHooks";
 import LoadingSpinner from "../assets/LoadingSpinner";
 import { Link } from "react-router-dom";
+import { CartContext } from "../../CartContext";
+import { useContext } from "react";
 
 // TODO add logic for adding all items
 // TODO can select items of a certain category
@@ -42,6 +44,9 @@ export default function AllProducts() {
 // TODO Change photo logic
 function ProductCard({ data }) {
 
+    const cart = useContext(CartContext);
+    const productQuantity = cart.getProductQuantity(data.productId)
+
     return (
         <>
             <Link to={`/shop/show/${data.productId}`}>
@@ -51,6 +56,9 @@ function ProductCard({ data }) {
 
                     <p>{data.title}</p>
                     <p>{data.price}€</p>
+                    <button onClick={() => cart.addOneToCart(data.productId)} class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                        {productQuantity}
+                    </button>
 
                     {/* <div class="flex justify-between mt-2">
                         <div class="basis-2/3">

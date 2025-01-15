@@ -15,6 +15,7 @@ import AdminEvents from "./components/admin/AdminEvents";
 import AdminProducts from "./components/admin/AdminProducts";
 import SingleEvent from "./components/events/SingleEvent";
 import LoginPage from "./components/LoginPage";
+import CartProvider from "./CartContext";
 
 /// Izveido react router, lai pareizi darbotos SPA
 function App() {
@@ -45,52 +46,54 @@ function App() {
 
 	return (
 		<>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<Layout />}>
-						<Route index element={<MainPage />} />
+			<CartProvider>
+				<BrowserRouter>
+					<Routes>
+						<Route path="/" element={<Layout />}>
+							<Route index element={<MainPage />} />
 
-						<Route path="/events" element={<Events />} />
-						<Route path="/events/show/:id" element={<SingleEvent />} />
+							<Route path="/events" element={<Events />} />
+							<Route path="/events/show/:id" element={<SingleEvent />} />
 
-						<Route path="/shop" element={<Shop />} />
-						<Route path="/shop/show/:id" element={<ProductView />} />
-						<Route path="/delivery" element={<Delivery />} />
-						<Route path="/about" element={<About />} />
-						<Route path="/contacts" element={<Contacts />} />
-
-						<Route
-							path="/admin"
-							element={
-								isAuthenticated() ? (
-									<AdminLayout />
-								) : (
-									<Navigate to={"/login"} />
-								)
-							}
-						>
-							<Route index element={<AdminDashboard />} />
+							<Route path="/shop" element={<Shop />} />
+							<Route path="/shop/show/:id" element={<ProductView />} />
+							<Route path="/delivery" element={<Delivery />} />
+							<Route path="/about" element={<About />} />
+							<Route path="/contacts" element={<Contacts />} />
 
 							<Route
-								path="products"
-								element={<AdminProducts />}
-							></Route>
-							<Route path="events" element={<AdminEvents />}></Route>
+								path="/admin"
+								element={
+									isAuthenticated() ? (
+										<AdminLayout />
+									) : (
+										<Navigate to={"/login"} />
+									)
+								}
+							>
+								<Route index element={<AdminDashboard />} />
+
+								<Route
+									path="products"
+									element={<AdminProducts />}
+								></Route>
+								<Route path="events" element={<AdminEvents />}></Route>
+							</Route>
+							<Route path="*" element={<PageNotFound />} />
 						</Route>
-						<Route path="*" element={<PageNotFound />} />
-					</Route>
-					<Route
-						path="/login"
-						element={
-							isAuthenticated() ? (
-								<Navigate to={"/admin"} />
-							) : (
-								<LoginPage />
-							)
-						}
-					/>
-				</Routes>
-			</BrowserRouter>
+						<Route
+							path="/login"
+							element={
+								isAuthenticated() ? (
+									<Navigate to={"/admin"} />
+								) : (
+									<LoginPage />
+								)
+							}
+						/>
+					</Routes>
+				</BrowserRouter>
+			</CartProvider>
 		</>
 	);
 }
