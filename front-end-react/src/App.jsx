@@ -16,6 +16,7 @@ import AdminProducts from "./components/admin/AdminProducts";
 import SingleEvent from "./components/events/SingleEvent";
 import LoginPage from "./components/LoginPage";
 import CartProvider from "./CartContext";
+import CategorizedProducts from "./components/shop/CategorizedProducts";
 
 /// Izveido react router, lai pareizi darbotos SPA
 function App() {
@@ -56,6 +57,7 @@ function App() {
 							<Route path="/events/show/:id" element={<SingleEvent />} />
 
 							<Route path="/shop" element={<Shop />} />
+							<Route path="/shop/category/:title" element={<CategorizedProducts />}></Route>
 							<Route path="/shop/show/:id" element={<ProductView />} />
 							<Route path="/delivery" element={<Delivery />} />
 							<Route path="/about" element={<About />} />
