@@ -2,17 +2,25 @@ import React from "react";
 import Title from "../Title";
 import { useAllData } from "../../hooks/dataHooks";
 import LoadingSpinner from "../assets/LoadingSpinner";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { CartContext } from "../../CartContext";
 import { useContext } from "react";
 
-// TODO add logic for adding all items
-// TODO can select items of a certain category
 
-export default function AllProducts() {
+export default function CategorizedProducts() {
+
+    const { title } = useParams();
+
+    // const location = useLocation();
+    // const stateId = location.state?.id;
+    // console.log(stateId);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const stateId = queryParams.get('id');
+
 
     const { data, loading, error } = useAllData(
-        "http://localhost:8080/api/products/show/all",
+        `http://localhost:8080/api/products/show/category/${stateId}`,
     );
 
     if (loading) {
@@ -20,12 +28,14 @@ export default function AllProducts() {
     }
 
     if (error) {
+        console.log(error);
         return <h1 className="text-3xl text-red-600 text-center">{error}</h1>;
     }
 
     return (
         <>
-
+            {title}
+            <hr></hr>
             <div class="grid grid-cols-5">
                 {data.result.map((n, i) => {
                     return (
