@@ -277,7 +277,7 @@ public class ModelClassesTests {
         ProductPicture testProductPicture = new ProductPicture(testPicture, testDescription, testProduct);
 
         //get
-        assertEquals(testPicture, testProductPicture.getPicture());
+        assertEquals(testPicture, testProductPicture.getReferenceToPicture());
         assertEquals(testDescription, testProductPicture.getDescription());
         assertEquals(testProduct, testProductPicture.getProduct());
 
@@ -288,12 +288,12 @@ public class ModelClassesTests {
         Product newTestProduct = new Product();
         newTestProduct.setAmount(7); 
 
-        testProductPicture.setPicture(testPicture);
+        testProductPicture.setReferenceToPicture(testPicture);;
         testProductPicture.setDescription(testDescription);
         testProductPicture.setProduct(newTestProduct);
         
         
-        assertEquals(testPicture, testProductPicture.getPicture());
+        assertEquals(testPicture, testProductPicture.getReferenceToPicture());
         assertEquals(testDescription, testProductPicture.getDescription());
         assertNotEquals(testProduct, testProductPicture.getProduct());
 

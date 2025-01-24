@@ -21,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -45,7 +46,8 @@ public class EventCategory {
 	
 	@NotNull
 	@Column(name = "title")
-	@Size(min = 1, max = 200, message = "Kategorijas nosaukums nedrīkst saturēt mazāk par 1 vai vairāk par 200 rakstzīmēm!")
+	@Size(min = 3, max = 200, message = "Kategorijas nosaukums nedrīkst saturēt mazāk par 3 vai vairāk par 200 rakstzīmēm!")
+	@Pattern(regexp = "^[a-zA-ZāčēģīķļņōŗšūžĀČĒĢĪĶĻŅŌŖŠŪŽ\\s]+$", message = "Kategorijas nosaukums drīkst saturēt tikai burtus un atstarpes!")
 	private String title;
 	
 	@OneToMany(mappedBy = "eventCategory")

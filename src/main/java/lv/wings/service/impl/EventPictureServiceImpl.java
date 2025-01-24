@@ -48,15 +48,15 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 		EventPicture eventPicture = retrieveById(id);
 		if (eventPicture == null) throw new Exception("Event picture with the id: (" + id + ") does not exist!");
 
-		System.out.println(eventPicture.getReferenceToPicture());
+		//System.out.println(eventPicture.getReferenceToPicture());
 		eventPictureRepo.delete(eventPicture);
 	}
 
 	@Override
 	public void create(EventPicture eventPicture) throws Exception {
-		EventPicture existedPasakumaBilde = eventPictureRepo.findByTitle(eventPicture.getTitle());
+		EventPicture existedEventPicture = eventPictureRepo.findByReferenceToPicture(eventPicture.getReferenceToPicture());
 
-		if (existedPasakumaBilde != null)
+		if (existedEventPicture != null)
 			throw new Exception("Event picture with title: " + eventPicture.getTitle() + " already exists");
 
 		eventPictureRepo.save(eventPicture);

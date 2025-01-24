@@ -10,7 +10,7 @@ import lv.wings.model.ProductPicture;
 
 public interface IProductPictureRepo extends CrudRepository<ProductPicture,Integer>, PagingAndSortingRepository<ProductPicture, Integer>{
 
-	ProductPicture findByPicture(String picture);
+	ProductPicture findByReferenceToPicture(String reference);
 	
 	ArrayList<ProductPicture> findByProduct(Product product);
 

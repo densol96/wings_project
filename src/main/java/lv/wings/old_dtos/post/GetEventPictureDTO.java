@@ -1,4 +1,4 @@
-package lv.wings.dto.post;
+package lv.wings.old_dtos.post;
 
 import lombok.Getter;
 import lombok.Setter;
