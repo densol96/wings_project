@@ -45,8 +45,8 @@ public class ProductCategory {
 	
 	@Column(name = "title")
 	@NotNull
-	@Size(min = 4, max = 50)
-	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ ]+", message = "Only letters and space are allowed")
+	@Size(min = 3, max = 200, message = "Kategorijas nosaukums nedrīkst saturēt mazāk par 3 vai vairāk par 200 rakstzīmēm!")
+	@Pattern(regexp = "^[a-zA-ZāčēģīķļņōŗšūžĀČĒĢĪĶĻŅŌŖŠŪŽ\\s]+$", message = "Kategorijas nosaukums drīkst saturēt tikai burtus un atstarpes!")
 	private String title;
 	
 	@Column(name = "description")
