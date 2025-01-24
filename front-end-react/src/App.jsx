@@ -18,6 +18,8 @@ import AdminEvents, {
 import AdminProducts from "./components/admin/AdminProducts";
 import SingleEvent from "./components/events/SingleEvent";
 import LoginPage from "./components/LoginPage";
+import CartProvider from "./CartContext";
+import CategorizedProducts from "./components/shop/CategorizedProducts";
 import { isAuthenticated, getToken } from "./utils/Auth";
 import AdminOptions from "./components/admin/AdminOptions";
 
@@ -26,69 +28,55 @@ function App() {
 
 	return (
 		<>
-			<BrowserRouter>
-				<Routes>
-					<Route path="/" element={<Layout />}>
-						<Route index element={<MainPage />} />
+			<CartProvider>
+				<BrowserRouter>
+					<Routes>
+						<Route path="/" element={<Layout />}>
+							<Route index element={<MainPage />} />
 
-						<Route path="/events" element={<Events />} />
+							<Route path="/events" element={<Events />} />
+							<Route path="/events/show/:id" element={<SingleEvent />} />
+
+							<Route path="/shop" element={<Shop />} />
+							<Route path="/shop/category/:title" element={<CategorizedProducts />}></Route>
+							<Route path="/shop/show/:id" element={<ProductView />} />
+							<Route path="/delivery" element={<Delivery />} />
+							<Route path="/about" element={<About />} />
+							<Route path="/contacts" element={<Contacts />} />
+
+							<Route
+								path="/admin"
+								element={
+									isAuthenticated() ? (
+										<AdminLayout />
+									) : (
+										<Navigate to={"/login"} />
+									)
+								}
+							>
+								<Route index element={<AdminDashboard />} />
+
+								<Route
+									path="products"
+									element={<AdminProducts />}
+								></Route>
+								<Route path="events" element={<AdminEvents />}></Route>
+							</Route>
+							<Route path="*" element={<PageNotFound />} />
+						</Route>
 						<Route
-							path="/events/show/:id"
-							element={<SingleEvent />}
+							path="/login"
+							element={
+								isAuthenticated() ? (
+									<Navigate to={"/admin"} />
+								) : (
+									<LoginPage />
+								)
+							}
 						/>
-
-						<Route path="/shop" element={<Shop />} />
-						<Route path="/shop/show/:id" element={<ProductView />} />
-						<Route path="/delivery" element={<Delivery />} />
-						<Route path="/about" element={<About />} />
-						<Route path="/contacts" element={<Contacts />} />
-						<Route path="*" element={<PageNotFound />} />
-					</Route>
-					<Route
-						path="/admin"
-						element={
-							isAuthenticated() ? (
-								<AdminLayout />
-							) : (
-								<Navigate to={"/login"} />
-							)
-						}
-					>
-						<Route index element={<AdminDashboard />} />
-
-						<Route
-							path="events/create"
-							element={<AdminCreateEvent />}
-						></Route>
-						<Route
-							path="events-category/create"
-							element={<AdminCreateEventCategory />}
-						></Route>
-						<Route
-							path="events-picture/create-delete"
-							element={<AdminCreateAndDeleteEventPicture />}
-						></Route>
-						<Route
-							path="events/options"
-							element={<AdminOptions />}
-						></Route>
-						<Route
-							path="products"
-							element={<AdminProducts />}
-						></Route>
-					</Route>
-					<Route
-						path="/login"
-						element={
-							isAuthenticated() ? (
-								<Navigate to={"/admin"} />
-							) : (
-								<LoginPage />
-							)
-						}
-					/>
-				</Routes>
-			</BrowserRouter>
+					</Routes>
+				</BrowserRouter>
+			</CartProvider>
 		</>
 	);
 }
