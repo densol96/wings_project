@@ -39,91 +39,85 @@ function App() {
 							<Route path="/events/show/:id" element={<SingleEvent />} />
 
 							<Route path="/shop" element={<Shop />} />
-							<Route path="/shop/category/:title" element={<CategorizedProducts />}></Route>
+							<Route path="/shop/category/:title" element={<CategorizedProducts />} />
 							<Route path="/shop/show/:id" element={<ProductView />} />
 							<Route path="/delivery" element={<Delivery />} />
 							<Route path="/about" element={<About />} />
 							<Route path="/contacts" element={<Contacts />} />
+							<Route path="*" element={<PageNotFound />} />
+						</Route>
+						<Route path="/admin" element={isAuthenticated() ? <AdminLayout /> : <Navigate to={"/login"} />}>
+							<Route index element={<AdminDashboard />} />
+
+							<Route path="events/create" element={<AdminCreateEvent />}></Route>
+							<Route path="events/update-delete" element={<AdminUpdateAndDeleteEvent />}></Route>
+							<Route
+								path="events-category"
+								element={<AdminCategoryNav title={"Jaunuma kategorija"} />}
+							></Route>
+							<Route
+								path="events-category/create"
+								element={
+									<AdminCreateCategory title={"Izveidot jaunuma kategoriju"} categoryType={"event"} />
+								}
+							></Route>
+							<Route
+								path="events-category/update-delete"
+								element={
+									<AdminUpdateAndDeleteCategory
+										title={"Labot vai dzest jaunuma kategoriju"}
+										categoryType={"event"}
+									/>
+								}
+							></Route>
 
 							<Route
-								path="/admin"
+								path="events-picture/create-delete"
 								element={
-									isAuthenticated() ? (
-										<AdminLayout />
-									) : (
-										<Navigate to={"/login"} />
-									)
+									<AdminCreateAndDeletePicture
+										title={"Attēlu rediģēšana jaunumiem"}
+										categoryType={"event"}
+									/>
 								}
-							>
-								<Route index element={<AdminDashboard />} />
+							></Route>
 
-						<Route path="events/create" element={<AdminCreateEvent />}></Route>
-						<Route path="events/update-delete" element={<AdminUpdateAndDeleteEvent />}></Route>
-						<Route
-							path="events-category"
-							element={<AdminCategoryNav title={"Jaunuma kategorija"} />}
-						></Route>
-						<Route
-							path="events-category/create"
-							element={
-								<AdminCreateCategory title={"Izveidot jaunuma kategoriju"} categoryType={"event"} />
-							}
-						></Route>
-						<Route
-							path="events-category/update-delete"
-							element={
-								<AdminUpdateAndDeleteCategory
-									title={"Labot vai dzest jaunuma kategoriju"}
-									categoryType={"event"}
-								/>
-							}
-						></Route>
-
-						<Route
-							path="events-picture/create-delete"
-							element={
-								<AdminCreateAndDeletePicture
-									title={"Attēlu rediģēšana jaunumiem"}
-									categoryType={"event"}
-								/>
-							}
-						></Route>
-
-						<Route path="products/create" element={<AdminCreateProduct />}></Route>
-						<Route path="products/update-delete" element={<AdminUpdateAndDeleteProduct />}></Route>
-						<Route
-							path="products-category"
-							element={<AdminCategoryNav title={"Produkta kategorija"} />}
-						></Route>
-						<Route
-							path="products-category/create"
-							element={
-								<AdminCreateCategory title={"Izveidot preces kategoriju"} categoryType={"product"} />
-							}
-						></Route>
-						<Route
-							path="products-category/update-delete"
-							element={
-								<AdminUpdateAndDeleteCategory
-									title={"Labot vai dzest preces kategoriju"}
-									categoryType={"product"}
-								/>
-							}
-						></Route>
-						<Route
-							path="products-picture/create-delete"
-							element={
-								<AdminCreateAndDeletePicture
-									title={"Attēlu rediģēšana precēm"}
-									categoryType={"product"}
-								/>
-							}
-						></Route>
-					</Route>
-					<Route path="/login" element={isAuthenticated() ? <Navigate to={"/admin"} /> : <LoginPage />} />
-					</Route>
-				</Routes>
-			</BrowserRouter>
+							<Route path="products/create" element={<AdminCreateProduct />}></Route>
+							<Route path="products/update-delete" element={<AdminUpdateAndDeleteProduct />}></Route>
+							<Route
+								path="products-category"
+								element={<AdminCategoryNav title={"Produkta kategorija"} />}
+							></Route>
+							<Route
+								path="products-category/create"
+								element={
+									<AdminCreateCategory
+										title={"Izveidot preces kategoriju"}
+										categoryType={"product"}
+									/>
+								}
+							></Route>
+							<Route
+								path="products-category/update-delete"
+								element={
+									<AdminUpdateAndDeleteCategory
+										title={"Labot vai dzest preces kategoriju"}
+										categoryType={"product"}
+									/>
+								}
+							></Route>
+							<Route
+								path="products-picture/create-delete"
+								element={
+									<AdminCreateAndDeletePicture
+										title={"Attēlu rediģēšana precēm"}
+										categoryType={"product"}
+									/>
+								}
+							></Route>
+						</Route>
+						<Route path="/login" element={isAuthenticated() ? <Navigate to={"/admin"} /> : <LoginPage />} />
+					</Routes>
+				</BrowserRouter>
 			</CartProvider>
 		</>
 	);
