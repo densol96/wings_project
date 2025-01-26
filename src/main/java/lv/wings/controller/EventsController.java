@@ -61,12 +61,12 @@ public class EventsController {
 	public ResponseEntity<ApiResponse<?>> getAllEvents() {
 		try {
 			ArrayList<Event> allEvents = eventsService.retrieveAll();
-			ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toArray(),
-					new String[] { "eventCategory.events" });
+			//ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toArray(),
+			//		new String[] { "eventCategory.events" });
 			
 					
 
-			return ResponseEntity.ok(new ApiResponse<>(null, eventsDTO));
+			return ResponseEntity.ok(new ApiResponse<>(null, allEvents));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {

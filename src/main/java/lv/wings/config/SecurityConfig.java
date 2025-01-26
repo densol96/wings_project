@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -47,7 +48,8 @@ public class SecurityConfig {
 		*/
 	@Bean
 	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
-		return http.csrf(AbstractHttpConfigurer::disable)
+		return http.csrf(csrf -> csrf.disable())
+				.cors(Customizer.withDefaults())
 				.authorizeHttpRequests(auth-> 
 				 auth.requestMatchers("/admin/**").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/**").hasAuthority("ADMIN")
@@ -62,6 +64,7 @@ public class SecurityConfig {
 				 .requestMatchers("/admin/api/products-pictures/**").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/products/**").hasAuthority("ADMIN")
 				 .requestMatchers("/admin/api/products").hasAuthority("ADMIN")
+				 .requestMatchers("/admin/api/products-pictures/create-delete").hasAuthority("ADMIN")
 
 				.anyRequest()
 				.permitAll()
