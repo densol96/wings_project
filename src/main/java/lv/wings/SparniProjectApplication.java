@@ -1,5 +1,8 @@
 package lv.wings;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -55,13 +58,13 @@ public class SparniProjectApplication {
 			IDeliveryTypeRepo deliveryTypeRepo, IPaymentTypeRepo paymentTypeRepo,
 			IEventRepo eventRepo, IEventPictureRepo eventPictureRepo, IEventCategory eventCategoryRepo,
 			IProductCategoryRepo productCategoryRepo, IPurchaseElementRepo purchaseElementRepo,
-			IProductRepo productRepo, IProductPictureRepo productPictureRepo, IMyAuthorityRepo authRepo, IMyUserRepo userRepo) {
+			IProductRepo productRepo, IProductPictureRepo productPictureRepo, IMyAuthorityRepo authRepo,
+			IMyUserRepo userRepo) {
 
 		return new CommandLineRunner() {
 
 			@Override
 			public void run(String... args) throws Exception {
-
 
 				DeliveryType deliveryType1 = new DeliveryType("Piegades Veids1", "Apraksts1");
 				DeliveryType deliveryType2 = new DeliveryType("Piegades Veids2", "Apraksts2");
@@ -73,47 +76,49 @@ public class SparniProjectApplication {
 				paymentTypeRepo.save(paymentType1);
 				paymentTypeRepo.save(paymentType2);
 
-
 				Faker faker = new Faker();
 
-
-				EventCategory newCat = new EventCategory("fake data category");
-				eventCategoryRepo.save(newCat);
-				for(int i = 0; i < 50; i++) {
+			//	EventCategory newCat = new EventCategory("fake data category");
+			//	eventCategoryRepo.save(newCat);
+				for (int i = 0; i < 50; i++) {
 					String dfName = faker.name().firstName();
 					String dfSurname = faker.name().lastName();
 					String dfEmail = faker.expression("#{regexify '[A-Za-z0-9]{6,10}'}") + "@gmail.com";
 					String dfAdress = faker.address().cityName() + ", " + faker.address().buildingNumber();
 					// String dfPersonasKods = faker.expression("#{regexify '[0-9]{6}-[0-9]{5}'}");
-					// String dfBankasNosaukums = faker.expression("#{options.option 'Liela banka', 'Maza banka', 'XL banka' 'XS banka'}");
+					// String dfBankasNosaukums = faker.expression("#{options.option 'Liela banka',
+					// 'Maza banka', 'XL banka' 'XS banka'}");
 					// String dfBankasSwiftKods = faker.expression("#{regexify '[0-9]{6}'}");
 					// String dfBankasKods = "Bankas kods " + faker.expression("#{numerify '###'}");
 
 					//// event fake data
-					/// 
-					//(Date startDate, Date endDate, String title, String location,
-	//	String description, String keyWords, EventCategory eventCategory
-					Date fakeDate = Date.from(faker.timeAndDate().past(10000, TimeUnit.DAYS));
-					Event event = new Event(fakeDate, fakeDate, faker.text().text(20), 
-					faker.address().city(), "orem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi." , "fake keyword", newCat);
+					///
+					// (Date startDate, Date endDate, String title, String location,
+					// String description, String keyWords, EventCategory eventCategory
+				 /* 	Date fakeDate = Date.from(faker.timeAndDate().past(10000, TimeUnit.DAYS));
+					Event event = new Event(fakeDate, fakeDate, faker.text().text(20),
+							faker.address().city(),
+							"orem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi.",
+							"fake keyword", newCat);
 
 					eventRepo.save(event);
+					*/
 
 					Customer dfCustomer = new Customer(dfName, dfSurname, dfEmail, dfAdress);
 
 					customerRepo.save(dfCustomer);
 
 					String d = faker.date().future(300, TimeUnit.HOURS, "YYYY-MM-dd hh:mm");
-        			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        			LocalDateTime dateTime = LocalDateTime.parse(d, formatter);
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+					LocalDateTime dateTime = LocalDateTime.parse(d, formatter);
 
 					Purchase newPurchase;
-					if(Integer.parseInt(faker.expression("#{numerify '#'}")) > 5) {
+					if (Integer.parseInt(faker.expression("#{numerify '#'}")) > 5) {
 						newPurchase = new Purchase(deliveryType1, paymentType2, dfCustomer, dateTime,
-						"Nav detalas");
+								"Nav detalas");
 					} else {
 						newPurchase = new Purchase(deliveryType2, paymentType1, dfCustomer, dateTime,
-						"Lielas detalas");
+								"Lielas detalas");
 					}
 					purchaseRepo.save(newPurchase);
 				}
@@ -137,12 +142,15 @@ public class SparniProjectApplication {
 				eventCategoryRepo.save(eventCategory1);
 				eventCategoryRepo.save(eventCategory2);
 				eventCategoryRepo.save(eventCategory3);
- 
-				Event pasakums1 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 1)), "Pasakums 1",
+
+				Event pasakums1 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 1)),
+						"Pasakums 1",
 						"Liepāja", "Pasākums visiem cilvēkiem!", "vasara atpūta", eventCategory1);
-				Event pasakums2 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 2)), "Pasakums 2",
+				Event pasakums2 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 2)),
+						"Pasakums 2",
 						"Ventspils", "Pasākums visiem cilvēkiem!", "vasara atpūta", eventCategory2);
-				Event pasakums3 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 3)), "Pasakums 3",
+				Event pasakums3 = new Event(Date.from(Instant.now()), Date.from(Instant.now().plusSeconds(86400 * 3)),
+						"Pasakums 3",
 						"Rīga", "Pasākums visiem cilvēkiem!", "vasara beigas", eventCategory2);
 				eventRepo.save(pasakums1);
 				eventRepo.save(pasakums2);
@@ -164,9 +172,11 @@ public class SparniProjectApplication {
 				productCategoryRepo.save(kategorija3);
 
 				// PRECES
-				Product product1 = new Product("Adīti ziemas dūraiņi", "Krustūrīenā izšūti adīti ziemas cimdi", 13.60f, 6,
+				Product product1 = new Product("Adīti ziemas dūraiņi", "Krustūrīenā izšūti adīti ziemas cimdi", 13.60f,
+						6,
 						kategorija2);
-				Product product2 = new Product("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35", 12.20f, 4,
+				Product product2 = new Product("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35",
+						12.20f, 4,
 						kategorija3);
 				productRepo.save(product1);
 				productRepo.save(product2);
@@ -187,25 +197,38 @@ public class SparniProjectApplication {
 				productPictureRepo.save(bilde11);
 				productPictureRepo.save(bilde22);
 				productPictureRepo.save(bilde33);
-				
-				//USER & AUTHORITY
+
+				// USER & AUTHORITY
 				MyAuthority a1 = new MyAuthority("ADMIN");
 				authRepo.save(a1);
-				
-				MyAuthority a2 = new MyAuthority("USER"); //TODO: jāizrunā vai šādu lomu vajag
-				authRepo.save(a2);
-				
-				PasswordEncoder encoder = new BCryptPasswordEncoder();
-				
 
-				MyUser u1 = new MyUser("annija.user", encoder.encode("123"),a2);
+				MyAuthority a2 = new MyAuthority("USER"); // TODO: jāizrunā vai šādu lomu vajag
+				authRepo.save(a2);
+
+				PasswordEncoder encoder = new BCryptPasswordEncoder();
+
+				MyUser u1 = new MyUser("annija.user", encoder.encode("123"), a2);
 				userRepo.save(u1);
-				
-				MyUser u2 = new MyUser("annija.admin", encoder.encode("456"),a1);
+
+				MyUser u2 = new MyUser("annija.admin", encoder.encode("456"), a1);
 				userRepo.save(u2);
-				
-				MyUser u3 = new MyUser("admin", encoder.encode("123"),a1);
+
+				MyUser u3 = new MyUser("admin", encoder.encode("123"), a1);
 				userRepo.save(u3);
+
+
+				//// create upload picture directories
+				/// (Wrong but fast version)
+				Path path1 = Paths.get("uploads/images/events");
+				Path path2 = Paths.get("uploads/images/products");
+
+				if (!Files.exists(path1)) {
+					Files.createDirectories(path1); 
+				}
+
+				if (!Files.exists(path2)) {
+					Files.createDirectories(path2);
+				}
 
 			}
 		};
