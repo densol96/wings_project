@@ -4,12 +4,13 @@ import LoadingSpinner from "../assets/LoadingSpinner";
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useEffect, useState } from "react";
 import axios from "axios";
+import ErrorMessage from "../errors/ErrorMessage";
 
 export default function News() {
     const location = useLocation();
 
 	const [events, setEvents] = useState([]);
-	const [error, setError] = useState();
+	const [error, setError] = useState(null);
 	const [loading, setLoading] = useState(false);
 	const [totalPages, setTotalPages] = useState(0);
 	//const { data, loading, error } = useAllData("http://localhost:8080/api/events");
@@ -35,10 +36,15 @@ export default function News() {
                 const response = await axios.get('http://localhost:8080/api/events', {
                     params: { page, sort }
                 });
-
-                setEvents(response.data.result.content); 
-				setTotalPages(response.data.result.page.totalPages - 1);
-				console.log(response);
+                
+        if (!response.data.result){
+          setError(response.data.message);
+        } else {
+          setEvents(response.data.result.content); 
+				  setTotalPages(response.data.result.page.totalPages - 1);
+        }
+      
+				
             } catch (error) {
 				setError(error)
                 console.error('Error fetching events:', error);
@@ -61,7 +67,7 @@ export default function News() {
 	
 
 	 if (error) {
-		return <h1 className="text-3xl text-red-600 text-center">{error}</h1>;
+		return <ErrorMessage error={error}/>
 	} 
 
 	return (
@@ -80,8 +86,10 @@ export default function News() {
   </div>
 </div>
 		
+     {totalPages > 1 && <Pagination  getQueryParams={getQueryParams} totalPages={totalPages}  />}
+      
+     
 
-	<Pagination  getQueryParams={getQueryParams} totalPages={totalPages}  />
 			</main>
 		</>
 	);
@@ -92,7 +100,6 @@ function NewComponent({ data }) {
 	let endDate = new Date(data.endDate).toLocaleDateString("lv-LV");
 	let description = data.description.slice(0, 100);
 
-	console.log(description)
 
 	return (
 		<div className="flex flex-col shadow-md rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 max-w-sm">

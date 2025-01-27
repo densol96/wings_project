@@ -33,7 +33,7 @@ export default function AdminLayout() {
 	return (
 		<>
 			<div
-				className={`fixed left-0 top-0 w-64 h-full bg-[#f8f4f3] p-4 z-10 sidebar-menu  transition-transform ${toggle ? "-translate-x-full" : ""}`}
+				className={`overflow-auto fixed left-0 top-0 w-64 h-full bg-[#f8f4f3] p-4 z-10 sidebar-menu  transition-transform ${toggle ? "-translate-x-full" : ""}`}
 			>
 				<Link to={"/admin"} className="flex items-center pb-4 border-b border-b-gray-800">
 					<h2 className="font-bold text-2xl">Admin panelis</h2>
