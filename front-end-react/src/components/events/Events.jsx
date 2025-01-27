@@ -90,7 +90,7 @@ export default function News() {
 function NewComponent({ data }) {
 	let startDate = new Date(data.startDate).toLocaleDateString("lv-LV");
 	let endDate = new Date(data.endDate).toLocaleDateString("lv-LV");
-	let description = data.description.slice(0, 50);
+	let description = data.description.slice(0, 100);
 
 	console.log(description)
 
@@ -105,12 +105,12 @@ function NewComponent({ data }) {
         <div className="bg-white py-4 px-3">
           <h3 className="text-xs mb-2 font-medium">{data.title}</h3>
           <div>
-            <p className="text-xs text-gray-400 border-2">
+            <p className="text-xs text-gray-400">
             {startDate} - {endDate}
 			</p>
           </div>
           <div>
-            <p className="text-xs text-gray-400 border-2 break-words">
+            <p className="text-xs text-gray-400 break-words">
               {description}...
 			</ p>
           </div>
