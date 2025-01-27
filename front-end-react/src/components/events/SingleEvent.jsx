@@ -1,41 +1,63 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useAsyncError, useParams } from "react-router-dom";
 import axios from "axios";
+import LoadingSpinner from "../assets/LoadingSpinner";
+import ErrorMessage from "../errors/ErrorMessage";
 
-export default function SingleNews() {
+export default function SingleEvent() {
 	const { id } = useParams();
-	const [news, setNews] = useState(null);
+	const [event, setEvent] = useState(null);
 	const [error, setError] = useState(null);
+	const [loading, setLoading] = useState(false);
 
-	const getData = async e => {
+	
 		useEffect(() => {
-			axios
-				.get(`http://localhost:8080/api/news/show/${id}`)
-				.then(res => {
-					setNews(res.data.result);
-				})
-				.catch(error => {
-					setError(error);
-				});
+			
+			const fetchEvent = async () => {
+				try {
+					setLoading(true)
+					let response = await axios.get(`http://localhost:8080/api/events/show/${id}`);
+					
+					 
+					 if (!response.data.result){
+						setError(response.data.message)
+					 } else {
+						setEvent(response.data.result); 
+					 }
+					
+					
+				} catch (error) {
+					setError(error)
+					
+				} finally{
+					setLoading(false);
+				}
+			};
+ 
+			fetchEvent();
+
+			
 		}, []);
-	};
+	
 
-	getData();
-
+	if (loading) {
+		return <LoadingSpinner />;
+	} 
+	
 	if (error) {
-		return <p>{error}</p>;
+		return <ErrorMessage  error={error} />
 	}
 
 	return (
 		<>
-			{news && (
+			{event && (
 				<>
-					<h2 className="text-2xl font-bold text-center">{news.title}</h2>
-					<h2 className="text-2xl font-bold text-center">{news.startDate}</h2>
-					<h2 className="text-2xl font-bold text-center">{news.endDate}</h2>
-					<h2 className="text-2xl font-bold text-center">{news.location}</h2>
-					<h2 className="text-2xl font-bold text-center">{news.description}</h2>
-				</>
+					<h2 className="text-2xl font-bold text-center">{event.title}</h2>
+					<h2 className="text-2xl font-bold text-center">{event.startDate}</h2>
+					<h2 className="text-2xl font-bold text-center">{event.endDate}</h2>
+					<h2 className="text-2xl font-bold text-center">{event.location}</h2>
+					<h2 className="text-2xl font-bold text-center">{event.description}</h2>
+				</> 
 			)}
 		</>
 	);
