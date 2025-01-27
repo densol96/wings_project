@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lv.wings.dto.DTOMapper;
-import lv.wings.dto.object.DTOObject;
 import lv.wings.dto.object.EventDTO;
 import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Event;
@@ -74,12 +73,14 @@ public class EventsController {
 
 			
 			
-			//ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toArray(),
-			//		new String[] { "eventCategory.events" });
+			ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toList().toArray(),
+					new String[] { "eventCategory.events" });
 			
-					
 
-			return ResponseEntity.ok(new ApiResponse<>(null, allEvents));
+			Page<Event> evts = new PageImpl(eventsDTO, pageable, allEvents.getTotalElements());
+			
+
+			return ResponseEntity.ok(new ApiResponse<>(null, evts));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
