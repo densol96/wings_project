@@ -3,6 +3,8 @@ package lv.wings.model;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -10,7 +12,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,6 +38,8 @@ import lombok.ToString;
 @ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE event_category SET deleted = true WHERE event_category_id=?")
+@Where(clause = "deleted=false")
 public class EventCategory {
 	@Column(name = "event_category_id")
 	@Id
@@ -69,6 +72,10 @@ public class EventCategory {
 	@LastModifiedBy
 	@Column(insertable = false)
 	private Integer lastModifiedBy;
+
+	//Soft delete
+	@Column(name = "deleted")
+	private boolean deleted = false;
 	
 	public EventCategory(String title) {
 		setTitle(title);

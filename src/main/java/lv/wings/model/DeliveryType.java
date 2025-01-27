@@ -3,6 +3,8 @@ package lv.wings.model;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -32,6 +34,8 @@ import lombok.ToString;
 @Table(name = "delivery_type")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE delivery_type SET deleted = true WHERE delivery_type_id=?")
+@Where(clause = "deleted=false")
 public class DeliveryType {
 	
 	@Id
@@ -75,6 +79,10 @@ public class DeliveryType {
 	@Column(insertable = false)
 	@JsonIgnore
 	private Integer lastModifiedBy;
+
+	//Soft delete
+	@Column(name = "deleted")
+	private boolean deleted = false;
 	
 	
 	public DeliveryType(String title, String description) {

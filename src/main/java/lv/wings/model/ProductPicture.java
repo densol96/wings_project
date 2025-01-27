@@ -2,6 +2,8 @@ package lv.wings.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -34,6 +36,8 @@ import lombok.ToString;
 @Table(name="Product_Picture")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE Product_Picture SET deleted = true WHERE product_picture_id=?")
+@Where(clause = "deleted=false")
 public class ProductPicture {
 
 	@Id
@@ -73,6 +77,10 @@ public class ProductPicture {
 	@LastModifiedBy
 	@Column(insertable = false)
 	private Integer lastModifiedBy;
+
+	//Soft delete
+	@Column(name = "deleted")
+	private boolean deleted = false;
 	
 	public ProductPicture(String referenceToPicture, String description, Product product) {
 		setReferenceToPicture(referenceToPicture);
