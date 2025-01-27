@@ -9,7 +9,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 	};
 	return (
 		<nav
-			className={`${toggle ? "h-96" : "h-24"} p-1 sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center overflow-y-hidden bg-light-nav lg:text-lg`}
+			className={`${toggle ? "h-96" : "h-24"} p-1 sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center overflow-y-hidden bg-light-nav lg:text-lg z-50`}
 		>
 			<div className={`${toggle ? "items-start" : "items-center"} justify-center flex h-full shrink`}>
 				<img
