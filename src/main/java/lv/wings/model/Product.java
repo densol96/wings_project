@@ -3,6 +3,8 @@ package lv.wings.model;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -42,6 +44,8 @@ import lv.wings.poi.PoiMeta;
 @Table(name="Product")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE Product SET deleted = true WHERE product_id=?")
+@Where(clause = "deleted=false")
 public class Product {
 	
 	@Id
@@ -112,6 +116,10 @@ public class Product {
 	@Column(insertable = false)
 	@JsonIgnore
 	private Integer lastModifiedBy;
+
+	//Soft delete
+	@Column(name = "deleted")
+	private boolean deleted = false;
 	
 	public Product(String title, String description, float price, int amount, ProductCategory productCategory) {
 		setTitle(title);
