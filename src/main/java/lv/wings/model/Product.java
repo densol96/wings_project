@@ -3,6 +3,8 @@ package lv.wings.model;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -10,10 +12,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -39,6 +44,8 @@ import lv.wings.poi.PoiMeta;
 @Table(name="Product")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE Product SET deleted = true WHERE product_id=?")
+@Where(clause = "deleted=false")
 public class Product {
 	
 	@Id
@@ -49,20 +56,24 @@ public class Product {
 	
 	//saite no kategorijas
 	@ManyToOne
+	@JsonManagedReference
 	@JoinColumn(name="product_category_id")
 	private ProductCategory productCategory;
 	
 	//saite uz bildi
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@JsonManagedReference
 	@ToString.Exclude
 	@JsonIgnore
-	private Collection<ProductPicture> productPicture;
+	private Collection<ProductPicture> productPictures;
+
 	
 	//saite uz pirkuma_elementu
 	@OneToMany(mappedBy = "product")
 	@ToString.Exclude
 	@JsonIgnore
 	private Collection<PurchaseElement> purchaseElement;
+
 	
 	@Column(name = "title")
 	@NotNull
@@ -72,15 +83,17 @@ public class Product {
 	
 	@Column(name = "description")
 	@NotNull
-	@Size(min = 4, max = 150)
+	@Size(min = 4, max = 1000)
 	private String description;
 	
 	@Column(name = "price")
+	@NotNull
 	@Min(0)
 	@PoiMeta(name="Cena (EUR)", valueFormat="{} EUR")
 	private float price;
 	
 	@Column(name = "amount")
+	@NotNull
 	@Min(0)
 	private int amount;
 	
@@ -103,6 +116,10 @@ public class Product {
 	@Column(insertable = false)
 	@JsonIgnore
 	private Integer lastModifiedBy;
+
+	//Soft delete
+	@Column(name = "deleted")
+	private boolean deleted = false;
 	
 	public Product(String title, String description, float price, int amount, ProductCategory productCategory) {
 		setTitle(title);

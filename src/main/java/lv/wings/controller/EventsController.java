@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
@@ -57,13 +63,24 @@ public class EventsController {
 	}
 
 	@GetMapping(value = "")
-	public ResponseEntity<ApiResponse<?>> getAllEvents() {
-		try {
-			ArrayList<Event> allEvents = eventsService.retrieveAll();
-			ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toArray(),
-					new String[] { "eventCategory.events" });
+	public ResponseEntity<ApiResponse<?>> getAllEvents(@RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "startDate") String sort) {
 
-			return ResponseEntity.ok(new ApiResponse<>(null, eventsDTO));
+							System.out.println(page - 1);
+		try {
+			Pageable pageable = PageRequest.of(page - 1, 10).withSort(Sort.by(sort));
+			Page<Event> allEvents = eventsService.retrieveAll(pageable);
+
+			
+			
+			ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toList().toArray(),
+					new String[] { "eventCategory.events" });
+			
+
+			Page<Event> evts = new PageImpl(eventsDTO, pageable, allEvents.getTotalElements());
+			
+
+			return ResponseEntity.ok(new ApiResponse<>(null, evts));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {

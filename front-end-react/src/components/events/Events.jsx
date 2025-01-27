@@ -1,42 +1,87 @@
 import Title from "../Title";
 import { useAllData } from "../../hooks/dataHooks";
 import LoadingSpinner from "../assets/LoadingSpinner";
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function News() {
-	const { data, loading, error } = useAllData(
-		"http://localhost:8080/api/events",
-	);
+    const location = useLocation();
 
-	if (loading) {
+	const [events, setEvents] = useState([]);
+	const [error, setError] = useState();
+	const [loading, setLoading] = useState(false);
+	const [totalPages, setTotalPages] = useState(0);
+	//const { data, loading, error } = useAllData("http://localhost:8080/api/events");
+
+
+	
+	const getQueryParams = () => {
+        const params = new URLSearchParams(location.search);
+
+
+        return {
+            page: parseInt(params.get('page')) || 1,
+            sort: params.get('sort') || 'startDate',
+        };
+    };
+
+	useEffect(() => {
+        const { page, sort } = getQueryParams();
+        
+        const fetchEvents = async () => {
+            try {
+				setLoading(true)
+                const response = await axios.get('http://localhost:8080/api/events', {
+                    params: { page, sort }
+                });
+
+                setEvents(response.data.result.content); 
+				setTotalPages(response.data.result.page.totalPages - 1);
+				console.log(response);
+            } catch (error) {
+				setError(error)
+                console.error('Error fetching events:', error);
+            } finally{
+				setLoading(false);
+			}
+        };
+
+        fetchEvents();
+    }, [location.search]); // Re-run when URL changes
+
+
+	
+
+	
+	 if (loading) {
 		return <LoadingSpinner />;
-	}
+	} 
 
-	if (error) {
+	
+
+	 if (error) {
 		return <h1 className="text-3xl text-red-600 text-center">{error}</h1>;
-	}
+	} 
 
 	return (
 		<>
 			<Title title={"Jaunumi - Pasākumi"} />
-			<main className="flex justify-center">
-				<section className="relative min-h-screen flex flex-col justify-center bg-slate-50 overflow-hidden">
-					<div className="w-full max-w-6xl mx-auto px-4 md:px-6 py-24">
-						<div className="flex flex-col justify-center divide-y divide-slate-200 [&>*]:py-16">
-							<div className="w-full max-w-3xl mx-auto">
-								<div className="-my-6">
-									{data.result.map((n, i) => {
-										return (
-											<NewComponent
-												key={n.startDate + i}
-												data={n}
-											/>
-										);
-									})}
-								</div>
-							</div>
+			<main>
+				 <div className="flex flex-col justify-center overflow-hidden bg-gray- py-6 sm:py-12">
+  <div className="mx-auto max-w-screen-xl px-4 w-full">
+    <div className="grid w-full sm:grid-cols-2 xl:grid-cols-4 gap-6">
+									{events.map((n, i) => {
+										return <NewComponent key={n.startDate + i} data={n} />;
+									})} 
+						
+				      
 						</div>
-					</div>
-				</section>
+  </div>
+</div>
+		
+
+	<Pagination  getQueryParams={getQueryParams} totalPages={totalPages}  />
 			</main>
 		</>
 	);
@@ -45,26 +90,123 @@ export default function News() {
 function NewComponent({ data }) {
 	let startDate = new Date(data.startDate).toLocaleDateString("lv-LV");
 	let endDate = new Date(data.endDate).toLocaleDateString("lv-LV");
+	let description = data.description.slice(0, 100);
+
+	console.log(description)
 
 	return (
-		<div className="relative pl-8 sm:pl-32 py-6 group">
-			<div className="font-medium text-indigo-500 mb-1 sm:mb-0">
-				{data.location}
-			</div>
+		<div className="flex flex-col shadow-md rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 max-w-sm">
+       
+        <div className="h-auto overflow-hidden">
+          <div className="h-44 overflow-hidden relative">
+            <img src="https://picsum.photos/400/400" alt=""/>
+          </div>
+        </div>
+        <div className="bg-white py-4 px-3">
+          <h3 className="text-xs mb-2 font-medium">{data.title}</h3>
+          <div>
+            <p className="text-xs text-gray-400">
+            {startDate} - {endDate}
+			</p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-400 break-words">
+              {description}...
+			</ p>
+          </div>
+        </div>
 
-			<div className="flex flex-col sm:flex-row items-start mb-1 group-last:before:hidden before:absolute before:left-2 sm:before:left-0 before:h-full before:px-px before:bg-slate-300 sm:before:ml-[6.5rem] before:self-start before:-translate-x-1/2 before:translate-y-3 after:absolute after:left-2 sm:after:left-0 after:w-2 after:h-2 after:bg-indigo-600 after:border-4 after:box-content after:border-slate-50 after:rounded-full sm:after:ml-[6.5rem] after:-translate-x-1/2 after:translate-y-1.5">
-				<time className="sm:absolute left-0 translate-y-0.5 inline-flex items-center justify-center text-xs font-semibold uppercase w-20 h-6 mb-3 sm:mb-0 text-emerald-600 bg-emerald-100 rounded-full">
-					{startDate}
-				</time>
-				<time className="sm:absolute left-0 translate-y-0.5 inline-flex items-center justify-center text-xs font-semibold uppercase w-20 h-6 mb-3 sm:mb-0 text-emerald-600 bg-emerald-100 rounded-full">
-					{endDate}
-				</time>
-				<div className="text-xl font-bold text-slate-900">
-					{data.title}
-				</div>
-			</div>
+      </div>
 
-			<div className="text-slate-500">{data.description}</div>
-		</div>
+		
 	);
 }
+
+
+
+function Pagination({getQueryParams, totalPages}){
+	const {page } = getQueryParams();
+	
+	const pageNumbers = [];
+    const range = 2; 
+    const startPage = Math.max(1, page - range);
+    const endPage = Math.min(totalPages, page + range);
+
+	for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+    }
+	
+  return (
+    <div className="z-0 flex items-center justify-center border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+      <div className="flex flex-1 justify-between sm:hidden">
+		<Link
+		
+          to={`/events?page=${page - 1}`}
+          className={`${page === 1 ? "pointer-events-none opacity-50" : ""} relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50`}
+        >
+          Iepriekšējā
+        </Link>
+       
+        <Link
+		
+          to={`/events?page=${page + 1}`}
+          className={`${page === totalPages ? "pointer-events-none opacity-50" : ""} relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50`}
+        >
+          Nākamā
+        </Link>
+      </div>
+      <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-center">
+        <div>
+          <nav aria-label="Pagination" className="isolate inline-flex -space-x-px rounded-md shadow-xs">
+		  
+            {/* Previous Page */}
+            <Link
+                to={`?page=${page - 1}`}
+                className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${page === 1 ? 'text-gray-500 cursor-not-allowed' : 'text-indigo-600 hover:bg-indigo-600 hover:text-white'}`}
+                aria-disabled={page === 1}
+                onClick={(e) => page === 1 && e.preventDefault()}
+            >
+                &laquo; Iepriekšējā
+            </Link>
+
+			{page === totalPages && <Link
+                to={`?page=${1}`}
+                className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${page === 0 ? 'text-gray-500 cursor-not-allowed' : 'text-indigo-600 hover:bg-indigo-600 hover:text-white'}`}
+                onClick={(e) => page === 1 && e.preventDefault()}
+            >
+                1
+            </Link>}
+
+            {/* Page Numbers */}
+            {pageNumbers.map((pageNumber) => (
+                <Link
+                    key={pageNumber}
+                    to={`?page=${pageNumber}`}
+                    className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${
+                        page === pageNumber
+                            ? 'bg-indigo-600 text-white'
+                            : 'text-gray-900 ring-1 ring-gray-300 ring-inset hover:bg-gray-50'
+                    }`}
+                    aria-current={page === pageNumber ? 'page' : undefined}
+                >
+                    {pageNumber}
+                </Link>
+            ))}
+
+            {/* Next Page */}
+            <Link
+                to={`?page=${page + 1}`}
+                className={`relative inline-flex items-center px-4 py-2 text-sm font-semibold ${page === totalPages ? 'text-gray-500 cursor-not-allowed' : 'text-indigo-600 hover:bg-indigo-600 hover:text-white'}`}
+                aria-disabled={page === totalPages}
+                onClick={(e) => page === totalPages && e.preventDefault()}
+            >
+                Nākamā &raquo;
+            </Link>
+          </nav>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+

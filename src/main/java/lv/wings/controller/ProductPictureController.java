@@ -21,8 +21,10 @@ import lv.wings.service.ICRUDService;
 public class ProductPictureController {
 	
 	@Autowired
-	private ICRUDInsertedService<ProductPicture> productPictureService;
+	private ICRUDService<ProductPicture> productPictureService;
 	
+
+	/* 
 	@GetMapping("show/all") //localhost:8080/preces/bilde/show/all
 	public String getAllProductPictures(Model model) {
 		try {
@@ -93,7 +95,7 @@ public class ProductPictureController {
 		}
 	}
 	
-	@GetMapping("/update/{id}") //localhost:8080/preces/bilde/update/{id}
+	@GetMapping("/update/{id}") 
 	public String getUpdateProductPictureById(@PathVariable("id") int id, Model model) {
 		try {
 			ProductPicture productPictureForUpdating = productPictureService.retrieveById(id);
@@ -123,4 +125,5 @@ public class ProductPictureController {
 		}
 	}
 
+	*/
 }

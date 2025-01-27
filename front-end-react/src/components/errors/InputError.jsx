@@ -16,24 +16,18 @@ export default function InputError({ errors }) {
 									stroke="currentColor"
 								>
 									<path
-										stroke-linecap="round"
-										stroke-linejoin="round"
-										stroke-width="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2"
 										d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
 									/>
 								</svg>
 							</div>
-							<p className="px-6 py-4 text-red-900 font-semibold text-lg">
-								Kļūda!
-							</p>
+							<p className="px-6 py-4 text-red-900 font-semibold text-lg">Kļūda!</p>
 						</div>
 						<div className="px-16 mb-4">
 							{errors.map(error => {
-								return (
-									<li className="text-md font-bold text-red-500 text-sm">
-										{error}
-									</li>
-								);
+								return <li className="text-md font-bold text-red-500 text-sm">{error}</li>;
 							})}
 						</div>
 					</div>

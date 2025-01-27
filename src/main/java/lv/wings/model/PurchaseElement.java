@@ -2,6 +2,8 @@ package lv.wings.model;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -30,6 +32,8 @@ import lombok.ToString;
 @Table(name="Purchase_Elements")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE Purchase_Elements SET deleted = true WHERE purchase_element_id=?")
+@Where(clause = "deleted=false")
 public class PurchaseElement {
 
 	@Id
@@ -63,6 +67,10 @@ public class PurchaseElement {
 	@LastModifiedBy
 	@Column(insertable = false)
 	private Integer lastModifiedBy;
+
+	//Soft delete
+	@Column(name = "deleted")
+	private boolean deleted = false;
 	
 	public PurchaseElement(Purchase purchase, Product product, int amount) {
 		setPurchase(purchase);
