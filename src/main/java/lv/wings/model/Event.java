@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Date;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -43,6 +45,8 @@ import lombok.ToString;
 @ToString
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE event SET deleted = true WHERE event_id=?")
+@Where(clause = "deleted=false")
 public class Event {
 	@Column(name = "event_id")
 	@Id
@@ -72,7 +76,7 @@ public class Event {
 
 	@NotNull
 	@Column(name = "description")
-	@Size(min = 0, max = 3000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
+	@Size(min = 0, max = 1000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
 	private String description;
 
 	/// Need to validate this
@@ -105,6 +109,10 @@ public class Event {
 	@LastModifiedBy
 	@Column(insertable = false)
 	private Integer lastModifiedBy;
+
+	//Soft delete
+	@Column(name = "deleted")
+	private boolean deleted = false;
 
 	public Event(Date startDate, Date endDate, String title, String location,
 		String description, String keyWords, EventCategory eventCategory) {

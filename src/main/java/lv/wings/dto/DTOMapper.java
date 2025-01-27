@@ -5,38 +5,59 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import lv.wings.dto.object.DTOObject;
 
 public class DTOMapper {
 	public static <T extends DTOObject> ArrayList<T> mapMany(Class<T> responseType, Object[] targets) throws Exception{
-		return mapMany(responseType, targets, new String[0]);
+		return mapMany(responseType, targets, new String[0], new String[0]);
 	}
-
+	
 	public static <T extends DTOObject> ArrayList<T> mapMany(Class<T> responseType, Object[] targets, String[] ignoreFields) throws Exception{
+		return mapMany(responseType, targets, ignoreFields, new String[0]);
+	}
+	
+	public static <T extends DTOObject> ArrayList<T> mapMany(Class<T> responseType, Object[] targets, String[] ignoreFields, String[] forceFields) throws Exception{
 		ArrayList<T> response = new ArrayList<>();
 		
 
 		for(Object target: targets){
-			response.add(map(responseType, target, ignoreFields));
+			response.add(map(responseType, target, ignoreFields, forceFields));
 		}
 
 		return response;
 	}
 
 	public static <T extends DTOObject> T map(Class<T> responseType, Object target) throws Exception{
-		return map(responseType, target, new String[0]);
+		return map(responseType, target, new String[0], new String[0]);
 	}
 
 	public static <T extends DTOObject> T map(Class<T> responseType, Object target, String[] ignoreFields) throws Exception{
+		return map(responseType, target, ignoreFields, new String[0]);
+	}
+
+	public static <T extends DTOObject> T map(Class<T> responseType, Object target, String[] ignoreFields, String[] forceFields) throws Exception{
 		T response = responseType.getConstructor().newInstance();
 
 		Class<?> targetClass = target.getClass();
 		
 		//all field of the DTO class
-		Field[] resourceFields = responseType.getDeclaredFields();
+		ArrayList<Field> resourceFields = getAllFields(responseType);
 		//all methods of the base class
-		Method[] targetMethods = targetClass.getMethods();
+		ArrayList<Method> targetMethods = getAllMethods(targetClass);
+
+		String clsnms = targetClass.getName();
+		for (Method method : targetMethods) {
+			clsnms += "; " + method.getName();
+		}
+		System.out.println(clsnms);
+
+		String metnms = targetClass.getName();
+		for (Field field : resourceFields) {
+			metnms += "; " + field.getName();
+		}
+		System.out.println(metnms);
 
 		//loop through all the fields
 		fieldLoop: for(Field resourceField : resourceFields){
@@ -45,15 +66,26 @@ public class DTOMapper {
 				if(fieldName.equals(ignoreField)) continue fieldLoop;
 			}
 
+			Boolean isRequired = false;
+			for(String forceField : forceFields){
+				if(fieldName.equals(forceField)){
+					isRequired = true;
+					break;
+				}
+			}
+
 			DTOMeta dtoMeta = resourceField.getAnnotation(DTOMeta.class);
 			if(dtoMeta != null){
-				if(dtoMeta.ignore()) continue;
+				if(!isRequired && dtoMeta.ignore()) continue;
 			}
 			//get the corresponding getter
 			Method targetMethod = getGetMethod(resourceField, targetMethods, dtoMeta);
 			if(targetMethod == null){
 				continue;
 			}
+
+			System.out.println(targetClass.getName()+"#"+targetMethod.getName());
+
 			//result type information of field
 			Class<?> fieldClass = resourceField.getType();
 			Type fieldType = resourceField.getGenericType();
@@ -89,7 +121,7 @@ public class DTOMapper {
 					if(toArrayMethod != null){
 						//get the "add" method to fill up the collection; .getMethod("add") didnt work
 						Method addMethod = null;
-						for(Method method : newFieldClass.getMethods()){
+						for(Method method : newFieldClass.getDeclaredMethods()){
 							if(method.getName().equals("add")){
 								addMethod = method;
 								break;
@@ -104,7 +136,7 @@ public class DTOMapper {
 						Object[] allContentsAsArray = (Object[]) toArrayMethod.invoke(executionResult);
 						//fill up the new collection with new content
 						for (Object elem : allContentsAsArray) {
-							addMethod.invoke(newObj, map((Class<T>) newFieldCollectionContentType, elem, flatterIgnoreFields(fieldName, ignoreFields)));
+							addMethod.invoke(newObj, map((Class<T>) newFieldCollectionContentType, elem, flatterIgnoreFields(fieldName, ignoreFields), flatterIgnoreFields(fieldName, forceFields)));
 						}
 					}
 
@@ -114,7 +146,7 @@ public class DTOMapper {
 					
 					//set the propery with the new DTO class
 					Class<?> newFieldClass = (Class<?>) fieldType;
-					resourceField.set(response, map((Class<T>) newFieldClass, executionResult, flatterIgnoreFields(fieldName, ignoreFields)));
+					resourceField.set(response, map((Class<T>) newFieldClass, executionResult, flatterIgnoreFields(fieldName, ignoreFields), flatterIgnoreFields(fieldName, forceFields)));
 				}
 			}
 		}
@@ -123,7 +155,7 @@ public class DTOMapper {
 		return response;
 	}
 
-	private static Method getGetMethod(Field field, Method[] methods, DTOMeta dtoMeta){
+	private static Method getGetMethod(Field field, ArrayList<Method> methods, DTOMeta dtoMeta){
 		String fieldName = field.getName();
 		if(dtoMeta != null && !dtoMeta.sourceField().isEmpty()){
 			fieldName = dtoMeta.sourceField();
@@ -149,5 +181,29 @@ public class DTOMapper {
 		}
 
 		return fields.toArray(new String[fields.size()]);
+	}
+
+	private static ArrayList<Method> getAllMethods(Class<?> classDef){
+		ArrayList<Method> targetMethods = new ArrayList<>();
+
+		Class<?> inheritParent = classDef;
+		do {
+			System.out.println(inheritParent.getName());
+            targetMethods.addAll(Arrays.asList(inheritParent.getMethods()));
+		} while ((inheritParent = inheritParent.getSuperclass()) != null && inheritParent != inheritParent.getSuperclass());
+
+		return targetMethods;
+	}
+	
+	private static ArrayList<Field> getAllFields(Class<?> classDef){
+		ArrayList<Field> targetFields = new ArrayList<>();
+
+		Class<?> inheritParent = classDef;
+		do {
+			System.out.println(inheritParent.getName());
+            targetFields.addAll(Arrays.asList(inheritParent.getDeclaredFields()));
+		} while ((inheritParent = inheritParent.getSuperclass()) != null && inheritParent != inheritParent.getSuperclass());
+
+		return targetFields;
 	}
 }

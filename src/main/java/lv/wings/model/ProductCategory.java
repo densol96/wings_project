@@ -3,6 +3,8 @@ package lv.wings.model;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -35,6 +37,8 @@ import lombok.ToString;
 @Table(name="product_category")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@SQLDelete(sql = "UPDATE product_category SET deleted = true WHERE product_category_id=?")
+@Where(clause = "deleted=false")
 public class ProductCategory {
 
 	@Id
@@ -45,8 +49,8 @@ public class ProductCategory {
 	
 	@Column(name = "title")
 	@NotNull
-	@Size(min = 4, max = 50)
-	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ ]+", message = "Only letters and space are allowed")
+	@Size(min = 3, max = 200, message = "Kategorijas nosaukums nedrīkst saturēt mazāk par 3 vai vairāk par 200 rakstzīmēm!")
+	@Pattern(regexp = "^[a-zA-ZāčēģīķļņōŗšūžĀČĒĢĪĶĻŅŌŖŠŪŽ\\s]+$", message = "Kategorijas nosaukums drīkst saturēt tikai burtus un atstarpes!")
 	private String title;
 	
 	@Column(name = "description")
@@ -79,6 +83,10 @@ public class ProductCategory {
 	@Column(insertable = false)
 	@JsonIgnore
 	private Integer lastModifiedBy;
+
+	//Soft delete
+	@Column(name = "deleted")
+	private boolean deleted = false;
 	
 	public ProductCategory(String title, String description) {
 		setTitle(title);

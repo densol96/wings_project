@@ -44,7 +44,10 @@ function ProductCategory({ data }) {
     return (
         <>
             <li>
-                <a href="#">{data.title}</a>
+                {/* <Link to={{pathname: `/shop/category/${data.title}`, state:{ id: `${data.productCategoryId}`}}}>{data.title}{data.productCategoryId}</Link> */}
+                <Link to={`/shop/category/${data.title}?id=${data.productCategoryId}`}>
+                    {data.title}
+                </Link>
             </li>
         </>
     )

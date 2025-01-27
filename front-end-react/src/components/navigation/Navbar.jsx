@@ -9,11 +9,9 @@ export default function Navbar({ toggle, handleToggleNav }) {
 	};
 	return (
 		<nav
-			className={`${toggle ? "h-96" : "h-24"} p-1 sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center overflow-y-hidden bg-light-nav lg:text-lg`}
+			className={`${toggle ? "h-96" : "h-24"} p-1 sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center overflow-y-hidden bg-light-nav lg:text-lg z-50`}
 		>
-			<div
-				className={`${toggle ? "items-start" : "items-center"} justify-center flex h-full shrink`}
-			>
+			<div className={`${toggle ? "items-start" : "items-center"} justify-center flex h-full shrink`}>
 				<img
 					draggable="false"
 					className={`${toggle ? "invisible" : "opacity-100"} absolute -left-20 rotate-75 w-96 h-auto lg:visible lg:opacity-100`}
@@ -24,11 +22,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 					className={`z-10 lg:h-24 shrink bg-light-nav bg-opacity-80 backdrop-blur-nano rounded-full`}
 					to={"/"}
 				>
-					<img
-						className="max-h-20"
-						src="/logos/biedribas_logo.png"
-						alt="Biedrības-logo"
-					/>
+					<img className="max-h-20" src="/logos/biedribas_logo.png" alt="Biedrības-logo" />
 				</Link>
 			</div>
 
@@ -41,11 +35,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 					<li>
 						<NavLink
 							to={"/"}
-							className={({ isActive }) =>
-								isActive
-									? classOptions.active
-									: classOptions.default
-							}
+							className={({ isActive }) => (isActive ? classOptions.active : classOptions.default)}
 						>
 							Sākums
 						</NavLink>
@@ -53,11 +43,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 					<li>
 						<NavLink
 							to={"/events"}
-							className={({ isActive }) =>
-								isActive
-									? classOptions.active
-									: classOptions.default
-							}
+							className={({ isActive }) => (isActive ? classOptions.active : classOptions.default)}
 						>
 							Jaunumi
 						</NavLink>
@@ -65,11 +51,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 					<li>
 						<NavLink
 							to={"/shop"}
-							className={({ isActive }) =>
-								isActive
-									? classOptions.active
-									: classOptions.default
-							}
+							className={({ isActive }) => (isActive ? classOptions.active : classOptions.default)}
 						>
 							Veikals
 						</NavLink>
@@ -77,11 +59,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 					<li>
 						<NavLink
 							to={"/about"}
-							className={({ isActive }) =>
-								isActive
-									? classOptions.active
-									: classOptions.default
-							}
+							className={({ isActive }) => (isActive ? classOptions.active : classOptions.default)}
 						>
 							Par biedrību
 						</NavLink>
@@ -89,11 +67,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 					<li>
 						<NavLink
 							to={"/contacts"}
-							className={({ isActive }) =>
-								isActive
-									? classOptions.active
-									: classOptions.default
-							}
+							className={({ isActive }) => (isActive ? classOptions.active : classOptions.default)}
 						>
 							Kontakti
 						</NavLink>
@@ -127,11 +101,7 @@ export default function Navbar({ toggle, handleToggleNav }) {
 							viewBox="0 0 24 24"
 							strokeWidth={3}
 						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M6 18 18 6M6 6l12 12"
-							/>
+							<path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
 						</svg>
 					)}
 				</button>

@@ -20,28 +20,32 @@ import lv.wings.responses.ApiResponse;
 @RequestMapping
 public class ImagesController {
 
-
     @Value("${upload.directory.events}")
 	private String uploadEventsDir;
 
+    @Value("${upload.directory.products}")
+	private String uploadProductsDir;
 
-    @GetMapping("images/events/{picturePath}")
+
+    @GetMapping("images/{picturePath}")
     public ResponseEntity<?> getEventImage(@PathVariable String picturePath){
 
-        //System.out.println(uploadEventsDir + "/" + picturePath);
-
         try {
-            File imageFile = new File(uploadEventsDir + "/" + picturePath);
+            File imageFile1 = new File(uploadEventsDir + "/" + picturePath);
+            File imageFile2 = new File(uploadProductsDir + "/" + picturePath);
 
+            
         
-             if (!imageFile.exists()){
+             if (!imageFile1.exists() && !imageFile2.exists()){
                 ApiResponse<String> notFoundResponse = new ApiResponse<>("No picture found!", null);
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundResponse);
             } 
-    
-            FileSystemResource fileSystemResource = new FileSystemResource(imageFile);
 
-            String contentType = URLConnection.guessContentTypeFromName(imageFile.getName());
+            File existingFile = imageFile1.exists() ? imageFile1 : imageFile2;
+    
+            FileSystemResource fileSystemResource = new FileSystemResource(existingFile);
+
+            String contentType = URLConnection.guessContentTypeFromName(existingFile.getName());
             if (contentType == null) {
                 contentType = "application/octet-stream";
             }
@@ -57,8 +61,4 @@ public class ImagesController {
         }
        
     }
-
-
-    //// products
-
 }

@@ -11,15 +11,16 @@ import lv.wings.model.ProductPicture;
 import lv.wings.repo.IProductPictureRepo;
 import lv.wings.repo.IProductRepo;
 import lv.wings.service.ICRUDInsertedService;
+import lv.wings.service.ICRUDService;
 
 @Service
-public class ProductPictureServiceImpl implements ICRUDInsertedService<ProductPicture>{
+public class ProductPictureServiceImpl implements ICRUDService<ProductPicture>{
 
 	@Autowired
 	private IProductPictureRepo productPictureRepo;
 	
-	@Autowired
-	private IProductRepo productRepo;
+	//@Autowired
+	//private IProductRepo productRepo;
 	
 	@Override
 	public ArrayList<ProductPicture> retrieveAll() throws Exception {
@@ -38,7 +39,7 @@ public class ProductPictureServiceImpl implements ICRUDInsertedService<ProductPi
 
 	@Override
 	public ProductPicture retrieveById(int id) throws Exception {
-		if(id < 0) throw new Exception("Invalid ID");
+		if(id < 1) throw new Exception("Invalid ID");
 		
 		if(productPictureRepo.existsById(id)) {
 			return productPictureRepo.findById(id).get();
@@ -50,51 +51,35 @@ public class ProductPictureServiceImpl implements ICRUDInsertedService<ProductPi
 	@Override
 	public void deleteById(int id) throws Exception {
 		//atrast preces bilde kuru gribam dzēst
-		ProductPicture driverForDeleting = retrieveById(id);
+		ProductPicture productPicture = retrieveById(id);
+		if (productPicture == null) throw new Exception("Product picture with the id: (" + id + ") does not exist!");
 				
 		//dzēšam no repo un DB
-		productPictureRepo.delete(driverForDeleting);
+		productPictureRepo.delete(productPicture);
 	}
 
 	@Override
 	public void create(ProductPicture productPicture) throws Exception {
-		ProductPicture existedProductPicture = productPictureRepo.findByPicture(productPicture.getPicture());
+		ProductPicture existedProductPicture = productPictureRepo.findByReferenceToPicture(productPicture.getReferenceToPicture());
 		
 		//tāda bilde jau eksistē
-		if(existedProductPicture != null) throw new Exception("Picture with name: " + productPicture.getPicture() + " already exists");
+		if(existedProductPicture != null) throw new Exception("Picture with name already exists!");
 		
 		//atrodu preci pēc id
-		if(productRepo.findById(productPicture.getProduct().getProductId()).isEmpty())
-			throw new Exception("Prece ar sekojošu id: " + productPicture.getProduct().getProductId() + " neeksistē!");
+		//if(productRepo.findById(productPicture.getProduct().getProductId()).isEmpty())
+		//	throw new Exception("Prece ar sekojošu id: " + productPicture.getProduct().getProductId() + " neeksistē!");
 				
 		productPictureRepo.save(productPicture);
 	}
 
-	@Override
-	public void create(ProductPicture productPicture, int id) throws Exception {
-		ProductPicture existedProductPicture = productPictureRepo.findByPicture(productPicture.getPicture());
-		
-		//tāda bilde jau eksistē
-		if(existedProductPicture != null) throw new Exception("Picture with name: " + productPicture.getPicture() + " already exists");
-		
-		//atrodu preci pēc id
-		if(productRepo.findById(id).isEmpty())
-			throw new Exception("Product with id: " + id + " does not exist!");
-				
-		//tāda bilde vēl neeksistē
-		ProductPicture newPicture = productPicture;
-		newPicture.setProduct(productRepo.findById(id).get());
-		productPictureRepo.save(newPicture);
-	}
 
 	@Override
 	public void update(int id, ProductPicture productPicture) throws Exception {
 		//atrodu
 		ProductPicture productPictureForUpdating = retrieveById(id);
 		
-		//izmainu
+		productPictureForUpdating.setReferenceToPicture(productPicture.getReferenceToPicture());
 		productPictureForUpdating.setDescription(productPicture.getDescription());
-		productPictureForUpdating.setPicture(productPicture.getPicture());
 		
 		//saglabāju repo un DB
 		productPictureRepo.save(productPictureForUpdating);
