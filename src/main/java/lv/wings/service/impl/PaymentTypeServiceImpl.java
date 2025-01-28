@@ -3,6 +3,9 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,7 @@ public class PaymentTypeServiceImpl implements ICRUDService<PaymentType> {
 
 
     @Override
+    @Cacheable("PaymentTypes")
     public ArrayList<PaymentType> retrieveAll() throws Exception {
         if(paymentTypeRepo.count() == 0) throw new Exception("Nav neviena samaksas veida");
 
@@ -32,12 +36,14 @@ public class PaymentTypeServiceImpl implements ICRUDService<PaymentType> {
     }
 
     @Override
+    @Cacheable(value = "PaymentTypes", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
     public Page<PaymentType> retrieveAll(Pageable pageable) throws Exception {
         if(paymentTypeRepo.count() == 0) throw new Exception("Nav neviena samaksas veida");
         return (Page<PaymentType>) paymentTypeRepo.findAll(pageable);
     }
 
     @Override
+    @Cacheable(value="PaymentTypes", key="#id")
     public PaymentType retrieveById(int id) throws Exception {
         if(id < 0) throw new Exception("ID ir negativs");
 
@@ -49,6 +55,7 @@ public class PaymentTypeServiceImpl implements ICRUDService<PaymentType> {
     }
 
     @Override
+    @CacheEvict(value = "PaymentTypes", allEntries = true)
     public void deleteById(int id) throws Exception {
         PaymentType paymentTypeToDelete = retrieveById(id);
 
@@ -63,6 +70,7 @@ public class PaymentTypeServiceImpl implements ICRUDService<PaymentType> {
     }
 
     @Override
+    @CacheEvict(value = "PaymentTypes", allEntries = true)
     public void create(PaymentType paymentType) throws Exception {
         PaymentType paymentTypeExist = paymentTypeRepo.findByTitle(paymentType.getTitle());
 
@@ -74,15 +82,14 @@ public class PaymentTypeServiceImpl implements ICRUDService<PaymentType> {
     }
 
     @Override
-    public void update(int id, PaymentType paymentType) throws Exception{
+    @CacheEvict(value = "PaymentTypes", allEntries = true)
+	@CachePut(value="PaymentTypes", key="#id")
+	public void update(int id, PaymentType paymentType) throws Exception{
         PaymentType paymentTypeToUpdate = retrieveById(id);
 
         paymentTypeToUpdate.setTitle(paymentType.getTitle());
         paymentTypeToUpdate.setDescription(paymentType.getDescription());
         
         paymentTypeRepo.save(paymentTypeToUpdate);
-
-
     }
-    
 }

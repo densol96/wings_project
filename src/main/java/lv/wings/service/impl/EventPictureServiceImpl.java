@@ -3,6 +3,9 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,7 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	private IEventPictureRepo eventPictureRepo;
 
 	@Override
+	@Cacheable("EventPictures")
 	public ArrayList<EventPicture> retrieveAll() throws Exception {
 		if (eventPictureRepo.count() == 0)
 			throw new Exception("There are no event pictures in the database");
@@ -25,6 +29,7 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	}
 
 	@Override
+	@Cacheable(value = "EventPictures", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
 	public Page<EventPicture> retrieveAll(Pageable pageable) throws Exception {
 		if (eventPictureRepo.count() == 0)
 			throw new Exception("There are no event pictures in the database");
@@ -32,6 +37,7 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	}
 
 	@Override
+	@Cacheable(value="EventPictures", key="#id")
 	public EventPicture retrieveById(int id) throws Exception {
 		if (id < 1)
 			throw new Exception("Invalid ID");
@@ -44,6 +50,7 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	}
 
 	@Override
+	@CacheEvict(value = "EventPictures", allEntries = true)
 	public void deleteById(int id) throws Exception {
 		EventPicture eventPicture = retrieveById(id);
 		if (eventPicture == null) throw new Exception("Event picture with the id: (" + id + ") does not exist!");
@@ -53,6 +60,7 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	}
 
 	@Override
+	@CacheEvict(value = "EventPictures", allEntries = true)
 	public void create(EventPicture eventPicture) throws Exception {
 		EventPicture existedEventPicture = eventPictureRepo.findByReferenceToPicture(eventPicture.getReferenceToPicture());
 
@@ -64,6 +72,8 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	}
 
 	@Override
+	@CacheEvict(value = "EventPictures", allEntries = true)
+	@CachePut(value="EventPictures", key="#id")
 	public void update(int id, EventPicture eventPicture) throws Exception {
 		EventPicture foundEventPicture = retrieveById(id);
 		

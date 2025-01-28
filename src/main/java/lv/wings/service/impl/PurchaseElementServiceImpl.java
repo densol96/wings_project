@@ -3,6 +3,9 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	private IProductRepo productRepo;
 	
 	@Override
+	@Cacheable("PurchaseElements")
 	public ArrayList<PurchaseElement> retrieveAll() throws Exception {
 		//izmest izņēmumu, ja ir tukša tabula
 		if(elementRepo.count()==0) throw new Exception("There are no Purchase Elements");
@@ -31,6 +35,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	}
 
 	@Override
+	@Cacheable(value = "PurchaseElements", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
 	public Page<PurchaseElement> retrieveAll(Pageable pageable) throws Exception {
 	
 		if(elementRepo.count()==0) throw new Exception("There are no Purchase Elements");
@@ -38,6 +43,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	}
 
 	@Override
+	@Cacheable(value="PurchaseElements", key="#id")
 	public PurchaseElement retrieveById(int id) throws Exception {
 		if(id < 0) throw new Exception("Invalid ID");
 		
@@ -49,6 +55,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	}
 
 	@Override
+	@CacheEvict(value = "PurchaseElements", allEntries = true)
 	public void deleteById(int id) throws Exception {
 		//atrast driver kuru gribam dzēst
 		PurchaseElement elementForDeleting = retrieveById(id);
@@ -58,6 +65,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	}
 
 	@Override
+	@CacheEvict(value = "PurchaseElements", allEntries = true)
 	public void create(PurchaseElement element) throws Exception {
 		//atrodu preci pēc id
 		if(productRepo.findById(element.getProduct().getProductId())==null) throw new 
@@ -69,6 +77,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	}
 
 	@Override
+	@CacheEvict(value = "PurchaseElements", allEntries = true)
 	public void create(PurchaseElement element, int id) throws Exception {
 		//atrodu preci pēc id
 		if(productRepo.findById(id)==null) throw new 
@@ -81,6 +90,8 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	}
 
 	@Override
+	@CacheEvict(value = "PurchaseElements", allEntries = true)
+	@CachePut(value="PurchaseElements", key="#id")
 	public void update(int id, PurchaseElement element) throws Exception {
 		//atrodu
 		PurchaseElement elementForUpdating = retrieveById(id);

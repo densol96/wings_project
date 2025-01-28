@@ -3,6 +3,7 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 	private IProductRepo productRepo;
 
 	@Override
+	@Cacheable("ProductCategories")
 	public ArrayList<ProductCategory> retrieveAll() throws Exception {
 		//izmest izņēmumu, ja ir tukša tabula
 		if(productCategoriesRepo.count()==0) throw new Exception("Product category table is empty");
@@ -32,6 +34,7 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 	}
 
 	@Override
+	@Cacheable(value = "ProductCategories", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
 	public Page<ProductCategory> retrieveAll(Pageable pageable) throws Exception {
 	
 		if(productCategoriesRepo.count()==0) throw new Exception("Product category table is empty");
