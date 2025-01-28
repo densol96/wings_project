@@ -40,46 +40,58 @@ public class EventsController {
 	@Autowired
 	ICRUDService<EventPicture> eventsPictureService;
 
-	@PostMapping(value = "/test")
-	public ResponseEntity<ApiResponse<?>> testtt(@Valid @RequestBody EventDTO eventDTO,
-			BindingResult result) {
-
-		if (result.hasErrors()) {
-			List<String> errors = result.getAllErrors()
-					.stream()
-					.map(error -> error.getDefaultMessage())
-					.collect(Collectors.toList());
-
-			ApiResponse<List<String>> errorResponse = new ApiResponse<>("Nepareizi ievades lauki!", errors);
-			return ResponseEntity.badRequest().body(errorResponse);
-		}
-
-		try {
-			return ResponseEntity.status(HttpStatus.CREATED)
-					.body(new ApiResponse<>("Jaunuma kategorija izveidota!", null));
-		} catch (Exception e) {
-			return ResponseEntity.internalServerError().body(new ApiResponse<>("Kļūda: " + e.getMessage(), null));
-		}
-
-	}
+	/*
+	 * @PostMapping(value = "/test")
+	 * public ResponseEntity<ApiResponse<?>> testtt(@Valid @RequestBody EventDTO
+	 * eventDTO,
+	 * BindingResult result) {
+	 * 
+	 * if (result.hasErrors()) {
+	 * List<String> errors = result.getAllErrors()
+	 * .stream()
+	 * .map(error -> error.getDefaultMessage())
+	 * .collect(Collectors.toList());
+	 * 
+	 * ApiResponse<List<String>> errorResponse = new
+	 * ApiResponse<>("Nepareizi ievades lauki!", errors);
+	 * return ResponseEntity.badRequest().body(errorResponse);
+	 * }
+	 * 
+	 * try {
+	 * return ResponseEntity.status(HttpStatus.CREATED)
+	 * .body(new ApiResponse<>("Jaunuma kategorija izveidota!", null));
+	 * } catch (Exception e) {
+	 * return ResponseEntity.internalServerError().body(new ApiResponse<>("Kļūda: "
+	 * + e.getMessage(), null));
+	 * }
+	 * 
+	 * }
+	 */
 
 	@GetMapping(value = "")
 	public ResponseEntity<ApiResponse<?>> getAllEvents(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "startDate") String sort) {
+			@RequestParam(defaultValue = "createDate") String sort) {
 
-							System.out.println(page - 1);
 		try {
-			Pageable pageable = PageRequest.of(page - 1, 10).withSort(Sort.by(sort));
+			Sort sorting = Sort.by(sort).descending();
+			;
+
+			if ("new".equals(sort)) {
+				sorting = Sort.by("createDate").descending();
+			} else if ("old".equals(sort)) {
+				sorting = Sort.by("createDate").ascending();
+			} else if ("title".equals(sort)) {
+				sorting = Sort.by("title");
+			} else if ("startDate".equals(sort)) {
+				sorting = Sort.by("startDate");
+			}
+			Pageable pageable = PageRequest.of(page - 1, 10, sorting);
 			Page<Event> allEvents = eventsService.retrieveAll(pageable);
 
-			
-			
 			ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toList().toArray(),
 					new String[] { "eventCategory.events" });
-			
 
 			Page<Event> evts = new PageImpl(eventsDTO, pageable, allEvents.getTotalElements());
-			
 
 			return ResponseEntity.ok(new ApiResponse<>(null, evts));
 		} catch (NoContentException e) {
@@ -92,20 +104,19 @@ public class EventsController {
 
 	}
 
-
 	@GetMapping(value = "/show/{id}")
-	  public ResponseEntity<ApiResponse<?>> getSingleNews(@PathVariable("id")
-	  int id) {
-	  
-	  try {
-		Event event = eventsService.retrieveById(id);
-		EventDTO eventDTO = DTOMapper.map(EventDTO.class, event, new String[] {"eventCategory.events", "eventPictures.event"});
+	public ResponseEntity<ApiResponse<?>> getSingleNews(@PathVariable("id") int id) {
 
-	  return ResponseEntity.ok(new ApiResponse<>(null,eventDTO));
-	  } catch (Exception e) {
-	  	return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
-	  } 
-	  }
+		try {
+			Event event = eventsService.retrieveById(id);
+			EventDTO eventDTO = DTOMapper.map(EventDTO.class, event,
+					new String[] { "eventCategory.events", "eventPictures.event" });
+
+			return ResponseEntity.ok(new ApiResponse<>(null, eventDTO));
+		} catch (Exception e) {
+			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
+		}
+	}
 
 	/*
 	 * @GetMapping(value = "/show/{id}")
