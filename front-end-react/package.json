@@ -14,6 +14,7 @@
 		"axios": "^1.7.7",
 		"front-end-react": "file:",
 		"jwt-decode": "^4.0.0",
+		"lightgallery": "^2.8.2",
 		"prettier": "^3.3.3",
 		"react": "^18.3.1",
 		"react-datepicker": "^7.5.0",
