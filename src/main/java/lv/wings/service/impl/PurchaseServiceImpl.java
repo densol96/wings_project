@@ -27,7 +27,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
 
 
     @Override
-    @Cacheable("cachenameloc")
+    @Cacheable("Purchases")
     public ArrayList<Purchase> retrieveAll() throws Exception {
         if(purchaseRepo.count() == 0) throw new Exception("There are no purchases");
 
@@ -35,14 +35,14 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
     }
 
     @Override
-    @Cacheable(value = "cachenameloc", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
+    @Cacheable(value = "Purchases", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
     public Page<Purchase> retrieveAll(Pageable pageable) throws Exception {
         if(purchaseRepo.count() == 0) throw new Exception("There are no purchases");
         return (Page<Purchase>) purchaseRepo.findAll(pageable);
     }
 
     @Override
-    @Cacheable(value="cachenameloc", key="#id")
+    @Cacheable(value="Purchases", key="#id")
     public Purchase retrieveById(int id) throws Exception {
         
         if(id < 0) throw new Exception("Invalid ID");
@@ -57,7 +57,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
 
 
     @Override
-    @CacheEvict(value = "cachenameloc", allEntries = true)
+    @CacheEvict(value = "Purchases", allEntries = true)
     public void deleteById(int id) throws Exception {
         Purchase purchaseToDelete = retrieveById(id);
 
@@ -73,7 +73,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
 
 
     @Override
-    @CacheEvict(value = "cachenameloc", allEntries = true)
+    @CacheEvict(value = "Purchases", allEntries = true)
     public void create(Purchase purchase) throws Exception {
         
         purchaseRepo.save(purchase);
@@ -82,8 +82,8 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
 
 
     @Override
-    @CacheEvict(value = "cachenameloc", allEntries = true)
-	@CachePut(value="cachenameloc", key="#id")
+    @CacheEvict(value = "Purchases", allEntries = true)
+	@CachePut(value="Purchases", key="#id")
 	public void update(int id, Purchase purchase) {
         
 
