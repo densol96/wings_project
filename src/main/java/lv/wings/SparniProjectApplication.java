@@ -12,41 +12,23 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lv.wings.model.Customer;
-import lv.wings.model.DeliveryType;
-import lv.wings.model.Event;
-import lv.wings.model.EventCategory;
-import lv.wings.model.EventPicture;
-import lv.wings.model.PaymentType;
-import lv.wings.model.Product;
-import lv.wings.model.ProductCategory;
-import lv.wings.model.ProductPicture;
-import lv.wings.model.Purchase;
-import lv.wings.model.PurchaseElement;
+import lv.wings.model.*;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
-import lv.wings.repo.ICustomerRepo;
-import lv.wings.repo.IDeliveryTypeRepo;
-import lv.wings.repo.IEventCategory;
-import lv.wings.repo.IEventPictureRepo;
-import lv.wings.repo.IEventRepo;
-import lv.wings.repo.IPaymentTypeRepo;
-import lv.wings.repo.IProductCategoryRepo;
-import lv.wings.repo.IProductPictureRepo;
-import lv.wings.repo.IProductRepo;
-import lv.wings.repo.IPurchaseElementRepo;
-import lv.wings.repo.IPurchaseRepo;
+import lv.wings.repo.*;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
 import net.datafaker.Faker;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableCaching
 public class SparniProjectApplication {
 
 	public static void main(String[] args) {

@@ -3,6 +3,9 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
 
 
     @Override
+    @Cacheable("cachenameloc")
     public ArrayList<Purchase> retrieveAll() throws Exception {
         if(purchaseRepo.count() == 0) throw new Exception("There are no purchases");
 
@@ -31,12 +35,14 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
     }
 
     @Override
+    @Cacheable(value = "cachenameloc", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
     public Page<Purchase> retrieveAll(Pageable pageable) throws Exception {
         if(purchaseRepo.count() == 0) throw new Exception("There are no purchases");
         return (Page<Purchase>) purchaseRepo.findAll(pageable);
     }
 
     @Override
+    @Cacheable(value="cachenameloc", key="#id")
     public Purchase retrieveById(int id) throws Exception {
         
         if(id < 0) throw new Exception("Invalid ID");
@@ -51,6 +57,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
 
 
     @Override
+    @CacheEvict(value = "cachenameloc", allEntries = true)
     public void deleteById(int id) throws Exception {
         Purchase purchaseToDelete = retrieveById(id);
 
@@ -66,6 +73,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
 
 
     @Override
+    @CacheEvict(value = "cachenameloc", allEntries = true)
     public void create(Purchase purchase) throws Exception {
         
         purchaseRepo.save(purchase);
@@ -74,7 +82,9 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase>{
 
 
     @Override
-    public void update(int id, Purchase purchase) {
+    @CacheEvict(value = "cachenameloc", allEntries = true)
+	@CachePut(value="cachenameloc", key="#id")
+	public void update(int id, Purchase purchase) {
         
 
 

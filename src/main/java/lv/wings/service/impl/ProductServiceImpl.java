@@ -3,6 +3,9 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,7 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 	private IProductPictureRepo pictureRepo;
 
 	@Override
+	@Cacheable("Products")
 	public ArrayList<Product> retrieveAll() throws Exception {
 		//izmest izņēmumu, ja ir tukša tabula
 		if(productRepo.count()==0) throw new Exception("There are no products");
@@ -44,12 +48,14 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 	}
 
 	@Override
+	@Cacheable(value = "Products", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
 	public Page<Product> retrieveAll(Pageable pageable) throws Exception{
 		if(productRepo.count()==0) throw new Exception("There are no products");
 		return (Page<Product>) productRepo.findAll(pageable);
 	}
 
 	@Override
+	@Cacheable(value="Products", key="#id")
 	public Product retrieveById(int id) throws Exception {
 		if(id < 0) throw new Exception("Id should be positive");
 		
@@ -61,6 +67,7 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 	}
 
 	@Override
+	@CacheEvict(value = "Products", allEntries = true)
 	public void deleteById(int id) throws Exception {
 		//atrast preci kuru gribam dzēst
 		Product productForDeleting = retrieveById(id);
@@ -86,6 +93,7 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 	}
 
 	@Override
+	@CacheEvict(value = "Products", allEntries = true)
 	public void create(Product product) throws Exception {
 		Product existedProduct = productRepo.findByTitle(product.getTitle());
 		
@@ -102,6 +110,7 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 	}
 
 	@Override
+	@CacheEvict(value = "Products", allEntries = true)
 	public void create(Product product, int id) throws Exception {
 		Product existedProduct = productRepo.findByTitle(product.getTitle());
 		
@@ -119,6 +128,8 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 	}
 
 	@Override
+	@CacheEvict(value = "Products", allEntries = true)
+	@CachePut(value="Products", key="#id")
 	public void update(int id, Product product) throws Exception {
 		//atrodu
 		Product productForUpdating = retrieveById(id);
@@ -135,6 +146,7 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 	}
 
 	@Override
+	@CachePut(value="Products", key="'c' + #categoryId")
 	public ArrayList<Product> selectAllByProductCategory(int categoryId) throws Exception {
 		ProductCategory productCategory = productCategoryRepo.findById(categoryId).get();
 		ArrayList<Product> products = new ArrayList<>();

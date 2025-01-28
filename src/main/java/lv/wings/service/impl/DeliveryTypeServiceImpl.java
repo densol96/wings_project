@@ -3,6 +3,9 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ public class DeliveryTypeServiceImpl implements ICRUDService<DeliveryType> {
 
 
     @Override
+    @Cacheable("DeliveryTypes")
     public ArrayList<DeliveryType> retrieveAll() throws Exception {
         if(deliveryTypeRepo.count() == 0) throw new Exception("There are no delivery types");
 
@@ -31,12 +35,14 @@ public class DeliveryTypeServiceImpl implements ICRUDService<DeliveryType> {
     }
 
     @Override
+    @Cacheable(value = "DeliveryTypes", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
     public Page<DeliveryType> retrieveAll(Pageable pageable) throws Exception {
         if(deliveryTypeRepo.count() == 0) throw new Exception("There are no delivery types");
         return (Page<DeliveryType>) deliveryTypeRepo.findAll(pageable);
     }
 
     @Override
+    @Cacheable(value="DeliveryTypes", key="#id")
     public DeliveryType retrieveById(int id) throws Exception {
         if(id < 0) throw new Exception("Invalid ID!");
 
@@ -48,6 +54,7 @@ public class DeliveryTypeServiceImpl implements ICRUDService<DeliveryType> {
     }
 
     @Override
+    @CacheEvict(value = "DeliveryTypes", allEntries = true)
     public void deleteById(int id) throws Exception {
         DeliveryType deliveryTypeToDelete = retrieveById(id);
 
@@ -62,6 +69,7 @@ public class DeliveryTypeServiceImpl implements ICRUDService<DeliveryType> {
     }
 
     @Override
+    @CacheEvict(value = "DeliveryTypes", allEntries = true)
     public void create(DeliveryType deliveryType) throws Exception {
         DeliveryType deliveryTypeExist = deliveryTypeRepo.findByTitle(deliveryType.getTitle());
 
@@ -73,6 +81,8 @@ public class DeliveryTypeServiceImpl implements ICRUDService<DeliveryType> {
     }
 
     @Override
+    @CacheEvict(value = "DeliveryTypes", allEntries = true)
+    @CachePut(value="DeliveryTypes", key="#id")
     public void update(int id, DeliveryType deliveryType) throws Exception {
         DeliveryType deliveryTypeToUpdate = retrieveById(id);
 

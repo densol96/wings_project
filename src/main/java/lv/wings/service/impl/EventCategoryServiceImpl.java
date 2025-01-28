@@ -3,6 +3,9 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 	IEventRepo eventRepo;
 
 	@Override
+	@Cacheable("EventCategories")
 	public ArrayList<EventCategory> retrieveAll() throws Exception {
 		if (eventCategoryRepo.count() == 0)
 			throw new Exception("There are no event categories in the database");
@@ -30,6 +34,7 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 	}
 
 	@Override
+	@Cacheable(value = "EventCategories", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
 	public Page<EventCategory> retrieveAll(Pageable pageable) throws Exception {
 		if (eventCategoryRepo.count() == 0)
 			throw new Exception("There are no event categories in the database");
@@ -37,6 +42,7 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 	}
 
 	@Override
+	@Cacheable(value="EventCategories", key="#id")
 	public EventCategory retrieveById(int id) throws Exception {
 		if (id < 1)
 			throw new Exception("Invalid ID!");
@@ -49,6 +55,7 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 	}
 
 	@Override
+	@CacheEvict(value = "EventCategories", allEntries = true)
 	public void deleteById(int id) throws Exception {
 		EventCategory eventCategory = retrieveById(id);
 		
@@ -66,6 +73,7 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 	}
 
 	@Override
+	@CacheEvict(value = "EventCategories", allEntries = true)
 	public void create(EventCategory eventCategory) throws Exception {
 		EventCategory existedPaskumaKategorija = eventCategoryRepo
 				.findByTitle(eventCategory.getTitle());
@@ -79,6 +87,8 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 	}
 
 	@Override
+	@CacheEvict(value = "EventCategories", allEntries = true)
+	@CachePut(value="EventCategories", key="#id")
 	public void update(int id, EventCategory eventCategory) throws Exception {
 		EventCategory foundEventCategory = retrieveById(id);
 		if (foundEventCategory == null) throw new Exception("Event category with the id: (" + id + ") does not exist!");
@@ -86,7 +96,5 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 		foundEventCategory.setTitle(eventCategory.getTitle());
 
 		eventCategoryRepo.save(foundEventCategory);
-
 	}
-
 }

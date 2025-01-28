@@ -3,6 +3,9 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,6 +24,7 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	private IEventRepo eventRepo;
 
 	@Override
+	@Cacheable("Events")
 	public ArrayList<Event> retrieveAll() throws NoContentException {
 		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAll();
 		if (events.isEmpty()) throw new NoContentException("There are no events");
@@ -30,6 +34,7 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 
 
 	@Override
+	@Cacheable(value = "Events", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
 	public Page<Event> retrieveAll(Pageable pageable) throws NoContentException {
 		Page<Event> events = (Page<Event>) eventRepo.findAll(pageable);
 		if (events.isEmpty()) throw new NoContentException("There are no events");
@@ -38,6 +43,7 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	}
 
 	@Override
+	@Cacheable(value="Events", key="#id")
 	public Event retrieveById(int id) throws Exception {
 		if (id < 1) throw new Exception("Invalid ID");
 		Event foundEvent = eventRepo.findByEventId(id);
@@ -47,6 +53,7 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	}
 	
 	@Override
+	@Cacheable(value = "Events", key = "'desc'")
 	public ArrayList<Event> selectAllEventsDescOrder() throws Exception {
 		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAllByOrderByEventIdDesc();
 
@@ -55,6 +62,7 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	}
 
 	@Override
+	@Cacheable(value = "Events", key = "'asc'")
 	public ArrayList<Event> selectAllEventsAscOrder() throws Exception {
 		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAllByOrderByEventIdAsc();
 		if (events.isEmpty()) throw new Exception("There are no events");
@@ -62,6 +70,7 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	}
 
 	@Override
+	@CacheEvict(value = "Events", allEntries = true)
 	public void deleteById(int id) throws Exception {
 		Event event = eventRepo.findByEventId(id);
 		if (event == null) throw new Exception("Event with id:"+ id +" does not exist");
@@ -70,6 +79,7 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	}
 
 	@Override
+	@CacheEvict(value = "Events", allEntries = true)
 	public void create(Event event) throws Exception {
 		Event existedEvent = eventRepo.findByTitle(event.getTitle());
 
@@ -77,10 +87,11 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 			throw new Exception("Event with title: " + event.getTitle() + " already exists");
 
 		eventRepo.save(event);
-		
 	}
 
 	@Override
+	@CacheEvict(value = "Events", allEntries = true)
+	@CachePut(value="Events", key="#id")
 	public void update(int id, Event event) throws Exception {
          Event foundEvent = eventRepo.findByEventId(event.getEventId());
 		
@@ -93,10 +104,6 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 		foundEvent.setDescription(event.getDescription());
 		foundEvent.setKeyWords(event.getKeyWords());
 
-		eventRepo.save(event);
-
-		
+		eventRepo.save(event);	
 	}
-	
-
 }

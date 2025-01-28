@@ -3,14 +3,15 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.ProductPicture;
 import lv.wings.repo.IProductPictureRepo;
-import lv.wings.repo.IProductRepo;
-import lv.wings.service.ICRUDInsertedService;
 import lv.wings.service.ICRUDService;
 
 @Service
@@ -23,6 +24,7 @@ public class ProductPictureServiceImpl implements ICRUDService<ProductPicture>{
 	//private IProductRepo productRepo;
 	
 	@Override
+	@Cacheable("ProductPictures")
 	public ArrayList<ProductPicture> retrieveAll() throws Exception {
 		//izmest izņēmumu, ja ir tukša tabula
 		if(productPictureRepo.count()==0) throw new Exception("There are no product pictures");
@@ -32,12 +34,14 @@ public class ProductPictureServiceImpl implements ICRUDService<ProductPicture>{
 	}
 
 	@Override
+	@Cacheable(value = "ProductPictures", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
 	public Page<ProductPicture> retrieveAll(Pageable pageable) throws Exception {
 		if(productPictureRepo.count()==0) throw new Exception("There are no product pictures");
 		return (Page<ProductPicture>)  productPictureRepo.findAll(pageable);
 	}
 
 	@Override
+	@Cacheable(value="ProductPictures", key="#id")
 	public ProductPicture retrieveById(int id) throws Exception {
 		if(id < 1) throw new Exception("Invalid ID");
 		
@@ -49,6 +53,7 @@ public class ProductPictureServiceImpl implements ICRUDService<ProductPicture>{
 	}
 
 	@Override
+	@CacheEvict(value = "ProductPictures", allEntries = true)
 	public void deleteById(int id) throws Exception {
 		//atrast preces bilde kuru gribam dzēst
 		ProductPicture productPicture = retrieveById(id);
@@ -59,6 +64,7 @@ public class ProductPictureServiceImpl implements ICRUDService<ProductPicture>{
 	}
 
 	@Override
+	@CacheEvict(value = "ProductPictures", allEntries = true)
 	public void create(ProductPicture productPicture) throws Exception {
 		ProductPicture existedProductPicture = productPictureRepo.findByReferenceToPicture(productPicture.getReferenceToPicture());
 		
@@ -74,6 +80,8 @@ public class ProductPictureServiceImpl implements ICRUDService<ProductPicture>{
 
 
 	@Override
+	@CacheEvict(value = "ProductPictures", allEntries = true)
+	@CachePut(value="ProductPictures", key="#id")
 	public void update(int id, ProductPicture productPicture) throws Exception {
 		//atrodu
 		ProductPicture productPictureForUpdating = retrieveById(id);
