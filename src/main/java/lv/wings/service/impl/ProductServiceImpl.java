@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import lv.wings.dto.object.ProductDTO;
 import lv.wings.model.Product;
 import lv.wings.model.ProductCategory;
 import lv.wings.model.ProductPicture;
@@ -145,6 +146,13 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 		}
 
 		return products;
+	}
+
+	public ArrayList<Product> randomProducts() throws Exception {
+		 ArrayList<Product> randomProducts = productRepo.findRandomProducts(6);
+
+
+		  return randomProducts;
 	}
 	
 	

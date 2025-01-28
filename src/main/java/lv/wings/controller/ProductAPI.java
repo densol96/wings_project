@@ -1,6 +1,9 @@
 package lv.wings.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,8 +13,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import lv.wings.dto.DTOMapper;
+import lv.wings.dto.object.ProductDTO;
 import lv.wings.exceptions.NoContentException;
 import lv.wings.model.Product;
+import lv.wings.model.ProductPicture;
 import lv.wings.responses.ApiArrayListResponse;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;
@@ -69,5 +75,45 @@ public class ProductAPI {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 
+	}
+
+
+	@GetMapping("random")
+	public ResponseEntity<ApiResponse<ArrayList<ProductDTO>>> randomProducts(){
+		try {
+			ArrayList<Product> randomProducts = productFilteringService.randomProducts();
+
+			/// Lai main skata izvilktu tikai 1 attēlu katrai precei
+			for (Product product : randomProducts){
+
+				Collection<ProductPicture> onlyFirstPictureList = new ArrayList<>();
+				if (!product.getProductPictures().isEmpty()){
+					List<ProductPicture> pictureList = new ArrayList<>(product.getProductPictures());
+
+						int randomIndex = new Random().nextInt(pictureList.size());
+
+					
+						ProductPicture randomPicture = pictureList.get(randomIndex);
+
+						onlyFirstPictureList.add(randomPicture);
+				}
+
+				product.setProductPictures(onlyFirstPictureList);
+			}
+
+			ArrayList<ProductDTO> productsDTO = DTOMapper.mapMany(ProductDTO.class, randomProducts.toArray(), new String[]{
+				"productCategory.events", "productPictures.event", "productPictures.description", "productCategory", "description"
+			});
+
+			
+			return ResponseEntity.ok(new ApiResponse<>(null, productsDTO));
+		} catch (NoContentException e) {
+			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.internalServerError().body(
+					new ApiResponse<>(e.getMessage(), null));
+		}
+	
 	}
 }

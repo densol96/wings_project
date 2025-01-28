@@ -6,9 +6,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ErrorMessage from "../errors/ErrorMessage";
 import convertToLocalTime from "../../utils/convertToLocalTime";
+import Select from "react-select";
 
 export default function News() {
 	const location = useLocation();
+	const navigate = useNavigate();
 
 	const [events, setEvents] = useState([]);
 	const [error, setError] = useState(null);
@@ -23,6 +25,11 @@ export default function News() {
 			page: parseInt(params.get("page")) || 1,
 			sort: params.get("sort") || "startDate",
 		};
+	};
+
+	const handleSortChange = selectedOption => {
+		const { page } = getQueryParams(); // Get the current page
+		navigate(`?page=${page}&sort=${selectedOption.value}`); // Update URL query params
 	};
 
 	useEffect(() => {
@@ -52,6 +59,13 @@ export default function News() {
 		fetchEvents();
 	}, [location.search]); // Re-run when URL changes
 
+	const options = [
+		{ value: "new", label: "Jaunākais" },
+		{ value: "old", label: "Vecākais" },
+		{ value: "title", label: "Nosaukums" },
+		{ value: "startDate", label: "Sākuma Datums" },
+	];
+
 	if (loading) {
 		return <LoadingSpinner />;
 	}
@@ -64,13 +78,20 @@ export default function News() {
 		<>
 			<Title title={"Jaunumi - Pasākumi"} />
 			<main>
+				<Select
+					value={options.find(opt => opt.value === getQueryParams().sort)}
+					placeholder="Kārtot..."
+					onChange={handleSortChange}
+					options={options}
+					className="float-right m-5 text-center"
+				/>
 				<div className="flex flex-col justify-center overflow-hidden bg-gray- py-6 sm:py-12">
 					<div className="mx-auto max-w-screen-xl px-4 w-full">
 						<div className="grid w-full sm:grid-cols-2 xl:grid-cols-4 gap-6">
-							{events.map((n, i) => {
+							{events.map((event, i) => {
 								return (
-									<Link to={`show/${n.id}`}>
-										<EventComponent key={n.startDate + i} url={IMAGES_URL} data={n} />
+									<Link key={event.id} to={`show/${event.id}`}>
+										<EventComponent key={event.startDate + i} url={IMAGES_URL} data={event} />
 									</Link>
 								);
 							})}
