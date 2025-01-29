@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, useLocation } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import Events from "./components/events/Events";
 import Shop from "./components/shop/Shop";

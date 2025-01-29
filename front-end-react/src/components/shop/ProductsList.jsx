@@ -25,7 +25,7 @@ function getAllProducts() {
 
 function getProductData(id, products) {
 
-    let productData = products.find(product => product.productId === id)
+    let productData = products.find(product => product.id === id)
 
     console.log(productData)
     if (productData == undefined) {

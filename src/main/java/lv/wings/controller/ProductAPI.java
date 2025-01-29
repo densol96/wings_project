@@ -35,12 +35,12 @@ public class ProductAPI {
     private IProductsFilterService productFilteringService;
 
     @GetMapping(value = "/show/all")
-	public ResponseEntity<ApiArrayListResponse<Product>> getProducts() {
+	public ResponseEntity<ApiArrayListResponse<ProductDTO>> getProducts() {
 
 		try {
 			ArrayList<Product> allProducts = productService.retrieveAll();
 
-			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allProducts));
+			return ResponseEntity.ok(new ApiArrayListResponse<>(null, DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(), new String[]{"productPicture.id"})));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
@@ -51,10 +51,10 @@ public class ProductAPI {
 
 
     @GetMapping(value = "/show/{id}")
-	public ResponseEntity<ApiResponse<Product>> getSingleProduct(@PathVariable("id") int id) {
+	public ResponseEntity<ApiResponse<ProductDTO>> getSingleProduct(@PathVariable("id") int id) {
 
 		try {
-			return ResponseEntity.ok(new ApiResponse<>(null, productService.retrieveById(id)));
+			return ResponseEntity.ok(new ApiResponse<>(null, DTOMapper.map(ProductDTO.class, productService.retrieveById(id))));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {

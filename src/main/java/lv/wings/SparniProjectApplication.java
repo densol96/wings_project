@@ -18,10 +18,30 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import lv.wings.model.*;
+import lv.wings.model.Customer;
+import lv.wings.model.DeliveryType;
+import lv.wings.model.Event;
+import lv.wings.model.EventCategory;
+import lv.wings.model.EventPicture;
+import lv.wings.model.PaymentType;
+import lv.wings.model.Product;
+import lv.wings.model.ProductCategory;
+import lv.wings.model.ProductPicture;
+import lv.wings.model.Purchase;
+import lv.wings.model.PurchaseElement;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
-import lv.wings.repo.*;
+import lv.wings.repo.ICustomerRepo;
+import lv.wings.repo.IDeliveryTypeRepo;
+import lv.wings.repo.IEventCategory;
+import lv.wings.repo.IEventPictureRepo;
+import lv.wings.repo.IEventRepo;
+import lv.wings.repo.IPaymentTypeRepo;
+import lv.wings.repo.IProductCategoryRepo;
+import lv.wings.repo.IProductPictureRepo;
+import lv.wings.repo.IProductRepo;
+import lv.wings.repo.IPurchaseElementRepo;
+import lv.wings.repo.IPurchaseRepo;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
 import net.datafaker.Faker;
@@ -248,13 +268,13 @@ public class SparniProjectApplication {
 				ProductPicture bilde66 = new ProductPicture("zekes3.jpg", "Zeķes3", product6);
 
 				
-				ProductPicture bilde77 = new ProductPicture("dzemperis1.jpg", "Džemperis1", product7);
-				ProductPicture bilde88 = new ProductPicture("dzemperis2.jpg", "Džemperis2", product8);
-				ProductPicture bilde99 = new ProductPicture("dzemperis3.jpg", "Džemperis3", product9);
+				ProductPicture bilde77 = new ProductPicture("dzemperi1.jpg", "Džemperis1", product7);
+				ProductPicture bilde88 = new ProductPicture("dzemperi2.jpg", "Džemperis2", product8);
+				ProductPicture bilde99 = new ProductPicture("dzemperi3.jpg", "Džemperis3", product9);
 
-				ProductPicture bilde100 = new ProductPicture("cepure1.jpg", "Cepure1", product10);
-				ProductPicture bilde111 = new ProductPicture("cepure2.jpg", "Cepure2", product11);
-				ProductPicture bilde122 = new ProductPicture("cepure3.jpg", "Cepure3", product12);
+				ProductPicture bilde100 = new ProductPicture("cepures1.jpg", "Cepure1", product10);
+				ProductPicture bilde111 = new ProductPicture("cepures2.jpg", "Cepure2", product11);
+				ProductPicture bilde122 = new ProductPicture("cepures3.jpg", "Cepure3", product12);
 
 				ProductPicture bilde133 = new ProductPicture("salle1.jpg", "Šalle1", product13);
 				ProductPicture bilde144 = new ProductPicture("salle2.jpg", "Šalle2", product14);
@@ -264,6 +284,10 @@ public class SparniProjectApplication {
 				ProductPicture bilde166 = new ProductPicture("manta1.jpg", "Manta1", product16);
 				ProductPicture bilde177 = new ProductPicture("manta2.jpg", "Manta2", product17);
 				ProductPicture bilde188 = new ProductPicture("manta3.jpg", "Manta3", product18);
+
+				ProductPicture bilde190 = new ProductPicture("aksesuars1.jpg", "Aksesuars 1", product19);
+				ProductPicture bilde200 = new ProductPicture("aksesuars2.jpg", "Aksesuars 2", product20);
+				ProductPicture bilde210 = new ProductPicture("aksesuars3.jpg", "Aksesuars 3", product21);
 				productPictureRepo.save(bilde11);
 				productPictureRepo.save(bilde22);
 				productPictureRepo.save(bilde33);
@@ -285,6 +309,10 @@ public class SparniProjectApplication {
 				productPictureRepo.save(bilde166);
 				productPictureRepo.save(bilde177);
 				productPictureRepo.save(bilde188);
+
+				productPictureRepo.save(bilde190);
+				productPictureRepo.save(bilde200);
+				productPictureRepo.save(bilde210);
 				
 				//USER & AUTHORITY
 
