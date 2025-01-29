@@ -4,8 +4,9 @@ import { useAllData } from "../../hooks/dataHooks";
 import LoadingSpinner from "../assets/LoadingSpinner";
 import { Link, useParams, useLocation } from "react-router-dom";
 import { CartContext } from "../../CartContext";
-import { useContext } from "react";
-
+import { useContext, useState } from "react";
+import AllCategorizedProducts from "./AllCategorizedProducts";
+import Categories from "../shop/Categories";
 
 export default function CategorizedProducts() {
 
@@ -18,61 +19,30 @@ export default function CategorizedProducts() {
     const queryParams = new URLSearchParams(location.search);
     const stateId = queryParams.get('id');
 
-
-    const { data, loading, error } = useAllData(
-        `http://localhost:8080/api/products/show/category/${stateId}`,
-    );
-
-    if (loading) {
-        return <LoadingSpinner />;
-    }
-
-    if (error) {
-        console.log(error);
-        return <h1 className="text-3xl text-red-600 text-center">{error}</h1>;
-    }
+    const [search, setSearch] = useState('');
 
     return (
         <>
-            {title}
-            <hr></hr>
-            <div class="grid grid-cols-5">
-                {data.result.map((n, i) => {
-                    return (
-                        <ProductCard
-                            key={n + i}
-                            data={n}
-                        />
-                    );
-                })}
-            </div>
+            <main className="overscroll-auto">
+                <div className="flex px-4 py-2 rounded-md border-1 border-slate-150 overflow-hidden max-w-md mx-auto mt-6 mb-6 bg-sky-50 shadow-md rounded-md">
+					<input type="search" placeholder="Meklēt..." className="w-full outline-none bg-transparent text-gray-600 text-sm" onChange={(e) => setSearch(e.target.value)} />
+				</div>
 
-        </>
-    );
-}
-
-// TODO Change photo logic
-function ProductCard({ data }) {
-
-    const cart = useContext(CartContext);
-    const productQuantity = cart.getProductQuantity(data.productId)
-
-    return (
-        <>
-            <div class="block max-w-sm min-h-80 max-h-80 p-6 bg-slate-50 border border-gray-250 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-2">
-                <Link to={`/shop/show/${data.productId}`}>
+                <div className="grid 2xl:grid-cols-7 xl:grid-cols-9 lg:grid-cols-9 md:grid-cols-2 sm:grid-cols-2 grid-cols-2">
+                    <div className="2xl:col-start-2 2xl:col-span-5 xl:col-start-2 xl:col-span-7 lg:col-start-2 lg:col-span-7 md:col-start-0 md:col-span-2 sm:col-start-0 sm:col-span-2 col-start-0 col-span-2">
+                        <div className="grid 2xl:grid-cols-6 xl:grid-cols-6 lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-5 mb-5">
+                            <div className="2xl:col-start-1 2xl:col-span-1 xl:col-start-1 xl:col-span-1 lg:col-start-1 lg:col-span-1 md:col-start-0 md:col-span-1 sm:col-start-0 sm:col-span-1 col-start-0 col-span-1 bg-light-nav shadow-md rounded-md">
+                                <Categories />
+                            </div>
+                            
+                            <div className="2xl:col-end-7 2xl:col-span-5 xl:col-end-7 xl:col-span-5 lg:col-end-7 lg:col-span-5 md:col-end-6 md:col-span-4 sm:col-end-6 sm:col-span-4 col-end-6 col-span-4 mx-5 bg-light-nav shadow-md rounded-md">
+                                <AllCategorizedProducts id={stateId} search={search.toLowerCase()} />
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
-                    <img class="rounded object-scale-down h-48 w-96 select-none	" src="../src/assets/markusstest.png" alt="" draggable="false"/>
-
-                    <p>{data.title}</p>
-                    <p>{data.price}€</p>
-                </Link>
-
-                <button onClick={() => cart.addOneToCart(data.productId)} class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                    {productQuantity}
-                </button>
-
-            </div>
+            </main>
         </>
     );
 }
