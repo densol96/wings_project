@@ -3,6 +3,8 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +45,7 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 	}
 
 	@Override
+	@Cacheable(value="ProductCategories", key="#id")
 	public ProductCategory retrieveById(int id) throws Exception {
 		if(id < 0) throw new Exception("Id should be positive");
 		
@@ -54,6 +57,7 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 	}
 
 	@Override
+	@CacheEvict(value = "ProductCategories", allEntries = true)
 	public void deleteById(int id) throws Exception {
 		if(retrieveById(id)==null) throw new Exception("Product category with (id:" + id + ") does not exist!");
 		
@@ -72,6 +76,7 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 	}
 
 	@Override
+	@CacheEvict(value = "ProductCategories", allEntries = true)
 	public void create(ProductCategory category) throws Exception {
 		ProductCategory existingProductCategory = productCategoriesRepo.findByTitleAndDescription(category.getTitle(), category.getDescription());
 				
@@ -84,6 +89,8 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 	}
 
 	@Override
+	@CacheEvict(value = "ProductCategories", allEntries = true)
+	@CachePut(value="ProductCategories", key="#id")
 	public void update(int id, ProductCategory category) throws Exception {
 		//atrodu
 		ProductCategory productCategoryForUpdating = retrieveById(id);
