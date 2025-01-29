@@ -2,17 +2,14 @@ import React from "react";
 import Title from "../Title";
 import { useAllData } from "../../hooks/dataHooks";
 import LoadingSpinner from "../assets/LoadingSpinner";
-import { Link } from "react-router-dom";
+import { Link, useParams, useLocation } from "react-router-dom";
 import { CartContext } from "../../CartContext";
 import { useContext } from "react";
 
-// TODO add logic for adding all items
-// TODO can select items of a certain category
-
-export default function AllProducts( {search} ) {
+export default function AllCategorizedProducts( {id, search} ) {
 
     const { data, loading, error } = useAllData(
-        "http://localhost:8080/api/products/show/all",
+        `http://localhost:8080/api/products/show/category/${id}`,
     );
 
     if (loading) {
@@ -20,11 +17,13 @@ export default function AllProducts( {search} ) {
     }
 
     if (error) {
+        console.log(error);
         return <h1 className="text-3xl text-red-600 text-center">{error}</h1>;
     }
 
     return (
         <>
+            {data.title}
             <div className="grid 2xl:grid-cols-5 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 grid-cols-1">
                 {data.result.filter((item) => {
                     return search.toLowerCase() === '' ? item : item.title.toLowerCase().includes(search);

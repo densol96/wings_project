@@ -146,22 +146,88 @@ public class SparniProjectApplication {
 				eventPictureRepo.save(bilde3);
 
 				// KATEGORIJAS
-				ProductCategory kategorija1 = new ProductCategory("Cepure", "Galvas segas");
-				ProductCategory kategorija2 = new ProductCategory("Cimdi", "Adīti cimdi");
-				ProductCategory kategorija3 = new ProductCategory("Zeķes", "Adītas zeķes");
+				ProductCategory kategorija1 = new ProductCategory("Adītas lelles", "Adītas lelles");
+				ProductCategory kategorija2 = new ProductCategory("Aksesuāri", "Aksesuāri");
+				ProductCategory kategorija3 = new ProductCategory("Cepure", "Galvas segas");
+				ProductCategory kategorija4 = new ProductCategory("Cimdi", "Adīti cimdi");
+				ProductCategory kategorija5 = new ProductCategory("Džemperi", "Adīti džemperi");
+				ProductCategory kategorija6 = new ProductCategory("Šalles", "Kakla sega");
+				ProductCategory kategorija7 = new ProductCategory("Zeķes", "Adītas zeķes");
 				productCategoryRepo.save(kategorija1);
 				productCategoryRepo.save(kategorija2);
 				productCategoryRepo.save(kategorija3);
+				productCategoryRepo.save(kategorija4);
+				productCategoryRepo.save(kategorija5);
+				productCategoryRepo.save(kategorija6);
+				productCategoryRepo.save(kategorija7);
 
 				// PRECES
-				Product product1 = new Product("Adīti ziemas dūraiņi", "Krustūrīenā izšūti adīti ziemas cimdi", 13.60f,
-						6,
-						kategorija2);
-				Product product2 = new Product("Tamborētas zeķes pusaudžiem", "Baltas taborētas zeķes izmērs 35",
-						12.20f, 4,
+				Product product1 = new Product("Adīti ziemas dūraiņi A", "cimdi1", 13.99f, 6,
+						kategorija4);
+				Product product2 = new Product("Adīti ziemas dūraiņi B", "cimdi2", 9.99f, 6,
+						kategorija4);
+				Product product3 = new Product("Adīti ziemas dūraiņi C", "cimdi3", 14.99f, 6,
+						kategorija4);
+				Product product4 = new Product("Zeķes pusaudžiem A", "zekes1", 8.99f, 4,
+						kategorija7);
+				Product product5 = new Product("Zeķes pusaudžiem B", "zekes2", 8.88f, 4,
+						kategorija7);
+				Product product6 = new Product("Zeķes pusaudžiem C", "zekes3", 12.99f, 4,
+						kategorija7);
+				Product product7 = new Product("Džemperis A", "dzemperi1", 25.99f, 4,
+						kategorija5);
+				Product product8 = new Product("Džemperis B", "dzemperi2", 31.99f, 4,
+						kategorija5);
+				Product product9 = new Product("Džemperis C", "dzemperi3", 19.99f, 4,
+						kategorija5);
+				Product product10 = new Product("Cepure A", "cepures1", 8.99f, 4,
 						kategorija3);
+				Product product11 = new Product("Cepure B", "cepures2", 7.99f, 4,
+						kategorija3);
+				Product product12 = new Product("Cepure C", "cepures3", 12.99f, 4,
+						kategorija3);
+				Product product13 = new Product("Šalle A", "salle1", 8.99f, 4,
+						kategorija6);
+				Product product14 = new Product("Šalle B", "salle2", 7.99f, 4,
+						kategorija6);
+				Product product15 = new Product("Šalle C", "salle3", 12.99f, 4,
+						kategorija6);
+				Product product16 = new Product("Lelle A", "manta1", 8.99f, 4,
+						kategorija1);
+				Product product17 = new Product("Lelle B", "manta2", 7.99f, 4,
+						kategorija1);
+				Product product18 = new Product("Lelle C", "manta3", 12.99f, 4,
+						kategorija1);
+				Product product19 = new Product("Aksesuārs A", "aksesuars1", 8.99f, 4,
+						kategorija2);
+				Product product20 = new Product("Aksesuārs B", "aksesuars2", 7.99f, 4,
+						kategorija2);
+				Product product21 = new Product("Aksesuārs C", "aksesuars3", 12.99f, 4,
+						kategorija2);
+				
+				
 				productRepo.save(product1);
 				productRepo.save(product2);
+				productRepo.save(product3);
+				productRepo.save(product4);
+				productRepo.save(product5);
+				productRepo.save(product6);
+				productRepo.save(product7);
+				productRepo.save(product8);
+				productRepo.save(product9);
+				productRepo.save(product10);
+				productRepo.save(product11);
+				productRepo.save(product12);
+				productRepo.save(product13);
+				productRepo.save(product14);
+				productRepo.save(product15);
+				productRepo.save(product16);
+				productRepo.save(product17);
+				productRepo.save(product18);
+				productRepo.save(product19);
+				productRepo.save(product20);
+				productRepo.save(product21);
+
 
 				// PIRKUMA ELEMENTS
 				PurchaseElement purchaseElement1 = new PurchaseElement(purchase1, product1, 2);
@@ -173,14 +239,55 @@ public class SparniProjectApplication {
 
 				// BILDES
 				// public Preces_bilde(String bilde, String apraksts, Prece product)
-				ProductPicture bilde11 = new ProductPicture("bilde1.jpg", "Zeķes1", product1);
-				ProductPicture bilde22 = new ProductPicture("bilde2.jpg", "Zeķes2", product1);
-				ProductPicture bilde33 = new ProductPicture("bilde3.jpg", "Cimdi1", product2);
+				ProductPicture bilde11 = new ProductPicture("cimdi1.jpg", "Cimdi1", product1);
+				ProductPicture bilde22 = new ProductPicture("cimdi2.jpg", "Cimdi2", product2);
+				ProductPicture bilde33 = new ProductPicture("cimdi3.jpg", "Cimdi3", product3);
+
+				ProductPicture bilde44 = new ProductPicture("zekes1.jpg", "Zeķes1", product4);
+				ProductPicture bilde55 = new ProductPicture("zekes2.jpg", "Zeķes2", product5);
+				ProductPicture bilde66 = new ProductPicture("zekes3.jpg", "Zeķes3", product6);
+
+				
+				ProductPicture bilde77 = new ProductPicture("dzemperis1.jpg", "Džemperis1", product7);
+				ProductPicture bilde88 = new ProductPicture("dzemperis2.jpg", "Džemperis2", product8);
+				ProductPicture bilde99 = new ProductPicture("dzemperis3.jpg", "Džemperis3", product9);
+
+				ProductPicture bilde100 = new ProductPicture("cepure1.jpg", "Cepure1", product10);
+				ProductPicture bilde111 = new ProductPicture("cepure2.jpg", "Cepure2", product11);
+				ProductPicture bilde122 = new ProductPicture("cepure3.jpg", "Cepure3", product12);
+
+				ProductPicture bilde133 = new ProductPicture("salle1.jpg", "Šalle1", product13);
+				ProductPicture bilde144 = new ProductPicture("salle2.jpg", "Šalle2", product14);
+				ProductPicture bilde155 = new ProductPicture("salle3.jpg", "Šalle3", product15);
+
+				
+				ProductPicture bilde166 = new ProductPicture("manta1.jpg", "Manta1", product16);
+				ProductPicture bilde177 = new ProductPicture("manta2.jpg", "Manta2", product17);
+				ProductPicture bilde188 = new ProductPicture("manta3.jpg", "Manta3", product18);
 				productPictureRepo.save(bilde11);
 				productPictureRepo.save(bilde22);
 				productPictureRepo.save(bilde33);
 
 				// USER & AUTHORITY
+
+				productPictureRepo.save(bilde44);
+				productPictureRepo.save(bilde55);
+				productPictureRepo.save(bilde66);
+				productPictureRepo.save(bilde77);
+				productPictureRepo.save(bilde88);
+				productPictureRepo.save(bilde99);
+				productPictureRepo.save(bilde100);
+				productPictureRepo.save(bilde111);
+				productPictureRepo.save(bilde122);
+				productPictureRepo.save(bilde133);
+				productPictureRepo.save(bilde144);
+				productPictureRepo.save(bilde155);
+				productPictureRepo.save(bilde166);
+				productPictureRepo.save(bilde177);
+				productPictureRepo.save(bilde188);
+				
+				//USER & AUTHORITY
+
 				MyAuthority a1 = new MyAuthority("ADMIN");
 				authRepo.save(a1);
 
