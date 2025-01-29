@@ -63,12 +63,12 @@ public class ProductAPI {
 	}
 
     @GetMapping(value = "/show/category/{categoryid}")
-	public ResponseEntity<ApiArrayListResponse<Product>> getProductsByCategory(@PathVariable("categoryid") int categoryId) {
+	public ResponseEntity<ApiArrayListResponse<ProductDTO>> getProductsByCategory(@PathVariable("categoryid") int categoryId) {
 
 		try {
 			ArrayList<Product> allProducts = productFilteringService.selectAllByProductCategory(categoryId);
 
-			return ResponseEntity.ok(new ApiArrayListResponse<>(null, allProducts));
+			return ResponseEntity.ok(new ApiArrayListResponse<>(null, DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(), new String[]{"productPicture.id"})));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
