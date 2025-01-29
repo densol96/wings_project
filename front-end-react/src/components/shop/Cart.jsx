@@ -21,7 +21,7 @@ export default function Cart(props) {
             <div className="grid grid-cols-2 mb-1 border border-gray-250 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
 
                 <div className="cols-span-1">
-                    <img className="rounded xl:w-52 md:w-52 w-44 h-48 object-fill shadow border border-gray-250 select-none" src={`../../src/assets/${productData.description}.jpg`} alt="" draggable="false"/>
+                    <img className="rounded xl:w-52 md:w-52 w-44 h-48 object-fill shadow border border-gray-250 select-none" src={`http://localhost:8080/images/${productData.productPictures?.[0]?.referenceToPicture}`} alt="" draggable="false"/>
                 </div>
 
                 <div className="cols-span-3 pt-1 2xl:pl-2 pl-1">

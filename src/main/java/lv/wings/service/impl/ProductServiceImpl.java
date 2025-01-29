@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.dto.object.ProductDTO;
 import lv.wings.model.Product;
 import lv.wings.model.ProductCategory;
 import lv.wings.model.ProductPicture;

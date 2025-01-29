@@ -42,28 +42,33 @@ app.use(express.static("public"));
 app.use(express.json());
 
 app.post("/samaksa", async(req, res) => {
+    try{
+        const items = req.body.items;
+        let lineItems = [];
+        items.forEach((item) => {
+            lineItems.push(
+                {
+                    price: stripeProducts[item.id],
+                    quantity: item.quantity
+                }
+            )
+        });
     
-    const items = req.body.items;
-    let lineItems = [];
-    items.forEach((item) => {
-        lineItems.push(
-            {
-                price: stripeProducts[item.id],
-                quantity: item.quantity
-            }
-        )
-    });
-
-    const session = await stripe.checkout.sessions.create({
-        line_items: lineItems,
-        mode: 'payment',
-        success_url: "http://localhost:3000/success",
-        cancel_url: "http://localhost:3000/cancel",
-    });
-
-    res.send(JSON.stringify({
-        url: session.url
-    }));
+        const session = await stripe.checkout.sessions.create({
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: "http://localhost:3000/success",
+            cancel_url: "http://localhost:3000/cancel",
+        });
+    
+        res.send(JSON.stringify({
+            url: session.url
+        }));
+    }catch{
+        res.send(JSON.stringify({
+            success: false
+        }));
+    }
 });
 
 app.listen(4000, () => console.log("Listening"));

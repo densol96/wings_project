@@ -46,21 +46,21 @@ export default function AllProducts( {search} ) {
 function ProductCard({ data }) {
 
     const cart = useContext(CartContext);
-    const productQuantity = cart.getProductQuantity(data.productId)
-
+    const productQuantity = cart.getProductQuantity(data.id)
+    console.log(data);
     return (
         <>
             <div className="block max-w-sm min-h-60 max-h-80 p-3 bg-white border border-gray-250 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 m-2 hover:bg-slate-100">
-                <Link to={`/shop/show/${data.productId}`}>
+                <Link to={`/shop/show/${data.id}`}>
                     
-                    <img className="rounded h-48 w-96 object-fit shadow border border-gray-250 select-none" src={`../../src/assets/${data.description}.jpg`} alt="" draggable="false"/>
+                    <img className="rounded h-48 w-96 object-fit shadow border border-gray-250 select-none" src={`http://localhost:8080/images/${data.productPictures?.[0]?.referenceToPicture}`} alt="" draggable="false"/>
                     <div className="mt-2 mb-1">
                         <p>{data.title}</p>
                         <p>{data.price}€</p>
                     </div>
                 </Link>
 
-                <button onClick={() => cart.addOneToCart(data.productId)} className="bg-transparent hover:bg-amber-500 text-amber-500 font-semibold hover:text-white py-2 px-4 border border-amber-500 hover:border-transparent rounded active:bg-amber-600">
+                <button onClick={() => cart.addOneToCart(data.id)} className="bg-transparent hover:bg-amber-500 text-amber-500 font-semibold hover:text-white py-2 px-4 border border-amber-500 hover:border-transparent rounded active:bg-amber-600">
                     Pievienot ({productQuantity})
                 </button>
 
