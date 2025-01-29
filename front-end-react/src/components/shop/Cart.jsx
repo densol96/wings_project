@@ -1,6 +1,8 @@
 import { CartContext } from "../../CartContext";
 import { useContext } from "react";
 import { getAllProducts, getProductData } from "./ProductsList";
+import LoadingSpinner from "../assets/LoadingSpinner";
+
 
 export default function Cart(props) {
 
@@ -15,7 +17,7 @@ export default function Cart(props) {
     const productData = getProductData(id, products);
 
 
-    if (!productData) return <p>Product not found</p>;
+    if (!productData) return <LoadingSpinner />
     return (
         <>
             <div className="grid grid-cols-2 mb-1 border border-gray-250 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
