@@ -138,7 +138,7 @@ public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProdu
 		productForUpdating.setDescription(product.getDescription());
 		productForUpdating.setPrice(product.getPrice());
 		productForUpdating.setAmount(product.getAmount());
-		//preceForUpdating.setKategorijas(prece.getKategorijas());
+		productForUpdating.setProductCategory(product.getProductCategory());
 		productForUpdating.setTitle(product.getTitle());
 		
 		//saglabāju repo un DB
