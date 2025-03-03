@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+
+@layer base {
+}
+
+@layer components {
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
