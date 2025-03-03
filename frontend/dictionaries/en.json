@@ -1,0 +1,81 @@
+{
+    "meta": {
+      "title": {
+        "template": "%s - Spārni Association",
+        "default": "Home - Spārni Association"
+      },
+      "description": "The official website of the 'Spārni' association, led by Astrīda Kinne. The website includes an online store, information about events and news, as well as organizational activities that help women through education, crafts, and community development.",
+      "openGraph": {
+        "title": "Spārni Association - Empowering Women Through Crafts and Education",
+        "description": "Join the 'Spārni' association to explore crafts, attend events, and shop for unique handmade items created by local women. The association supports women in their personal and professional growth.",
+        "url": "https://www.latvijasrokdarbi.lv",
+        "siteName": "Spārni Association"
+      }
+    },
+    "header": {
+        "home": {
+            "title": "Home",
+            "href": "/en/home"
+        },
+        "news": {
+            "title": "News",
+            "href": "/en/news"
+        },
+        "shop": {
+            "title": "Shop",
+            "href": "/en/shop"
+        },
+        "about": {
+            "title": "About Us",
+            "href": "/en/about"
+        },
+        "contacts": {
+            "title": "Contacts",
+            "href": "/en/contacts"
+        }
+    },
+    "footer": {
+        "title": "Handmade Products",
+        "description": "All rights reserved",
+        "categories": [
+          {
+            "title": "Association",
+            "links": [
+              { "title": "Example", "href": "/" },
+              { "title": "Example", "href": "/" },
+              { "title": "Example", "href": "/" }
+            ]
+          },
+          {
+            "title": "Association",
+            "links": [
+              { "title": "Example", "href": "/" },
+              { "title": "Example", "href": "/" },
+              { "title": "Example", "href": "/" }
+            ]
+          },
+          {
+            "title": "Association",
+            "links": [
+              { "title": "Example", "href": "/" },
+              { "title": "Example", "href": "/" },
+              { "title": "Example", "href": "/" }
+            ]
+          },
+          {
+            "title": "Association",
+            "links": [
+              { "title": "Example", "href": "/" },
+              { "title": "Example", "href": "/" },
+              { "title": "Example", "href": "/" }
+            ]
+          }
+        ]
+      },
+      "home": {
+        "title": "Association Wings",
+        "description": "Handmade products",
+        "button": "Learn more about the Wings association",
+        "quote": "Handmade products are crafted by hand using various craft techniques to create unique and aesthetic items. These products often combine an artistic approach with practical applications, such as clothing, accessories, decorative elements, or household items."
+      }
+}

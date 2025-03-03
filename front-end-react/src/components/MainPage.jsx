@@ -57,10 +57,10 @@ function Ltl({ randomProducts }) {
 		ltr: true,
 	};
 
-	let mp = {x0:0,y0:0,x:0,y:0, md:false};
+	let mp = { x0: 0, y0: 0, x: 0, y: 0, md: false };
 
 	return (
-		<div className="slider-container  w-full h-60 overflow-hidden shadow-2xl rounded-lg">
+		<div className="slider-container w-full h-60 overflow-hidden shadow-2xl rounded-lg">
 			<Slider {...settings} className="h-full">
 				{randomProducts.map(product => {
 					if (product.productPictures[0]) {
@@ -69,11 +69,14 @@ function Ltl({ randomProducts }) {
 								<h1 className="pointer-events-none absolute left-1/2 -translate-x-1/2 rounded-lg top-0 bg-black bg-opacity-50 text-white text-bold p-4">
 									{product.title}
 								</h1>
-								<Link to={`shop/show/${product.id}`} onMouseDown={(e)=>{
-									mp.x0 = mp.x = e.clientX;
-									mp.y0 = mp.y = e.clientY;
-									mp.md = true;
-								}} >
+								<Link
+									to={`shop/show/${product.id}`}
+									onMouseDown={e => {
+										mp.x0 = mp.x = e.clientX;
+										mp.y0 = mp.y = e.clientY;
+										mp.md = true;
+									}}
+								>
 									<img
 										className="w-full h-full"
 										src={`${IMAGES_URL}${product.productPictures?.[0]?.referenceToPicture}`}

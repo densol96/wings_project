@@ -9,7 +9,7 @@ export default function Layout() {
 
 	useEffect(() => {
 		// execute on location change
-		console.log('Location changed!', location.pathname);
+		console.log("Location changed!", location.pathname);
 		document.scrollingElement.scrollTop = 0;
 	}, [location]);
 
@@ -27,8 +27,6 @@ export default function Layout() {
 			<div onClick={handleCloseNav}>
 				<Outlet />
 			</div>
-
-
 			<Footer />
 		</>
 	);
