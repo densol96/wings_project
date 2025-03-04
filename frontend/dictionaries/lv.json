@@ -1,70 +1,111 @@
 {
-    "meta": {
-        "title": {
-            "template": "%s - Spārni biedrība",
-            "default": "Sākums - Spārni biedrība"
-        },
-        "description": "Oficiālā 'Spārni' biedrības mājas lapa, kuru vada Astrīda Kinne. Mājas lapa ietver e-veikalu, informāciju par pasākumiem un jaunumiem, kā arī organizācijas aktivitātēm, kas palīdz sievietēm caur izglītību, amatniecību un sabiedrības attīstību.",
-        "openGraph": {
-            "title": "Spārni biedrība - Sieviešu pilnveidošana caur amatniecību un izglītību",
-            "description": "Pievienojieties biedrībai 'Spārni', lai izpētītu amatniecību, apmeklētu pasākumus un iepirktos unikālos rokdarbus, ko izgatavo vietējās sievietes. Biedrība atbalsta sievietes viņu personīgajā un profesionālajā izaugsmē.",
-            "siteName": "Spārni biedrība"
-        }
+  "meta": {
+    "title": {
+      "template": "%s - Spārni biedrība",
+      "default": "Sākums - Spārni biedrība"
     },
-    "header": {
-        "home": {
-            "title": "Sākums",
-            "href": "/"
-        },
-        "news": {
-            "title": "Jaunumi",
-            "href": "/news"
-        },
-        "shop": {
-            "title": "Veikals",
-            "href": "/shop"
-        },
-        "about": {
-            "title": "Par Mums",
-            "href": "/about"
-        },
-        "contacts": {
-            "title": "Kontakti",
-            "href": "/contacts"
-        }
-    },
-    "footer": {
-        "title": "Rokdarbu izstrādājumi",
-        "description": "Visas tiesības aizsargātas",
-        "categories": [
-            {
-                "title": "Biedrība",
-                "links": [{"title": "Piemers", "href": "/"}, {"title": "Piemers", "href": "/"}, {"title": "Piemers", "href": "/"}]
-            },
-            {
-                "title": "Biedrība",
-                "links": [{"title": "Piemers", "href": "/"}, {"title": "Piemers", "href": "/"}, {"title": "Piemers", "href": "/"}]
-            },
-            {
-                "title": "Biedrība",
-                "links": [{"title": "Piemers", "href": "/"}, {"title": "Piemers", "href": "/"}, {"title": "Piemers", "href": "/"}]
-            },
-            {
-                "title": "Biedrība",
-                "links": [{"title": "Piemers", "href": "/"}, {"title": "Piemers", "href": "/"}, {"title": "Piemers", "href": "/"}]
-            }
-        ]
-    },
+    "description": "Oficiālā 'Spārni' biedrības mājas lapa, kuru vada Astrīda Kinne. Mājas lapa ietver e-veikalu, informāciju par pasākumiem un jaunumiem, kā arī organizācijas aktivitātēm, kas palīdz sievietēm caur izglītību, amatniecību un sabiedrības attīstību.",
+    "openGraph": {
+      "title": "Spārni biedrība - Sieviešu pilnveidošana caur amatniecību un izglītību",
+      "description": "Pievienojieties biedrībai 'Spārni', lai izpētītu amatniecību, apmeklētu pasākumus un iepirktos unikālos rokdarbus, ko izgatavo vietējās sievietes. Biedrība atbalsta sievietes viņu personīgajā un profesionālajā izaugsmē.",
+      "siteName": "Spārni biedrība"
+    }
+  },
+  "header": {
     "home": {
-        "title": "Biedrība spārni",
-        "description": "Rokdarbu izstrādājumi",
-        "button": "Uzzināt vairāk par Spārnu biedrību",
-        "quote": "Rokdarbu izstrādājumi ir roku darbs, kurā tiek izmantotas dažādas amatniecības tehnikas, lai radītu unikālus un estētiskus priekšmetus. Šie izstrādājumi bieži vien apvieno māksliniecisko pieeju ar praktisku pielietojumu, piemēram, apģērbu, aksesuāru, dekoratīvu elementu vai mājsaimniecības priekšmetu veidā."
+      "title": "Sākums",
+      "href": "/"
     },
-   "about": {
+    "news": {
+      "title": "Jaunumi",
+      "href": "/news"
+    },
+    "shop": {
+      "title": "Veikals",
+      "href": "/shop"
+    },
+    "about": {
+      "title": "Par Mums",
+      "href": "/about"
+    },
+    "contacts": {
+      "title": "Kontakti",
+      "href": "/contacts"
+    }
+  },
+  "footer": {
+    "title": "Rokdarbu izstrādājumi",
+    "description": "Visas tiesības aizsargātas",
+    "categories": [
+      {
+        "title": "Biedrība",
+        "links": [
+          { "title": "Piemers", "href": "/" },
+          { "title": "Piemers", "href": "/" },
+          { "title": "Piemers", "href": "/" }
+        ]
+      },
+      {
+        "title": "Biedrība",
+        "links": [
+          { "title": "Piemers", "href": "/" },
+          { "title": "Piemers", "href": "/" },
+          { "title": "Piemers", "href": "/" }
+        ]
+      },
+      {
+        "title": "Biedrība",
+        "links": [
+          { "title": "Piemers", "href": "/" },
+          { "title": "Piemers", "href": "/" },
+          { "title": "Piemers", "href": "/" }
+        ]
+      },
+      {
+        "title": "Biedrība",
+        "links": [
+          { "title": "Piemers", "href": "/" },
+          { "title": "Piemers", "href": "/" },
+          { "title": "Piemers", "href": "/" }
+        ]
+      }
+    ]
+  },
+  "home": {
+    "title": "Biedrība spārni",
+    "description": "Rokdarbu izstrādājumi",
+    "button": "Uzzināt vairāk par Spārnu biedrību",
+    "quote": "Rokdarbu izstrādājumi ir roku darbs, kurā tiek izmantotas dažādas amatniecības tehnikas, lai radītu unikālus un estētiskus priekšmetus. Šie izstrādājumi bieži vien apvieno māksliniecisko pieeju ar praktisku pielietojumu, piemēram, apģērbu, aksesuāru, dekoratīvu elementu vai mājsaimniecības priekšmetu veidā.",
+    "imageDescription": "Biedrības Spārni dalībnieki kopā",
+    "lineOneDescription": "Linijas dekorācija, opcija 1",
+    "lineTwoDescription": "Linijas dekorācija, opcija 2"
+  },
+  "about": {
     "title": "Par Mums",
     "description": "Biedrība \"Spārni\" ir organizācija, kas sniedz atbalstu sievietēm, palīdzot risināt dažādas problēmas, veicinot izglītību un attīstību, kā arī piedaloties amatniecības tirgos un pasākumos. Mūsu mērķis ir apmācīt sievietes amatniecības prasmēs, piedāvājot vieslekcijas, pieredzes apmaiņas braucienus un daudz citas aktivitātes, kas veicina sabiedrības izglītošanu un sociālo integrāciju.",
     "mission": "Mēs sadarbojamies ar vairākām organizācijām, kā arī piedalāmies dažādās izstādēs, gan Latvijā, gan ārpus tās, lai veicinātu mūsu dalībnieču darbu popularizēšanu. Mūsu biedri, galvenokārt sievietes, piedalās dažādos projektos un labdarības aktivitātēs, piedāvājot pašu darinātos izstrādājumus, ko pārdodam gan veikalā, gan mūsu e-veikalā.",
-    "invitation": "Mēs aicinām pievienoties mūsu aktivitātēm, piedalīties pasākumos un izmantot iespēju iegādāties unikālus rokdarbus mūsu e-veikalā."
+    "invitation": "Mēs aicinām pievienoties mūsu aktivitātēm, piedalīties pasākumos un izmantot iespēju iegādāties unikālus rokdarbus mūsu e-veikalā.",
+    "imageDescription": "Biedrības Spārni dalībnieki kopā"
+  },
+  "contacts": {
+    "title": "Amatu māja",
+    "description": "Amatu māja Ventspilī ir mūsu fiziskā atrašanās vieta, kur varat apskatīt un iegādāties mūsu darinājumus klātienē, papildus mūsu e-veikalam. Šeit notiek arī dažādi pasākumi un izstādes, kur varat iepazīties ar mūsu amatnieču darbiem.",
+    "contactsName": "Kontakti",
+    "openTitle": "Uzņēmuma darba laiks",
+    "schedule": [
+      { "day": "Pirmdiena", "hours": "7:00 - 17:00" },
+      { "day": "Otrdiena", "hours": "9:00 - 18:00" },
+      { "day": "Trešdiena", "hours": "9:00 - 18:00" },
+      { "day": "Ceturtdiena", "hours": "9:00 - 18:00" },
+      { "day": "Piektdiena", "hours": "7:00 - 15:00" },
+      { "day": "Sestdiena", "hours": "Slēgts" },
+      { "day": "Svētdiena", "hours": "Slēgts" }
+    ],
+    "contactDetails": [
+      { "label": "Tālrunis", "info": "+371 123 4567" },
+      { "label": "E-pasts", "info": "info@uznemums.lv" },
+      { "label": "Adrese", "info": "Ventspils, Skolas iela 3" }
+    ],
+    "mapDescription": "Fiziskā veikala atrašanās vieta kartē"
   }
 }

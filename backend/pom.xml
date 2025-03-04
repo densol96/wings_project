@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+s<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.4</version>
-        <relativePath/>
+        <relativePath />
     </parent>
     <groupId>lv.wings</groupId>
     <artifactId>sparni_project</artifactId>
@@ -72,7 +73,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-		
+
         <!-- live update dependency
         <dependency> 
 <groupId>org.springframework.boot</groupId> 
@@ -86,8 +87,9 @@
             <artifactId>datafaker</artifactId>
             <version>2.3.1</version>
         </dependency>
-        
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
+
+        <!--
+        https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -122,7 +124,6 @@
         </dependency>
 
 
-        
     </dependencies>
 
     <build>
@@ -152,7 +153,7 @@
                         </goals>
                         <configuration>
                             <workingDirectory>./front-end-react</workingDirectory>
-                            <nodeVersion>v20.18.0</nodeVersion> 
+                            <nodeVersion>v20.18.0</nodeVersion>
                             <npmVersion>10.8.2</npmVersion>
                         </configuration>
                     </execution>
@@ -179,7 +180,7 @@
                 </executions>
             </plugin>
 
-		
+
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.3.1</version>
@@ -191,10 +192,10 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>./src/main/resources/static</outputDirectory> 
+                            <outputDirectory>./src/main/resources/static</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>./front-end-react/dist</directory> 
+                                    <directory>./front-end-react/dist</directory>
                                     <includes>
                                         <include>**/*</include>
                                     </includes>
@@ -204,7 +205,7 @@
                     </execution>
                 </executions>
             </plugin>
-		
+
         </plugins>
     </build>
 

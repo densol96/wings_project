@@ -1,87 +1,112 @@
 {
-    "meta": {
-      "title": {
-        "template": "%s - Spārni Association",
-        "default": "Home - Spārni Association"
-      },
-      "description": "The official website of the 'Spārni' association, led by Astrīda Kinne. The website includes an online store, information about events and news, as well as organizational activities that help women through education, crafts, and community development.",
-      "openGraph": {
-        "title": "Spārni Association - Empowering Women Through Crafts and Education",
-        "description": "Join the 'Spārni' association to explore crafts, attend events, and shop for unique handmade items created by local women. The association supports women in their personal and professional growth.",
-        "url": "https://www.latvijasrokdarbi.lv",
-        "siteName": "Spārni Association"
-      }
+  "meta": {
+    "title": {
+      "template": "%s - Spārni Association",
+      "default": "Home - Spārni Association"
     },
-    "header": {
-        "home": {
-            "title": "Home",
-            "href": "/en"
-        },
-        "news": {
-            "title": "News",
-            "href": "/en/news"
-        },
-        "shop": {
-            "title": "Shop",
-            "href": "/en/shop"
-        },
-        "about": {
-            "title": "About Us",
-            "href": "/en/about"
-        },
-        "contacts": {
-            "title": "Contacts",
-            "href": "/en/contacts"
-        }
+    "description": "The official website of the 'Spārni' association, led by Astrīda Kinne. The website includes an online store, information about events and news, as well as organizational activities that help women through education, crafts, and community development.",
+    "openGraph": {
+      "title": "Spārni Association - Empowering Women Through Crafts and Education",
+      "description": "Join the 'Spārni' association to explore crafts, attend events, and shop for unique handmade items created by local women. The association supports women in their personal and professional growth.",
+      "url": "https://www.latvijasrokdarbi.lv",
+      "siteName": "Spārni Association"
+    }
+  },
+  "header": {
+    "home": {
+      "title": "Home",
+      "href": "/en"
     },
-    "footer": {
-        "title": "Handmade Products",
-        "description": "All rights reserved",
-        "categories": [
-          {
-            "title": "Association",
-            "links": [
-              { "title": "Example", "href": "/" },
-              { "title": "Example", "href": "/" },
-              { "title": "Example", "href": "/" }
-            ]
-          },
-          {
-            "title": "Association",
-            "links": [
-              { "title": "Example", "href": "/" },
-              { "title": "Example", "href": "/" },
-              { "title": "Example", "href": "/" }
-            ]
-          },
-          {
-            "title": "Association",
-            "links": [
-              { "title": "Example", "href": "/" },
-              { "title": "Example", "href": "/" },
-              { "title": "Example", "href": "/" }
-            ]
-          },
-          {
-            "title": "Association",
-            "links": [
-              { "title": "Example", "href": "/" },
-              { "title": "Example", "href": "/" },
-              { "title": "Example", "href": "/" }
-            ]
-          }
+    "news": {
+      "title": "News",
+      "href": "/en/news"
+    },
+    "shop": {
+      "title": "Shop",
+      "href": "/en/shop"
+    },
+    "about": {
+      "title": "About Us",
+      "href": "/en/about"
+    },
+    "contacts": {
+      "title": "Contacts",
+      "href": "/en/contacts"
+    }
+  },
+  "footer": {
+    "title": "Handmade Products",
+    "description": "All rights reserved",
+    "categories": [
+      {
+        "title": "Association",
+        "links": [
+          { "title": "Example", "href": "/" },
+          { "title": "Example", "href": "/" },
+          { "title": "Example", "href": "/" }
         ]
       },
-      "home": {
-        "title": "Association Wings",
-        "description": "Handmade products",
-        "button": "Learn more about the Wings association",
-        "quote": "Handmade products are crafted by hand using various craft techniques to create unique and aesthetic items. These products often combine an artistic approach with practical applications, such as clothing, accessories, decorative elements, or household items."
+      {
+        "title": "Association",
+        "links": [
+          { "title": "Example", "href": "/" },
+          { "title": "Example", "href": "/" },
+          { "title": "Example", "href": "/" }
+        ]
       },
-      "about":  {
-        "title": "About Us",
-        "description": "The \"Spārni\" Association is an organization that provides support to women by helping them address various issues, promoting education and development, and participating in handicraft fairs and events. Our goal is to train women in handicraft skills, offering guest lectures, exchange trips, and many other activities that promote community education and social integration.",
-        "mission": "We collaborate with several organizations and participate in various exhibitions both in Latvia and abroad, to help promote the work of our members. Our members, mainly women, engage in various projects and charity activities, selling their handmade products in our physical store as well as in our online shop.",
-        "invitation": "We invite you to join our activities, participate in our events, and explore the opportunity to purchase unique handicrafts in our online store."
+      {
+        "title": "Association",
+        "links": [
+          { "title": "Example", "href": "/" },
+          { "title": "Example", "href": "/" },
+          { "title": "Example", "href": "/" }
+        ]
+      },
+      {
+        "title": "Association",
+        "links": [
+          { "title": "Example", "href": "/" },
+          { "title": "Example", "href": "/" },
+          { "title": "Example", "href": "/" }
+        ]
       }
+    ]
+  },
+  "home": {
+    "title": "Association Wings",
+    "description": "Handmade products",
+    "button": "Learn more about the Wings association",
+    "quote": "Handmade products are crafted by hand using various craft techniques to create unique and aesthetic items. These products often combine an artistic approach with practical applications, such as clothing, accessories, decorative elements, or household items.",
+    "imageDescription": "Members of Biedriba Sparni together",
+    "lineOneDescription": "A line decoration, option 1",
+    "lineTwoDescription": "A line decoration, option 2"
+  },
+  "about": {
+    "title": "About Us",
+    "description": "The \"Spārni\" Association is an organization that provides support to women by helping them address various issues, promoting education and development, and participating in handicraft fairs and events. Our goal is to train women in handicraft skills, offering guest lectures, exchange trips, and many other activities that promote community education and social integration.",
+    "mission": "We collaborate with several organizations and participate in various exhibitions both in Latvia and abroad, to help promote the work of our members. Our members, mainly women, engage in various projects and charity activities, selling their handmade products in our physical store as well as in our online shop.",
+    "invitation": "We invite you to join our activities, participate in our events, and explore the opportunity to purchase unique handicrafts in our online store.",
+    "imageDescription": "Members of Biedriba Sparni together"
+  },
+  "contacts": {
+    "title": "Craft House",
+    "description": "The Craft House in Ventspils is our physical location where you can view and purchase our creations in person, in addition to our online store. Various events and exhibitions also take place here, where you can explore the work of our artisans.",
+    "contactsName": "Contacts",
+    "openTitle": "Company working hours",
+    "schedule": [
+      { "day": "Monday", "hours": "7:00 AM - 5:00 PM" },
+      { "day": "Tuesday", "hours": "9:00 AM - 6:00 PM" },
+      { "day": "Wednesday", "hours": "9:00 AM - 6:00 PM" },
+      { "day": "Thursday", "hours": "9:00 AM - 6:00 PM" },
+      { "day": "Friday", "hours": "7:00 AM - 3:00 PM" },
+      { "day": "Saturday", "hours": "Closed" },
+      { "day": "Sunday", "hours": "Closed" }
+    ],
+    "contactDetails": [
+      { "label": "Phone", "info": "+371 123 4567" },
+      { "label": "Email", "info": "info@company.lv" },
+      { "label": "Address", "info": "Ventspils, Skolas iela 3" }
+    ],
+    "mapDescription": "Physical store location on the map"
+  }
 }

@@ -5,6 +5,7 @@ import { Header, Footer } from "@/components";
 
 import { Roboto } from "next/font/google";
 import { getDictionary } from "@/dictionaries/dictionaries";
+import { PageProps } from "@/@types/shared";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -12,18 +13,11 @@ const roboto = Roboto({
   display: "swap",
 });
 
-type Params = { lang: "en" | "lv" };
-
-type Props = {
-  params: Params;
-  children: React.ReactNode;
-};
-
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "lv" }];
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export const generateMetadata = async ({ params }: PageProps) => {
   const { meta } = await getDictionary(params.lang);
 
   return {
@@ -52,9 +46,13 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
       en: { href: "https://example.com/en", hreflang: "en" },
     } as AlternateURLs,
   };
-}
+};
 
-export default async function RootLayout({ children, params: { lang } }: Props) {
+type Props = PageProps & {
+  children: React.ReactNode;
+};
+
+const RootLayout = async ({ children, params: { lang } }: Props) => {
   const dict = await getDictionary(lang);
 
   return (
@@ -66,4 +64,5 @@ export default async function RootLayout({ children, params: { lang } }: Props) 
       </body>
     </html>
   );
-}
+};
+export default RootLayout;
