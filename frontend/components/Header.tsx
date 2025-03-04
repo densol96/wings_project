@@ -7,7 +7,7 @@ import { NavBar } from "./";
 import { Logo } from "./shared";
 import { ToolsIcon, ExpandIcon, CloseIcon, CartIcon } from "./shared/icons";
 import { HeaderDictionary } from "./NavBar";
-import { LangSelectMenu } from "./LangSelectMenu";
+import LangSelectMenu from "./LangSelectMenu";
 
 type Props = {
   className?: string;
@@ -26,7 +26,7 @@ const Header = ({ headerDictionary, lang }: Props) => {
         isExpanded ? "h-96" : "h-24"
       } p-1 sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center overflow-y-hidden bg-light-nav lg:text-lg z-50`}
     >
-      <div className={`${isExpanded ? "items-start" : "items-center"} justify-center flex h-full shrink`}>
+      <div className={`${isExpanded ? "items-start" : "items-center"} justify-center flex h-full shrink p-4`}>
         <img
           draggable="false"
           className={`${
@@ -37,9 +37,10 @@ const Header = ({ headerDictionary, lang }: Props) => {
         />
         <Logo />
       </div>
+
       <NavBar isExpanded={isExpanded} headerDictionary={headerDictionary} />
 
-      <section className="flex flex-col items-center h-full">
+      <section className="flex flex-col items-end h-full">
         <button
           onClick={toggle}
           className="size-10 flex  justify-center align-center items-center lg:hidden"
@@ -48,14 +49,20 @@ const Header = ({ headerDictionary, lang }: Props) => {
           {!isExpanded ? <ExpandIcon /> : <CloseIcon />}
         </button>
 
-        <div className="flex gap-x-4 h-full p-4 items-end">
+        <div
+          className={`flex gap-x-4 h-full p-4 items-end ${
+            isExpanded ? "flex-col-reverse" : "flex-row"
+          } lg:flex-row gap-4 lg:gap-2`}
+        >
           <LangSelectMenu lang={lang} />
-          <Link className="size-6 self-end" href="/admin">
-            <ToolsIcon />
-          </Link>
-          <button className="size-6 self-end">
-            <CartIcon />
-          </button>
+          <div className="flex flex-row gap-4 lg:gap-2">
+            <Link className="size-6 self-end" href="/admin">
+              <ToolsIcon />
+            </Link>
+            <button className="size-6 self-end">
+              <CartIcon />
+            </button>
+          </div>
         </div>
       </section>
     </nav>

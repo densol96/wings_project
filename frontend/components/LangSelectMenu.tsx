@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { locales, defaultLocale } from "@/constants/locales";
+import { defaultLangIsSelected } from "@/services/helpers";
 
 type Locales = "lv" | "en";
 
@@ -10,16 +11,15 @@ type Props = {
   lang: Locales;
 };
 
-export const LangSelectMenu = ({ lang }: Props) => {
+const LangSelectMenu = ({ lang }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const [selectedLang, setSelectedLang] = useState(lang);
 
   useEffect(() => {
-    const defaultLangSelected = !locales.some((l) => pathname.startsWith("/" + l.locale));
     const newLocale = "/" + selectedLang;
-    const newPath = defaultLangSelected ? newLocale + pathname : pathname.replace(/^\/[a-z]{2}/, newLocale);
-    router.push(newPath);
+    const newPath = defaultLangIsSelected(pathname) ? newLocale + pathname : pathname.replace(/^\/[a-z]{2}/, newLocale);
+    router.push(newPath, { scroll: false });
   }, [selectedLang]);
 
   return (
@@ -33,3 +33,5 @@ export const LangSelectMenu = ({ lang }: Props) => {
     </select>
   );
 };
+
+export default LangSelectMenu;

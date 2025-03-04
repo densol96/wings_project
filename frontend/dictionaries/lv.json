@@ -14,23 +14,23 @@
     "header": {
         "home": {
             "title": "Sākums",
-            "href": "/lv/home"
+            "href": "/"
         },
         "news": {
             "title": "Jaunumi",
-            "href": "/lv/news"
+            "href": "/news"
         },
         "shop": {
             "title": "Veikals",
-            "href": "/lv/shop"
+            "href": "/shop"
         },
         "about": {
-            "title": "Par biedrību",
-            "href": "/lv/about"
+            "title": "Par Mums",
+            "href": "/about"
         },
         "contacts": {
             "title": "Kontakti",
-            "href": "/lv/contacts"
+            "href": "/contacts"
         }
     },
     "footer": {
@@ -60,5 +60,11 @@
         "description": "Rokdarbu izstrādājumi",
         "button": "Uzzināt vairāk par Spārnu biedrību",
         "quote": "Rokdarbu izstrādājumi ir roku darbs, kurā tiek izmantotas dažādas amatniecības tehnikas, lai radītu unikālus un estētiskus priekšmetus. Šie izstrādājumi bieži vien apvieno māksliniecisko pieeju ar praktisku pielietojumu, piemēram, apģērbu, aksesuāru, dekoratīvu elementu vai mājsaimniecības priekšmetu veidā."
-    }
+    },
+   "about": {
+    "title": "Par Mums",
+    "description": "Biedrība \"Spārni\" ir organizācija, kas sniedz atbalstu sievietēm, palīdzot risināt dažādas problēmas, veicinot izglītību un attīstību, kā arī piedaloties amatniecības tirgos un pasākumos. Mūsu mērķis ir apmācīt sievietes amatniecības prasmēs, piedāvājot vieslekcijas, pieredzes apmaiņas braucienus un daudz citas aktivitātes, kas veicina sabiedrības izglītošanu un sociālo integrāciju.",
+    "mission": "Mēs sadarbojamies ar vairākām organizācijām, kā arī piedalāmies dažādās izstādēs, gan Latvijā, gan ārpus tās, lai veicinātu mūsu dalībnieču darbu popularizēšanu. Mūsu biedri, galvenokārt sievietes, piedalās dažādos projektos un labdarības aktivitātēs, piedāvājot pašu darinātos izstrādājumus, ko pārdodam gan veikalā, gan mūsu e-veikalā.",
+    "invitation": "Mēs aicinām pievienoties mūsu aktivitātēm, piedalīties pasākumos un izmantot iespēju iegādāties unikālus rokdarbus mūsu e-veikalā."
+  }
 }

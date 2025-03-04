@@ -21,7 +21,7 @@ const RandomProducts = async () => {
 
   return (
     randomProducts.length > 0 && (
-      <section className="flex justify-center my-20">
+      <section className="flex justify-center mt-32 mb-40">
         <RandomProductsSlider randomProducts={randomProducts} />
       </section>
     )

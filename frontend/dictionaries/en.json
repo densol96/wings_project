@@ -15,7 +15,7 @@
     "header": {
         "home": {
             "title": "Home",
-            "href": "/en/home"
+            "href": "/en"
         },
         "news": {
             "title": "News",
@@ -77,5 +77,11 @@
         "description": "Handmade products",
         "button": "Learn more about the Wings association",
         "quote": "Handmade products are crafted by hand using various craft techniques to create unique and aesthetic items. These products often combine an artistic approach with practical applications, such as clothing, accessories, decorative elements, or household items."
+      },
+      "about":  {
+        "title": "About Us",
+        "description": "The \"Spārni\" Association is an organization that provides support to women by helping them address various issues, promoting education and development, and participating in handicraft fairs and events. Our goal is to train women in handicraft skills, offering guest lectures, exchange trips, and many other activities that promote community education and social integration.",
+        "mission": "We collaborate with several organizations and participate in various exhibitions both in Latvia and abroad, to help promote the work of our members. Our members, mainly women, engage in various projects and charity activities, selling their handmade products in our physical store as well as in our online shop.",
+        "invitation": "We invite you to join our activities, participate in our events, and explore the opportunity to purchase unique handicrafts in our online store."
       }
 }

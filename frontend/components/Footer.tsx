@@ -62,7 +62,7 @@ type Props = {
 
 const Footer = ({ footerDictionary }: Props) => {
   return (
-    <footer className="w-full body-font mt-auto flex flex-col text-gray-700">
+    <footer className="w-full body-font mt-auto flex flex-col text-gray-700 bg-gray-200">
       <main className="px-40 pt-24 pb-14 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-8 text-center">
         <div className="w-full text-center">
           <Logo />
