@@ -3,3 +3,4 @@ export { default as NavBar } from "./NavBar";
 export { default as Footer } from "./Footer";
 export { default as Wallpaper } from "./Wallpaper";
 export { default as RandomProductsSlider } from "./RandomProductsSlider";
+export { default as RandomProducts } from "./RandomProducts";

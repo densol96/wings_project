@@ -66,10 +66,10 @@ const Footer = ({ footerDictionary }: Props) => {
       <main className="px-40 pt-24 pb-14 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-8 text-center">
         <div className="w-full text-center">
           <Logo />
-          <p className="mt-2 text-sm text-gray-500">{footerDictionary.title}</p>
+          <p className="mt-2 text-sm">{footerDictionary.title}</p>
           <div className="mt-4 flex justify-center space-x-3">
             {iconLinks.map((il, i) => (
-              <a key={il.href + "_icon_" + i} href={il.href} className="text-gray-500 hover:text-gray-700">
+              <a key={il.href + "_icon_" + i} href={il.href} className="hover:text-gray-700">
                 {il.icon}
               </a>
             ))}
@@ -77,7 +77,7 @@ const Footer = ({ footerDictionary }: Props) => {
         </div>
         {footerDictionary.categories.map((category, index) => (
           <div key={index} className="w-full">
-            <h2 className="mb-3 text-sm font-bold tracking-widest text-gray-900 uppercase">{category.title}</h2>
+            <h2 className="mb-3 text-sm font-bold tracking-widest text-gray-800 uppercase">{category.title}</h2>
             <nav className="mb-10 list-none">
               {category.links.map((cl, i) => (
                 <li key={cl.href + "_column_" + i} className="mt-3">

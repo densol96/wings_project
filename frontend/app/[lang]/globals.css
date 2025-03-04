@@ -6,6 +6,38 @@
 @import "~slick-carousel/slick/slick-theme.css";
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply text-gray-700 text-base leading-normal;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply text-gray-800;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font-family: inherit;
+    color: inherit;
+  }
+
+  img {
+    max-width: 100%;
+  }
+
+  a {
+    cursor: pointer;
+  }
 }
 
 @layer components {

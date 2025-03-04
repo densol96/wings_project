@@ -16,62 +16,64 @@ import lv.wings.repo.IPurchaseElementRepo;
 import lv.wings.service.ICRUDInsertedService;
 
 @Service
-public class PurchaseElementServiceImpl implements ICRUDInsertedService<PurchaseElement>{
+public class PurchaseElementServiceImpl implements ICRUDInsertedService<PurchaseElement> {
 
 	@Autowired
 	private IPurchaseElementRepo elementRepo;
-	
+
 	@Autowired
 	private IProductRepo productRepo;
-	
+
 	@Override
 	@Cacheable("PurchaseElements")
 	public ArrayList<PurchaseElement> retrieveAll() throws Exception {
-		//izmest izņēmumu, ja ir tukša tabula
-		if(elementRepo.count()==0) throw new Exception("There are no Purchase Elements");
-				
-		//pretējā gadījumā sameklēt visus ierakstus no repo
+		// izmest izņēmumu, ja ir tukša tabula
+		if (elementRepo.count() == 0)
+			throw new Exception("There are no Purchase Elements");
+
+		// pretējā gadījumā sameklēt visus ierakstus no repo
 		return (ArrayList<PurchaseElement>) elementRepo.findAll();
 	}
 
 	@Override
 	@Cacheable(value = "PurchaseElements", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
 	public Page<PurchaseElement> retrieveAll(Pageable pageable) throws Exception {
-	
-		if(elementRepo.count()==0) throw new Exception("There are no Purchase Elements");
+
+		if (elementRepo.count() == 0)
+			throw new Exception("There are no Purchase Elements");
 		return (Page<PurchaseElement>) elementRepo.findAll(pageable);
 	}
 
 	@Override
-	@Cacheable(value="PurchaseElements", key="#id")
+	@Cacheable(value = "PurchaseElements", key = "#id")
 	public PurchaseElement retrieveById(int id) throws Exception {
-		if(id < 0) throw new Exception("Invalid ID");
-		
-		if(elementRepo.existsById(id)) {
+		if (id < 0)
+			throw new Exception("Invalid ID");
+
+		if (elementRepo.existsById(id)) {
 			return elementRepo.findById(id).get();
-		}else {
-			throw new Exception("Purchase element with id: ("+ id + ") does not exist");
+		} else {
+			throw new Exception("Purchase element with id: (" + id + ") does not exist");
 		}
 	}
 
 	@Override
 	@CacheEvict(value = "PurchaseElements", allEntries = true)
 	public void deleteById(int id) throws Exception {
-		//atrast driver kuru gribam dzēst
+		// atrast driver kuru gribam dzēst
 		PurchaseElement elementForDeleting = retrieveById(id);
-				
-		//dzēšam no repo un DB
+
+		// dzēšam no repo un DB
 		elementRepo.delete(elementForDeleting);
 	}
 
 	@Override
 	@CacheEvict(value = "PurchaseElements", allEntries = true)
 	public void create(PurchaseElement element) throws Exception {
-		//atrodu preci pēc id
-		if(productRepo.findById(element.getProduct().getProductId())==null) throw new 
-		Exception("Product with id: " + element.getProduct().getProductId() + " does not exist");
-		
-		//izveidoju noklusējuma pirkuma elementu
+		// atrodu preci pēc id
+		if (productRepo.findById(element.getProduct().getProductId()) == null)
+			throw new Exception("Product with id: " + element.getProduct().getProductId() + " does not exist");
+		// izveidoju noklusējuma pirkuma elementu
 		PurchaseElement newElement = element;
 		elementRepo.save(newElement);
 	}
@@ -79,11 +81,11 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	@Override
 	@CacheEvict(value = "PurchaseElements", allEntries = true)
 	public void create(PurchaseElement element, int id) throws Exception {
-		//atrodu preci pēc id
-		if(productRepo.findById(id)==null) throw new 
-		Exception("Product with id: " + id + " does not exist");
-		
-		//izveidoju noklusējuma pirkuma elementu
+		// atrodu preci pēc id
+		if (productRepo.findById(id) == null)
+			throw new Exception("Product with id: " + id + " does not exist");
+
+		// izveidoju noklusējuma pirkuma elementu
 		PurchaseElement newElement = element;
 		newElement.setProduct(productRepo.findById(id).get());
 		elementRepo.save(newElement);
@@ -91,18 +93,18 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 
 	@Override
 	@CacheEvict(value = "PurchaseElements", allEntries = true)
-	@CachePut(value="PurchaseElements", key="#id")
+	@CachePut(value = "PurchaseElements", key = "#id")
 	public void update(int id, PurchaseElement element) throws Exception {
-		//atrodu
+		// atrodu
 		PurchaseElement elementForUpdating = retrieveById(id);
-		
-		//izmainu
-		//elementsForUpdating.setPrece(pirkuma_elements.getPrece());
+
+		// izmainu
+		// elementsForUpdating.setPrece(pirkuma_elements.getPrece());
 		elementForUpdating.setAmount(element.getAmount());
-		
-		//saglabāju repo un DB
+
+		// saglabāju repo un DB
 		elementRepo.save(elementForUpdating);
-		
+
 	}
 
 }

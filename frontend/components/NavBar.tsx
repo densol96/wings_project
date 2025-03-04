@@ -27,13 +27,11 @@ const NavBar: React.FC<Props> = ({ isExpanded, headerDictionary }) => {
   const pathname = usePathname();
   const { active, default: def } = classOptions;
 
-  console.log(isExpanded);
-
   return (
     <div
       className={`${
         isExpanded ? "opacity-100 grow" : `hidden`
-      } shrink-0 z-10 p-10 bg-cover flex justify-center items-center  bg-[url('/assets/knitting_img.jpg')] h-full bg-no-repeat bg-center rounded-xl overflow-hidden lg:block lg:grow-0`}
+      } text-gray-900 shrink-0 z-10 p-10 bg-cover flex justify-center items-center  bg-[url('/assets/knitting_img.jpg')] h-full bg-no-repeat bg-center rounded-xl overflow-hidden lg:block lg:grow-0`}
     >
       <ul
         className={`${
