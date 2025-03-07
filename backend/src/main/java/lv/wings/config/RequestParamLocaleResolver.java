@@ -16,11 +16,7 @@ public class RequestParamLocaleResolver implements LocaleResolver {
     public Locale resolveLocale(HttpServletRequest request) {
         String lang = request.getParameter(paramName);
         if (lang != null && allowedLocales.contains(lang)) {
-            try {
-                return Locale.forLanguageTag(lang);
-            } catch (Exception e) {
-                return defaultLocale;
-            }
+            return Locale.forLanguageTag(lang);
         }
         return defaultLocale;
     }

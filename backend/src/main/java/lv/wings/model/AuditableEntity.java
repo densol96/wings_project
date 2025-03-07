@@ -32,11 +32,11 @@ public abstract class AuditableEntity {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdTimestamp;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     @Column(insertable = false)
-    private LocalDateTime lastModifiedTimestamp;
+    private LocalDateTime lastModifiedAt;
 
     @CreatedBy
     @ManyToOne
