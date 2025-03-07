@@ -1,8 +1,10 @@
 package lv.wings.controller;
 
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -35,14 +37,14 @@ import lv.wings.dto.object.EventPictureDTO;
 import lv.wings.dto.object.ProductCategoryDTO;
 import lv.wings.dto.object.ProductDTO;
 import lv.wings.dto.object.ProductPictureDTO;
-import lv.wings.exceptions.NoContentException;
+import lv.wings.exception.old.NoContentException;
 import lv.wings.model.Event;
 import lv.wings.model.EventCategory;
 import lv.wings.model.EventPicture;
 import lv.wings.model.Product;
 import lv.wings.model.ProductCategory;
 import lv.wings.model.ProductPicture;
-import lv.wings.responses.ApiArrayListResponse;
+import lv.wings.responses.ApiListResponse;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;
 
@@ -185,7 +187,6 @@ public class AdminController {
 	public ResponseEntity<ApiResponse<?>> postCreateEventCategory(
 			@Valid @RequestBody EventCategoryDTO eventCategory,
 			BindingResult result) {
-
 		if (result.hasErrors()) {
 			List<String> errors = result.getAllErrors()
 					.stream()
@@ -236,7 +237,7 @@ public class AdminController {
 	@PostMapping(value = "events-pictures/create-delete", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ApiResponse<?>> postCreateAndDeleteEventPicture(
 			@Valid @RequestPart EventPictureDTO eventPictureDTO,
-			BindingResult result, @RequestParam(required = false) ArrayList<Integer> deleteIds,
+			BindingResult result, @RequestParam(required = false) List<Integer> deleteIds,
 			@RequestPart(required = false) List<MultipartFile> pictures) {
 
 		if (result.hasErrors()) {
@@ -257,7 +258,7 @@ public class AdminController {
 				for (Integer pictureId : deleteIds) {
 					EventPicture eventPicture = eventsPictureService.retrieveById(pictureId);
 					eventPictures.remove(eventPicture);
-					Path deleteImagePath = Paths.get(uploadEventsDir, eventPicture.getReferenceToPicture());
+					Path deleteImagePath = Paths.get(uploadEventsDir, eventPicture.getImageUrl());
 					Files.deleteIfExists(deleteImagePath);
 				}
 			}
@@ -280,7 +281,7 @@ public class AdminController {
 			}
 
 			event.setEventPictures(eventPictures);
-			eventsService.update(event.getEventId(), event);
+			eventsService.update(event.getId(), event);
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Attēli atjaunoti!", null));
 		} catch (Exception e) {
@@ -294,7 +295,7 @@ public class AdminController {
 	@PostMapping(value = "products-pictures/create-delete", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ApiResponse<?>> postCreateAndDeleteProductPicture(
 			@Valid @RequestPart ProductPictureDTO productPictureDTO,
-			BindingResult result, @RequestParam(required = false) ArrayList<Integer> deleteIds,
+			BindingResult result, @RequestParam(required = false) List<Integer> deleteIds,
 			@RequestPart(required = false) List<MultipartFile> pictures) {
 
 		if (result.hasErrors()) {
@@ -352,30 +353,30 @@ public class AdminController {
 	}
 
 	@GetMapping(value = "events-categories")
-	public ResponseEntity<ApiArrayListResponse<?>> getAllEventCategories() {
+	public ResponseEntity<ApiListResponse<EventCategoryDTO>> getAllEventCategories() {
 		try {
-			ArrayList<EventCategory> allEventCategories = eventsCategoryService.retrieveAll();
-			ArrayList<EventCategoryDTO> eventCategoriesDTO = DTOMapper.mapMany(
+			List<EventCategory> allEventCategories = eventsCategoryService.retrieveAll();
+			List<EventCategoryDTO> eventCategoriesDTO = DTOMapper.mapMany(
 					EventCategoryDTO.class, allEventCategories.toArray(), new String[] { "events" });
-			return ResponseEntity.ok(new ApiArrayListResponse<>(null, eventCategoriesDTO));
+
+			return ResponseEntity.ok(new ApiListResponse<>(null, eventCategoriesDTO));
 		} catch (NoContentException e) {
-			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+			return ResponseEntity.ok(new ApiListResponse<>(e.getMessage(), List.of()));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
-
 	}
 
 	@GetMapping(value = "products-categories")
-	public ResponseEntity<ApiArrayListResponse<?>> getAllProductCategories() {
+	public ResponseEntity<ApiListResponse<?>> getAllProductCategories() {
 		try {
-			ArrayList<ProductCategory> allProductCategories = productsCategoryService.retrieveAll();
-			ArrayList<ProductCategoryDTO> productCategoriesDTO = DTOMapper.mapMany(
+			List<ProductCategory> allProductCategories = productsCategoryService.retrieveAll();
+			List<ProductCategoryDTO> productCategoriesDTO = DTOMapper.mapMany(
 					ProductCategoryDTO.class, allProductCategories.toArray());
 
-			return ResponseEntity.ok(new ApiArrayListResponse<>(null, productCategoriesDTO));
+			return ResponseEntity.ok(new ApiListResponse<>(null, productCategoriesDTO));
 		} catch (NoContentException e) {
-			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+			return ResponseEntity.ok(new ApiListResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
@@ -385,8 +386,8 @@ public class AdminController {
 	@GetMapping(value = "events")
 	public ResponseEntity<ApiResponse<?>> getAllEvents() {
 		try {
-			ArrayList<Event> allEvents = eventsService.retrieveAll();
-			ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toArray(),
+			List<Event> allEvents = eventsService.retrieveAll();
+			List<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class, allEvents.toArray(),
 					new String[] { "eventCategory", "location", "startDate", "endDate", "description", "lastModified",
 							"createdBy", "lastModifiedBy" });
 
@@ -404,8 +405,8 @@ public class AdminController {
 	@GetMapping(value = "products")
 	public ResponseEntity<ApiResponse<?>> getAllProducts() {
 		try {
-			ArrayList<Product> allProducts = productsService.retrieveAll();
-			ArrayList<ProductDTO> productsDTO = DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(),
+			List<Product> allProducts = productsService.retrieveAll();
+			List<ProductDTO> productsDTO = DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(),
 					new String[] { "productCategory", "purchaseElement", "description", "price", "amount",
 							"lastModified", "createdBy", "lastModifiedBy" });
 
@@ -478,9 +479,9 @@ public class AdminController {
 			event.setStartDate(eventDTO.getStartDate());
 			event.setEndDate(eventDTO.getEndDate());
 			event.setDescription(eventDTO.getDescription());
-			event.setEventCategory(eventCategory);
+			event.setCategory(eventCategory);
 
-			eventsService.update(event.getEventId(), event);
+			eventsService.update(event.getId(), event);
 
 			return ResponseEntity.ok(new ApiResponse<>(null, eventDTO));
 		} catch (NoContentException e) {
@@ -526,7 +527,6 @@ public class AdminController {
 			return ResponseEntity.internalServerError().body(
 					new ApiResponse<>(e.getMessage(), null));
 		}
-
 	}
 
 	@DeleteMapping(value = "events-categories/{id}")
@@ -580,7 +580,6 @@ public class AdminController {
 
 	@DeleteMapping(value = "products/{id}")
 	public ResponseEntity<ApiResponse<Product>> deleteProduct(@PathVariable int id) {
-
 		try {
 			Product product = productsService.retrieveById(id);
 			productsService.deleteById(id);

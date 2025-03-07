@@ -1,17 +1,16 @@
 package lv.wings.repo;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import lv.wings.model.Product;
 import lv.wings.model.ProductPicture;
 
-public interface IProductPictureRepo extends CrudRepository<ProductPicture,Integer>, PagingAndSortingRepository<ProductPicture, Integer>{
+public interface IProductPictureRepo extends JpaRepository<ProductPicture, Integer> {
 
 	ProductPicture findByReferenceToPicture(String reference);
-	
-	ArrayList<ProductPicture> findByProduct(Product product);
+
+	List<ProductPicture> findByProduct(Product product);
 
 }

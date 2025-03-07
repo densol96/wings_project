@@ -1,6 +1,7 @@
 package lv.wings.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -10,53 +11,45 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.exceptions.NoContentException;
+import lombok.RequiredArgsConstructor;
+import lv.wings.exception.old.NoContentException;
 import lv.wings.model.Event;
 import lv.wings.repo.IEventRepo;
 import lv.wings.service.ICRUDService;
 import lv.wings.service.IPasakumiFilteringService;
 
 @Service
+@RequiredArgsConstructor
 public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFilteringService {
 
-	@Autowired
-	private IEventRepo eventRepo;
+	private final IEventRepo eventRepo;
 
 	@Override
 	@Cacheable("Events")
-	public ArrayList<Event> retrieveAll() throws NoContentException {
-		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAll();
-		if (events.isEmpty())
-			throw new NoContentException("There are no events");
-		return events;
+	public List<Event> retrieveAll() {
+		return eventRepo.findAll();
 	}
 
 	@Override
 	@Cacheable(value = "Events", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-	public Page<Event> retrieveAll(Pageable pageable) throws NoContentException {
-		Page<Event> events = (Page<Event>) eventRepo.findAll(pageable);
-		if (events.isEmpty())
-			throw new NoContentException("There are no events");
-
-		return events;
+	public Page<Event> retrieveAll(Pageable pageable) {
+		return eventRepo.findAll(pageable);
 	}
 
 	@Override
 	@Cacheable(value = "Events", key = "#id")
-	public Event retrieveById(int id) throws Exception {
+	public Event retrieveById(Integer id) throws Exception {
 		if (id < 1)
 			throw new Exception("Invalid ID");
-		Event foundEvent = eventRepo.findByEventId(id);
-		if (foundEvent == null)
-			throw new Exception("Event with the id: (" + id + ") does not exist!");
-
+		Event foundEvent = eventRepo.findById(id)
+				.orElseThrow(() -> new Exception("Event with the id: (" + id + ") does not exist!"));
 		return foundEvent;
 	}
 
 	@Override
 	@Cacheable(value = "Events", key = "'desc'")
-	public ArrayList<Event> selectAllEventsDescOrder() throws Exception {
-		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAllByOrderByEventIdDesc();
+	public List<Event> selectAllEventsDescOrder() throws Exception {
+		List<Event> events = eventRepo.findAllByOrderByIdDesc();
 
 		if (events.isEmpty())
 			throw new Exception("There are no events");
@@ -65,8 +58,8 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 
 	@Override
 	@Cacheable(value = "Events", key = "'asc'")
-	public ArrayList<Event> selectAllEventsAscOrder() throws Exception {
-		ArrayList<Event> events = (ArrayList<Event>) eventRepo.findAllByOrderByEventIdAsc();
+	public List<Event> selectAllEventsAscOrder() throws Exception {
+		List<Event> events = eventRepo.findAllByOrderByIdAsc();
 		if (events.isEmpty())
 			throw new Exception("There are no events");
 		return events;
@@ -74,11 +67,9 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 
 	@Override
 	@CacheEvict(value = "Events", allEntries = true)
-	public void deleteById(int id) throws Exception {
-		Event event = eventRepo.findByEventId(id);
-		if (event == null)
-			throw new Exception("Event with id:" + id + " does not exist");
-
+	public void deleteById(Integer id) throws Exception {
+		Event event = eventRepo.findById(id)
+				.orElseThrow(() -> new Exception("Event with id:" + id + " does not exist"));
 		eventRepo.delete(event);
 	}
 
@@ -96,11 +87,9 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 	@Override
 	@CacheEvict(value = "Events", allEntries = true)
 	@CachePut(value = "Events", key = "#id")
-	public void update(int id, Event event) throws Exception {
-		Event foundEvent = eventRepo.findByEventId(event.getEventId());
-
-		if (foundEvent == null)
-			throw new Exception("Event with (id:" + id + ") does not exist");
+	public void update(Integer id, Event event) throws Exception {
+		Event foundEvent = eventRepo.findById(event.getId())
+				.orElseThrow(() -> new Exception("Event with (id:" + id + ") does not exist"));
 
 		foundEvent.setStartDate(event.getStartDate());
 		foundEvent.setEndDate(event.getEndDate());

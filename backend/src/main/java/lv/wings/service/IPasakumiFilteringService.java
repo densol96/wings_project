@@ -1,11 +1,11 @@
 package lv.wings.service;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import lv.wings.model.Event;
 
 public interface IPasakumiFilteringService {
-	ArrayList<Event> selectAllEventsDescOrder() throws Exception;
+	List<Event> selectAllEventsDescOrder() throws Exception;
 
-	ArrayList<Event> selectAllEventsAscOrder() throws Exception;
+	List<Event> selectAllEventsAscOrder() throws Exception;
 }

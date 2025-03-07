@@ -15,46 +15,46 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lv.wings.dto.DTOMapper;
 import lv.wings.dto.object.ProductDTO;
-import lv.wings.exceptions.NoContentException;
+import lv.wings.exception.old.NoContentException;
 import lv.wings.model.Product;
 import lv.wings.model.ProductPicture;
-import lv.wings.responses.ApiArrayListResponse;
+import lv.wings.responses.ApiListResponse;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;
 import lv.wings.service.IProductsFilterService;
-
 
 @RestController
 @RequestMapping(value = "/api/products")
 public class ProductAPI {
 
-    @Autowired
-    private ICRUDService<Product> productService;
+	@Autowired
+	private ICRUDService<Product> productService;
 
-    @Autowired
-    private IProductsFilterService productFilteringService;
+	@Autowired
+	private IProductsFilterService productFilteringService;
 
-    @GetMapping(value = "/show/all")
-	public ResponseEntity<ApiArrayListResponse<ProductDTO>> getProducts() {
+	@GetMapping(value = "/show/all")
+	public ResponseEntity<ApiListResponse<ProductDTO>> getProducts() {
 
 		try {
-			ArrayList<Product> allProducts = productService.retrieveAll();
+			List<Product> allProducts = productService.retrieveAll();
 
-			return ResponseEntity.ok(new ApiArrayListResponse<>(null, DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(), new String[]{"productPicture.id"})));
+			return ResponseEntity.ok(new ApiListResponse<>(null,
+					DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(), new String[] { "productPicture.id" })));
 		} catch (NoContentException e) {
-			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+			return ResponseEntity.ok(new ApiListResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 
 	}
 
-
-    @GetMapping(value = "/show/{id}")
+	@GetMapping(value = "/show/{id}")
 	public ResponseEntity<ApiResponse<ProductDTO>> getSingleProduct(@PathVariable("id") int id) {
 
 		try {
-			return ResponseEntity.ok(new ApiResponse<>(null, DTOMapper.map(ProductDTO.class, productService.retrieveById(id))));
+			return ResponseEntity
+					.ok(new ApiResponse<>(null, DTOMapper.map(ProductDTO.class, productService.retrieveById(id))));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
@@ -62,50 +62,51 @@ public class ProductAPI {
 		}
 	}
 
-    @GetMapping(value = "/show/category/{categoryid}")
-	public ResponseEntity<ApiArrayListResponse<ProductDTO>> getProductsByCategory(@PathVariable("categoryid") int categoryId) {
+	@GetMapping(value = "/show/category/{categoryid}")
+	public ResponseEntity<ApiListResponse<ProductDTO>> getProductsByCategory(
+			@PathVariable("categoryid") int categoryId) {
 
 		try {
-			ArrayList<Product> allProducts = productFilteringService.selectAllByProductCategory(categoryId);
+			List<Product> allProducts = productFilteringService.selectAllByProductCategory(categoryId);
 
-			return ResponseEntity.ok(new ApiArrayListResponse<>(null, DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(), new String[]{"productPicture.id"})));
+			return ResponseEntity.ok(new ApiListResponse<>(null,
+					DTOMapper.mapMany(ProductDTO.class, allProducts.toArray(), new String[] { "productPicture.id" })));
 		} catch (NoContentException e) {
-			return ResponseEntity.ok(new ApiArrayListResponse<>(e.getMessage(), null));
+			return ResponseEntity.ok(new ApiListResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 
 	}
 
-
 	@GetMapping("random")
-	public ResponseEntity<ApiResponse<ArrayList<ProductDTO>>> randomProducts(){
+	public ResponseEntity<ApiResponse<ArrayList<ProductDTO>>> randomProducts() {
 		try {
-			ArrayList<Product> randomProducts = productFilteringService.randomProducts();
+			List<Product> randomProducts = productFilteringService.randomProducts();
 
 			/// Lai main skata izvilktu tikai 1 attēlu katrai precei
-			for (Product product : randomProducts){
+			for (Product product : randomProducts) {
 
 				Collection<ProductPicture> onlyFirstPictureList = new ArrayList<>();
-				if (!product.getProductPictures().isEmpty()){
+				if (!product.getProductPictures().isEmpty()) {
 					List<ProductPicture> pictureList = new ArrayList<>(product.getProductPictures());
 
-						int randomIndex = new Random().nextInt(pictureList.size());
+					int randomIndex = new Random().nextInt(pictureList.size());
 
-					
-						ProductPicture randomPicture = pictureList.get(randomIndex);
+					ProductPicture randomPicture = pictureList.get(randomIndex);
 
-						onlyFirstPictureList.add(randomPicture);
+					onlyFirstPictureList.add(randomPicture);
 				}
 
 				product.setProductPictures(onlyFirstPictureList);
 			}
 
-			ArrayList<ProductDTO> productsDTO = DTOMapper.mapMany(ProductDTO.class, randomProducts.toArray(), new String[]{
-				"productCategory.events", "productPictures.event", "productPictures.description", "productCategory", "description"
-			});
+			ArrayList<ProductDTO> productsDTO = DTOMapper.mapMany(ProductDTO.class, randomProducts.toArray(),
+					new String[] {
+							"productCategory.events", "productPictures.event", "productPictures.description",
+							"productCategory", "description"
+					});
 
-			
 			return ResponseEntity.ok(new ApiResponse<>(null, productsDTO));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
@@ -114,6 +115,6 @@ public class ProductAPI {
 			return ResponseEntity.internalServerError().body(
 					new ApiResponse<>(e.getMessage(), null));
 		}
-	
+
 	}
 }

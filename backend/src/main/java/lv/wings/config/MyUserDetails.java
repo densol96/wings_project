@@ -7,28 +7,25 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import lombok.Getter;
 import lv.wings.model.security.MyUser;
 
-public class MyUserDetails implements UserDetails{
+@Getter
+public class MyUserDetails implements UserDetails {
 
 	private MyUser user;
-	
+
 	public MyUserDetails(MyUser inputUser) {
-		user = inputUser; //TODO pārbaudīt uz not null
+		user = inputUser;
 	}
-	
-	//necessary for ApplicationAuditAware
-	public MyUser getMyUser() {
-        return user;
-    }
-	
+
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		
+
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		
+
 		authorities.add(new SimpleGrantedAuthority(user.getAuthority().getTitle()));
-		
+
 		return authorities;
 	}
 

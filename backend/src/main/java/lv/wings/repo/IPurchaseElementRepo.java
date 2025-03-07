@@ -1,19 +1,17 @@
 package lv.wings.repo;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import lv.wings.model.Product;
 import lv.wings.model.Purchase;
 import lv.wings.model.PurchaseElement;
 
-public interface IPurchaseElementRepo extends CrudRepository<PurchaseElement,Integer>, PagingAndSortingRepository<PurchaseElement, Integer>{
+public interface IPurchaseElementRepo extends JpaRepository<PurchaseElement, Integer> {
 
-    ArrayList<PurchaseElement> findByPurchase(Purchase purchase);
+    List<PurchaseElement> findByPurchase(Purchase purchase);
 
-    ArrayList<PurchaseElement> findByProduct (Product product);
-	
+    List<PurchaseElement> findByProduct(Product product);
 
 }

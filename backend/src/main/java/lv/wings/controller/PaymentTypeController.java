@@ -1,6 +1,7 @@
 package lv.wings.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,15 +19,14 @@ import lv.wings.service.ICRUDService;
 @Controller
 @RequestMapping("/samaksas/veids")
 public class PaymentTypeController {
-    
+
     @Autowired
     private ICRUDService<PaymentType> paymentTypeService;
 
-
     @GetMapping("/show/all")
-    public String getShowAllPaymentTypes(Model model){
+    public String getShowAllPaymentTypes(Model model) {
         try {
-            ArrayList<PaymentType> allPaymentTypes = paymentTypeService.retrieveAll();
+            List<PaymentType> allPaymentTypes = paymentTypeService.retrieveAll();
             model.addAttribute("mydata", allPaymentTypes);
             return "sv-all-page";
         } catch (Exception e) {
@@ -35,9 +35,8 @@ public class PaymentTypeController {
         }
     }
 
-
     @GetMapping("/show/all/{id}")
-    public String getShowOnePaymentType(@PathVariable("id") int id, Model model){
+    public String getShowOnePaymentType(@PathVariable("id") int id, Model model) {
         try {
             PaymentType paymentType = paymentTypeService.retrieveById(id);
             model.addAttribute("mydata", paymentType);
@@ -48,12 +47,11 @@ public class PaymentTypeController {
         }
     }
 
-
     @GetMapping("/remove/{id}")
-    public String getDeleteOnePaymentType(@PathVariable("id") int id, Model model){
+    public String getDeleteOnePaymentType(@PathVariable("id") int id, Model model) {
         try {
             paymentTypeService.deleteById(id);
-            ArrayList<PaymentType> allPaymentTypes = paymentTypeService.retrieveAll();
+            List<PaymentType> allPaymentTypes = paymentTypeService.retrieveAll();
             model.addAttribute("mydata", allPaymentTypes);
             return "sv-all-page";
         } catch (Exception e) {
@@ -62,17 +60,15 @@ public class PaymentTypeController {
         }
     }
 
-
     @GetMapping("/add")
     public String getAddPaymentType(Model model) {
         model.addAttribute("sv", new PaymentType());
         return "sv-add-page";
     }
 
-
     @PostMapping("/add")
     public String postAddPaymentType(@Valid PaymentType paymentType, BindingResult result, Model model) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return "sv-add-page";
         } else {
             try {
@@ -85,7 +81,6 @@ public class PaymentTypeController {
         }
     }
 
-    
     @GetMapping("/update/{id}")
     public String getUpdatePaymentType(@PathVariable("id") int id, Model model) {
         try {
@@ -93,16 +88,16 @@ public class PaymentTypeController {
             model.addAttribute("sv", paymentTypeToUpdate);
             model.addAttribute("id", id);
             return "sv-update-page";
-        } catch (Exception e){
+        } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
 
-
     @PostMapping("/update/{id}")
-    public String postUpdatePaymentType(@PathVariable("id") int id, @Valid PaymentType paymentType, BindingResult result, Model model) {
-        if(result.hasErrors()) {
+    public String postUpdatePaymentType(@PathVariable("id") int id, @Valid PaymentType paymentType,
+            BindingResult result, Model model) {
+        if (result.hasErrors()) {
             return "sv-update-page";
         } else {
             try {
@@ -114,6 +109,5 @@ public class PaymentTypeController {
             }
         }
     }
-
 
 }

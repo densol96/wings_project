@@ -1,6 +1,6 @@
 package lv.wings.controller;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,19 +15,17 @@ import jakarta.validation.Valid;
 import lv.wings.model.DeliveryType;
 import lv.wings.service.ICRUDService;
 
-
 @Controller
 @RequestMapping("/piegades/veids")
 public class DeliveryTypeController {
-    
+
     @Autowired
     private ICRUDService<DeliveryType> deliveryTypeService;
 
-
     @GetMapping("/show/all")
-    public String getShowAllDeliveryTypes(Model model){
+    public String getShowAllDeliveryTypes(Model model) {
         try {
-            ArrayList<DeliveryType> allDeliveryTypes = deliveryTypeService.retrieveAll();
+            List<DeliveryType> allDeliveryTypes = deliveryTypeService.retrieveAll();
             model.addAttribute("mydata", allDeliveryTypes);
             return "pv-all-page";
         } catch (Exception e) {
@@ -36,9 +34,8 @@ public class DeliveryTypeController {
         }
     }
 
-
     @GetMapping("/show/all/{id}")
-    public String getShowOneDeliveryType(@PathVariable("id") int id, Model model){
+    public String getShowOneDeliveryType(@PathVariable("id") int id, Model model) {
         try {
             DeliveryType deliveryType = deliveryTypeService.retrieveById(id);
             model.addAttribute("mydata", deliveryType);
@@ -49,12 +46,11 @@ public class DeliveryTypeController {
         }
     }
 
-
     @GetMapping("/remove/{id}")
-    public String getDeleteOneDeliveryType(@PathVariable("id") int id, Model model){
+    public String getDeleteOneDeliveryType(@PathVariable("id") int id, Model model) {
         try {
             deliveryTypeService.deleteById(id);
-            ArrayList<DeliveryType> allDeliveryTypes = deliveryTypeService.retrieveAll();
+            List<DeliveryType> allDeliveryTypes = deliveryTypeService.retrieveAll();
             model.addAttribute("mydata", allDeliveryTypes);
             return "pv-all-page";
         } catch (Exception e) {
@@ -63,17 +59,15 @@ public class DeliveryTypeController {
         }
     }
 
-
     @GetMapping("/add")
     public String getAddDeliveryType(Model model) {
         model.addAttribute("pv", new DeliveryType());
         return "pv-add-page";
     }
 
-
     @PostMapping("/add")
     public String postAddDeliveryType(@Valid DeliveryType deliveryType, BindingResult result, Model model) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return "pv-add-page";
         } else {
             try {
@@ -86,7 +80,6 @@ public class DeliveryTypeController {
         }
     }
 
-    
     @GetMapping("/update/{id}")
     public String getUpdateDeliveryType(@PathVariable("id") int id, Model model) {
         try {
@@ -94,16 +87,16 @@ public class DeliveryTypeController {
             model.addAttribute("pv", deliveryTypeToUpdate);
             model.addAttribute("id", id);
             return "pv-update-page";
-        } catch (Exception e){
+        } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
 
-
     @PostMapping("/update/{id}")
-    public String postUpdateDeliveryType(@PathVariable("id") int id, @Valid DeliveryType deliveryType, BindingResult result, Model model) {
-        if(result.hasErrors()) {
+    public String postUpdateDeliveryType(@PathVariable("id") int id, @Valid DeliveryType deliveryType,
+            BindingResult result, Model model) {
+        if (result.hasErrors()) {
             return "pv-update-page";
         } else {
             try {
