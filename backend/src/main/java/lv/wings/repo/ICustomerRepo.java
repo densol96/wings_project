@@ -1,12 +1,9 @@
 package lv.wings.repo;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import lv.wings.model.Customer;
 
-public interface ICustomerRepo extends CrudRepository<Customer, Integer>, PagingAndSortingRepository<Customer, Integer>{
-
+public interface ICustomerRepo extends JpaRepository<Customer, Integer> {
     Customer findByNameAndSurname(String name, String surname);
-
 }

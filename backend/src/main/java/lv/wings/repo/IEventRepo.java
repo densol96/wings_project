@@ -1,23 +1,18 @@
 package lv.wings.repo;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import lv.wings.model.Event;
 import lv.wings.model.EventCategory;
 
-public interface IEventRepo extends CrudRepository<Event, Integer>, PagingAndSortingRepository<Event, Integer> {
+public interface IEventRepo extends JpaRepository<Event, Integer> {
+	List<Event> findAllByOrderByIdDesc();
 
-	Event findByEventId(int id);
-
-	ArrayList<Event> findAllByOrderByEventIdDesc();
-
-	ArrayList<Event> findAllByOrderByEventIdAsc();
+	List<Event> findAllByOrderByIdAsc();
 
 	Event findByTitle(String title);
 
-	ArrayList<Event> findByEventCategory(EventCategory eventCategory);
-
+	List<Event> findByCategory(EventCategory category);
 }

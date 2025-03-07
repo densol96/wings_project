@@ -12,7 +12,7 @@ import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
-import lv.wings.responses.AuthResponse;
+// import lv.wings.responses.AuthResponse;
 
 @Service
 public class AuthService {
@@ -32,26 +32,28 @@ public class AuthService {
       this.authManager = authManager;
    }
 
-   public AuthResponse resgister(MyUser request) {
-      MyUser user = new MyUser();
-      MyAuthority authority = authorityRepo.findById(1).orElseThrow(); // ADMIN authority
+   // public AuthResponse resgister(MyUser request) {
+   // MyUser user = new MyUser();
+   // MyAuthority authority = authorityRepo.findById(1).orElseThrow(); // ADMIN
+   // authority
 
-      user.setUsername(request.getUsername());
-      user.setPassword(passwordEncoder.encode(request.getPassword()));
-      user.setAuthority(authority);
+   // user.setUsername(request.getUsername());
+   // user.setPassword(passwordEncoder.encode(request.getPassword()));
+   // user.setAuthority(authority);
 
-      userRepo.save(user);
+   // userRepo.save(user);
 
-      String token = jwtService.generateToken(user);
-      return new AuthResponse(token);
-   }
+   // String token = jwtService.generateToken(user);
+   // return new AuthResponse(token);
+   // }
 
-   public AuthResponse authenticate(MyUser request) {
-      authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-      MyUser user = userRepo.findByUsername(request.getUsername());
-      String token = jwtService.generateToken(user);
-      return new AuthResponse(token);
-   }
+   // public AuthResponse authenticate(MyUser request) {
+   // authManager.authenticate(
+   // new UsernamePasswordAuthenticationToken(request.getUsername(),
+   // request.getPassword()));
+   // MyUser user = userRepo.findByUsername(request.getUsername());
+   // String token = jwtService.generateToken(user);
+   // return new AuthResponse(token);
+   // }
 
 }

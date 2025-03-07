@@ -29,7 +29,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name="Purchase_Elements")
+@Table(name = "Purchase_Elements")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE Purchase_Elements SET deleted = true WHERE purchase_element_id=?")
@@ -37,41 +37,40 @@ import lombok.ToString;
 public class PurchaseElement {
 
 	@Id
-	@Column(name = "purchase_element_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
 	private int purchaseElementId;
-	
-	//TODO te nak pirkums ID MARKUSS
+
+	// TODO te nak pirkums ID MARKUSS
 	@ManyToOne
 	@JoinColumn(name = "purchase_id")
 	private Purchase purchase;
-	
-	//saite uz preces
+
+	// saite uz preces
 	@ManyToOne
 	@JoinColumn(name = "product_id")
 	private Product product;
-	
+
 	@Column(name = "amount")
 	@Min(1)
 	private int amount;
-	
+
 	@CreatedDate
-	@Column(nullable = false,updatable = false)
+	@Column(nullable = false, updatable = false)
 	private LocalDateTime createDate;
-	
+
 	@LastModifiedDate
 	@Column(insertable = false)
 	private LocalDateTime lastModifiedByAdmin;
-	
+
 	@LastModifiedBy
 	@Column(insertable = false)
 	private Integer lastModifiedBy;
 
-	//Soft delete
+	// Soft delete
 	@Column(name = "deleted")
 	private boolean deleted = false;
-	
+
 	public PurchaseElement(Purchase purchase, Product product, int amount) {
 		setPurchase(purchase);
 		setProduct(product);

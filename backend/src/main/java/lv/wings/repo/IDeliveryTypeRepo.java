@@ -1,11 +1,11 @@
 package lv.wings.repo;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+import lv.wings.model.Customer;
 import lv.wings.model.DeliveryType;
 
-public interface IDeliveryTypeRepo extends CrudRepository<DeliveryType, Integer>, PagingAndSortingRepository<DeliveryType, Integer>{
+public interface IDeliveryTypeRepo extends JpaRepository<DeliveryType, Integer> {
 
     DeliveryType findByTitle(String title);
 

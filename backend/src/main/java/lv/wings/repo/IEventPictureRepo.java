@@ -1,14 +1,11 @@
 package lv.wings.repo;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import lv.wings.model.EventPicture;
 
-public interface IEventPictureRepo extends CrudRepository<EventPicture, Integer>, PagingAndSortingRepository<EventPicture, Integer>{
+public interface IEventPictureRepo extends JpaRepository<EventPicture, Integer> {
 
-	//EventPicture findByTitle(String title);
-	EventPicture findByReferenceToPicture(String reference);
-	
-	
+	EventPicture findByImageUrl(String imageUrl);
+
 }

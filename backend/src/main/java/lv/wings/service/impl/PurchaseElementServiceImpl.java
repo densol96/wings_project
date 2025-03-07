@@ -46,7 +46,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 
 	@Override
 	@Cacheable(value = "PurchaseElements", key = "#id")
-	public PurchaseElement retrieveById(int id) throws Exception {
+	public PurchaseElement retrieveById(Integer id) throws Exception {
 		if (id < 0)
 			throw new Exception("Invalid ID");
 
@@ -59,7 +59,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 
 	@Override
 	@CacheEvict(value = "PurchaseElements", allEntries = true)
-	public void deleteById(int id) throws Exception {
+	public void deleteById(Integer id) throws Exception {
 		// atrast driver kuru gribam dzēst
 		PurchaseElement elementForDeleting = retrieveById(id);
 
@@ -80,7 +80,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 
 	@Override
 	@CacheEvict(value = "PurchaseElements", allEntries = true)
-	public void create(PurchaseElement element, int id) throws Exception {
+	public void create(PurchaseElement element, Integer id) throws Exception {
 		// atrodu preci pēc id
 		if (productRepo.findById(id) == null)
 			throw new Exception("Product with id: " + id + " does not exist");
@@ -94,7 +94,7 @@ public class PurchaseElementServiceImpl implements ICRUDInsertedService<Purchase
 	@Override
 	@CacheEvict(value = "PurchaseElements", allEntries = true)
 	@CachePut(value = "PurchaseElements", key = "#id")
-	public void update(int id, PurchaseElement element) throws Exception {
+	public void update(Integer id, PurchaseElement element) throws Exception {
 		// atrodu
 		PurchaseElement elementForUpdating = retrieveById(id);
 

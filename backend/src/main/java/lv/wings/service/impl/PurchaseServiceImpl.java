@@ -1,6 +1,6 @@
 package lv.wings.service.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -27,11 +27,11 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase> {
 
     @Override
     @Cacheable("Purchases")
-    public ArrayList<Purchase> retrieveAll() throws Exception {
+    public List<Purchase> retrieveAll() throws Exception {
         if (purchaseRepo.count() == 0)
             throw new Exception("There are no purchases");
 
-        return (ArrayList<Purchase>) purchaseRepo.findAll();
+        return purchaseRepo.findAll();
     }
 
     @Override
@@ -44,7 +44,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase> {
 
     @Override
     @Cacheable(value = "Purchases", key = "#id")
-    public Purchase retrieveById(int id) throws Exception {
+    public Purchase retrieveById(Integer id) throws Exception {
         if (id < 0)
             throw new Exception("Invalid ID");
 
@@ -57,12 +57,12 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase> {
 
     @Override
     @CacheEvict(value = "Purchases", allEntries = true)
-    public void deleteById(int id) throws Exception {
+    public void deleteById(Integer id) throws Exception {
         Purchase purchaseToDelete = retrieveById(id);
 
-        ArrayList<PurchaseElement> purchaseElements = elementRepo.findByPurchase(purchaseToDelete);
+        List<PurchaseElement> purchaseElements = elementRepo.findByPurchase(purchaseToDelete);
 
-        for (int i = 0; i < purchaseElements.size(); i++) {
+        for (Integer i = 0; i < purchaseElements.size(); i++) {
             purchaseElements.get(i).setPurchase(null);
             elementRepo.save(purchaseElements.get(i));
         }
@@ -79,7 +79,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase> {
     @Override
     @CacheEvict(value = "Purchases", allEntries = true)
     @CachePut(value = "Purchases", key = "#id")
-    public void update(int id, Purchase purchase) {
+    public void update(Integer id, Purchase purchase) {
 
     }
 

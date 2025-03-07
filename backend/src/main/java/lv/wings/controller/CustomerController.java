@@ -1,6 +1,7 @@
 package lv.wings.controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,19 +20,17 @@ import lv.wings.model.Customer;
 import lv.wings.poi.PoiController;
 import lv.wings.service.ICRUDService;
 
-
 @Controller
 @RequestMapping("/customer")
 public class CustomerController {
-    
+
     @Autowired
     private ICRUDService<Customer> customerService;
 
-
     @GetMapping("/show/all")
-    public String getShowAllCustomers(Model model){
+    public String getShowAllCustomers(Model model) {
         try {
-            ArrayList<Customer> allCustomers = customerService.retrieveAll();
+            List<Customer> allCustomers = customerService.retrieveAll();
             model.addAttribute("mydata", allCustomers);
             return "pircejs-all-page";
         } catch (Exception e) {
@@ -40,9 +39,8 @@ public class CustomerController {
         }
     }
 
-
     @GetMapping("/show/all/{id}")
-    public String getShowOneCustomer(@PathVariable("id") int id, Model model){
+    public String getShowOneCustomer(@PathVariable("id") int id, Model model) {
         try {
             Customer customer = customerService.retrieveById(id);
             model.addAttribute("mydata", customer);
@@ -53,28 +51,28 @@ public class CustomerController {
         }
     }
 
-    @GetMapping("/download/all")//localhost:8080/pircejs/download/all
-	public ResponseEntity<byte[]> downloadCustomers() {
-		try {
-			ArrayList<Customer> allCustomers = customerService.retrieveAll();
-			byte[] fileBytes = PoiController.buildMultiple("pirceji", allCustomers, new String[]{});
+    @GetMapping("/download/all") // localhost:8080/pircejs/download/all
+    public ResponseEntity<byte[]> downloadCustomers() {
+        try {
+            List<Customer> allCustomers = customerService.retrieveAll();
+            byte[] fileBytes = PoiController.buildMultiple("pirceji", (ArrayList<Customer>) allCustomers,
+                    new String[] {});
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			headers.setContentDispositionFormData("attachment", "query_results.xlsx");
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDispositionFormData("attachment", "query_results.xlsx");
 
-			return ResponseEntity.ok().headers(headers).body(fileBytes);
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
-
+            return ResponseEntity.ok().headers(headers).body(fileBytes);
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @GetMapping("/remove/{id}")
-    public String getDeleteOneCustomer(@PathVariable("id") int id, Model model){
+    public String getDeleteOneCustomer(@PathVariable("id") int id, Model model) {
         try {
             customerService.deleteById(id);
-            ArrayList<Customer> allCustomers = customerService.retrieveAll();
+            List<Customer> allCustomers = customerService.retrieveAll();
             model.addAttribute("mydata", allCustomers);
             return "pircejs-all-page";
         } catch (Exception e) {
@@ -83,17 +81,15 @@ public class CustomerController {
         }
     }
 
-
     @GetMapping("/add")
     public String getAddCustomer(Model model) {
         model.addAttribute("pircejs", new Customer());
         return "pircejs-add-page";
     }
 
-
     @PostMapping("/add")
     public String postAddCustomer(@Valid Customer pircejs, BindingResult result, Model model) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             return "pircejs-add-page";
         } else {
             try {
@@ -106,7 +102,6 @@ public class CustomerController {
         }
     }
 
-    
     @GetMapping("/update/{id}")
     public String getUpdateCustomer(@PathVariable("id") int id, Model model) {
         try {
@@ -114,16 +109,16 @@ public class CustomerController {
             model.addAttribute("pircejs", customerToUpdate);
             model.addAttribute("id", id);
             return "pircejs-update-page";
-        } catch (Exception e){
+        } catch (Exception e) {
             model.addAttribute("message", e.getMessage());
             return "error-page";
         }
     }
 
-
     @PostMapping("/update/{id}")
-    public String postUpdateCustomer(@PathVariable("id") int id, @Valid Customer customer, BindingResult result, Model model) {
-        if(result.hasErrors()) {
+    public String postUpdateCustomer(@PathVariable("id") int id, @Valid Customer customer, BindingResult result,
+            Model model) {
+        if (result.hasErrors()) {
             return "pircejs-update-page";
         } else {
             try {

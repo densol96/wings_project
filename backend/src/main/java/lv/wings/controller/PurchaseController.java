@@ -2,6 +2,7 @@ package lv.wings.controller;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -48,7 +49,7 @@ public class PurchaseController {
     @GetMapping("/show/all")
     public String getShowAllPurchases(Model model) {
         try {
-            ArrayList<Purchase> allPurchases = purchaseService.retrieveAll();
+            List<Purchase> allPurchases = purchaseService.retrieveAll();
             model.addAttribute("mydata", allPurchases);
             return "pirkums-all-page";
         } catch (Exception e) {
@@ -109,7 +110,7 @@ public class PurchaseController {
     public String getDeleteOnePurchase(@PathVariable("id") int id, Model model) {
         try {
             purchaseService.deleteById(id);
-            ArrayList<Purchase> allPurchases = purchaseService.retrieveAll();
+            List<Purchase> allPurchases = purchaseService.retrieveAll();
             model.addAttribute("mydata", allPurchases);
             return "pirkums-all-page";
         } catch (Exception e) {
@@ -121,9 +122,9 @@ public class PurchaseController {
     @GetMapping("/add")
     public String getAddPurchase(Model model) {
         try {
-            ArrayList<PaymentType> paymentTypes = paymentTypeService.retrieveAll();
-            ArrayList<DeliveryType> deliveryTypes = deliveryTypeService.retrieveAll();
-            ArrayList<Customer> customers = customerService.retrieveAll();
+            List<PaymentType> paymentTypes = paymentTypeService.retrieveAll();
+            List<DeliveryType> deliveryTypes = deliveryTypeService.retrieveAll();
+            List<Customer> customers = customerService.retrieveAll();
             model.addAttribute("pirkums", new Purchase());
             model.addAttribute("samaksasVeidi", paymentTypes);
             model.addAttribute("piegadesVeidi", deliveryTypes);

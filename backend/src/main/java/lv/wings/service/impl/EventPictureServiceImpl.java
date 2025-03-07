@@ -37,8 +37,8 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	}
 
 	@Override
-	@Cacheable(value="EventPictures", key="#id")
-	public EventPicture retrieveById(int id) throws Exception {
+	@Cacheable(value = "EventPictures", key = "#id")
+	public EventPicture retrieveById(Integer id) throws Exception {
 		if (id < 1)
 			throw new Exception("Invalid ID");
 
@@ -51,18 +51,19 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 
 	@Override
 	@CacheEvict(value = "EventPictures", allEntries = true)
-	public void deleteById(int id) throws Exception {
+	public void deleteById(Integer id) throws Exception {
 		EventPicture eventPicture = retrieveById(id);
-		if (eventPicture == null) throw new Exception("Event picture with the id: (" + id + ") does not exist!");
+		if (eventPicture == null)
+			throw new Exception("Event picture with the id: (" + id + ") does not exist!");
 
-		//System.out.println(eventPicture.getReferenceToPicture());
+		// System.out.prIntegerln(eventPicture.getReferenceToPicture());
 		eventPictureRepo.delete(eventPicture);
 	}
 
 	@Override
 	@CacheEvict(value = "EventPictures", allEntries = true)
 	public void create(EventPicture eventPicture) throws Exception {
-		EventPicture existedEventPicture = eventPictureRepo.findByReferenceToPicture(eventPicture.getReferenceToPicture());
+		EventPicture existedEventPicture = eventPictureRepo.findByImageUrl(eventPicture.getImageUrl());
 
 		if (existedEventPicture != null)
 			throw new Exception("Event picture with title: " + eventPicture.getTitle() + " already exists");
@@ -73,13 +74,14 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 
 	@Override
 	@CacheEvict(value = "EventPictures", allEntries = true)
-	@CachePut(value="EventPictures", key="#id")
-	public void update(int id, EventPicture eventPicture) throws Exception {
+	@CachePut(value = "EventPictures", key = "#id")
+	public void update(Integer id, EventPicture eventPicture) throws Exception {
 		EventPicture foundEventPicture = retrieveById(id);
-		
-		if (foundEventPicture == null) throw new Exception("Event picture with the id: (" + id + ") does not exist!");
 
-		foundEventPicture.setReferenceToPicture(eventPicture.getReferenceToPicture());
+		if (foundEventPicture == null)
+			throw new Exception("Event picture with the id: (" + id + ") does not exist!");
+
+		foundEventPicture.setImageUrl(eventPicture.getImageUrl());
 		foundEventPicture.setTitle(eventPicture.getTitle());
 		foundEventPicture.setDescription(eventPicture.getDescription());
 

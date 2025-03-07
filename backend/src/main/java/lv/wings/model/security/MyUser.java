@@ -20,21 +20,19 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name="WingsUser")
+@Table(name = "WingsUser")
 public class MyUser {
-	
 	@Id
-	@Column(name = "UserId")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
 	private Integer userId;
-	
+
 	@Column(name = "Username")
 	private String username;
-	
+
 	@Column(name = "Password")
 	private String password;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "AuthorityId")
 	private MyAuthority authority;
@@ -44,13 +42,9 @@ public class MyUser {
 		this.password = password;
 		this.authority = authority;
 	}
-	
-	//necessary for ApplicationAuditAware
-	public Integer getUserId() {
-        return userId;
-    }
 
-	
-	
-	
+	// necessary for ApplicationAuditAware
+	public Integer getUserId() {
+		return userId;
+	}
 }

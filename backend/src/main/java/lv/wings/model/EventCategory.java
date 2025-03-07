@@ -46,37 +46,37 @@ public class EventCategory {
 	@Setter(value = AccessLevel.NONE)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int eventCategoryId;
-	
+
 	@NotNull
 	@Column(name = "title")
 	@Size(min = 3, max = 200, message = "Kategorijas nosaukums nedrīkst saturēt mazāk par 3 vai vairāk par 200 rakstzīmēm!")
 	@Pattern(regexp = "^[a-zA-ZāčēģīķļņōŗšūžĀČĒĢĪĶĻŅŌŖŠŪŽ\\s]+$", message = "Kategorijas nosaukums drīkst saturēt tikai burtus un atstarpes!")
 	private String title;
-	
-	@OneToMany(mappedBy = "eventCategory")
+
+	@OneToMany(mappedBy = "category")
 	@JsonBackReference
 	private Collection<Event> events;
-	
+
 	@CreatedDate
-	@Column(nullable = false,updatable = false)
+	@Column(nullable = false, updatable = false)
 	private LocalDateTime createDate;
-	
+
 	@LastModifiedDate
 	@Column(insertable = false)
 	private LocalDateTime lastModified;
-	
+
 	@CreatedBy
 	@Column(updatable = false)
 	private Integer createdBy;
-	
+
 	@LastModifiedBy
 	@Column(insertable = false)
 	private Integer lastModifiedBy;
 
-	//Soft delete
+	// Soft delete
 	@Column(name = "deleted")
 	private boolean deleted = false;
-	
+
 	public EventCategory(String title) {
 		setTitle(title);
 	}

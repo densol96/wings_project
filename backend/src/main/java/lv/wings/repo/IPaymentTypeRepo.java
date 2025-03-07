@@ -1,11 +1,10 @@
 package lv.wings.repo;
 
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import lv.wings.model.PaymentType;
 
-public interface IPaymentTypeRepo extends CrudRepository<PaymentType, Integer>, PagingAndSortingRepository<PaymentType, Integer>{
+public interface IPaymentTypeRepo extends JpaRepository<PaymentType, Integer> {
 
     PaymentType findByTitle(String title);
 
