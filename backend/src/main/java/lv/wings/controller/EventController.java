@@ -21,6 +21,7 @@ import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import lv.wings.dto.DTOMapper;
 import lv.wings.dto.object.EventDTO;
+import lv.wings.enums.SortBy;
 import lv.wings.exception.old.NoContentException;
 import lv.wings.model.Event;
 import lv.wings.responses.ApiResponse;
@@ -37,11 +38,12 @@ public class EventController {
 	@GetMapping
 	public ResponseEntity<String> getLatestEvents(
 			@RequestParam(defaultValue = "1") @Min(1) Integer page,
-			@RequestParam(defaultValue = "4") @Min(1) Integer resultsPerPage) {
+			@RequestParam(defaultValue = "4") @Min(1) Integer resultsPerPage,
+			@RequestParam(defaultValue = "CREATEDAT") SortBy sortBy) {
 
-		return ResponseEntity.ok("In testing");
+		return ResponseEntity.ok("In testing ==> " + sortBy.toString());
 
-		// Pageable pageable = PageRequest.of(page - 1, RESULTS_PER_PAGE,
+		// Pageable pageable = PageRequest.of(page - 1, resultsPerPage,
 		// Sort.by("createDate").descending());
 		// Page<Event> allEvents = eventsService.retrieveAll(pageable);
 		// ArrayList<EventDTO> eventsDTO = DTOMapper.mapMany(EventDTO.class,
