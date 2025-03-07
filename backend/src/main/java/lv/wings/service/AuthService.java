@@ -7,7 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import lv.wings.config.MyUserDetailsMenager;
+import lv.wings.config.security.MyUserDetailsMenager;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
 import lv.wings.repo.security.IMyAuthorityRepo;

@@ -1,4 +1,4 @@
-package lv.wings.config;
+package lv.wings.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,20 +10,20 @@ import lv.wings.model.security.MyUser;
 import lv.wings.repo.security.IMyUserRepo;
 
 @Service
-public class MyUserDetailsMenager implements UserDetailsManager{
+public class MyUserDetailsMenager implements UserDetailsManager {
 
 	@Autowired
 	private IMyUserRepo userRepo;
-	
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		
+
 		MyUser userFromDB = userRepo.findByUsername(username);
-		
-		if(userFromDB == null) {
+
+		if (userFromDB == null) {
 			throw new UsernameNotFoundException(username + " is not found in system");
-		}else {
-			MyUserDetails details = new  MyUserDetails(userFromDB);
+		} else {
+			MyUserDetails details = new MyUserDetails(userFromDB);
 			return details;
 		}
 	}
@@ -31,25 +31,25 @@ public class MyUserDetailsMenager implements UserDetailsManager{
 	@Override
 	public void createUser(UserDetails user) {
 		// TODO papildināt
-		
+
 	}
 
 	@Override
 	public void updateUser(UserDetails user) {
 		// TODO papildināt
-		
+
 	}
 
 	@Override
 	public void deleteUser(String username) {
 		// TODO papildināt
-		
+
 	}
 
 	@Override
 	public void changePassword(String oldPassword, String newPassword) {
 		// TODO papildināt
-		
+
 	}
 
 	@Override

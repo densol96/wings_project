@@ -1,4 +1,4 @@
-package lv.wings.config;
+package lv.wings.config.interceptors.locale;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

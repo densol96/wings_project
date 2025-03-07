@@ -1,9 +1,7 @@
 package lv.wings.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,15 +10,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import lv.wings.exception.old.NoContentException;
 import lv.wings.model.Event;
 import lv.wings.repo.IEventRepo;
 import lv.wings.service.ICRUDService;
-import lv.wings.service.IPasakumiFilteringService;
 
 @Service
 @RequiredArgsConstructor
-public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFilteringService {
+public class EventServiceImpl implements ICRUDService<Event> {
 
 	private final IEventRepo eventRepo;
 
@@ -38,31 +34,10 @@ public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFiltering
 
 	@Override
 	@Cacheable(value = "Events", key = "#id")
-	public Event retrieveById(Integer id) throws Exception {
-		if (id < 1)
-			throw new Exception("Invalid ID");
+	public Event retrieveById(Integer id) {
 		Event foundEvent = eventRepo.findById(id)
-				.orElseThrow(() -> new Exception("Event with the id: (" + id + ") does not exist!"));
+				.orElseThrow(() -> new RuntimeException("Event with the id: (" + id + ") does not exist!"));
 		return foundEvent;
-	}
-
-	@Override
-	@Cacheable(value = "Events", key = "'desc'")
-	public List<Event> selectAllEventsDescOrder() throws Exception {
-		List<Event> events = eventRepo.findAllByOrderByIdDesc();
-
-		if (events.isEmpty())
-			throw new Exception("There are no events");
-		return events;
-	}
-
-	@Override
-	@Cacheable(value = "Events", key = "'asc'")
-	public List<Event> selectAllEventsAscOrder() throws Exception {
-		List<Event> events = eventRepo.findAllByOrderByIdAsc();
-		if (events.isEmpty())
-			throw new Exception("There are no events");
-		return events;
 	}
 
 	@Override
