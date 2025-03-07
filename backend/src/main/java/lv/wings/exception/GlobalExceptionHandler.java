@@ -12,6 +12,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.dto.response.BasicErrorDto;
+import lv.wings.exception.validation.InvalidQueryParameterException;
 
 @Slf4j
 @RestControllerAdvice
@@ -26,7 +27,23 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<BasicErrorDto> handleConversionError(MethodArgumentTypeMismatchException e, Locale locale) {
         log.error("*** Conversion error: {}.", e.getMessage());
-        return handleProceduralException(e, locale);
+        return handleInvalidQueryParameterException(
+                new InvalidQueryParameterException(e.getName(), e.getValue().toString(), false),
+                locale);
+    }
+
+    @ExceptionHandler(InvalidQueryParameterException.class)
+    public ResponseEntity<BasicErrorDto> handleInvalidQueryParameterException(InvalidQueryParameterException e,
+            Locale locale) {
+        if (e.getFromInterceptor()) {
+            log.error("*** Interceptor detected a query-param data-format error: {}", e.getMessage());
+        } else {
+            log.error("*** Control flow from MethodArgumentTypeMismatchException: {}", e.getMessage());
+        }
+
+        String message = messageSource.getMessage("error.invalid-query-param",
+                new Object[] { e.getQueryName(), e.getQueryValue() }, locale);
+        return ResponseEntity.badRequest().body(BasicErrorDto.builder().message(message).build());
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,4 +1,4 @@
-package lv.wings.config;
+package lv.wings.config.interceptors.locale;
 
 import java.util.ArrayList;
 import java.util.List;

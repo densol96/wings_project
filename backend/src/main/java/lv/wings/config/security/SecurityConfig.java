@@ -1,4 +1,4 @@
-package lv.wings.config;
+package lv.wings.config.security;
 
 import java.util.Arrays;
 
