@@ -7,7 +7,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.EventPicture;
@@ -21,40 +23,41 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 
 	@Override
 	@Cacheable("EventPictures")
-	public ArrayList<EventPicture> retrieveAll() throws Exception {
+	public ArrayList<EventPicture> retrieveAll() {
 		if (eventPictureRepo.count() == 0)
-			throw new Exception("There are no event pictures in the database");
+			throw new RuntimeException("There are no event pictures in the database");
 
 		return (ArrayList<EventPicture>) eventPictureRepo.findAll();
 	}
 
 	@Override
 	@Cacheable(value = "EventPictures", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-	public Page<EventPicture> retrieveAll(Pageable pageable) throws Exception {
+	public Page<EventPicture> retrieveAll(Integer page, Integer size, String sortBy, String sortDirection) {
 		if (eventPictureRepo.count() == 0)
-			throw new Exception("There are no event pictures in the database");
+			throw new RuntimeException("There are no event pictures in the database");
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
 		return (Page<EventPicture>) eventPictureRepo.findAll(pageable);
 	}
 
 	@Override
 	@Cacheable(value = "EventPictures", key = "#id")
-	public EventPicture retrieveById(Integer id) throws Exception {
+	public EventPicture retrieveById(Integer id) {
 		if (id < 1)
-			throw new Exception("Invalid ID");
+			throw new RuntimeException("Invalid ID");
 
 		if (eventPictureRepo.existsById(id)) {
 			return eventPictureRepo.findById(id).get();
 		} else {
-			throw new Exception("Event picture with the id: (" + id + ") does not exist!");
+			throw new RuntimeException("Event picture with the id: (" + id + ") does not exist!");
 		}
 	}
 
 	@Override
 	@CacheEvict(value = "EventPictures", allEntries = true)
-	public void deleteById(Integer id) throws Exception {
+	public void deleteById(Integer id) {
 		EventPicture eventPicture = retrieveById(id);
 		if (eventPicture == null)
-			throw new Exception("Event picture with the id: (" + id + ") does not exist!");
+			throw new RuntimeException("Event picture with the id: (" + id + ") does not exist!");
 
 		// System.out.prIntegerln(eventPicture.getReferenceToPicture());
 		eventPictureRepo.delete(eventPicture);
@@ -62,11 +65,11 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 
 	@Override
 	@CacheEvict(value = "EventPictures", allEntries = true)
-	public void create(EventPicture eventPicture) throws Exception {
+	public void create(EventPicture eventPicture) {
 		EventPicture existedEventPicture = eventPictureRepo.findByImageUrl(eventPicture.getImageUrl());
 
 		if (existedEventPicture != null)
-			throw new Exception("Event picture with title: " + eventPicture.getTitle() + " already exists");
+			throw new RuntimeException("Event picture with url: " + eventPicture.getImageUrl() + " already exists");
 
 		eventPictureRepo.save(eventPicture);
 
@@ -75,14 +78,13 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	@Override
 	@CacheEvict(value = "EventPictures", allEntries = true)
 	@CachePut(value = "EventPictures", key = "#id")
-	public void update(Integer id, EventPicture eventPicture) throws Exception {
+	public void update(Integer id, EventPicture eventPicture) {
 		EventPicture foundEventPicture = retrieveById(id);
 
 		if (foundEventPicture == null)
-			throw new Exception("Event picture with the id: (" + id + ") does not exist!");
+			throw new RuntimeException("Event picture with the id: (" + id + ") does not exist!");
 
 		foundEventPicture.setImageUrl(eventPicture.getImageUrl());
-		foundEventPicture.setTitle(eventPicture.getTitle());
 		foundEventPicture.setDescription(eventPicture.getDescription());
 
 		eventPictureRepo.save(foundEventPicture);

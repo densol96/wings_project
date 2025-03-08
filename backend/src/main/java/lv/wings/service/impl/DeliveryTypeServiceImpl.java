@@ -8,7 +8,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.DeliveryType;
@@ -28,37 +30,38 @@ public class DeliveryTypeServiceImpl implements ICRUDService<DeliveryType> {
 
     @Override
     @Cacheable("DeliveryTypes")
-    public List<DeliveryType> retrieveAll() throws Exception {
+    public List<DeliveryType> retrieveAll() {
         if (deliveryTypeRepo.count() == 0)
-            throw new Exception("There are no delivery types");
+            throw new RuntimeException("There are no delivery types");
 
         return deliveryTypeRepo.findAll();
     }
 
     @Override
     @Cacheable(value = "DeliveryTypes", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-    public Page<DeliveryType> retrieveAll(Pageable pageable) throws Exception {
+    public Page<DeliveryType> retrieveAll(Integer page, Integer size, String sortBy, String sortDirection) {
         if (deliveryTypeRepo.count() == 0)
-            throw new Exception("There are no delivery types");
+            throw new RuntimeException("There are no delivery types");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
         return deliveryTypeRepo.findAll(pageable);
     }
 
     @Override
     @Cacheable(value = "DeliveryTypes", key = "#id")
-    public DeliveryType retrieveById(Integer id) throws Exception {
+    public DeliveryType retrieveById(Integer id) {
         if (id < 0)
-            throw new Exception("Invalid ID!");
+            throw new RuntimeException("Invalid ID!");
 
         if (deliveryTypeRepo.existsById(id)) {
             return deliveryTypeRepo.findById(id).get();
         } else {
-            throw new Exception("DElivery type with ID [" + id + "] does not exist");
+            throw new RuntimeException("DElivery type with ID [" + id + "] does not exist");
         }
     }
 
     @Override
     @CacheEvict(value = "DeliveryTypes", allEntries = true)
-    public void deleteById(Integer id) throws Exception {
+    public void deleteById(Integer id) {
         DeliveryType deliveryTypeToDelete = retrieveById(id);
 
         List<Purchase> purchases = purchaseRepo.findByDeliveryType(deliveryTypeToDelete);
@@ -73,20 +76,20 @@ public class DeliveryTypeServiceImpl implements ICRUDService<DeliveryType> {
 
     @Override
     @CacheEvict(value = "DeliveryTypes", allEntries = true)
-    public void create(DeliveryType deliveryType) throws Exception {
+    public void create(DeliveryType deliveryType) {
         DeliveryType deliveryTypeExist = deliveryTypeRepo.findByTitle(deliveryType.getTitle());
 
         if (deliveryTypeExist == null) {
             deliveryTypeRepo.save(deliveryType);
         } else {
-            throw new Exception("Delivery type already exists");
+            throw new RuntimeException("Delivery type already exists");
         }
     }
 
     @Override
     @CacheEvict(value = "DeliveryTypes", allEntries = true)
     @CachePut(value = "DeliveryTypes", key = "#id")
-    public void update(Integer id, DeliveryType deliveryType) throws Exception {
+    public void update(Integer id, DeliveryType deliveryType) {
         DeliveryType deliveryTypeToUpdate = retrieveById(id);
 
         deliveryTypeToUpdate.setTitle(deliveryType.getTitle());

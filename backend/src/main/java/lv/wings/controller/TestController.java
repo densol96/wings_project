@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lv.wings.repo.IEventRepo;
+
 import lv.wings.repo.ITestRepo;
 
 @Getter
@@ -22,7 +22,6 @@ class TestClass {
 public class TestController {
 
     private final ITestRepo testRepo;
-    private final IEventRepo eventRepo;
 
     @GetMapping("/test")
     public String test(Locale locale) {

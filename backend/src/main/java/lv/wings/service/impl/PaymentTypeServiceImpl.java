@@ -8,7 +8,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.PaymentType;
@@ -28,37 +30,38 @@ public class PaymentTypeServiceImpl implements ICRUDService<PaymentType> {
 
     @Override
     @Cacheable("PaymentTypes")
-    public ArrayList<PaymentType> retrieveAll() throws Exception {
+    public ArrayList<PaymentType> retrieveAll() {
         if (paymentTypeRepo.count() == 0)
-            throw new Exception("Nav neviena samaksas veida");
+            throw new RuntimeException("Nav neviena samaksas veida");
 
         return (ArrayList<PaymentType>) paymentTypeRepo.findAll();
     }
 
     @Override
     @Cacheable(value = "PaymentTypes", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-    public Page<PaymentType> retrieveAll(Pageable pageable) throws Exception {
+    public Page<PaymentType> retrieveAll(Integer page, Integer size, String sortBy, String sortDirection) {
         if (paymentTypeRepo.count() == 0)
-            throw new Exception("Nav neviena samaksas veida");
+            throw new RuntimeException("Nav neviena samaksas veida");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
         return (Page<PaymentType>) paymentTypeRepo.findAll(pageable);
     }
 
     @Override
     @Cacheable(value = "PaymentTypes", key = "#id")
-    public PaymentType retrieveById(Integer id) throws Exception {
+    public PaymentType retrieveById(Integer id) {
         if (id < 0)
-            throw new Exception("ID ir negativs");
+            throw new RuntimeException("ID ir negativs");
 
         if (paymentTypeRepo.existsById(id)) {
             return paymentTypeRepo.findById(id).get();
         } else {
-            throw new Exception("Samaksas veids ar ID [" + id + "] neeksiste");
+            throw new RuntimeException("Samaksas veids ar ID [" + id + "] neeksiste");
         }
     }
 
     @Override
     @CacheEvict(value = "PaymentTypes", allEntries = true)
-    public void deleteById(Integer id) throws Exception {
+    public void deleteById(Integer id) {
         PaymentType paymentTypeToDelete = retrieveById(id);
 
         List<Purchase> purchases = purchaseRepo.findByPaymentType(paymentTypeToDelete);
@@ -73,20 +76,20 @@ public class PaymentTypeServiceImpl implements ICRUDService<PaymentType> {
 
     @Override
     @CacheEvict(value = "PaymentTypes", allEntries = true)
-    public void create(PaymentType paymentType) throws Exception {
+    public void create(PaymentType paymentType) {
         PaymentType paymentTypeExist = paymentTypeRepo.findByTitle(paymentType.getTitle());
 
         if (paymentTypeExist == null) {
             paymentTypeRepo.save(paymentType);
         } else {
-            throw new Exception("Samaksas veids eksiste");
+            throw new RuntimeException("Samaksas veids eksiste");
         }
     }
 
     @Override
     @CacheEvict(value = "PaymentTypes", allEntries = true)
     @CachePut(value = "PaymentTypes", key = "#id")
-    public void update(Integer id, PaymentType paymentType) throws Exception {
+    public void update(Integer id, PaymentType paymentType) {
         PaymentType paymentTypeToUpdate = retrieveById(id);
 
         paymentTypeToUpdate.setTitle(paymentType.getTitle());

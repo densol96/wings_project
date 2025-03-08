@@ -28,10 +28,8 @@ public class EventPictureController {
 
 	@GetMapping(value = "")
 	public ResponseEntity<ApiListResponse<EventPicture>> getAllPictures() {
-
 		try {
 			List<EventPicture> allEventPictures = eventPictureRepo.retrieveAll();
-
 			return ResponseEntity.ok(new ApiListResponse<>(null, allEventPictures));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiListResponse<>(e.getMessage(), null));
@@ -40,20 +38,6 @@ public class EventPictureController {
 		}
 
 	}
-	/*
-	 * @GetMapping("")
-	 * public String getAllEventPictures(Model model) {
-	 * try {
-	 * ArrayList<EventPicture> allEventPictures = eventPictureRepo.retrieveAll();
-	 * model.addAttribute("pasakumaBilde",allEventPictures);
-	 * model.addAttribute("msg", "Visas pasākuma bildes");
-	 * return "pasakumaBilde/pasakumaBilde-all-page";
-	 * } catch (Exception e) {
-	 * model.addAttribute("message", e.getMessage());
-	 * return "error-page";
-	 * }
-	 * }
-	 */
 
 	@GetMapping("/show/all/{id}")
 	public String getEventPictureById(@PathVariable("id") int id, Model model) {
@@ -107,7 +91,6 @@ public class EventPictureController {
 			model.addAttribute("message", e.getMessage());
 			return "error-page";
 		}
-
 	}
 
 	@PostMapping("/update/{id}")

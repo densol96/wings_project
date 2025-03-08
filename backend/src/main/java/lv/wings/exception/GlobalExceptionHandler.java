@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -12,6 +13,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.dto.response.BasicErrorDto;
+import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.validation.InvalidQueryParameterException;
 
 @Slf4j
@@ -26,7 +28,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<BasicErrorDto> handleConversionError(MethodArgumentTypeMismatchException e, Locale locale) {
-        log.error("*** Conversion error: {}.", e.getMessage());
+        log.error("*** Conversion error as MethodArgumentTypeMismatchException: {}.", e.getMessage());
         return handleInvalidQueryParameterException(
                 new InvalidQueryParameterException(e.getName(), e.getValue().toString(), false),
                 locale);
@@ -36,7 +38,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BasicErrorDto> handleInvalidQueryParameterException(InvalidQueryParameterException e,
             Locale locale) {
         if (e.getFromInterceptor()) {
-            log.error("*** Interceptor detected a query-param data-format error: {}", e.getMessage());
+            log.error("*** Interceptor detected InvalidQueryParameterException: {}", e.getMessage());
         } else {
             log.error("*** Control flow from MethodArgumentTypeMismatchException: {}", e.getMessage());
         }
@@ -44,6 +46,19 @@ public class GlobalExceptionHandler {
         String message = messageSource.getMessage("error.invalid-query-param",
                 new Object[] { e.getQueryName(), e.getQueryValue() }, locale);
         return ResponseEntity.badRequest().body(BasicErrorDto.builder().message(message).build());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<BasicErrorDto> handleEntityNotFoundException(EntityNotFoundException e, Locale locale) {
+        log.error("*** EntityNotFoundException: {}", e.getMessage());
+        String localizedEntityName = messageSource.getMessage(e.getEntityNameKey(), null, locale);
+        String message = messageSource.getMessage(
+                "error.entity-not-found",
+                new Object[] { localizedEntityName, e.getEntityId() },
+                locale);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(BasicErrorDto.builder().message(message).build());
     }
 
     @ExceptionHandler(Exception.class)

@@ -72,61 +72,67 @@ public class AdminController {
 	@Value("${upload.directory.products}")
 	private String uploadProductsDir;
 
-	@PostMapping(value = "events/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<ApiResponse<?>> postCreateEvent(@Valid @RequestPart EventDTO eventDTO,
-			BindingResult result, @RequestPart(required = false) List<MultipartFile> pictures) {
+	// @PostMapping(value = "events/create", consumes =
+	// MediaType.MULTIPART_FORM_DATA_VALUE)
+	// public ResponseEntity<ApiResponse<?>> postCreateEvent(@Valid @RequestPart
+	// EventDTO eventDTO,
+	// BindingResult result, @RequestPart(required = false) List<MultipartFile>
+	// pictures) {
 
-		if (result.hasErrors()) {
-			List<String> errors = result.getAllErrors()
-					.stream()
-					.map(error -> error.getDefaultMessage())
-					.collect(Collectors.toList());
+	// if (result.hasErrors()) {
+	// List<String> errors = result.getAllErrors()
+	// .stream()
+	// .map(error -> error.getDefaultMessage())
+	// .collect(Collectors.toList());
 
-			ApiResponse<List<String>> errorResponse = new ApiResponse<>("Nepareizi ievades lauki!", errors);
-			return ResponseEntity.badRequest().body(errorResponse);
-		}
+	// ApiResponse<List<String>> errorResponse = new ApiResponse<>("Nepareizi
+	// ievades lauki!", errors);
+	// return ResponseEntity.badRequest().body(errorResponse);
+	// }
 
-		try {
-			EventCategory eventCategory = eventsCategoryService.retrieveById(eventDTO.getEventCategory().getId());
-			Event event = new Event(
-					eventDTO.getStartDate(),
-					eventDTO.getEndDate(),
-					eventDTO.getTitle(),
-					eventDTO.getLocation(),
-					eventDTO.getDescription(),
-					"key words", /// need to remove this probably
-					eventCategory);
+	// try {
+	// EventCategory eventCategory =
+	// eventsCategoryService.retrieveById(eventDTO.getEventCategory().getId());
+	// Event event = new Event(
+	// eventDTO.getStartDate(),
+	// eventDTO.getEndDate(),
+	// eventDTO.getTitle(),
+	// eventDTO.getLocation(),
+	// eventDTO.getDescription(),
+	// "key words", /// need to remove this probably
+	// eventCategory);
 
-			if (pictures != null) {
-				Collection<EventPicture> eventPictures = new ArrayList<EventPicture>();
-				for (MultipartFile picture : pictures) {
-					String uniqFileName = UUID.randomUUID()
-							.toString()
-							.substring(0, 12) + "-" + picture.getOriginalFilename();
-					Path imagePath = Paths.get(uploadEventsDir, uniqFileName);
+	// if (pictures != null) {
+	// Collection<EventPicture> eventPictures = new ArrayList<EventPicture>();
+	// for (MultipartFile picture : pictures) {
+	// String uniqFileName = UUID.randomUUID()
+	// .toString()
+	// .substring(0, 12) + "-" + picture.getOriginalFilename();
+	// Path imagePath = Paths.get(uploadEventsDir, uniqFileName);
 
-					EventPicture eventPicture = new EventPicture(
-							uniqFileName,
-							picture.getOriginalFilename(),
-							"apraksts", /// we need this?
-							event);
+	// EventPicture eventPicture = new EventPicture(
+	// uniqFileName,
+	// picture.getOriginalFilename(),
+	// "apraksts", /// we need this?
+	// event);
 
-					eventPictures.add(eventPicture);
-					Files.write(imagePath, picture.getBytes());
-				}
+	// eventPictures.add(eventPicture);
+	// Files.write(imagePath, picture.getBytes());
+	// }
 
-				event.setEventPictures(eventPictures);
-			}
+	// event.setEventPictures(eventPictures);
+	// }
 
-			eventsService.create(event);
-			return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Jaunums izveidots!", null));
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(new ApiResponse<>("Kļūda: " + e.getMessage(), null));
-		}
+	// eventsService.create(event);
+	// return ResponseEntity.status(HttpStatus.CREATED).body(new
+	// ApiResponse<>("Jaunums izveidots!", null));
+	// } catch (Exception e) {
+	// System.out.println(e.getMessage());
+	// return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	// .body(new ApiResponse<>("Kļūda: " + e.getMessage(), null));
+	// }
 
-	}
+	// }
 
 	@PostMapping(value = "products/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ApiResponse<?>> postCreateProduct(@Valid @RequestPart ProductDTO productDTO,
@@ -234,63 +240,68 @@ public class AdminController {
 
 	}
 
-	@PostMapping(value = "events-pictures/create-delete", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<ApiResponse<?>> postCreateAndDeleteEventPicture(
-			@Valid @RequestPart EventPictureDTO eventPictureDTO,
-			BindingResult result, @RequestParam(required = false) List<Integer> deleteIds,
-			@RequestPart(required = false) List<MultipartFile> pictures) {
+	// @PostMapping(value = "events-pictures/create-delete", consumes =
+	// MediaType.MULTIPART_FORM_DATA_VALUE)
+	// public ResponseEntity<ApiResponse<?>> postCreateAndDeleteEventPicture(
+	// @Valid @RequestPart EventPictureDTO eventPictureDTO,
+	// BindingResult result, @RequestParam(required = false) List<Integer>
+	// deleteIds,
+	// @RequestPart(required = false) List<MultipartFile> pictures) {
 
-		if (result.hasErrors()) {
-			List<String> errors = result.getAllErrors()
-					.stream()
-					.map(error -> error.getDefaultMessage())
-					.collect(Collectors.toList());
+	// if (result.hasErrors()) {
+	// List<String> errors = result.getAllErrors()
+	// .stream()
+	// .map(error -> error.getDefaultMessage())
+	// .collect(Collectors.toList());
 
-			ApiResponse<List<String>> errorResponse = new ApiResponse<>("Nepareizi ievades lauki!", errors);
-			return ResponseEntity.badRequest().body(errorResponse);
-		}
+	// ApiResponse<List<String>> errorResponse = new ApiResponse<>("Nepareizi
+	// ievades lauki!", errors);
+	// return ResponseEntity.badRequest().body(errorResponse);
+	// }
 
-		try {
-			Event event = eventsService.retrieveById(eventPictureDTO.getId());
-			Collection<EventPicture> eventPictures = event.getEventPictures();
+	// try {
+	// Event event = eventsService.retrieveById(eventPictureDTO.getId());
+	// Collection<EventPicture> eventPictures = event.getEventPictures();
 
-			if (deleteIds != null) {
-				for (Integer pictureId : deleteIds) {
-					EventPicture eventPicture = eventsPictureService.retrieveById(pictureId);
-					eventPictures.remove(eventPicture);
-					Path deleteImagePath = Paths.get(uploadEventsDir, eventPicture.getImageUrl());
-					Files.deleteIfExists(deleteImagePath);
-				}
-			}
+	// if (deleteIds != null) {
+	// for (Integer pictureId : deleteIds) {
+	// EventPicture eventPicture = eventsPictureService.retrieveById(pictureId);
+	// eventPictures.remove(eventPicture);
+	// Path deleteImagePath = Paths.get(uploadEventsDir,
+	// eventPicture.getImageUrl());
+	// Files.deleteIfExists(deleteImagePath);
+	// }
+	// }
 
-			if (pictures != null) {
-				for (MultipartFile picture : pictures) {
-					String uniqFileName = UUID.randomUUID().toString().substring(0, 12) + "-"
-							+ picture.getOriginalFilename();
-					Path imagePath = Paths.get(uploadEventsDir, uniqFileName);
+	// if (pictures != null) {
+	// for (MultipartFile picture : pictures) {
+	// String uniqFileName = UUID.randomUUID().toString().substring(0, 12) + "-"
+	// + picture.getOriginalFilename();
+	// Path imagePath = Paths.get(uploadEventsDir, uniqFileName);
 
-					EventPicture newEventPicture = new EventPicture(
-							uniqFileName,
-							picture.getOriginalFilename(),
-							"Bildes apraksts!",
-							event);
+	// EventPicture newEventPicture = new EventPicture(
+	// uniqFileName,
+	// picture.getOriginalFilename(),
+	// "Bildes apraksts!",
+	// event);
 
-					eventPictures.add(newEventPicture);
-					Files.write(imagePath, picture.getBytes());
-				}
-			}
+	// eventPictures.add(newEventPicture);
+	// Files.write(imagePath, picture.getBytes());
+	// }
+	// }
 
-			event.setEventPictures(eventPictures);
-			eventsService.update(event.getId(), event);
+	// event.setEventPictures(eventPictures);
+	// eventsService.update(event.getId(), event);
 
-			return ResponseEntity.status(HttpStatus.CREATED).body(new ApiResponse<>("Attēli atjaunoti!", null));
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(new ApiResponse<>("Kļūda: " + e.getMessage(), null));
-		}
+	// return ResponseEntity.status(HttpStatus.CREATED).body(new
+	// ApiResponse<>("Attēli atjaunoti!", null));
+	// } catch (Exception e) {
+	// System.out.println(e.getMessage());
+	// return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+	// .body(new ApiResponse<>("Kļūda: " + e.getMessage(), null));
+	// }
 
-	}
+	// }
 
 	@PostMapping(value = "products-pictures/create-delete", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<ApiResponse<?>> postCreateAndDeleteProductPicture(
@@ -457,42 +468,44 @@ public class AdminController {
 
 	}
 
-	@PutMapping(value = "events/{id}")
-	public ResponseEntity<ApiResponse<?>> updateEvent(@PathVariable int id, @RequestBody EventDTO eventDTO,
-			BindingResult result) {
+	// @PutMapping(value = "events/{id}")
+	// public ResponseEntity<ApiResponse<?>> updateEvent(@PathVariable int id,
+	// @RequestBody EventDTO eventDTO,
+	// BindingResult result) {
 
-		if (result.hasErrors()) {
-			List<String> errors = result.getAllErrors()
-					.stream()
-					.map(error -> error.getDefaultMessage())
-					.collect(Collectors.toList());
+	// if (result.hasErrors()) {
+	// List<String> errors = result.getAllErrors()
+	// .stream()
+	// .map(error -> error.getDefaultMessage())
+	// .collect(Collectors.toList());
 
-			ApiResponse<List<String>> errorResponse = new ApiResponse<>("Nepareizi ievades lauki!", errors);
-			return ResponseEntity.badRequest().body(errorResponse);
-		}
-		try {
-			Event event = eventsService.retrieveById(id);
-			EventCategory eventCategory = eventsCategoryService.retrieveById(eventDTO.getEventCategory().getId());
+	// ApiResponse<List<String>> errorResponse = new ApiResponse<>("Nepareizi
+	// ievades lauki!", errors);
+	// return ResponseEntity.badRequest().body(errorResponse);
+	// }
+	// try {
+	// Event event = eventsService.retrieveById(id);
+	// EventCategory eventCategory =
+	// eventsCategoryService.retrieveById(eventDTO.getEventCategory().getId());
 
-			event.setTitle(eventDTO.getTitle());
-			event.setLocation(eventDTO.getLocation());
-			event.setStartDate(eventDTO.getStartDate());
-			event.setEndDate(eventDTO.getEndDate());
-			event.setDescription(eventDTO.getDescription());
-			event.setCategory(eventCategory);
+	// event.setTitle(eventDTO.getTitle());
+	// event.setLocation(eventDTO.getLocation());
+	// event.setStartDate(eventDTO.getStartDate());
+	// event.setEndDate(eventDTO.getEndDate());
+	// event.setDescription(eventDTO.getDescription());
+	// event.setCategory(eventCategory);
 
-			eventsService.update(event.getId(), event);
+	// eventsService.update(event.getId(), event);
 
-			return ResponseEntity.ok(new ApiResponse<>(null, eventDTO));
-		} catch (NoContentException e) {
-			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.internalServerError().body(
-					new ApiResponse<>(e.getMessage(), null));
-		}
-
-	}
+	// return ResponseEntity.ok(new ApiResponse<>(null, eventDTO));
+	// } catch (NoContentException e) {
+	// return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// return ResponseEntity.internalServerError().body(
+	// new ApiResponse<>(e.getMessage(), null));
+	// }
+	// }
 
 	@PutMapping(value = "products/{id}")
 	public ResponseEntity<ApiResponse<?>> updateProduct(@PathVariable int id, @RequestBody ProductDTO productDTO,

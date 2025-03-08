@@ -27,18 +27,11 @@ import lombok.NoArgsConstructor;
 @Where(clause = "deleted=false")
 public class EventPicture extends AuditableEntity {
 
-	@NotNull
 	@Column(nullable = false, unique = true)
 	private String imageUrl;
 
 	@NotNull
 	@Column(nullable = false)
-	@Size(min = 5, max = 200, message = "Nosaukums nedrīkst saturēt mazāk par 5 vai vairāk par 200 rakstzīmēm!")
-	private String title;
-
-	@NotNull
-	@Column(nullable = false)
-	@Size(min = 0, max = 150, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
 	private String description;
 
 	@ManyToOne
@@ -53,7 +46,6 @@ public class EventPicture extends AuditableEntity {
 	@Builder
 	public EventPicture(String imageUrl, String title, String description, Event event) {
 		setImageUrl(imageUrl);
-		setTitle(title);
 		setDescription(description);
 		setEvent(event);
 	}
