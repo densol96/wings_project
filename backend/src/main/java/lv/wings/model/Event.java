@@ -1,13 +1,12 @@
 package lv.wings.model;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
+import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -19,52 +18,41 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import lv.wings.model.translation.EventTranslation;
+import lv.wings.model.translation.Localable;
+import lv.wings.model.translation.Translatable;
+
 @Entity
-@Table(name = "events")
+@Table(name = "events_lv")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
 @SQLDelete(sql = "UPDATE event SET deleted = true WHERE event_id=?")
 @Where(clause = "deleted=false")
-public class Event extends AuditableEntity {
-	@NotNull
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private Date startDate;
+public class Event extends AuditableEntity implements Translatable {
 
-	@NotNull
-	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private Date endDate;
+	private LocalDate startDate;
 
-	@NotNull
-	@Size(min = 5, max = 300, message = "Nosaukums nedrīkst saturēt mazāk par 5 vai vairāk par 300 rakstzīmēm!")
-	private String title;
-
-	@NotNull
-	@Size(min = 2, max = 200, message = "Vieta nedrīkst saturēt mazāk par 2 vai vairāk par 200 rakstzīmēm!")
-	private String location;
-
-	@NotNull
-	@Size(min = 0, max = 1000, message = "Aprakstā par daudz rakstzīmju! (0-3000)")
-	private String description;
-
-	@NotNull
-	private String keyWords;
+	private LocalDate endDate;
 
 	@ManyToOne
 	@JsonManagedReference
-	@JoinColumn(name = "event_category_id")
+	@JoinColumn(name = "category_id", nullable = false)
 	private EventCategory category;
 
 	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
 	@JsonManagedReference
-	private Collection<EventPicture> eventPictures;
+	private List<EventPicture> eventPictures;
+
+	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+	@Getter(AccessLevel.NONE)
+	private List<EventTranslation> translations;
 
 	// Soft delete
 	@Column(name = "deleted")
@@ -72,8 +60,8 @@ public class Event extends AuditableEntity {
 
 	@Builder
 	public Event(
-			Date startDate,
-			Date endDate,
+			LocalDate startDate,
+			LocalDate endDate,
 			String title,
 			String location,
 			String description,
@@ -81,11 +69,11 @@ public class Event extends AuditableEntity {
 			EventCategory category) {
 		setStartDate(startDate);
 		setEndDate(endDate);
-		setTitle(title);
-		setLocation(location);
-		setDescription(description);
-		setKeyWords(keyWords);
 		setCategory(category);
 	}
 
+	@Override
+	public List<Localable> getTranslations() {
+		return translations.stream().map(tr -> (Localable) tr).toList();
+	}
 }

@@ -7,7 +7,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Customer;
@@ -27,37 +29,31 @@ public class CustomerServiceImpl implements ICRUDService<Customer> {
 
     @Override
     @Cacheable("Customers")
-    public List<Customer> retrieveAll() throws Exception {
-        if (customerRepo.count() == 0)
-            throw new Exception("There are no customers");
-
+    public List<Customer> retrieveAll() {
         return customerRepo.findAll();
     }
 
     @Override
     @Cacheable(value = "Customers", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-    public Page<Customer> retrieveAll(Pageable pageable) throws Exception {
-        if (customerRepo.count() == 0)
-            throw new Exception("There are no customers");
+    public Page<Customer> retrieveAll(Integer page, Integer size, String sortBy, String sortDirection) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
         return customerRepo.findAll(pageable);
     }
 
     @Override
     @Cacheable(value = "Customers", key = "#id")
-    public Customer retrieveById(Integer id) throws Exception {
-        if (id < 0)
-            throw new Exception("Invalid ID!");
+    public Customer retrieveById(Integer id) {
 
         if (customerRepo.existsById(id)) {
             return customerRepo.findById(id).get();
         } else {
-            throw new Exception("Customer with ID [" + id + "] does not exist");
+            throw new RuntimeException("Customer with ID [" + id + "] does not exist");
         }
     }
 
     @Override
     @CacheEvict(value = "Customers", allEntries = true)
-    public void deleteById(Integer id) throws Exception {
+    public void deleteById(Integer id) {
         Customer customerToDelete = retrieveById(id);
 
         List<Purchase> purchases = purchaseRepo.findByCustomer(customerToDelete);
@@ -72,13 +68,13 @@ public class CustomerServiceImpl implements ICRUDService<Customer> {
 
     @Override
     @CacheEvict(value = "Customers", allEntries = true)
-    public void create(Customer customer) throws Exception {
+    public void create(Customer customer) {
         Customer customerExist = customerRepo.findByNameAndSurname(customer.getName(), customer.getSurname());
 
         if (customerExist == null) {
             customerRepo.save(customer);
         } else {
-            throw new Exception("Customer already exists");
+            throw new RuntimeException("Customer already exists");
         }
 
     }
@@ -86,7 +82,7 @@ public class CustomerServiceImpl implements ICRUDService<Customer> {
     @Override
     @CacheEvict(value = "Customers", allEntries = true)
     @CachePut(value = "Customers", key = "#id")
-    public void update(Integer id, Customer customer) throws Exception {
+    public void update(Integer id, Customer customer) {
         Customer customerToUpdate = retrieveById(id);
 
         customerToUpdate.setName(customer.getName());

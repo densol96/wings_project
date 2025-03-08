@@ -20,6 +20,8 @@ public class ParameterValidationInterceptor implements HandlerInterceptor {
         shouldBeGreaterThanZero("size", request.getParameter("size"));
         validateAgainstAllowedValues("sortDirection", request.getParameter("sortDirection"),
                 new ArrayList<>(List.of("asc", "desc")));
+        validateAgainstAllowedValues("sortBy", request.getParameter("sortDirection"),
+                new ArrayList<>(List.of("title", "createdAt")));
         return true;
     }
 

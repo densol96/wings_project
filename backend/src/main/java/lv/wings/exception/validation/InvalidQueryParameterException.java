@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class InvalidQueryParameterException extends RuntimeException {
-    private String queryName;
-    private String queryValue;
-    private Boolean fromInterceptor;
+    private final String queryName;
+    private final String queryValue;
+    private final Boolean fromInterceptor;
 
     public InvalidQueryParameterException(String queryName, String queryValue, boolean fromInterceptor) {
         super("Invalid query parameter: " + queryName + " with value: " + queryValue);

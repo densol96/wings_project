@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import lv.wings.model.Event;
 import lv.wings.model.EventCategory;
 
-public interface IEventRepo extends JpaRepository<Event, Integer> {
+public interface EventRepository extends JpaRepository<Event, Integer> {
 	List<Event> findAllByOrderByIdDesc();
 
 	List<Event> findAllByOrderByIdAsc();

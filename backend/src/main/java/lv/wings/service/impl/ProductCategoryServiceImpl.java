@@ -8,7 +8,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Product;
@@ -28,43 +30,42 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 
 	@Override
 	@Cacheable("ProductCategories")
-	public ArrayList<ProductCategory> retrieveAll() throws Exception {
+	public List<ProductCategory> retrieveAll() {
 		// izmest izņēmumu, ja ir tukša tabula
 		if (productCategoriesRepo.count() == 0)
-			throw new Exception("Product category table is empty");
-
-		// pretējā gadījumā sameklēt visus ierakstus no repo
-		return (ArrayList<ProductCategory>) productCategoriesRepo.findAll();
+			throw new RuntimeException("Product category table is empty");
+		return productCategoriesRepo.findAll();
 	}
 
 	@Override
 	@Cacheable(value = "ProductCategories", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-	public Page<ProductCategory> retrieveAll(Pageable pageable) throws Exception {
+	public Page<ProductCategory> retrieveAll(Integer page, Integer size, String sortBy, String sortDirection) {
 
 		if (productCategoriesRepo.count() == 0)
-			throw new Exception("Product category table is empty");
+			throw new RuntimeException("Product category table is empty");
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
 
 		return (Page<ProductCategory>) productCategoriesRepo.findAll(pageable);
 	}
 
 	@Override
 	@Cacheable(value = "ProductCategories", key = "#id")
-	public ProductCategory retrieveById(Integer id) throws Exception {
+	public ProductCategory retrieveById(Integer id) {
 		if (id < 0)
-			throw new Exception("Id should be positive");
+			throw new RuntimeException("Id should be positive");
 
 		if (productCategoriesRepo.existsById(id)) {
 			return productCategoriesRepo.findById(id).get();
 		} else {
-			throw new Exception("Product category with this id (" + id + ") is not in system");
+			throw new RuntimeException("Product category with this id (" + id + ") is not in system");
 		}
 	}
 
 	@Override
 	@CacheEvict(value = "ProductCategories", allEntries = true)
-	public void deleteById(Integer id) throws Exception {
+	public void deleteById(Integer id) {
 		if (retrieveById(id) == null)
-			throw new Exception("Product category with (id:" + id + ") does not exist!");
+			throw new RuntimeException("Product category with (id:" + id + ") does not exist!");
 
 		// atrast kategoriju kuru gribam dzēst
 		ProductCategory ProductCategoryForDeleting = retrieveById(id);
@@ -82,13 +83,13 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 
 	@Override
 	@CacheEvict(value = "ProductCategories", allEntries = true)
-	public void create(ProductCategory category) throws Exception {
+	public void create(ProductCategory category) {
 		ProductCategory existingProductCategory = productCategoriesRepo.findByTitleAndDescription(category.getTitle(),
 				category.getDescription());
 
 		// tāda category jau eksistē
 		if (existingProductCategory != null)
-			throw new Exception("Product category with name: " + category.getTitle() + " already exists in DB!");
+			throw new RuntimeException("Product category with name: " + category.getTitle() + " already exists in DB!");
 
 		// tāds driver vēl neeksistē
 		productCategoriesRepo.save(category);
@@ -98,7 +99,7 @@ public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory>
 	@Override
 	@CacheEvict(value = "ProductCategories", allEntries = true)
 	@CachePut(value = "ProductCategories", key = "#id")
-	public void update(Integer id, ProductCategory category) throws Exception {
+	public void update(Integer id, ProductCategory category) {
 		// atrodu
 		ProductCategory productCategoryForUpdating = retrieveById(id);
 

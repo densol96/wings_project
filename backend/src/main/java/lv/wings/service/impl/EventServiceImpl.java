@@ -1,78 +1,44 @@
 package lv.wings.service.impl;
 
-import java.util.List;
-
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
+import lv.wings.dto.response.event.EventTranslationDto;
+import lv.wings.dto.response.event.PublicEventDto;
+import lv.wings.mapper.EventMapper;
 import lv.wings.model.Event;
-import lv.wings.repo.IEventRepo;
-import lv.wings.service.ICRUDService;
+import lv.wings.model.translation.EventTranslation;
+import lv.wings.repo.EventRepository;
+import lv.wings.service.AbstractCRUDService;
+import lv.wings.service.EventService;
+import lv.wings.service.LocaleService;
 
 @Service
-@RequiredArgsConstructor
-public class EventServiceImpl implements ICRUDService<Event> {
+public class EventServiceImpl extends AbstractCRUDService<Event, Integer> implements EventService {
 
-	private final IEventRepo eventRepo;
+    private final EventMapper eventMapper;
+    private final LocaleService localeService;
 
-	@Override
-	@Cacheable("Events")
-	public List<Event> retrieveAll() {
-		return eventRepo.findAll();
-	}
+    public EventServiceImpl(EventRepository eventRepository, EventMapper eventMapper, LocaleService localeService) {
+        super(eventRepository, "Event", "entity.event");
+        this.eventMapper = eventMapper;
+        this.localeService = localeService;
+    }
 
-	@Override
-	@Cacheable(value = "Events", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-	public Page<Event> retrieveAll(Pageable pageable) {
-		return eventRepo.findAll(pageable);
-	}
+    @Override
+    public Page<PublicEventDto> getEvents(Pageable pageable) {
+        return findAll(pageable).map(this::eventToPublicDto);
+    }
 
-	@Override
-	@Cacheable(value = "Events", key = "#id")
-	public Event retrieveById(Integer id) {
-		Event foundEvent = eventRepo.findById(id)
-				.orElseThrow(() -> new RuntimeException("Event with the id: (" + id + ") does not exist!"));
-		return foundEvent;
-	}
+    @Override
+    public PublicEventDto getEvent(Integer id) {
+        return eventToPublicDto(findById(id));
+    }
 
-	@Override
-	@CacheEvict(value = "Events", allEntries = true)
-	public void deleteById(Integer id) throws Exception {
-		Event event = eventRepo.findById(id)
-				.orElseThrow(() -> new Exception("Event with id:" + id + " does not exist"));
-		eventRepo.delete(event);
-	}
-
-	@Override
-	@CacheEvict(value = "Events", allEntries = true)
-	public void create(Event event) throws Exception {
-		Event existedEvent = eventRepo.findByTitle(event.getTitle());
-
-		if (existedEvent != null)
-			throw new Exception("Event with title: " + event.getTitle() + " already exists");
-
-		eventRepo.save(event);
-	}
-
-	@Override
-	@CacheEvict(value = "Events", allEntries = true)
-	@CachePut(value = "Events", key = "#id")
-	public void update(Integer id, Event event) throws Exception {
-		Event foundEvent = eventRepo.findById(event.getId())
-				.orElseThrow(() -> new Exception("Event with (id:" + id + ") does not exist"));
-
-		foundEvent.setStartDate(event.getStartDate());
-		foundEvent.setEndDate(event.getEndDate());
-		foundEvent.setTitle(event.getTitle());
-		foundEvent.setLocation(event.getLocation());
-		foundEvent.setDescription(event.getDescription());
-		foundEvent.setKeyWords(event.getKeyWords());
-
-		eventRepo.save(event);
-	}
+    private PublicEventDto eventToPublicDto(Event event) {
+        EventTranslation translation = (EventTranslation) localeService.getRightTranslation(event);
+        EventTranslationDto translationDto = eventMapper.eventTranslationToDto(translation);
+        return eventMapper.eventToPublicDto(event, translationDto);
+    }
 }

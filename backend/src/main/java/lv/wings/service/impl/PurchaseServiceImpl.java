@@ -7,7 +7,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lv.wings.model.Purchase;
@@ -27,37 +29,38 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase> {
 
     @Override
     @Cacheable("Purchases")
-    public List<Purchase> retrieveAll() throws Exception {
+    public List<Purchase> retrieveAll() {
         if (purchaseRepo.count() == 0)
-            throw new Exception("There are no purchases");
+            throw new RuntimeException("There are no purchases");
 
         return purchaseRepo.findAll();
     }
 
     @Override
     @Cacheable(value = "Purchases", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-    public Page<Purchase> retrieveAll(Pageable pageable) throws Exception {
+    public Page<Purchase> retrieveAll(Integer page, Integer size, String sortBy, String sortDirection) {
         if (purchaseRepo.count() == 0)
-            throw new Exception("There are no purchases");
-        return (Page<Purchase>) purchaseRepo.findAll(pageable);
+            throw new RuntimeException("There are no purchases");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));
+        return purchaseRepo.findAll(pageable);
     }
 
     @Override
     @Cacheable(value = "Purchases", key = "#id")
-    public Purchase retrieveById(Integer id) throws Exception {
+    public Purchase retrieveById(Integer id) {
         if (id < 0)
-            throw new Exception("Invalid ID");
+            throw new RuntimeException("Invalid ID");
 
         if (purchaseRepo.existsById(id)) {
             return purchaseRepo.findById(id).get();
         } else {
-            throw new Exception("Purchase with id [" + id + "] does not exist");
+            throw new RuntimeException("Purchase with id [" + id + "] does not exist");
         }
     }
 
     @Override
     @CacheEvict(value = "Purchases", allEntries = true)
-    public void deleteById(Integer id) throws Exception {
+    public void deleteById(Integer id) {
         Purchase purchaseToDelete = retrieveById(id);
 
         List<PurchaseElement> purchaseElements = elementRepo.findByPurchase(purchaseToDelete);
@@ -72,7 +75,7 @@ public class PurchaseServiceImpl implements ICRUDService<Purchase> {
 
     @Override
     @CacheEvict(value = "Purchases", allEntries = true)
-    public void create(Purchase purchase) throws Exception {
+    public void create(Purchase purchase) {
         purchaseRepo.save(purchase);
     }
 

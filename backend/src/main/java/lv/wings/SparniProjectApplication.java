@@ -1,6 +1,7 @@
 package lv.wings;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -26,11 +27,11 @@ import lv.wings.model.ProductCategory;
 import lv.wings.model.Purchase;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
+import lv.wings.repo.EventRepository;
 import lv.wings.repo.ICustomerRepo;
 import lv.wings.repo.IDeliveryTypeRepo;
 import lv.wings.repo.IEventCategory;
 import lv.wings.repo.IEventPictureRepo;
-import lv.wings.repo.IEventRepo;
 import lv.wings.repo.IPaymentTypeRepo;
 import lv.wings.repo.IProductCategoryRepo;
 import lv.wings.repo.IProductPictureRepo;
@@ -57,7 +58,7 @@ public class SparniProjectApplication {
 			IPurchaseRepo purchaseRepo,
 			IDeliveryTypeRepo deliveryTypeRepo,
 			IPaymentTypeRepo paymentTypeRepo,
-			IEventRepo eventRepo,
+			EventRepository eventRepo,
 			IEventPictureRepo eventPictureRepo,
 			IEventCategory eventCategoryRepo,
 			IProductCategoryRepo productCategoryRepo,
@@ -142,8 +143,8 @@ public class SparniProjectApplication {
 
 				for (int i = 1; i <= 10; i++) {
 					Event e = Event.builder()
-							.startDate(Date.from(Instant.now()))
-							.endDate(Date.from(Instant.now().plusSeconds(86400 * 1))) // 24hrs
+							.startDate(LocalDate.now())
+							.endDate(LocalDate.now().plusDays(1)) // 24hrs
 							.title("Pasakums " + i)
 							.description("Pasākums visiem cilvēkiem!")
 							.location("Liepāja")
