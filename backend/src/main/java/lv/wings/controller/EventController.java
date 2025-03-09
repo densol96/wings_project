@@ -24,7 +24,13 @@ public class EventController {
 
 	@GetMapping
 	public ResponseEntity<Page<PublicEventDto>> getLatestEvents(
-			@PageableDefault(page = 0, size = 4, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+			@PageableDefault(page = 1, size = 5, sort = "createdAt", direction = Sort.Direction.ASC) Pageable pageable) {
+
+		Sort sort = pageable.getSort();
+
+		System.out.println("CONTROLLER sortBy => " + sort.toList().get(0).getProperty());
+		System.out.println("CONTROLLER sortDirection => " + sort.toList().get(0).getDirection());
+
 		return ResponseEntity.ok(eventsService.getEvents(pageable));
 	}
 

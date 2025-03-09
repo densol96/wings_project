@@ -80,12 +80,13 @@ public class EventCategoryServiceImpl implements ICRUDService<EventCategory> {
 	@Override
 	@CacheEvict(value = "EventCategories", allEntries = true)
 	public void create(EventCategory eventCategory) {
-		EventCategory existedPaskumaKategorija = eventCategoryRepo
-				.findByTitle(eventCategory.getTitle());
+		// EventCategory existedPaskumaKategorija = eventCategoryRepo
+		// .findByTitle(eventCategory.getTitle());
 
-		if (existedPaskumaKategorija != null)
-			throw new RuntimeException(
-					"Event category with title: " + eventCategory.getTitle() + " already exists");
+		// if (existedPaskumaKategorija != null)
+		// throw new RuntimeException(
+		// "Event category with title: " + eventCategory.getTitle() + " already
+		// exists");
 
 		eventCategoryRepo.save(eventCategory);
 

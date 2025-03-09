@@ -3,6 +3,7 @@ package lv.wings.controller;
 import java.util.Locale;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Getter;
@@ -23,9 +24,9 @@ public class TestController {
 
     private final ITestRepo testRepo;
 
-    @GetMapping("/test")
-    public String test(Locale locale) {
-        System.out.println(locale);
+    @GetMapping("/test/{id}")
+    public String test(@PathVariable Integer id) {
+        System.out.println("IN CONTROLLER => " + id);
         return "IN TEST";
     }
 }

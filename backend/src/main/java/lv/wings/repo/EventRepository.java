@@ -12,7 +12,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
 
 	List<Event> findAllByOrderByIdAsc();
 
-	Event findByTitle(String title);
+	// Event findByTitle(String title);
 
 	List<Event> findByCategory(EventCategory category);
 }

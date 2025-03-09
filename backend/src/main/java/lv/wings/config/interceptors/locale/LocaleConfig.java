@@ -8,10 +8,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
+
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.servlet.LocaleResolver;
 
 @Configuration
+@RequiredArgsConstructor
 public class LocaleConfig implements WebMvcConfigurer {
+
+    private final RequestParamLocaleResolver localeResolver;
+
     @Bean
     public MessageSource messageSource() {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
@@ -29,7 +36,7 @@ public class LocaleConfig implements WebMvcConfigurer {
 
     @Bean
     public LocaleResolver localeResolver() {
-        return new RequestParamLocaleResolver();
+        return localeResolver;
     }
 
     @Override

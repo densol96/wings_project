@@ -64,6 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BasicErrorDto> handleUnexpectedException(Exception e, Locale locale) {
         log.error("*** Unexpected exception of type {}: {}", e.getClass().getSimpleName(), e.getMessage());
+        // e.printStackTrace();
         return handleProceduralException(e, locale);
     }
 
@@ -72,7 +73,6 @@ public class GlobalExceptionHandler {
         // : messageSource.getMessage("error.internal", null, locale);
 
         String message = messageSource.getMessage("error.internal", null, locale);
-
         return ResponseEntity
                 .internalServerError()
                 .body(BasicErrorDto.builder().message(message).build());
