@@ -48,8 +48,8 @@ import lv.wings.responses.ApiListResponse;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;
 
-@RestController
-@RequestMapping("/admin/api/")
+// @RestController
+// @RequestMapping("/admin/api/")
 public class AdminController {
 
 	@Autowired

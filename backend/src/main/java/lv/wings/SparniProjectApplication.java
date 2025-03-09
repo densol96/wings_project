@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.CommandLineRunner;
@@ -12,11 +14,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.extern.slf4j.Slf4j;
+import lv.wings.enums.LocaleCode;
 import lv.wings.model.Customer;
 import lv.wings.model.DeliveryType;
 import lv.wings.model.Event;
@@ -27,6 +31,7 @@ import lv.wings.model.ProductCategory;
 import lv.wings.model.Purchase;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
+import lv.wings.model.translation.EventTranslation;
 import lv.wings.repo.EventRepository;
 import lv.wings.repo.ICustomerRepo;
 import lv.wings.repo.IDeliveryTypeRepo;
@@ -53,6 +58,7 @@ public class SparniProjectApplication {
 	}
 
 	// @Bean
+	// @Profile("seed")
 	public CommandLineRunner sparniDB(
 			ICustomerRepo customerRepo,
 			IPurchaseRepo purchaseRepo,
@@ -142,19 +148,27 @@ public class SparniProjectApplication {
 				userRepo.save(u1);
 
 				for (int i = 1; i <= 10; i++) {
+
+					EventTranslation lv = EventTranslation.builder().title("lv_title_" + i)
+							.description("lv_description_" + i).locale(LocaleCode.LV).build();
+
+					EventTranslation en = EventTranslation.builder().title("en_title_" + i)
+							.description("en_description_" + i).locale(LocaleCode.EN).build();
+
 					Event e = Event.builder()
 							.startDate(LocalDate.now())
 							.endDate(LocalDate.now().plusDays(1)) // 24hrs
-							.title("Pasakums " + i)
-							.description("Pasākums visiem cilvēkiem!")
-							.location("Liepāja")
 							.category(eventCategory1)
-							.keyWords("example")
+							.translations(List.of(lv, en))
 							.build();
+
+					lv.setEvent(e);
+					en.setEvent(e);
+
 					e.setCreatedBy(u1);
 					eventRepo.save(e);
 					if (i <= 3) {
-						EventPicture bilde = new EventPicture("bilde" + i + ".jpg", "bilde1", "lababilde", e);
+						EventPicture bilde = new EventPicture(UUID.randomUUID().toString(), "bilde1", "lababilde", e);
 						bilde.setCreatedBy(u1);
 						eventPictureRepo.save(bilde);
 					}

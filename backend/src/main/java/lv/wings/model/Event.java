@@ -29,7 +29,7 @@ import lv.wings.model.translation.Localable;
 import lv.wings.model.translation.Translatable;
 
 @Entity
-@Table(name = "events_lv")
+@Table(name = "events")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
@@ -52,7 +52,7 @@ public class Event extends AuditableEntity implements Translatable {
 
 	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
 	@Getter(AccessLevel.NONE)
-	private List<EventTranslation> translations;
+	private List<EventTranslation> translations = new ArrayList<>();
 
 	// Soft delete
 	@Column(name = "deleted")
@@ -62,14 +62,12 @@ public class Event extends AuditableEntity implements Translatable {
 	public Event(
 			LocalDate startDate,
 			LocalDate endDate,
-			String title,
-			String location,
-			String description,
-			String keyWords,
-			EventCategory category) {
+			EventCategory category,
+			List<EventTranslation> translations) {
 		setStartDate(startDate);
 		setEndDate(endDate);
 		setCategory(category);
+		setTranslations(translations);
 	}
 
 	@Override

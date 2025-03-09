@@ -17,7 +17,7 @@ public interface EventMapper {
     @Mapping(target = "imageUrl", expression = "java(event.getEventPictures() != null && !event.getEventPictures().isEmpty() ? event.getEventPictures().get(0).getImageUrl() : null)")
     @Mapping(target = "category", expression = "java(event.getCategory() != null ? event.getCategory().getTitle() : null)")
     @Mapping(target = "translation", source = "translation")
-    PublicEventDto eventToPublicDto(Event product, EventTranslationDto translation);
+    PublicEventDto eventToPublicDto(Event event, EventTranslationDto translation);
 
     EventTranslationDto eventTranslationToDto(EventTranslation translation);
 }

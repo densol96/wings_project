@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Locale;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.LocaleResolver;
 
+@Component
 public class RequestParamLocaleResolver implements LocaleResolver {
     private Locale defaultLocale = Locale.forLanguageTag("lv");
     private String paramName = "lang";
@@ -23,5 +26,6 @@ public class RequestParamLocaleResolver implements LocaleResolver {
 
     @Override
     public void setLocale(HttpServletRequest request, HttpServletResponse response, Locale locale) {
+        // Not needed
     }
 }
