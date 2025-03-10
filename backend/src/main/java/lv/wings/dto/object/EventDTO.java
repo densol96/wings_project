@@ -8,8 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lv.wings.dto.DTOMeta;
-import lv.wings.model.Event;
-
+import lv.wings.model.entity.Event;
 
 @Getter
 @Setter
@@ -40,17 +39,18 @@ public class EventDTO extends DTOObject {
 
 	public EventCategoryDTO eventCategory;
 
-	//@DTOMeta(ignore = true)
-	//public long timeLeftForEvent;
+	// @DTOMeta(ignore = true)
+	// public long timeLeftForEvent;
 
 	// public LocalDateTime createDate;
 
-	/* 
-	@Override
-	public void onFinish(Object source) {
-		super.onFinish(source);
-		Event event = (Event) source;
-		this.timeLeftForEvent = new Date().getTime() - event.getStartDate().getTime();
-	}
-		*/
+	/*
+	 * @Override
+	 * public void onFinish(Object source) {
+	 * super.onFinish(source);
+	 * Event event = (Event) source;
+	 * this.timeLeftForEvent = new Date().getTime() -
+	 * event.getStartDate().getTime();
+	 * }
+	 */
 }

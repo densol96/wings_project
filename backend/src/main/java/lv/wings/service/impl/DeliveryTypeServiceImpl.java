@@ -13,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.DeliveryType;
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.DeliveryType;
+import lv.wings.model.entity.Purchase;
 import lv.wings.repo.IDeliveryTypeRepo;
 import lv.wings.repo.IPurchaseRepo;
 import lv.wings.service.ICRUDService;

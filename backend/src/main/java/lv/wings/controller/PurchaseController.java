@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.mail.MailSender;
-import lv.wings.model.Customer;
-import lv.wings.model.DeliveryType;
-import lv.wings.model.PaymentType;
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.Customer;
+import lv.wings.model.entity.DeliveryType;
+import lv.wings.model.entity.PaymentType;
+import lv.wings.model.entity.Purchase;
 import lv.wings.poi.PoiController;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;

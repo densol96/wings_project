@@ -10,21 +10,18 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lv.wings.dto.DTOMeta;
-import lv.wings.model.Product;
-
+import lv.wings.model.entity.Product;
 
 @Getter
 @Setter
 public class ProductDTO extends DTOObject {
-	@DTOMeta(sourceField="productId")
+	@DTOMeta(sourceField = "productId")
 	public int id;
-
 
 	@NotNull
 	@Size(min = 4, max = 50)
 	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ ]+", message = "Only letters and space are allowed")
 	public String title;
-
 
 	@Column(name = "description")
 	@NotNull
@@ -40,10 +37,10 @@ public class ProductDTO extends DTOObject {
 	public int amount;
 
 	public ProductCategoryDTO productCategory;
-	
+
 	public ArrayList<ProductPictureDTO> productPictures;
 
-	@DTOMeta(ignore=true)
+	@DTOMeta(ignore = true)
 	public int imageCount;
 
 	@Override

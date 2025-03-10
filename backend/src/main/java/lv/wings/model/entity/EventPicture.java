@@ -1,4 +1,4 @@
-package lv.wings.model;
+package lv.wings.model.entity;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.wings.model.interfaces.Imagable;
 
 @Entity
 @Table(name = "event_pictures")
@@ -25,14 +26,14 @@ import lombok.NoArgsConstructor;
 @Data
 @SQLDelete(sql = "UPDATE event_pictures SET deleted = true WHERE event_pictures_id=?")
 @Where(clause = "deleted=false")
-public class EventPicture extends AuditableEntity {
+public class EventPicture extends AuditableEntity implements Imagable {
 
-	@Column(nullable = false, unique = true)
-	private String imageUrl;
+	@Column(nullable = false)
+	private String src;
 
 	@NotNull
 	@Column(nullable = false)
-	private String description;
+	private String alt;
 
 	@ManyToOne
 	@JsonBackReference
@@ -44,9 +45,9 @@ public class EventPicture extends AuditableEntity {
 	private boolean deleted = false;
 
 	@Builder
-	public EventPicture(String imageUrl, String title, String description, Event event) {
-		setImageUrl(imageUrl);
-		setDescription(description);
+	public EventPicture(String src, String alt, Event event) {
+		setSrc(src);
+		setAlt(alt);
 		setEvent(event);
 	}
 

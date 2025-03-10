@@ -11,6 +11,7 @@ const config: Config = {
       colors: {
         "light-nav": "#fbe9d0",
         "primary-bright": "#751521",
+        "primary-bright-light": "#a41d2e",
       },
       textShadow: {
         DEFAULT: "0 2px 4px var(--tw-shadow-color)",

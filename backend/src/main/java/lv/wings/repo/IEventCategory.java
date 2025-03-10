@@ -2,7 +2,7 @@ package lv.wings.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import lv.wings.model.EventCategory;
+import lv.wings.model.entity.EventCategory;
 
 public interface IEventCategory extends JpaRepository<EventCategory, Integer> {
 

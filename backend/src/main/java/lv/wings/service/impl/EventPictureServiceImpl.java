@@ -1,8 +1,8 @@
 package lv.wings.service.impl;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -12,14 +12,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.EventPicture;
+import lombok.RequiredArgsConstructor;
+import lv.wings.dto.response.ImageDto;
+import lv.wings.mapper.ImageMapper;
+import lv.wings.model.entity.EventPicture;
 import lv.wings.repo.IEventPictureRepo;
 import lv.wings.service.ICRUDService;
 
 @Service
+@RequiredArgsConstructor
 public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
-	@Autowired
-	private IEventPictureRepo eventPictureRepo;
+
+	private final IEventPictureRepo eventPictureRepo;
+	private final ImageMapper imageMapper;
 
 	@Override
 	@Cacheable("EventPictures")
@@ -66,10 +71,10 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 	@Override
 	@CacheEvict(value = "EventPictures", allEntries = true)
 	public void create(EventPicture eventPicture) {
-		EventPicture existedEventPicture = eventPictureRepo.findByImageUrl(eventPicture.getImageUrl());
+		EventPicture existedEventPicture = eventPictureRepo.findBySrc(eventPicture.getSrc());
 
 		if (existedEventPicture != null)
-			throw new RuntimeException("Event picture with url: " + eventPicture.getImageUrl() + " already exists");
+			throw new RuntimeException("Event picture with url: " + eventPicture.getSrc() + " already exists");
 
 		eventPictureRepo.save(eventPicture);
 
@@ -84,11 +89,20 @@ public class EventPictureServiceImpl implements ICRUDService<EventPicture> {
 		if (foundEventPicture == null)
 			throw new RuntimeException("Event picture with the id: (" + id + ") does not exist!");
 
-		foundEventPicture.setImageUrl(eventPicture.getImageUrl());
-		foundEventPicture.setDescription(eventPicture.getDescription());
+		foundEventPicture.setSrc(eventPicture.getSrc());
+		foundEventPicture.setAlt(eventPicture.getAlt());
 
 		eventPictureRepo.save(foundEventPicture);
 
+	}
+
+	public List<ImageDto> getPicturesAsDtoPerEventId(Integer id) {
+		return eventPictureRepo.findAllByEventId(id).stream().map(imageMapper::imageToDto).toList();
+	}
+
+	public ImageDto getEventWallpaperById(Integer id) {
+		List<ImageDto> pictures = getPicturesAsDtoPerEventId(id);
+		return pictures.isEmpty() ? null : pictures.get(0);
 	}
 
 }

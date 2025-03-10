@@ -1,4 +1,4 @@
-package lv.wings.model;
+package lv.wings.model.entity;
 
 import java.time.LocalDateTime;
 
@@ -15,10 +15,10 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,31 +29,40 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "Purchase_Elements")
+@Table(name = "Customer")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@SQLDelete(sql = "UPDATE Purchase_Elements SET deleted = true WHERE purchase_element_id=?")
+@SQLDelete(sql = "UPDATE Customer SET deleted = true WHERE customer_id=?")
 @Where(clause = "deleted=false")
-public class PurchaseElement {
+public class Customer {
 
 	@Id
+	@Column(name = "customer_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int purchaseElementId;
+	private int customer_id;
 
-	// TODO te nak pirkums ID MARKUSS
-	@ManyToOne
-	@JoinColumn(name = "purchase_id")
-	private Purchase purchase;
+	@Column(name = "name")
+	@NotNull
+	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ' ]+", message = "Tikai burti un atstarpes ir atlautas")
+	@Size(max = 20, min = 2)
+	private String name;
 
-	// saite uz preces
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
+	@Column(name = "surname")
+	@NotNull
+	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ' ]+", message = "Tikai burti un atstarpes ir atlautas")
+	@Size(max = 20, min = 2)
+	private String surname;
 
-	@Column(name = "amount")
-	@Min(1)
-	private int amount;
+	// TODO REGEX
+	@Column(name = "email")
+	@NotNull
+	private String email;
+
+	// Iespejams jaunu klasi
+	@Column(name = "adress")
+	@NotNull
+	private String adress;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
@@ -71,9 +80,11 @@ public class PurchaseElement {
 	@Column(name = "deleted")
 	private boolean deleted = false;
 
-	public PurchaseElement(Purchase purchase, Product product, int amount) {
-		setPurchase(purchase);
-		setProduct(product);
-		setAmount(amount);
+	public Customer(String name, String surname, String email, String adress) {
+		setName(name);
+		setSurname(surname);
+		setEmail(email);
+		setAdress(adress);
 	}
+
 }

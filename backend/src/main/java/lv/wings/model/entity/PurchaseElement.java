@@ -1,10 +1,10 @@
-package lv.wings.model;
+package lv.wings.model.entity;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,8 +17,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,66 +29,51 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "Purchase")
+@Table(name = "Purchase_Elements")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@SQLDelete(sql = "UPDATE Purchase SET deleted = true WHERE purchase_id=?")
+@SQLDelete(sql = "UPDATE Purchase_Elements SET deleted = true WHERE purchase_element_id=?")
 @Where(clause = "deleted=false")
-public class Purchase {
-	
+public class PurchaseElement {
+
 	@Id
-	@Column(name = "purchase_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int purchaseId;
-	
+	private int purchaseElementId;
 
+	// TODO te nak pirkums ID MARKUSS
 	@ManyToOne
-	@JoinColumn(name = "delivery_type_id")
-	private DeliveryType deliveryType;
-	
-	
-	@ManyToOne
-	@JoinColumn(name = "payment_type_id")
-	private PaymentType paymentType;
-	
-	
-	@ManyToOne
-	@JoinColumn(name = "customer_id")
-	private Customer customer;
-	
-	
-	@Column(name = "delivery_date")
-	private LocalDateTime deliveryDate;
-	
-	
-	@Column(name = "delivery_details")
-	private String deliveryDetails;
-	
+	@JoinColumn(name = "purchase_id")
+	private Purchase purchase;
 
-	@OneToMany(mappedBy = "purchase")
-	@ToString.Exclude
-	private Collection<PurchaseElement> purchaseElement;
-	
+	// saite uz preces
+	@ManyToOne
+	@JoinColumn(name = "product_id")
+	private Product product;
+
+	@Column(name = "amount")
+	@Min(1)
+	private int amount;
+
+	@CreatedDate
+	@Column(nullable = false, updatable = false)
+	private LocalDateTime createDate;
+
 	@LastModifiedDate
 	@Column(insertable = false)
 	private LocalDateTime lastModifiedByAdmin;
-	
+
 	@LastModifiedBy
 	@Column(insertable = false)
 	private Integer lastModifiedBy;
 
-	//Soft delete
+	// Soft delete
 	@Column(name = "deleted")
 	private boolean deleted = false;
 
-	
-	public Purchase(DeliveryType deliveryType, PaymentType paymentType, Customer customer, LocalDateTime deliveryDate, String deliveryDetails) {
-		setDeliveryType(deliveryType);
-		setPaymentType(paymentType);
-		setCustomer(customer);
-		setDeliveryDate(deliveryDate);
-		setDeliveryDetails(deliveryDetails);
+	public PurchaseElement(Purchase purchase, Product product, int amount) {
+		setPurchase(purchase);
+		setProduct(product);
+		setAmount(amount);
 	}
-
 }

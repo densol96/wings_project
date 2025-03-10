@@ -16,7 +16,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lv.wings.enums.LocaleCode;
-import lv.wings.model.Event;
+import lv.wings.model.entity.Event;
+import lv.wings.model.interfaces.Localable;
 
 @Entity
 @Table(name = "event_translations")

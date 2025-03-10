@@ -1,4 +1,4 @@
-package lv.wings.model;
+package lv.wings.model.entity;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -41,86 +41,84 @@ import lv.wings.poi.PoiMeta;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name="Product")
+@Table(name = "Product")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE Product SET deleted = true WHERE product_id=?")
 @Where(clause = "deleted=false")
 public class Product {
-	
+
 	@Id
 	@Column(name = "product_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
 	private int productId;
-	
-	//saite no kategorijas
+
+	// saite no kategorijas
 	@ManyToOne
 	@JsonManagedReference
-	@JoinColumn(name="product_category_id")
+	@JoinColumn(name = "product_category_id")
 	private ProductCategory productCategory;
-	
-	//saite uz bildi
+
+	// saite uz bildi
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@JsonManagedReference
 	@ToString.Exclude
 	@JsonIgnore
 	private Collection<ProductPicture> productPictures;
 
-	
-	//saite uz pirkuma_elementu
+	// saite uz pirkuma_elementu
 	@OneToMany(mappedBy = "product")
 	@ToString.Exclude
 	@JsonIgnore
 	private Collection<PurchaseElement> purchaseElement;
 
-	
 	@Column(name = "title")
 	@NotNull
 	@Size(min = 4, max = 50)
 	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ ]+", message = "Only letters and space are allowed")
 	private String title;
-	
+
 	@Column(name = "description")
 	@NotNull
 	@Size(min = 4, max = 1000)
 	private String description;
-	
+
 	@Column(name = "price")
 	@NotNull
 	@Min(0)
-	@PoiMeta(name="Cena (EUR)", valueFormat="{} EUR")
+	@PoiMeta(name = "Cena (EUR)", valueFormat = "{} EUR")
 	private float price;
-	
+
 	@Column(name = "amount")
 	@NotNull
 	@Min(0)
 	private int amount;
-	
+
 	@CreatedDate
-	@Column(nullable = false,updatable = false)
+	@Column(nullable = false, updatable = false)
 	@JsonIgnore
 	private LocalDateTime createDate;
-	
+
 	@LastModifiedDate
 	@Column(insertable = false)
 	@JsonIgnore
 	private LocalDateTime lastModified;
-	
+
 	@CreatedBy
 	@Column(updatable = false)
 	@JsonIgnore
 	private Integer createdBy;
-	
+
 	@LastModifiedBy
 	@Column(insertable = false)
 	@JsonIgnore
 	private Integer lastModifiedBy;
 
-	//Soft delete
+	// Soft delete
 	@Column(name = "deleted")
 	private boolean deleted = false;
-	
+
 	public Product(String title, String description, float price, int amount, ProductCategory productCategory) {
 		setTitle(title);
 		setDescription(description);
@@ -128,6 +126,5 @@ public class Product {
 		setAmount(amount);
 		setProductCategory(productCategory);
 	}
-	
 
 }

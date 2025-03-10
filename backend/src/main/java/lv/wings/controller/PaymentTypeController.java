@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.PaymentType;
+import lv.wings.model.entity.PaymentType;
 import lv.wings.service.ICRUDService;
 
 @Controller

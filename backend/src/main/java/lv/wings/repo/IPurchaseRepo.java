@@ -4,10 +4,10 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import lv.wings.model.Customer;
-import lv.wings.model.DeliveryType;
-import lv.wings.model.PaymentType;
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.Customer;
+import lv.wings.model.entity.DeliveryType;
+import lv.wings.model.entity.PaymentType;
+import lv.wings.model.entity.Purchase;
 
 public interface IPurchaseRepo extends JpaRepository<Purchase, Integer> {
 

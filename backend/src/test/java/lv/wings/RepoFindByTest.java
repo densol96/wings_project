@@ -12,18 +12,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import lv.wings.model.DeliveryType;
-import lv.wings.model.Customer;
-import lv.wings.model.Purchase;
-import lv.wings.model.PaymentType;
 import lv.wings.repo.IDeliveryTypeRepo;
+import lv.wings.model.entity.Customer;
+import lv.wings.model.entity.DeliveryType;
+import lv.wings.model.entity.PaymentType;
+import lv.wings.model.entity.Purchase;
 import lv.wings.repo.ICustomerRepo;
 import lv.wings.repo.IPurchaseRepo;
 import lv.wings.repo.IPaymentTypeRepo;
 
 @SpringBootTest
 public class RepoFindByTest {
-    
+
     @Autowired
     private ICustomerRepo customerRepo;
 
@@ -39,7 +39,7 @@ public class RepoFindByTest {
     @Test
     @Order(3)
     public void findMarkussTest() {
-        Customer markuss = new Customer("Markuss", "Blumbergs", "random1@gmail.com", "Talsi, Street 1");    
+        Customer markuss = new Customer("Markuss", "Blumbergs", "random1@gmail.com", "Talsi, Street 1");
         Customer found = customerRepo.findByNameAndSurname(markuss.getName(), markuss.getSurname());
 
         assertEquals(markuss.getName(), found.getName());
@@ -55,7 +55,6 @@ public class RepoFindByTest {
         assertEquals(deliveryType1.getTitle(), found.getTitle());
     }
 
-
     @Test
     @Order(1)
     public void findPaymentTypeTest() {
@@ -64,7 +63,6 @@ public class RepoFindByTest {
 
         assertEquals(paymentType1.getTitle(), found.getTitle());
     }
-
 
     @Test
     @Order(4)
@@ -77,13 +75,10 @@ public class RepoFindByTest {
         ArrayList<Purchase> findPirkumsWithDeliveryType = purchaseRepo.findByDeliveryType(deliveryType1);
         ArrayList<Purchase> findPirkumsWithPaymentType = purchaseRepo.findByPaymentType(paymentType1);
 
-        assertAll( "pirkumi",
-            () -> assertNotNull(findPirkumsWithCustomer),
-            () -> assertNotNull(findPirkumsWithDeliveryType),
-            () -> assertNotNull(findPirkumsWithPaymentType)
-        ); 
+        assertAll("pirkumi",
+                () -> assertNotNull(findPirkumsWithCustomer),
+                () -> assertNotNull(findPirkumsWithDeliveryType),
+                () -> assertNotNull(findPirkumsWithPaymentType));
     }
-    
 
-    
 }

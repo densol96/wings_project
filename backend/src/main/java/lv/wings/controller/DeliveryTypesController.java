@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lv.wings.exception.old.NoContentException;
-import lv.wings.model.DeliveryType;
+import lv.wings.model.entity.DeliveryType;
 import lv.wings.responses.ApiListResponse;
 import lv.wings.responses.ApiResponse;
 import lv.wings.service.ICRUDService;

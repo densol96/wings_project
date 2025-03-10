@@ -8,24 +8,23 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import lv.wings.model.Customer;
-import lv.wings.model.DeliveryType;
-import lv.wings.model.Event;
-import lv.wings.model.EventCategory;
-import lv.wings.model.EventPicture;
-import lv.wings.model.PaymentType;
-import lv.wings.model.Product;
-import lv.wings.model.ProductCategory;
-import lv.wings.model.ProductPicture;
-import lv.wings.model.Purchase;
-import lv.wings.model.PurchaseElement;
+import lv.wings.model.entity.Customer;
+import lv.wings.model.entity.DeliveryType;
+import lv.wings.model.entity.Event;
+import lv.wings.model.entity.EventCategory;
+import lv.wings.model.entity.EventPicture;
+import lv.wings.model.entity.PaymentType;
+import lv.wings.model.entity.Product;
+import lv.wings.model.entity.ProductCategory;
+import lv.wings.model.entity.ProductPicture;
+import lv.wings.model.entity.Purchase;
+import lv.wings.model.entity.PurchaseElement;
 import net.datafaker.Faker;
 
 @SpringBootTest
 public class ModelClassesTests {
 
     Faker faker = new Faker();
-
 
     @Test
     void customerTest() {
@@ -58,7 +57,6 @@ public class ModelClassesTests {
         assertEquals(testAdress, testCustomer.getAdress());
     }
 
-
     @Test
     void deliveryTypeTest() {
         String testTitle = faker.expression("#{letterify '?????'}");
@@ -79,8 +77,10 @@ public class ModelClassesTests {
         assertEquals(testTitle, testDeliveryType.getTitle());
         assertEquals(testDesc, testDeliveryType.getDescription());
 
-        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        // String formattedTimeCreated = testDeliveryType.getCreateDate().format(formatter);
+        // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd
+        // HH:mm");
+        // String formattedTimeCreated =
+        // testDeliveryType.getCreateDate().format(formatter);
         // String formattedNow = LocalDateTime.now().format(formatter);
 
         // assertEquals(formattedTimeCreated, formattedNow);
@@ -100,7 +100,7 @@ public class ModelClassesTests {
 
         assertEquals(testTitle, testEventCategory.getTitle());
     }
-    
+
     @Test
     void eventTest() {
 
@@ -115,7 +115,8 @@ public class ModelClassesTests {
         EventCategory testEventCategory = new EventCategory(testEventCategoryTitle);
 
         // Test get methods
-        Event testEvent = new Event(testStartDate, testEndDate, testTitle, testLocation, testDescription, testKeyWords, testEventCategory);
+        Event testEvent = new Event(testStartDate, testEndDate, testTitle, testLocation, testDescription, testKeyWords,
+                testEventCategory);
         assertEquals(testStartDate, testEvent.getStartDate());
         assertEquals(testEndDate, testEvent.getEndDate());
         assertEquals(testTitle, testEvent.getTitle());
@@ -126,7 +127,7 @@ public class ModelClassesTests {
 
         // Test set methods
         testStartDate = new Date(2026, 4, 17);
-        testEndDate = new Date(2025, 4, 18);        // Test finishes with end date being before start date
+        testEndDate = new Date(2025, 4, 18); // Test finishes with end date being before start date
         testTitle = faker.expression("#{letterify '?????'}");
         testLocation = faker.expression("#{letterify '????????'}");
         testDescription = faker.expression("#{letterify '????? ???????'}");
@@ -185,7 +186,7 @@ public class ModelClassesTests {
 
     @Test
     void paymentTypeTest() {
-        
+
         String testTitle = faker.expression("#{letterify '?????'}");
         String testDesc = faker.expression("#{letterify '????? ???????'}");
         PaymentType testPaymentType = new PaymentType(testTitle, testDesc);
@@ -239,14 +240,14 @@ public class ModelClassesTests {
 
         Product testProduct = new Product(testTitle, testDesc, testPrice, testAmount, testProductCategory);
 
-        //get
+        // get
         assertEquals(testTitle, testProduct.getTitle());
         assertEquals(testDesc, testProduct.getDescription());
         assertEquals(testPrice, testProduct.getPrice());
         assertEquals(testAmount, testProduct.getAmount());
         assertEquals(testProductCategory, testProduct.getProductCategory());
 
-        //set
+        // set
         testTitle = faker.expression("#{letterify '?????'}");
         testDesc = faker.expression("#{letterify '????? ???????'}");
         float newTestPrice = 4.22f;
@@ -269,27 +270,26 @@ public class ModelClassesTests {
     @Test
     void productPictureTest() {
         String testPicture = faker.expression("#{letterify '?????.jpg'}");
-        String testDescription = faker.expression("#{letterify '????? ???????'}");   
+        String testDescription = faker.expression("#{letterify '????? ???????'}");
         Product testProduct = new Product();
         ProductPicture testProductPicture = new ProductPicture(testPicture, testDescription, testProduct);
 
-        //get
+        // get
         assertEquals(testPicture, testProductPicture.getReferenceToPicture());
         assertEquals(testDescription, testProductPicture.getDescription());
         assertEquals(testProduct, testProductPicture.getProduct());
 
-
-        //set
+        // set
         testPicture = faker.expression("#{letterify '?????.jpg'}");
         testDescription = faker.expression("#{letterify '????? ???????'}");
         Product newTestProduct = new Product();
-        newTestProduct.setAmount(7); 
+        newTestProduct.setAmount(7);
 
-        testProductPicture.setReferenceToPicture(testPicture);;
+        testProductPicture.setReferenceToPicture(testPicture);
+        ;
         testProductPicture.setDescription(testDescription);
         testProductPicture.setProduct(newTestProduct);
-        
-        
+
         assertEquals(testPicture, testProductPicture.getReferenceToPicture());
         assertEquals(testDescription, testProductPicture.getDescription());
         assertNotEquals(testProduct, testProductPicture.getProduct());
@@ -304,16 +304,17 @@ public class ModelClassesTests {
         LocalDateTime testDeliveryDate = LocalDateTime.of(2026, 4, 5, 10, 5, 33);
         String testDeliveryDetails = faker.expression("#{letterify '????? ??????? ??? ?????? ? ????? ?????'}");
 
-        Purchase testPurchase = new Purchase(testDeliveryType, testPaymentType, testCustomer, testDeliveryDate, testDeliveryDetails);
+        Purchase testPurchase = new Purchase(testDeliveryType, testPaymentType, testCustomer, testDeliveryDate,
+                testDeliveryDetails);
 
-        //get
+        // get
         assertEquals(testDeliveryType, testPurchase.getDeliveryType());
         assertEquals(testPaymentType, testPurchase.getPaymentType());
         assertEquals(testCustomer, testPurchase.getCustomer());
         assertEquals(testDeliveryDate, testPurchase.getDeliveryDate());
         assertEquals(testDeliveryDetails, testPurchase.getDeliveryDetails());
 
-        //set
+        // set
         DeliveryType newTestDeliveryType = new DeliveryType();
         newTestDeliveryType.setDescription("new description");
         PaymentType newPaymentType = new PaymentType();
@@ -344,13 +345,13 @@ public class ModelClassesTests {
         int testAmount = 5;
 
         PurchaseElement testPurchaseElement = new PurchaseElement(testPurchase, testProduct, testAmount);
-        
-        //get
+
+        // get
         assertEquals(testPurchase, testPurchaseElement.getPurchase());
         assertEquals(testProduct, testPurchaseElement.getProduct());
         assertEquals(testAmount, testPurchaseElement.getAmount());
 
-        //set
+        // set
         Purchase newTestPurchase = new Purchase();
         newTestPurchase.setDeliveryDetails("big details");
         Product newTestProduct = new Product();

@@ -5,14 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { FaHandPointRight } from "react-icons/fa";
 
-import { Heading } from "@/components/shared";
-import { HomeContent } from "@/@types/shared";
+import { Heading, StyledLink } from "@/components/shared";
+import { HomeContent, Locale } from "@/@types/shared";
 
 type Props = {
   homeDictionary: HomeContent;
+  lang: Locale;
 };
 
-const Wallpaper = ({ homeDictionary }: Props) => {
+const Wallpaper = ({ homeDictionary, lang }: Props) => {
   return (
     <div className="relative overflow-hidden py-24 sm:py-32 my-4 px-6">
       <Image
@@ -27,13 +28,7 @@ const Wallpaper = ({ homeDictionary }: Props) => {
           </Heading>
           <div className="flex flex-row justify-between items-end">
             <p className="mt-8 text-lg font-medium text-pretty sm:text-xl/8">{homeDictionary.description}</p>
-            <Link
-              className="border-b border-primary-bright hover:border-transparent transition-border duration-200 flex items-center gap-2"
-              href="/about"
-            >
-              <p>{homeDictionary.button}</p>
-              <FaHandPointRight />
-            </Link>
+            <StyledLink href={`${lang}/about`}>{homeDictionary.button}</StyledLink>
           </div>
         </div>
       </div>

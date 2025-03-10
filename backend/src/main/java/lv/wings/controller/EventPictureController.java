@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.exception.old.NoContentException;
-import lv.wings.model.EventPicture;
+import lv.wings.model.entity.EventPicture;
 import lv.wings.responses.ApiListResponse;
 import lv.wings.service.ICRUDService;
 

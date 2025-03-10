@@ -13,8 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.Event;
-import lv.wings.model.EventCategory;
+import lv.wings.model.entity.Event;
+import lv.wings.model.entity.EventCategory;
 import lv.wings.repo.EventRepository;
 import lv.wings.repo.IEventCategory;
 import lv.wings.service.ICRUDService;

@@ -6,8 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import lv.wings.model.Product;
-import lv.wings.model.ProductCategory;
+import lv.wings.model.entity.Product;
+import lv.wings.model.entity.ProductCategory;
 
 public interface IProductRepo extends JpaRepository<Product, Integer> {
 

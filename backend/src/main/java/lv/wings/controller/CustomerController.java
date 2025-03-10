@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.Customer;
+import lv.wings.model.entity.Customer;
 import lv.wings.poi.PoiController;
 import lv.wings.service.ICRUDService;
 

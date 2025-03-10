@@ -2,7 +2,7 @@ package lv.wings.repo;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import lv.wings.model.ProductCategory;
+import lv.wings.model.entity.ProductCategory;
 
 public interface IProductCategoryRepo extends JpaRepository<ProductCategory, Integer> {
 
