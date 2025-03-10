@@ -40,13 +40,14 @@ public class CustomPageableResolver extends PageableHandlerMethodArgumentResolve
         String pageParam = webRequest.getParameter("page");
         String sizeParam = webRequest.getParameter("size");
         String sortParam = webRequest.getParameter("sort");
-        String directionStringParam = webRequest.getParameter("direction");
-        Sort.Direction directionParam = directionStringParam.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        String directionParam = webRequest.getParameter("direction");
+        Sort.Direction directioon = "desc".equals(directionParam) ? Sort.Direction.DESC : Sort.Direction.ASC;
 
         // Final values that will be used by the controller as Pageable
         Integer finalPage = pageParam != null ? Integer.parseInt(pageParam) : defaultPage;
         Integer finalSize = sizeParam != null ? Integer.parseInt(sizeParam) : defaultSize;
-        Sort finalSort = sortParam != null && directionParam != null ? Sort.by(directionParam, sortParam) : defaultSort;
+        Sort finalSort = sortParam != null && directionParam != null ? Sort.by(directioon, sortParam)
+                : defaultSort;
 
         // Remember to subtract -1, since spring uses 0 as a starting page
         return PageRequest.of(finalPage - 1, finalSize, finalSort);

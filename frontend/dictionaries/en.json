@@ -108,5 +108,14 @@
       { "label": "Address", "info": "Ventspils, Skolas iela 3" }
     ],
     "mapDescription": "Physical store location on the map"
+  },
+  "news": {
+    "title": "Latest News",
+    "description": "Learn about our latest projects, events, and craft exhibitions! Stay up to date with our news and discover unique handmade creations crafted with love and care. Join our activities and support women’s creativity and growth!",
+    "button": "Other news",
+    "postedOn": "Posted on",
+    "readMore": "Learn more",
+    "alt": "Event's image",
+    "error": "No any news to display at this time."
   }
 }

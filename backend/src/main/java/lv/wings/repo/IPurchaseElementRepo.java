@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import lv.wings.model.Product;
-import lv.wings.model.Purchase;
-import lv.wings.model.PurchaseElement;
+import lv.wings.model.entity.Product;
+import lv.wings.model.entity.Purchase;
+import lv.wings.model.entity.PurchaseElement;
 
 public interface IPurchaseElementRepo extends JpaRepository<PurchaseElement, Integer> {
 

@@ -12,8 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.Customer;
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.Customer;
+import lv.wings.model.entity.Purchase;
 import lv.wings.repo.ICustomerRepo;
 import lv.wings.repo.IPurchaseRepo;
 import lv.wings.service.ICRUDService;

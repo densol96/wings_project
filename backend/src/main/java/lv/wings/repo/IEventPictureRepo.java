@@ -1,11 +1,13 @@
 package lv.wings.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import lv.wings.model.EventPicture;
+import lv.wings.model.entity.EventPicture;
 
 public interface IEventPictureRepo extends JpaRepository<EventPicture, Integer> {
+	EventPicture findBySrc(String src);
 
-	EventPicture findByImageUrl(String imageUrl);
-
+	List<EventPicture> findAllByEventId(Integer id);
 }

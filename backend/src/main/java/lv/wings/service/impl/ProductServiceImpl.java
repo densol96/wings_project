@@ -13,10 +13,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.Product;
-import lv.wings.model.ProductCategory;
-import lv.wings.model.ProductPicture;
-import lv.wings.model.PurchaseElement;
+import lv.wings.model.entity.Product;
+import lv.wings.model.entity.ProductCategory;
+import lv.wings.model.entity.ProductPicture;
+import lv.wings.model.entity.PurchaseElement;
 import lv.wings.repo.IProductCategoryRepo;
 import lv.wings.repo.IProductPictureRepo;
 import lv.wings.repo.IProductRepo;

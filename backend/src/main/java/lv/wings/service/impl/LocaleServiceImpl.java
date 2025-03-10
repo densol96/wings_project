@@ -5,8 +5,8 @@ import java.util.Locale;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.translation.Localable;
-import lv.wings.model.translation.Translatable;
+import lv.wings.model.interfaces.Localable;
+import lv.wings.model.interfaces.Translatable;
 import lv.wings.service.LocaleService;
 
 @Service

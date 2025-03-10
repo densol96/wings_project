@@ -21,14 +21,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.enums.LocaleCode;
-import lv.wings.model.Customer;
-import lv.wings.model.DeliveryType;
-import lv.wings.model.Event;
-import lv.wings.model.EventCategory;
-import lv.wings.model.EventPicture;
-import lv.wings.model.PaymentType;
-import lv.wings.model.ProductCategory;
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.Customer;
+import lv.wings.model.entity.DeliveryType;
+import lv.wings.model.entity.Event;
+import lv.wings.model.entity.EventCategory;
+import lv.wings.model.entity.EventPicture;
+import lv.wings.model.entity.PaymentType;
+import lv.wings.model.entity.ProductCategory;
+import lv.wings.model.entity.Purchase;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
 import lv.wings.model.translation.EventTranslation;
@@ -45,6 +45,7 @@ import lv.wings.repo.IPurchaseElementRepo;
 import lv.wings.repo.IPurchaseRepo;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
+import net.datafaker.Faker;
 
 @SpringBootApplication
 @EnableJpaAuditing(auditorAwareRef = "auditorAware")
@@ -88,7 +89,7 @@ public class SparniProjectApplication {
 				// paymentTypeRepo.save(paymentType1);
 				// paymentTypeRepo.save(paymentType2);
 
-				// Faker faker = new Faker();
+				Faker faker = new Faker();
 				// for (int i = 0; i < 50; i++) {
 				// String dfName = faker.name().firstName();
 				// String dfSurname = faker.name().lastName();
@@ -164,11 +165,12 @@ public class SparniProjectApplication {
 
 					lv.setEvent(e);
 					en.setEvent(e);
-
+					e.setTranslations(List.of(lv, en));
 					e.setCreatedBy(u1);
 					eventRepo.save(e);
 					if (i <= 3) {
-						EventPicture bilde = new EventPicture(UUID.randomUUID().toString(), "bilde1", "lababilde", e);
+						EventPicture bilde = new EventPicture("http://localhost:8080/images/bilde1.jpg", "lababilde",
+								e);
 						bilde.setCreatedBy(u1);
 						eventPictureRepo.save(bilde);
 					}

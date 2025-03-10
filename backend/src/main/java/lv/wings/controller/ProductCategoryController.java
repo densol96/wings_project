@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.ProductCategory;
+import lv.wings.model.entity.ProductCategory;
 import lv.wings.service.ICRUDService;
 
 @Controller

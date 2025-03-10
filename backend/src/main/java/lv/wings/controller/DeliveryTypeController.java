@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
-import lv.wings.model.DeliveryType;
+import lv.wings.model.entity.DeliveryType;
 import lv.wings.service.ICRUDService;
 
 @Controller

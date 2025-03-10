@@ -10,7 +10,7 @@ const Home = async function ({ params: { lang } }: PageProps) {
 
   return (
     <>
-      <Wallpaper homeDictionary={homeDictionary} />
+      <Wallpaper lang={lang} homeDictionary={homeDictionary} />
       <RandomProducts />
       <section className="px-6 py-12 bg-white relative mb-40">
         <Image

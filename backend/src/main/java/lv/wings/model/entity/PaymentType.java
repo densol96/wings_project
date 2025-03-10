@@ -1,9 +1,11 @@
-package lv.wings.model;
+package lv.wings.model.entity;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -15,10 +17,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,69 +29,53 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "Customer")
+@Table(name = "Payment_Type")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@SQLDelete(sql = "UPDATE Customer SET deleted = true WHERE customer_id=?")
+@SQLDelete(sql = "UPDATE Payment_Type SET deleted = true WHERE payment_type_id=?")
 @Where(clause = "deleted=false")
-public class Customer {
+public class PaymentType {
 
 	@Id
-	@Column(name = "customer_id")
+	@Column(name = "payment_type_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
-	private int customer_id;
-	
-	
-	@Column(name = "name")
-	@NotNull
-	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ' ]+", message = "Tikai burti un atstarpes ir atlautas")
-	@Size(max = 20, min = 2)
-	private String name;
-	
-	
-	@Column(name = "surname")
-	@NotNull
-	@Pattern(regexp = "[A-ZĒŪĪĻĶĢŠĀŽČŅa-zēūīļķģšāžčņ' ]+", message = "Tikai burti un atstarpes ir atlautas")
-	@Size(max = 20, min = 2)
-	private String surname;
-	
-	
-	//TODO REGEX
-	@Column(name = "email")
-	@NotNull
-	private String email;
-	
-	
-	//Iespejams jaunu klasi
-	@Column(name = "adress")
-	@NotNull
-	private String adress;
+	private int paymentTypeId;
 
-	
+	// TODO iespejams papildus anotacijas
+	@Column(name = "title")
+	private String title;
+
+	@Column(name = "description")
+	private String description;
+
+	@OneToMany(mappedBy = "paymentType")
+	@ToString.Exclude
+	private Collection<Purchase> purchases;
+
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
 	private LocalDateTime createDate;
-	
+
 	@LastModifiedDate
 	@Column(insertable = false)
-	private LocalDateTime lastModifiedByAdmin;
-	
+	private LocalDateTime lastModified;
+
+	@CreatedBy
+	@Column(updatable = false)
+	private Integer createdBy;
+
 	@LastModifiedBy
 	@Column(insertable = false)
 	private Integer lastModifiedBy;
 
-	//Soft delete
+	// Soft delete
 	@Column(name = "deleted")
 	private boolean deleted = false;
-	
-	
-	public Customer(String name, String surname, String email, String adress) {
-		setName(name);
-		setSurname(surname);
-		setEmail(email);
-		setAdress(adress);
+
+	public PaymentType(String title, String description) {
+		setTitle(title);
+		setDescription(description);
 	}
-	
-	
+
 }

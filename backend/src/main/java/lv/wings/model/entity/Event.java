@@ -1,4 +1,4 @@
-package lv.wings.model;
+package lv.wings.model.entity;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import lv.wings.model.translation.EventTranslation;
-import lv.wings.model.translation.Localable;
-import lv.wings.model.translation.Translatable;
+import lv.wings.model.interfaces.Localable;
+import lv.wings.model.interfaces.Translatable;
 
 @Entity
 @Table(name = "events")

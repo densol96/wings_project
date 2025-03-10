@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lv.wings.exception.old.NoContentException;
-import lv.wings.model.ProductCategory;
+import lv.wings.model.entity.ProductCategory;
 import lv.wings.responses.ApiListResponse;
 import lv.wings.service.ICRUDService;
 

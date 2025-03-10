@@ -1,4 +1,4 @@
-package lv.wings.model.translation;
+package lv.wings.model.interfaces;
 
 import lv.wings.enums.LocaleCode;
 

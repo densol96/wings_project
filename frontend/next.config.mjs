@@ -9,6 +9,11 @@ const nextConfig = {
         port: "8080",
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "www.allianceplast.com",
+        pathname: "/wp-content/uploads/no-image.png",
+      },
     ],
   },
 };

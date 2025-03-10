@@ -17,10 +17,11 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTable.XWPFBorderType;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-import lv.wings.model.PurchaseElement;
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.Purchase;
+import lv.wings.model.entity.PurchaseElement;
+
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 public class PoiController {
 	public static <T> byte[] buildSingle(String tabname, T source, String[] fields) throws Exception {

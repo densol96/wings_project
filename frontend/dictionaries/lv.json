@@ -107,5 +107,14 @@
       { "label": "Adrese", "info": "Ventspils, Skolas iela 3" }
     ],
     "mapDescription": "Fiziskā veikala atrašanās vieta kartē"
+  },
+  "news": {
+    "title": "Jaunākās ziņas",
+    "description": "Uzziniet par mūsu jaunākajiem projektiem, pasākumiem un amatniecības izstādēm! Sekojiet līdzi jaunumiem un atklājiet unikālus rokdarbus, kas radīti ar mīlestību un rūpību. Pievienojieties mūsu aktivitātēm un atbalstiet sieviešu radošumu un izaugsmi!",
+    "button": "Citas ziņas",
+    "postedOn": "Publicēts",
+    "readMore": "Uzzināt vairāk",
+    "alt": "Jaunuma attēls",
+    "error": "Pašlaik nav ziņu, ko parādīt."
   }
 }

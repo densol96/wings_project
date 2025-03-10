@@ -9,19 +9,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.Purchase;
 import lv.wings.service.ICRUDService;
 
 @SpringBootTest
 public class PurchaseServiceTest {
-    
+
     @Autowired
     ICRUDService<Purchase> purchaseService;
 
-
     @Test
     void selectAllPurchasesTest() throws Exception {
-        ArrayList<Purchase> purchases = purchaseService.retrieveAll(); 
+        ArrayList<Purchase> purchases = purchaseService.retrieveAll();
         assertNotNull(purchases);
     }
 
@@ -37,12 +36,11 @@ public class PurchaseServiceTest {
         assertThrowsExactly(Exception.class, () -> purchaseService.retrieveById(444));
     }
 
-
     @Test
     void insertPurchaseTest() throws Exception {
         ArrayList<Purchase> oldPurchases = purchaseService.retrieveAll();
         int oldAmount = oldPurchases.size();
-        
+
         Purchase purchase = new Purchase();
         purchaseService.create(purchase);
 
@@ -51,7 +49,6 @@ public class PurchaseServiceTest {
 
         assertNotEquals(oldAmount, newAmount);
     }
-
 
     @Test
     void updatePurchaseTest() throws Exception {
@@ -63,6 +60,5 @@ public class PurchaseServiceTest {
 
         assertNotEquals(newPurchase, oldPurchase);
     }
-
 
 }
