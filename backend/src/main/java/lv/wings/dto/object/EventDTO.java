@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lv.wings.dto.DTOMeta;
-import lv.wings.model.entity.Event;
 
 @Getter
 @Setter
