@@ -1,5 +1,27 @@
 package lv.wings.model.translation;
 
-public class EventCategoryTranslation {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lv.wings.enums.LocaleCode;
+import lv.wings.model.base.LocalableEntity;
+import lv.wings.model.entity.EventCategory;
 
+@Entity
+@Table(name = "event_category_translations")
+@NoArgsConstructor
+@Data
+public class EventCategoryTranslation extends LocalableEntity<EventCategory> {
+
+    @Column(unique = true, nullable = false)
+    private String title;
+
+    @Builder
+    public EventCategoryTranslation(String title, LocaleCode locale, EventCategory entity) {
+        super(locale, entity);
+        setTitle(title);
+    }
 }

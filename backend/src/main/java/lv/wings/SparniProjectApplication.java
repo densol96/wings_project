@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -31,11 +32,12 @@ import lv.wings.model.entity.ProductCategory;
 import lv.wings.model.entity.Purchase;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
+import lv.wings.model.translation.EventCategoryTranslation;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.repo.EventRepository;
 import lv.wings.repo.ICustomerRepo;
 import lv.wings.repo.IDeliveryTypeRepo;
-import lv.wings.repo.IEventCategory;
+import lv.wings.repo.EventCategoryRepository;
 import lv.wings.repo.IEventPictureRepo;
 import lv.wings.repo.IPaymentTypeRepo;
 import lv.wings.repo.IProductCategoryRepo;
@@ -67,7 +69,7 @@ public class SparniProjectApplication {
 			IPaymentTypeRepo paymentTypeRepo,
 			EventRepository eventRepo,
 			IEventPictureRepo eventPictureRepo,
-			IEventCategory eventCategoryRepo,
+			EventCategoryRepository eventCategoryRepo,
 			IProductCategoryRepo productCategoryRepo,
 			IPurchaseElementRepo purchaseElementRepo,
 			IProductRepo productRepo,
@@ -134,28 +136,44 @@ public class SparniProjectApplication {
 				// purchaseRepo.save(purchase1);
 				// purchaseRepo.save(purchase2);
 
-				EventCategory eventCategory1 = new EventCategory("Sporta spēles");
-				EventCategory eventCategory2 = new EventCategory("Vasaras svētki");
-				EventCategory eventCategory3 = new EventCategory("Līgo");
-
-				eventCategoryRepo.save(eventCategory1);
-				eventCategoryRepo.save(eventCategory2);
-				eventCategoryRepo.save(eventCategory3);
-
 				MyAuthority a2 = new MyAuthority("USER");
 				authRepo.save(a2);
 				PasswordEncoder encoder = new BCryptPasswordEncoder();
 				MyUser u1 = new MyUser("annija.user", encoder.encode("123"), a2);
 				userRepo.save(u1);
 
+				EventCategory eventCategory1 = new EventCategory();
+				EventCategoryTranslation eventCategory1Lv = EventCategoryTranslation.builder()
+						.title("Veikala blogs")
+						.locale(LocaleCode.LV)
+						.entity(eventCategory1)
+						.build();
+				EventCategoryTranslation eventCategory1En = EventCategoryTranslation.builder()
+						.title("Shop blog")
+						.locale(LocaleCode.EN)
+						.entity(eventCategory1)
+						.build();
+				eventCategory1.setTranslations(List.of(eventCategory1Lv, eventCategory1En));
+				eventCategory1.setCreatedBy(u1);
+				eventCategoryRepo.save(eventCategory1);
+
 				for (int i = 1; i <= 10; i++) {
 
-					EventTranslation lv = EventTranslation.builder().title("lv_title_" + i)
-							.description("lv_description_" + i).locale(LocaleCode.LV).build();
+					EventTranslation lv = EventTranslation.builder()
+							.title("lv_title_" + i)
+							.description("lv_description_" + i)
+							.locale(LocaleCode.LV)
+							.build();
 
-					EventTranslation en = EventTranslation.builder().title("en_title_" + i)
-							.description("en_description_" + i).locale(LocaleCode.EN).build();
-
+					EventTranslation en = EventTranslation.builder()
+							.title("en_title_" + i)
+							.description("en_description_" + i)
+							.locale(LocaleCode.EN)
+							.build();
+					if (i <= 5) {
+						lv.setLocation("Rīga");
+						en.setLocation("Riga");
+					}
 					Event e = Event.builder()
 							.startDate(LocalDate.now())
 							.endDate(LocalDate.now().plusDays(1)) // 24hrs
@@ -163,8 +181,8 @@ public class SparniProjectApplication {
 							.translations(List.of(lv, en))
 							.build();
 
-					lv.setEvent(e);
-					en.setEvent(e);
+					lv.setEntity(e);
+					en.setEntity(e);
 					e.setTranslations(List.of(lv, en));
 					e.setCreatedBy(u1);
 					eventRepo.save(e);
@@ -173,6 +191,13 @@ public class SparniProjectApplication {
 								e);
 						bilde.setCreatedBy(u1);
 						eventPictureRepo.save(bilde);
+						if (i <= 2) {
+							EventPicture bilde2 = new EventPicture("http://localhost:8080/images/bilde2.jpg",
+									"lababilde",
+									e);
+							bilde2.setCreatedBy(u1);
+							eventPictureRepo.save(bilde2);
+						}
 					}
 				}
 

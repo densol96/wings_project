@@ -4,10 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import lv.wings.dto.response.event.ShortEventDto;
+import lv.wings.dto.response.event.SingleEventDto;
 import lv.wings.model.entity.Event;
 
 public interface EventService extends CRUDService<Event, Integer> {
-    Page<ShortEventDto> getEvents(Pageable pageable);
+    Page<ShortEventDto> getPublicEvents(Pageable pageable);
 
-    ShortEventDto getEvent(Integer id);
+    SingleEventDto getPublicEvent(Integer id);
 }
