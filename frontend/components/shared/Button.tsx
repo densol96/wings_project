@@ -3,7 +3,7 @@ type Props = {
   className?: string;
   size?: "md" | "lg"; // add more as neeeded
   color?: "primary";
-  onClick?: () => Promise<void> | void;
+  onClick?: () => Promise<any> | void;
 };
 
 const sizes = {

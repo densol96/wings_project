@@ -3,6 +3,11 @@ export type Locale = "lv" | "en";
 export type Lang = { lang: Locale };
 
 export type PageProps = { params: Lang };
+export type PagePropsWithId = {
+  params: Lang & {
+    id: number;
+  };
+};
 
 export type HomeContent = {
   title: string;
@@ -19,14 +24,27 @@ export type Image = {
   alt: string;
 };
 
+export type ShortContent = {
+  title: string;
+  description: string;
+};
+
 export type ShortNewsItem = {
   id: number;
   image: Image;
-  translation: {
-    title: string;
-    description: string;
+  translation: ShortContent;
+  createdAt: Date;
+};
+
+export type SingleNewsItem = {
+  id: number;
+  images: Image[];
+  translation: ShortContent & {
+    location: string;
   };
   createdAt: Date;
+  startDate: Date;
+  endDate: Date;
 };
 
 export type PageInfo = {
