@@ -1,10 +1,11 @@
 package lv.wings.service.impl;
 
 import java.util.Locale;
-
+import java.util.function.Supplier;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-
+import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.model.interfaces.Localable;
 import lv.wings.model.interfaces.Translatable;
 import lv.wings.service.LocaleService;
@@ -25,15 +26,22 @@ public class LocaleServiceImpl implements LocaleService {
     }
 
     @Override
-    public Localable getRightTranslation(Translatable entity) {
+    public <T extends Localable> T getRightTranslation(Translatable entity, Class<T> translationClass, Supplier<MissingTranslationException> exceptionSupplier) {
         return entity.getTranslations()
                 .stream()
-                .filter(t -> t.getLocale().getCode().equalsIgnoreCase(getCurrentLocaleCode()))
+                .filter(translation -> translation.getLocale().getCode().equalsIgnoreCase(getCurrentLocaleCode()))
                 .findFirst()
-                .orElseGet(() -> entity.getTranslations()
+                .or(() -> entity.getTranslations()
                         .stream()
                         .filter(t -> t.getLocale().getCode().equalsIgnoreCase(DEFAULT_LOCALE))
-                        .findFirst()
-                        .orElse(null));
+                        .findFirst())
+                .map(translation -> {
+                    if (translationClass.isInstance(translation)) {
+                        return translationClass.cast(translation);
+                    } else {
+                        throw exceptionSupplier.get();
+                    }
+                })
+                .orElseThrow(exceptionSupplier);
     }
 }

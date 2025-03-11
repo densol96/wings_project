@@ -4,7 +4,6 @@ interface EventData {
   id: string;
   title: string;
   description: string;
-  // другие поля...
 }
 
 export default async function Page({ params }: { params: { id: string } }) {

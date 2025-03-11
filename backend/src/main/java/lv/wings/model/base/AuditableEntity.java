@@ -1,4 +1,4 @@
-package lv.wings.model.entity;
+package lv.wings.model.base;
 
 import java.time.LocalDateTime;
 

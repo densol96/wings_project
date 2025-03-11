@@ -17,6 +17,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.wings.model.base.AuditableEntity;
 import lv.wings.model.interfaces.Imagable;
 
 @Entity
