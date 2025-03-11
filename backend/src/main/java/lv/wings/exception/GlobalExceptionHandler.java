@@ -1,9 +1,10 @@
 package lv.wings.exception;
 
 import java.util.Locale;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.dto.response.BasicErrorDto;
 import lv.wings.exception.entity.EntityNotFoundException;
+import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.exception.validation.InvalidQueryParameterException;
+import lv.wings.model.security.MyUser;
 
 @Slf4j
 @RestControllerAdvice
@@ -22,6 +25,7 @@ import lv.wings.exception.validation.InvalidQueryParameterException;
 public class GlobalExceptionHandler {
 
     private final MessageSource messageSource;
+    private final AuditorAware<MyUser> auditorService;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -44,7 +48,7 @@ public class GlobalExceptionHandler {
         }
 
         String message = messageSource.getMessage("error.invalid-query-param",
-                new Object[] { e.getQueryName(), e.getQueryValue() }, locale);
+                new Object[] {e.getQueryName(), e.getQueryValue()}, locale);
         return ResponseEntity.badRequest().body(BasicErrorDto.builder().message(message).build());
     }
 
@@ -54,8 +58,31 @@ public class GlobalExceptionHandler {
         String localizedEntityName = messageSource.getMessage(e.getEntityNameKey(), null, locale);
         String message = messageSource.getMessage(
                 "error.entity-not-found",
-                new Object[] { localizedEntityName, e.getEntityId() },
+                new Object[] {localizedEntityName, e.getEntityId()},
                 locale);
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(BasicErrorDto.builder().message(message).build());
+    }
+
+    @ExceptionHandler(MissingTranslationException.class)
+    public ResponseEntity<BasicErrorDto> handleMissingTranslationException(MissingTranslationException e, Locale locale) {
+        log.error("*** MissingTranslationException: {}", e.getMessage());
+
+        Optional<MyUser> authenticatedUser = auditorService.getCurrentAuditor();
+
+        // Add a check if the authenticated is not an admin / employee later (when implement it)
+        if (authenticatedUser.isEmpty()) {
+            // If just a guest / or user, display a general message
+            return handleProceduralException(e, locale);
+        }
+        // Else, inform the admin / employee that some translation is missing
+        String localizedEntityName = messageSource.getMessage(e.getEntityNameKey(), null, locale);
+        String message = messageSource.getMessage(
+                "error.translation-not-found",
+                new Object[] {localizedEntityName, e.getEntityId()},
+                locale);
+
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(BasicErrorDto.builder().message(message).build());
