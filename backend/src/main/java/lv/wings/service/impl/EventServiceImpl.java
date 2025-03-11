@@ -12,7 +12,6 @@ import lv.wings.dto.response.event.SingleEventDto;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.mapper.EventMapper;
 import lv.wings.model.entity.Event;
-import lv.wings.model.interfaces.Localable;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.repo.EventRepository;
 import lv.wings.service.AbstractCRUDService;
