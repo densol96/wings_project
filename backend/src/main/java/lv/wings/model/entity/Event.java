@@ -1,6 +1,7 @@
 package lv.wings.model.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.SQLDelete;
@@ -28,8 +29,6 @@ import lv.wings.model.base.TranslatableEntity;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
-@SQLDelete(sql = "UPDATE event SET deleted = true WHERE event_id=?")
-@Where(clause = "deleted=false")
 public class Event extends TranslatableEntity<EventTranslation> {
 
 	private LocalDate startDate;
@@ -41,14 +40,10 @@ public class Event extends TranslatableEntity<EventTranslation> {
 	private EventCategory category;
 
 	@OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<EventPicture> images;
-
-	// Soft delete
-	@Column(name = "deleted")
-	private boolean deleted = false;
+	private List<EventPicture> images = new ArrayList<>();
 
 	@Builder
-	public Event(LocalDate startDate, LocalDate endDate, EventCategory category, List<EventTranslation> translations) {
+	public Event(LocalDate startDate, LocalDate endDate, EventCategory category) {
 		setStartDate(startDate);
 		setEndDate(endDate);
 		setCategory(category);

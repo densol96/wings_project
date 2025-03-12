@@ -116,5 +116,11 @@
     "readMore": "Uzzināt vairāk",
     "alt": "Jaunuma attēls",
     "error": "Pašlaik nav ziņu, ko parādīt."
+  },
+  "newsItem": {
+    "startDate": "Sākuma datums",
+    "endDate": "Beigu datums",
+    "postedOn": "Publicēts",
+    "location": "Lokācija"
   }
 }

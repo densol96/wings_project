@@ -19,26 +19,24 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
+
 import lv.wings.enums.LocaleCode;
-import lv.wings.model.entity.Customer;
-import lv.wings.model.entity.DeliveryType;
 import lv.wings.model.entity.Event;
 import lv.wings.model.entity.EventCategory;
 import lv.wings.model.entity.EventPicture;
-import lv.wings.model.entity.PaymentType;
 import lv.wings.model.entity.ProductCategory;
-import lv.wings.model.entity.Purchase;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
 import lv.wings.model.translation.EventCategoryTranslation;
+import lv.wings.model.translation.EventPictureTranslation;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.repo.EventRepository;
 import lv.wings.repo.ICustomerRepo;
 import lv.wings.repo.IDeliveryTypeRepo;
 import lv.wings.repo.EventCategoryRepository;
-import lv.wings.repo.IEventPictureRepo;
+import lv.wings.repo.EventPictureRepository;
 import lv.wings.repo.IPaymentTypeRepo;
 import lv.wings.repo.IProductCategoryRepo;
 import lv.wings.repo.IProductPictureRepo;
@@ -47,6 +45,7 @@ import lv.wings.repo.IPurchaseElementRepo;
 import lv.wings.repo.IPurchaseRepo;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
+
 import net.datafaker.Faker;
 
 @SpringBootApplication
@@ -62,13 +61,14 @@ public class SparniProjectApplication {
 
 	// @Bean
 	// @Profile("seed")
+	@Transactional
 	public CommandLineRunner sparniDB(
 			ICustomerRepo customerRepo,
 			IPurchaseRepo purchaseRepo,
 			IDeliveryTypeRepo deliveryTypeRepo,
 			IPaymentTypeRepo paymentTypeRepo,
 			EventRepository eventRepo,
-			IEventPictureRepo eventPictureRepo,
+			EventPictureRepository eventPictureRepo,
 			EventCategoryRepository eventCategoryRepo,
 			IProductCategoryRepo productCategoryRepo,
 			IPurchaseElementRepo purchaseElementRepo,
@@ -146,12 +146,12 @@ public class SparniProjectApplication {
 				EventCategoryTranslation eventCategory1Lv = EventCategoryTranslation.builder()
 						.title("Veikala blogs")
 						.locale(LocaleCode.LV)
-						.entity(eventCategory1)
+						.category(eventCategory1)
 						.build();
 				EventCategoryTranslation eventCategory1En = EventCategoryTranslation.builder()
 						.title("Shop blog")
 						.locale(LocaleCode.EN)
-						.entity(eventCategory1)
+						.category(eventCategory1)
 						.build();
 				eventCategory1.setTranslations(List.of(eventCategory1Lv, eventCategory1En));
 				eventCategory1.setCreatedBy(u1);
@@ -178,7 +178,6 @@ public class SparniProjectApplication {
 							.startDate(LocalDate.now())
 							.endDate(LocalDate.now().plusDays(1)) // 24hrs
 							.category(eventCategory1)
-							.translations(List.of(lv, en))
 							.build();
 
 					lv.setEntity(e);
@@ -187,14 +186,18 @@ public class SparniProjectApplication {
 					e.setCreatedBy(u1);
 					eventRepo.save(e);
 					if (i <= 3) {
-						EventPicture bilde = new EventPicture("http://localhost:8080/images/bilde1.jpg", "lababilde",
-								e);
+						EventPicture bilde = EventPicture.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
+						EventPictureTranslation altEn = EventPictureTranslation.builder().alt("Good picture").picture(bilde).locale(LocaleCode.EN).build();
+						EventPictureTranslation altLv = EventPictureTranslation.builder().alt("Laba bilde").picture(bilde).locale(LocaleCode.LV).build();
+						bilde.setTranslations(List.of(altEn, altLv));
 						bilde.setCreatedBy(u1);
 						eventPictureRepo.save(bilde);
 						if (i <= 2) {
-							EventPicture bilde2 = new EventPicture("http://localhost:8080/images/bilde2.jpg",
-									"lababilde",
-									e);
+							EventPicture bilde2 = EventPicture.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
+							EventPictureTranslation altEn2 =
+									EventPictureTranslation.builder().alt("Some other good picture").picture(bilde2).locale(LocaleCode.EN).build();
+							EventPictureTranslation altLv2 = EventPictureTranslation.builder().alt("Kada cita laba bilde").picture(bilde2).locale(LocaleCode.LV).build();
+							bilde2.setTranslations(List.of(altEn2, altLv2));
 							bilde2.setCreatedBy(u1);
 							eventPictureRepo.save(bilde2);
 						}
@@ -202,20 +205,20 @@ public class SparniProjectApplication {
 				}
 
 				// KATEGORIJAS
-				ProductCategory kategorija1 = new ProductCategory("Adītas lelles", "Adītas lelles");
-				ProductCategory kategorija2 = new ProductCategory("Aksesuāri", "Aksesuāri");
-				ProductCategory kategorija3 = new ProductCategory("Cepure", "Galvas segas");
-				ProductCategory kategorija4 = new ProductCategory("Cimdi", "Adīti cimdi");
-				ProductCategory kategorija5 = new ProductCategory("Džemperi", "Adīti džemperi");
-				ProductCategory kategorija6 = new ProductCategory("Šalles", "Kakla sega");
-				ProductCategory kategorija7 = new ProductCategory("Zeķes", "Adītas zeķes");
-				productCategoryRepo.save(kategorija1);
-				productCategoryRepo.save(kategorija2);
-				productCategoryRepo.save(kategorija3);
-				productCategoryRepo.save(kategorija4);
-				productCategoryRepo.save(kategorija5);
-				productCategoryRepo.save(kategorija6);
-				productCategoryRepo.save(kategorija7);
+				// ProductCategory kategorija1 = new ProductCategory("Adītas lelles", "Adītas lelles");
+				// ProductCategory kategorija2 = new ProductCategory("Aksesuāri", "Aksesuāri");
+				// ProductCategory kategorija3 = new ProductCategory("Cepure", "Galvas segas");
+				// ProductCategory kategorija4 = new ProductCategory("Cimdi", "Adīti cimdi");
+				// ProductCategory kategorija5 = new ProductCategory("Džemperi", "Adīti džemperi");
+				// ProductCategory kategorija6 = new ProductCategory("Šalles", "Kakla sega");
+				// ProductCategory kategorija7 = new ProductCategory("Zeķes", "Adītas zeķes");
+				// productCategoryRepo.save(kategorija1);
+				// productCategoryRepo.save(kategorija2);
+				// productCategoryRepo.save(kategorija3);
+				// productCategoryRepo.save(kategorija4);
+				// productCategoryRepo.save(kategorija5);
+				// productCategoryRepo.save(kategorija6);
+				// productCategoryRepo.save(kategorija7);
 
 				// PRECES
 				// Product product1 = new Product("Adīti ziemas dūraiņi A", "cimdi1", 13.99f, 6,

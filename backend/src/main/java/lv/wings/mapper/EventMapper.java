@@ -1,5 +1,6 @@
 package lv.wings.mapper;
 
+import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,7 +12,7 @@ import lv.wings.dto.response.event.SingleEventDto;
 import lv.wings.model.entity.Event;
 import lv.wings.model.translation.EventTranslation;
 
-@Mapper(componentModel = "spring", uses = { ImageMapper.class })
+@Mapper(componentModel = "spring")
 public interface EventMapper {
 
     EventTranslationShortDto eventTranslationToShortDto(EventTranslation translation);
@@ -21,6 +22,8 @@ public interface EventMapper {
     ShortEventDto eventToShortDto(Event event, EventTranslationShortDto translation, ImageDto image);
 
     @Mapping(target = "translation", source = "translation")
-    SingleEventDto eventToFullDto(Event event, EventTranslationDto translation);
+    @Mapping(target = "category", source = "categoryTitle")
+    @Mapping(target = "images", source = "images")
+    SingleEventDto eventToFullDto(Event event, EventTranslationDto translation, List<ImageDto> images, String categoryTitle);
 
 }

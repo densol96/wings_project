@@ -19,12 +19,13 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+import lv.wings.model.interfaces.AuditableContract;
 import lv.wings.model.security.MyUser;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public abstract class AuditableEntity {
+public abstract class AuditableEntity implements AuditableContract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(value = AccessLevel.NONE)
