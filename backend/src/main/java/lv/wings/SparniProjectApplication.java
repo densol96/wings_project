@@ -33,16 +33,16 @@ import lv.wings.model.translation.EventCategoryTranslation;
 import lv.wings.model.translation.EventPictureTranslation;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.repo.EventRepository;
-import lv.wings.repo.ICustomerRepo;
-import lv.wings.repo.IDeliveryTypeRepo;
+import lv.wings.repo.CustomerRepository;
+import lv.wings.repo.DeliveryTypeRepository;
 import lv.wings.repo.EventCategoryRepository;
 import lv.wings.repo.EventPictureRepository;
-import lv.wings.repo.IPaymentTypeRepo;
-import lv.wings.repo.IProductCategoryRepo;
-import lv.wings.repo.IProductPictureRepo;
-import lv.wings.repo.IProductRepo;
-import lv.wings.repo.IPurchaseElementRepo;
-import lv.wings.repo.IPurchaseRepo;
+import lv.wings.repo.PaymentTypeRepository;
+import lv.wings.repo.ProductCategoryRepository;
+import lv.wings.repo.ProductPictureRepository;
+import lv.wings.repo.ProductRepository;
+import lv.wings.repo.PurchaseElementRepository;
+import lv.wings.repo.PurchaseRepository;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
 
@@ -63,17 +63,17 @@ public class SparniProjectApplication {
 	// @Profile("seed")
 	@Transactional
 	public CommandLineRunner sparniDB(
-			ICustomerRepo customerRepo,
-			IPurchaseRepo purchaseRepo,
-			IDeliveryTypeRepo deliveryTypeRepo,
-			IPaymentTypeRepo paymentTypeRepo,
+			CustomerRepository customerRepo,
+			PurchaseRepository purchaseRepo,
+			DeliveryTypeRepository deliveryTypeRepo,
+			PaymentTypeRepository paymentTypeRepo,
 			EventRepository eventRepo,
 			EventPictureRepository eventPictureRepo,
 			EventCategoryRepository eventCategoryRepo,
-			IProductCategoryRepo productCategoryRepo,
-			IPurchaseElementRepo purchaseElementRepo,
-			IProductRepo productRepo,
-			IProductPictureRepo productPictureRepo, IMyAuthorityRepo authRepo,
+			ProductCategoryRepository productCategoryRepo,
+			PurchaseElementRepository purchaseElementRepo,
+			ProductRepository productRepo,
+			ProductPictureRepository productPictureRepo, IMyAuthorityRepo authRepo,
 			IMyUserRepo userRepo) {
 		return new CommandLineRunner() {
 			@Override

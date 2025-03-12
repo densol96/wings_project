@@ -12,14 +12,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import lv.wings.repo.IDeliveryTypeRepo;
+import lv.wings.repo.DeliveryTypeRepository;
 import lv.wings.model.entity.Customer;
 import lv.wings.model.entity.DeliveryType;
 import lv.wings.model.entity.PaymentType;
 import lv.wings.model.entity.Purchase;
 import lv.wings.repo.ICustomerRepo;
-import lv.wings.repo.IPurchaseRepo;
-import lv.wings.repo.IPaymentTypeRepo;
+import lv.wings.repo.PurchaseRepository;
+import lv.wings.repo.PaymentTypeRepository;
 
 @SpringBootTest
 public class RepoFindByTest {
@@ -28,13 +28,13 @@ public class RepoFindByTest {
     private ICustomerRepo customerRepo;
 
     @Autowired
-    private IDeliveryTypeRepo deliveryTypeRepo;
+    private DeliveryTypeRepository deliveryTypeRepo;
 
     @Autowired
-    private IPaymentTypeRepo paymentTypeRepo;
+    private PaymentTypeRepository paymentTypeRepo;
 
     @Autowired
-    private IPurchaseRepo purchaseRepo;
+    private PurchaseRepository purchaseRepo;
 
     @Test
     @Order(3)

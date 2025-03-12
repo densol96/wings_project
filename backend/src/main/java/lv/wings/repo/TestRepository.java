@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import lv.wings.model.Test;
 
-public interface ITestRepo extends JpaRepository<Test, Integer> {
+public interface TestRepository extends JpaRepository<Test, Integer> {
 
 }

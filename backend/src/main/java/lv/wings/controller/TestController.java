@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import lv.wings.repo.ITestRepo;
+import lv.wings.repo.TestRepository;
 
 @Getter
 class TestClass {
@@ -18,11 +18,12 @@ class TestClass {
     String FIELD = "FIELD";
 }
 
+
 @RestController
 @RequiredArgsConstructor
 public class TestController {
 
-    private final ITestRepo testRepo;
+    private final TestRepository testRepo;
 
     @GetMapping("/test/{id}")
     public String test(@PathVariable Integer id) {

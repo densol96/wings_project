@@ -19,13 +19,13 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
-import lv.wings.model.interfaces.AuditableContract;
+import lv.wings.model.interfaces.Auditable;
 import lv.wings.model.security.MyUser;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Data
-public abstract class AuditableEntity implements AuditableContract {
+public abstract class AuditableEntity implements Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(value = AccessLevel.NONE)
@@ -38,11 +38,6 @@ public abstract class AuditableEntity implements AuditableContract {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModifiedAt;
-
-    @CreatedBy
-    @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
-    private MyUser createdBy;
 
     @LastModifiedBy
     @ManyToOne

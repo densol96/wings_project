@@ -35,7 +35,6 @@ import lv.wings.dto.object.EventCategoryDTO;
 import lv.wings.dto.object.EventDTO;
 import lv.wings.dto.object.EventPictureDTO;
 import lv.wings.dto.object.ProductCategoryDTO;
-import lv.wings.dto.object.ProductDTO;
 import lv.wings.dto.object.ProductPictureDTO;
 import lv.wings.exception.old.NoContentException;
 import lv.wings.model.entity.Event;
@@ -52,19 +51,19 @@ import lv.wings.service.ICRUDService;
 // @RequestMapping("/admin/api/")
 public class AdminController {
 
-	@Autowired
-	private ICRUDService<Event> eventsService;
-	@Autowired
-	private ICRUDService<EventCategory> eventsCategoryService;
-	@Autowired
-	private ICRUDService<EventPicture> eventsPictureService;
+	// @Autowired
+	// private ICRUDService<Event> eventsService;
+	// @Autowired
+	// private ICRUDService<EventCategory> eventsCategoryService;
+	// @Autowired
+	// private ICRUDService<EventPicture> eventsPictureService;
 
-	@Autowired
-	private ICRUDService<Product> productsService;
-	@Autowired
-	private ICRUDService<ProductCategory> productsCategoryService;
-	@Autowired
-	private ICRUDService<ProductPicture> productsPictureService;
+	// @Autowired
+	// private ICRUDService<Product> productsService;
+	// @Autowired
+	// private ICRUDService<ProductCategory> productsCategoryService;
+	// @Autowired
+	// private ICRUDService<ProductPicture> productsPictureService;
 
 	@Value("${upload.directory.events}")
 	private String uploadEventsDir;

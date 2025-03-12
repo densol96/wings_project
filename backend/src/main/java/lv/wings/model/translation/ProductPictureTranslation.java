@@ -10,19 +10,18 @@ import lombok.NoArgsConstructor;
 
 import lv.wings.enums.LocaleCode;
 import lv.wings.model.base.LocalableEntity;
-import lv.wings.model.entity.EventPicture;
+import lv.wings.model.entity.ProductPicture;
 
 @Entity
-@Table(name = "event_picture_translations")
+@Table(name = "product_picture_translations")
 @NoArgsConstructor
 @Data
-public class EventPictureTranslation extends LocalableEntity<EventPicture> {
-
+public class ProductPictureTranslation extends LocalableEntity<ProductPicture> {
     @Column(nullable = false)
     private String alt;
 
     @Builder
-    public EventPictureTranslation(LocaleCode locale, EventPicture picture, String alt) {
+    public ProductPictureTranslation(LocaleCode locale, ProductPicture picture, String alt) {
         super(locale, picture);
         setAlt(alt);
     }

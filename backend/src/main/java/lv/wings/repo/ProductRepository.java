@@ -9,11 +9,11 @@ import org.springframework.data.repository.query.Param;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductCategory;
 
-public interface IProductRepo extends JpaRepository<Product, Integer> {
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-	Product findByTitle(String title);
+	// Product findByTitle(String title);
 
-	List<Product> findByProductCategory(ProductCategory productCategory);
+	List<Product> findByCategory(ProductCategory category);
 
 	@Query(value = "SELECT * FROM product ORDER BY RAND() LIMIT :count", nativeQuery = true)
 	List<Product> findRandomProducts(@Param("count") int count);

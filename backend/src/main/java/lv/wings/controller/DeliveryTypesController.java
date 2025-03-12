@@ -15,6 +15,7 @@ import lv.wings.exception.old.NoContentException;
 import lv.wings.model.entity.DeliveryType;
 import lv.wings.responses.ApiListResponse;
 import lv.wings.responses.ApiResponse;
+import lv.wings.service.CRUDService;
 import lv.wings.service.ICRUDService;
 
 @RestController
@@ -22,13 +23,14 @@ import lv.wings.service.ICRUDService;
 public class DeliveryTypesController {
 
 	@Autowired
-	private ICRUDService<DeliveryType> deliveryTypeService;
+	private CRUDService<DeliveryType, Integer> deliveryTypeService;
 
 	@GetMapping(value = "/show/all")
 	public ResponseEntity<ApiListResponse<DeliveryType>> getAllDeliveryTypes() {
 
 		try {
-			List<DeliveryType> allDeliveryTypes = deliveryTypeService.retrieveAll();
+			// List<DeliveryType> allDeliveryTypes = deliveryTypeService.retrieveAll();
+			List<DeliveryType> allDeliveryTypes = null;
 
 			return ResponseEntity.ok(new ApiListResponse<>(null, allDeliveryTypes));
 		} catch (NoContentException e) {
@@ -43,7 +45,7 @@ public class DeliveryTypesController {
 	public ResponseEntity<ApiResponse<DeliveryType>> getSingleDeliveryType(@PathVariable("id") int id) {
 
 		try {
-			return ResponseEntity.ok(new ApiResponse<>(null, deliveryTypeService.retrieveById(id)));
+			return ResponseEntity.ok(new ApiResponse<>(null, deliveryTypeService.findById(id)));
 		} catch (NoContentException e) {
 			return ResponseEntity.ok(new ApiResponse<>(e.getMessage(), null));
 		} catch (Exception e) {
