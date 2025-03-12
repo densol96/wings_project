@@ -24,66 +24,31 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lv.wings.model.base.TranslatableEntity;
+import lv.wings.model.translation.ProductCategoryTranslation;
+import lv.wings.model.translation.ProductPictureTranslation;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@ToString
-@Table(name = "Product_Picture")
 @Entity
+@Table(name = "product_pictures")
 @EntityListeners(AuditingEntityListener.class)
-@SQLDelete(sql = "UPDATE Product_Picture SET deleted = true WHERE product_picture_id=?")
-@Where(clause = "deleted=false")
-public class ProductPicture {
+@NoArgsConstructor
+@Data
+public class ProductPicture extends TranslatableEntity<ProductPictureTranslation> {
 
-	@Id
-	@Column(name = "product_picture_id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Setter(value = AccessLevel.NONE)
-	private int productPictureId;
+	@Column(nullable = false)
+	private String src;
 
-	// saite uz preci
 	@ManyToOne
-	@JsonBackReference
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-	@NotNull
-	@Column(name = "reference_to_picture")
-	private String referenceToPicture;
 
-	@Column(name = "description")
-	@NotNull
-	@Size(min = 4, max = 150)
-	private String description;
-
-	@CreatedDate
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime createDate;
-
-	@LastModifiedDate
-	@Column(insertable = false)
-	private LocalDateTime lastModified;
-
-	@CreatedBy
-	// @Column(updatable = false)
-	private Integer createdBy;
-
-	@LastModifiedBy
-	@Column(insertable = false)
-	private Integer lastModifiedBy;
-
-	// Soft delete
-	@Column(name = "deleted")
-	private boolean deleted = false;
-
-	public ProductPicture(String referenceToPicture, String description, Product product) {
-		setReferenceToPicture(referenceToPicture);
-		setDescription(description);
+	public ProductPicture(Product product) {
 		setProduct(product);
 	}
 

@@ -8,7 +8,7 @@ import lv.wings.model.entity.Product;
 import lv.wings.model.entity.Purchase;
 import lv.wings.model.entity.PurchaseElement;
 
-public interface IPurchaseElementRepo extends JpaRepository<PurchaseElement, Integer> {
+public interface PurchaseElementRepository extends JpaRepository<PurchaseElement, Integer> {
 
     List<PurchaseElement> findByPurchase(Purchase purchase);
 

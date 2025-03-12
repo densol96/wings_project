@@ -20,6 +20,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,27 +38,24 @@ import lombok.ToString;
 public class PurchaseElement {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Setter(value = AccessLevel.NONE)
-	private int purchaseElementId;
+	private Integer id;
 
-	// TODO te nak pirkums ID MARKUSS
 	@ManyToOne
-	@JoinColumn(name = "purchase_id")
+	@JoinColumn(name = "purchase_id", nullable = false)
 	private Purchase purchase;
 
-	// saite uz preces
 	@ManyToOne
-	@JoinColumn(name = "product_id")
+	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
 
-	@Column(name = "amount")
-	@Min(1)
-	private int amount;
+	@Column(nullable = false)
+	private Integer amount;
 
 	@CreatedDate
 	@Column(nullable = false, updatable = false)
-	private LocalDateTime createDate;
+	private LocalDateTime createdAt;
 
 	@LastModifiedDate
 	@Column(insertable = false)
@@ -71,7 +69,8 @@ public class PurchaseElement {
 	@Column(name = "deleted")
 	private boolean deleted = false;
 
-	public PurchaseElement(Purchase purchase, Product product, int amount) {
+	@Builder
+	public PurchaseElement(Purchase purchase, Product product, Integer amount) {
 		setPurchase(purchase);
 		setProduct(product);
 		setAmount(amount);

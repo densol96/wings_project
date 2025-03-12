@@ -14,7 +14,7 @@ import lv.wings.model.interfaces.Translatable;
 @MappedSuperclass
 @NoArgsConstructor
 @Setter
-public abstract class TranslatableEntity<L extends Localable> extends AuditableEntity implements Translatable {
+public abstract class TranslatableEntity<L extends Localable> extends AuditableEntityExtended implements Translatable {
 
     @OneToMany(mappedBy = "entity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<L> translations = new ArrayList<>();

@@ -9,7 +9,7 @@ import lv.wings.model.entity.DeliveryType;
 import lv.wings.model.entity.PaymentType;
 import lv.wings.model.entity.Purchase;
 
-public interface IPurchaseRepo extends JpaRepository<Purchase, Integer> {
+public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
 
     List<Purchase> findByPaymentType(PaymentType paymentType);
 

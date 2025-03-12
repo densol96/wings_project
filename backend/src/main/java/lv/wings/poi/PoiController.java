@@ -247,7 +247,7 @@ public class PoiController {
 		run.addBreak();
 		run.setText("Pasūtījuma ID");
 		run.addBreak();
-		run.setText(source.getPurchaseId() + "");
+		run.setText(source.getId() + "");
 		run.addBreak();
 
 		paragraph = tableRows.get(0).getCell(2).getParagraphArray(0);
@@ -284,8 +284,8 @@ public class PoiController {
 			int amount = purchaseElements.get(i).getAmount();
 			float price = purchaseElements.get(i).getProduct().getPrice();
 
-			tableRows.get(i + 1).getCell(0).getParagraphArray(0).createRun()
-					.setText(purchaseElements.get(i).getProduct().getTitle() + "");
+			// tableRows.get(i + 1).getCell(0).getParagraphArray(0).createRun()
+			// .setText(purchaseElements.get(i).getProduct().getTitle() + "");
 			tableRows.get(i + 1).getCell(1).getParagraphArray(0).createRun().setText(amount + "");
 			tableRows.get(i + 1).getCell(2).getParagraphArray(0).createRun().setText(price + "");
 			summ += amount * price;
