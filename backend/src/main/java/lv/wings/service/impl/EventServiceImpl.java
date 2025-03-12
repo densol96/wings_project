@@ -1,5 +1,6 @@
 package lv.wings.service.impl;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -9,31 +10,32 @@ import lv.wings.dto.response.event.EventTranslationDto;
 import lv.wings.dto.response.event.EventTranslationShortDto;
 import lv.wings.dto.response.event.ShortEventDto;
 import lv.wings.dto.response.event.SingleEventDto;
-import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.mapper.EventMapper;
 import lv.wings.model.entity.Event;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.repo.EventRepository;
-import lv.wings.service.AbstractCRUDService;
+import lv.wings.service.AbstractTranslatableCRUDService;
+import lv.wings.service.EventCategoryService;
 import lv.wings.service.EventService;
 import lv.wings.service.LocaleService;
 
 @Service
-public class EventServiceImpl extends AbstractCRUDService<Event, Integer> implements EventService {
+public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, EventTranslation, Integer> implements EventService {
 
     private final EventMapper eventMapper;
-    private final LocaleService localeService;
     private final EventPictureServiceImpl eventPictureService;
+    private final EventCategoryService eventCategoryService;
 
     public EventServiceImpl(
             EventRepository eventRepository,
             EventMapper eventMapper,
             EventPictureServiceImpl eventPictureService,
-            LocaleService localeService) {
-        super(eventRepository, "Event", "entity.event");
+            LocaleService localeService,
+            EventCategoryService eventCategoryService) {
+        super(eventRepository, "Event", "entity.event", localeService);
         this.eventMapper = eventMapper;
-        this.localeService = localeService;
         this.eventPictureService = eventPictureService;
+        this.eventCategoryService = eventCategoryService;
     }
 
     @Override
@@ -44,19 +46,14 @@ public class EventServiceImpl extends AbstractCRUDService<Event, Integer> implem
     @Override
     public SingleEventDto getPublicEvent(Integer id) {
         Event event = findById(id);
-        EventTranslationDto translation = eventMapper.eventTranslationToDto(getRightTranslationPerLocale(event));
-        return eventMapper.eventToFullDto(event, translation);
-    }
-
-    private EventTranslation getRightTranslationPerLocale(Event event) {
-        return localeService.getRightTranslation(
-                event,
-                EventTranslation.class,
-                () -> new MissingTranslationException("entity.event", "Event", event.getId()));
+        EventTranslationDto translation = eventMapper.eventTranslationToDto(getRightTranslation(event, EventTranslation.class));
+        String category = eventCategoryService.getCategoryTitleByEvent(event);
+        List<ImageDto> images = eventPictureService.getPicturesAsDtoPerEventId(id);
+        return eventMapper.eventToFullDto(event, translation, images, category);
     }
 
     private ShortEventDto eventToShortPublicDto(Event event) {
-        EventTranslation translation = getRightTranslationPerLocale(event);
+        EventTranslation translation = getRightTranslation(event, EventTranslation.class);
         EventTranslationShortDto translationShortDto = eventMapper.eventTranslationToShortDto(translation);
         ImageDto image = eventPictureService.getEventWallpaperById(event.getId());
         return eventMapper.eventToShortDto(event, translationShortDto, image);

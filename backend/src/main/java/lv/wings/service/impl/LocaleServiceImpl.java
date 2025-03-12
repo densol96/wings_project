@@ -28,7 +28,7 @@ public class LocaleServiceImpl implements LocaleService {
     }
 
     @Override
-    public <T extends Localable> T getRightTranslation(Translatable entity, Class<T> translationClass, Supplier<MissingTranslationException> exceptionSupplier) {
+    public <L extends Localable> L getRightTranslation(Translatable entity, Class<L> translationClass, Supplier<MissingTranslationException> exceptionSupplier) {
         return entity.getTranslations()
                 .stream()
                 .filter(translation -> translation.getLocale().getCode().equalsIgnoreCase(getCurrentLocaleCode()))

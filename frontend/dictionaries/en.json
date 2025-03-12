@@ -117,5 +117,11 @@
     "readMore": "Learn more",
     "alt": "Event's image",
     "error": "No any news to display at this time."
+  },
+  "newsItem": {
+    "startDate": "Start date",
+    "endDate": "End date",
+    "postedOn": "Posted on",
+    "location": "Location"
   }
 }

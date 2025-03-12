@@ -27,7 +27,7 @@ public class EventTranslation extends LocalableEntity<Event> {
     private String location;
 
     @Builder
-    public EventTranslation(LocaleCode locale, String title, String location, String description, Event event) {
+    public EventTranslation(LocaleCode locale, Event event, String title, String location, String description) {
         super(locale, event);
         setTitle(title);
         setLocation(location);

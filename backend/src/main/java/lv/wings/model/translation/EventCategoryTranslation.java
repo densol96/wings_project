@@ -20,8 +20,8 @@ public class EventCategoryTranslation extends LocalableEntity<EventCategory> {
     private String title;
 
     @Builder
-    public EventCategoryTranslation(String title, LocaleCode locale, EventCategory entity) {
-        super(locale, entity);
+    public EventCategoryTranslation(LocaleCode locale, EventCategory category, String title) {
+        super(locale, category);
         setTitle(title);
     }
 }

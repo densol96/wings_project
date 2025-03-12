@@ -45,6 +45,7 @@ export type SingleNewsItem = {
   createdAt: Date;
   startDate: Date;
   endDate: Date;
+  category: string;
 };
 
 export type PageInfo = {
