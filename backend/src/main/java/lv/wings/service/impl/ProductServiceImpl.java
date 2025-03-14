@@ -14,4 +14,6 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	public ProductServiceImpl(ProductRepository productRepository, LocaleService localeService) {
 		super(productRepository, "Product", "entity.product", localeService);
 	}
+
+
 }

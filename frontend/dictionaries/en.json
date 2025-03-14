@@ -23,7 +23,7 @@
     },
     "shop": {
       "title": "Shop",
-      "href": "/en/shop"
+      "href": "/en/shop/categories/0-all-products"
     },
     "about": {
       "title": "About Us",
@@ -128,6 +128,7 @@
     "meta": "Shop",
     "title": "All products",
     "description": "Discover beautiful and unique handmade crafts, created with love and care! Choose from a wide selection of handcrafted items that will fill your home with warmth and individuality. Each piece is special – made to bring joy and inspiration. Find your perfect creation today!",
-    "toHome": "To the main page"
+    "toHome": "To the main page",
+    "categoryListTitle": "Product Categories"
   }
 }

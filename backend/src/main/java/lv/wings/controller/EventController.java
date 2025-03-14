@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.wings.annotation.AllowedSortFields;
 import lv.wings.dto.response.event.ShortEventDto;
 import lv.wings.dto.response.event.SingleEventDto;
 import lv.wings.service.EventService;
@@ -25,6 +26,7 @@ public class EventController {
 	private final EventService eventsService;
 
 	@GetMapping
+	@AllowedSortFields({"lastModifiedAt", "startDate", "createdAt"})
 	public ResponseEntity<Page<ShortEventDto>> getLatestEvents(
 			@PageableDefault(page = 1, size = 6, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
 		log.info("Received GET request on /api/v1/events");

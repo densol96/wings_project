@@ -1,8 +1,9 @@
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { PagePropsWithSlug } from "@/types";
-import { extractIdFromSlug, fetcher } from "@/utils";
+import { extractIdFromSlug, fetcher, slugify } from "@/utils";
 import unslugify from "@/utils/unslugify";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -24,11 +25,14 @@ type ShopDict = {
 const Header = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
   const dict: ShopDict = (await getDictionary(lang)).shop;
   const categoryId = extractIdFromSlug(slug);
-  console.log(categoryId);
   const activeCategory: ActiveCategory =
     categoryId !== 0
       ? await fetcher(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/product-categories/${categoryId}?lang=${lang}`, [404, 400])
       : { title: dict.title, description: dict.description };
+
+  // If locale was changes, f.e. from /en/*/1-hats to /lv/*/hats-1 we get a localised activeCategory(cepures) and we can change the displayed url to /lv/*/1-cepures
+  const newLocalisedSlug = `${categoryId}-${slugify(activeCategory.title)}`;
+  if (newLocalisedSlug !== slug) redirect(newLocalisedSlug);
 
   return (
     <>
@@ -38,7 +42,7 @@ const Header = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
             <Link href={`/${lang}`}>{dict.toHome}</Link>
           </p>
           <span className="text-xl"> / </span>
-          <p>{activeCategory.title}</p>
+          <p className="font-medium text-gray-700">{activeCategory.title}</p>
         </div>
       </div>
       <p>{activeCategory.description}</p>

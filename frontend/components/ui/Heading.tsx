@@ -8,7 +8,7 @@ type Props = {
   as?: "h1" | "h2" | "h3" | "h4" | "h5";
 };
 
-const Heading = ({ className, children, size, as = "h1" }: Props) => {
+const Heading = ({ className, children, size = "xl", as = "h1" }: Props) => {
   const mapTagBySize = {
     xs: "h5",
     sm: "h4",

@@ -1,14 +1,17 @@
 package lv.wings.config.interceptors;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lv.wings.annotation.AllowedSortFields;
 import lv.wings.exception.validation.InvalidQueryParameterException;
 
 @Component
@@ -33,9 +36,19 @@ public class ParameterValidationInterceptor implements HandlerInterceptor {
 
         // // Validate sorting parameters
         validateAgainstAllowedValues("direction", request.getParameter("direction"), List.of("asc", "desc"));
-        validateAgainstAllowedValues("sort", request.getParameter("sort"), List.of("title", "createdAt"));
+        validateAgainstAllowedValues("sort", request.getParameter("sort"), extractAllowedValuesFromAnnotation(handler));
 
         return true;
+    }
+
+    private List<String> extractAllowedValuesFromAnnotation(Object handler) {
+        if (handler instanceof HandlerMethod) {
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            AllowedSortFields allowedSortFields = handlerMethod.getMethodAnnotation(AllowedSortFields.class);
+            if (allowedSortFields != null)
+                return Arrays.asList(allowedSortFields.value());
+        }
+        return List.of();
     }
 
     private void shouldBeGreaterThanZero(String paramName, String paramValue) {

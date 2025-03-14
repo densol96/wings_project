@@ -18,19 +18,19 @@
     },
     "news": {
       "title": "Jaunumi",
-      "href": "/news"
+      "href": "/jaunumi"
     },
     "shop": {
       "title": "Veikals",
-      "href": "/shop/categories/0-all-products"
+      "href": "/veikals/kategorijas/0-visi-produkti"
     },
     "about": {
       "title": "Par Mums",
-      "href": "/about"
+      "href": "/par-mums"
     },
     "contacts": {
       "title": "Kontakti",
-      "href": "/contacts"
+      "href": "/kontakti"
     }
   },
   "footer": {
@@ -127,6 +127,7 @@
     "meta": "Shop",
     "title": "Visi produkti",
     "description": "Atklājiet skaistus un unikālus rokdarbus, kas radīti ar mīlestību un rūpību! Izvēlieties no plaša klāsta ar rokām darinātu izstrādājumu, kas piepildīs jūsu mājokli ar siltumu un individualitāti. Katrs priekšmets ir īpašs – radīts, lai priecētu un iedvesmotu. Atrodiet savu ideālo darinājumu jau šodien!",
-    "toHome": "Uz galveno lapu"
+    "toHome": "Uz galveno lapu",
+    "categoryListTitle": "Produktu Kategorijas"
   }
 }
