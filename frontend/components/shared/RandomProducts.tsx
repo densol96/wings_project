@@ -1,7 +1,8 @@
 import React from "react";
-import RandomProductsSlider from "./RandomProductsSlider";
 import Link from "next/link";
 import Slider from "react-slick";
+
+import RandomProductsSlider from "./RandomProductsSlider";
 
 const RandomProducts = async () => {
   const data = await fetch("http://localhost:8080/api/products/random");

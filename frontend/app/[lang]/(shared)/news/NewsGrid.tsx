@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import NewsItem from "./NewsItem";
-import { Lang, Locale, NewsDictionaryType, PageInfo, ShortNewsItem } from "@/@types/shared";
-import { Button } from "@/components/shared";
 import { parsePageableResponse } from "@/utils";
-import { Spinner } from "@/components/shared/Spinner";
+
+import { Lang, Locale, NewsDictionaryType, PageInfo, ShortNewsItem } from "@/types";
+
+import { Button, Spinner } from "@/components";
+import NewsItem from "./NewsItem";
 
 type NewsState = {
   news: ShortNewsItem[];
@@ -38,9 +39,7 @@ const NewsGrid = function ({ lang, dict }: Props) {
     if (currentPage === 1) setIsLoading(true);
     setIsError(false);
     try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/events?page=${currentPage}&lang=${lang}`
-      );
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/events?page=${currentPage}&lang=${lang}`);
       if (!response.ok) throw new Error("response.ok = false likely due to problems with network (is server up?)");
       const result = await response.json();
       const { content, page, size, totalPages, totalElements } = parsePageableResponse(result);

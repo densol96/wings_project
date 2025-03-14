@@ -1,8 +1,15 @@
-import { Wallpaper, RandomProducts } from "@/components";
-import { getDictionary } from "@/dictionaries/dictionaries";
 import Image from "next/image";
+
+import { PageProps } from "@/types/common";
+import { HomeContent } from "@/types/sections/main";
+
+import { Wallpaper, RandomProducts } from "@/components/shared";
+import { getDictionary } from "@/dictionaries/dictionaries";
+
 import lineOne from "@/public/line_1.png";
-import { PageProps, HomeContent } from "@/@types/shared";
+
+import { twMerge } from "tailwind-merge";
+import { cn } from "@/utils";
 
 const Home = async function ({ params: { lang } }: PageProps) {
   const dict = await getDictionary(lang);

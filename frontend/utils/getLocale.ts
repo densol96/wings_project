@@ -1,6 +1,6 @@
 "use client";
 
-import { Locale } from "@/@types/shared";
+import { Locale } from "@/types/common";
 
 const getLocale = function (): Locale {
   return (typeof document !== "undefined" ? document.documentElement.lang : "lv") as Locale;

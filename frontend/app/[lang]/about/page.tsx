@@ -1,9 +1,13 @@
 import React from "react";
 import Image from "next/image";
-import image from "@/public/assets/about_sparni.png";
+
+import { PageProps } from "@/types/common";
+
 import { getDictionary } from "@/dictionaries/dictionaries";
-import { Heading } from "@/components/shared";
-import { PageProps } from "@/@types/shared";
+
+import { Heading } from "@/components/ui";
+
+import image from "@/public/assets/about_sparni.png";
 
 export const generateMetadata = async ({ params }: PageProps) => {
   const dict: AboutDictionaryType = (await getDictionary(params.lang)).about;

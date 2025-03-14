@@ -1,32 +1,33 @@
 "use client";
-
-import { Button } from "@/components/shared";
-import { getLocale } from "@/utils";
-import { useRouter } from "next/navigation";
 import React from "react";
+import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui";
+
+import { getLocale } from "@/utils";
 
 type Props = {
   error: Error;
   reset: () => void;
 };
 
+const errorMessages = {
+  en: "We are experiencing some technical difficulties, and this service is temporarily unavailable. Please try again later. If the problem persists, contact site administration. Best regards!",
+  lv: "Mums ir nelielas tehniskas problēmas, un šis pakalpojums pašlaik nav pieejams. Lūdzu, mēģiniet vēlreiz vēlāk. Ja problēma saglabājas, sazinieties ar vietnes administrāciju. Ar cieņu!",
+} as const;
+
+const subheading = {
+  en: "Sparni Association",
+  lv: "Sparni biedrība",
+};
+
+const btnText = {
+  en: "Go home",
+  lv: "Uz mājām",
+};
+
 const Error = ({ error, reset }: Props) => {
-  console.error("GLOVAL ERROR BOUNDARY ===> ", error);
-
-  const errorMessages = {
-    en: "We are experiencing some technical difficulties, and this service is temporarily unavailable. Please try again later. If the problem persists, contact site administration. Best regards!",
-    lv: "Mums ir nelielas tehniskas problēmas, un šis pakalpojums pašlaik nav pieejams. Lūdzu, mēģiniet vēlreiz vēlāk. Ja problēma saglabājas, sazinieties ar vietnes administrāciju. Ar cieņu!",
-  } as const;
-
-  const subheading = {
-    en: "Sparni Association",
-    lv: "Sparni biedrība",
-  };
-
-  const btnText = {
-    en: "Go home",
-    lv: "Uz mājām",
-  };
+  console.error("GLOBAL ERROR BOUNDARY ===> ", error);
 
   const lang = getLocale();
 

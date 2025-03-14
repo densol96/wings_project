@@ -1,10 +1,13 @@
 import React from "react";
-import { Locale, NewsDictionaryType, ShortNewsItem } from "@/@types/shared";
-import { formatDate } from "@/utils";
-import { Heading, StyledLink } from "@/components/shared";
 import Link from "next/link";
 import Image from "next/image";
-import MyImage from "@/components/shared/MyImage";
+import { formatDate } from "@/utils";
+
+import { Locale, NewsDictionaryType, ShortNewsItem } from "@/types";
+
+import { Heading, StyledLink } from "@/components";
+
+import MyImage from "@/components/ui/MyImage";
 
 const NewsItem = function ({ item, lang, dict }: { item: ShortNewsItem; lang: Locale; dict: NewsDictionaryType }) {
   const description = item.translation?.description;

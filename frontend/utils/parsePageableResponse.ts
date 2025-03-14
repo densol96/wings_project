@@ -1,4 +1,4 @@
-import { PageableResponse, PageableReturn } from "@/@types/shared";
+import { PageableResponse, PageableReturn } from "@/types/";
 
 const parsePageableResponse = (pageableResponse: PageableResponse): PageableReturn => {
   const { content, totalElements, totalPages } = pageableResponse;

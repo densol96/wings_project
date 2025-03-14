@@ -21,6 +21,11 @@ public abstract class AbstractCRUDService<T, ID> implements CRUDService<T, ID> {
     }
 
     @Override
+    public long count() {
+        return repository.count();
+    }
+
+    @Override
     public List<T> findAll() {
         return repository.findAll();
     }

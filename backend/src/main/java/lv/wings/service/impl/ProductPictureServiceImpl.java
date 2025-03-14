@@ -7,6 +7,7 @@ import lv.wings.model.translation.ProductPictureTranslation;
 import lv.wings.repo.ProductPictureRepository;
 import lv.wings.service.AbstractTranslatableCRUDService;
 import lv.wings.service.LocaleService;
+import lv.wings.service.ProductService;
 
 @Service
 public class ProductPictureServiceImpl extends AbstractTranslatableCRUDService<ProductPicture, ProductPictureTranslation, Integer> {

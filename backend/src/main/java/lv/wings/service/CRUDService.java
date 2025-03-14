@@ -6,6 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CRUDService<T, ID> {
+
+    long count();
+
     List<T> findAll();
 
     Page<T> findAll(Pageable pageable);

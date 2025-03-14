@@ -1,3 +1,4 @@
+import { cn } from "@/utils";
 import React from "react";
 
 type Props = {
@@ -26,11 +27,7 @@ const Heading = ({ className, children, size, as = "h1" }: Props) => {
     "2xl": "text-5xl sm:text-7xl font-bold tracking-tight",
   } as const;
 
-  return React.createElement(
-    as || mapTagBySize[size],
-    { className: `${mapClassNameBySize[size]} ${className}` },
-    children
-  );
+  return React.createElement(as || mapTagBySize[size], { className: cn(mapClassNameBySize[size], className) }, children);
 };
 
 export default Heading;

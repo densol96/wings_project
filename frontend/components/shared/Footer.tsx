@@ -1,6 +1,7 @@
 import React from "react";
-import { Logo } from "./shared";
 import Link from "next/link";
+
+import { Logo } from "@/components/ui";
 
 type IconLink = {
   icon: React.JSX.Element;

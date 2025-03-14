@@ -1,7 +1,7 @@
 "use client";
 
-import { Image } from "@/@types/shared";
-import MyImage from "./MyImage";
+import { Image } from "@/types/";
+import MyImage from "../ui/MyImage";
 import Link from "next/link";
 
 import dynamic from "next/dynamic";

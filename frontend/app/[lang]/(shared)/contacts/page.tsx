@@ -1,7 +1,9 @@
-import { PageProps } from "@/@types/shared";
-import { Heading } from "@/components/shared";
-import { getDictionary } from "@/dictionaries/dictionaries";
 import React from "react";
+
+import { getDictionary } from "@/dictionaries/dictionaries";
+
+import { PageProps } from "@/types";
+import { Heading } from "@/components";
 
 type ContactDetail = {
   label: string;
