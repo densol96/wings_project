@@ -12,4 +12,8 @@ public interface LocaleService {
     String getCurrentLocaleCode();
 
     <T extends Localable> T getRightTranslation(Translatable entity, Class<T> translationClass, Supplier<MissingTranslationException> exceptionSupplier);
+
+    String getMessage(String messageCode, Object[] args);
+
+    String getMessage(String messageCode);
 }

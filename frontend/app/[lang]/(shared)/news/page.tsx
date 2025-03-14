@@ -1,6 +1,9 @@
-import { NewsDictionaryType, PageProps } from "@/@types/shared";
-import { Heading } from "@/components/shared";
+import { PageProps } from "@/types/common";
+import { NewsDictionaryType } from "@/types/sections/news";
+
 import { getDictionary } from "@/dictionaries/dictionaries";
+
+import { Heading } from "@/components/ui";
 import NewsGrid from "./NewsGrid";
 
 export const generateMetadata = async ({ params: { lang } }: PageProps) => {

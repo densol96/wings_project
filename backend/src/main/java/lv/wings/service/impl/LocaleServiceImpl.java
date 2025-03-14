@@ -4,18 +4,29 @@ import java.util.Locale;
 import java.util.function.Supplier;
 
 import org.apache.poi.ss.formula.functions.T;
+import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.model.interfaces.Localable;
 import lv.wings.model.interfaces.Translatable;
+import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.service.LocaleService;
 
 @Service
 public class LocaleServiceImpl implements LocaleService {
 
-    private final String DEFAULT_LOCALE = "lv";
+    private final IMyAuthorityRepo IMyAuthorityRepo;
+    private final MessageSource messageSource;
+
+    private final static String DEFAULT_LOCALE = "lv";
+
+
+    public LocaleServiceImpl(IMyAuthorityRepo IMyAuthorityRepo, MessageSource messageSource) {
+        this.IMyAuthorityRepo = IMyAuthorityRepo;
+        this.messageSource = messageSource;
+    }
 
     @Override
     public Locale getCurrentLocale() {
@@ -46,4 +57,14 @@ public class LocaleServiceImpl implements LocaleService {
                 })
                 .orElseThrow(exceptionSupplier);
     }
+
+
+    public String getMessage(String messageCode) {
+        return getMessage(messageCode, null);
+    }
+
+    public String getMessage(String messageCode, Object[] args) {
+        return messageSource.getMessage(messageCode, args, getCurrentLocale());
+    }
+
 }

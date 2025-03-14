@@ -1,4 +1,4 @@
-import { Locale } from "@/@types/shared";
+import { Locale } from "@/types/";
 import "server-only";
 
 const dictionaries: any = {

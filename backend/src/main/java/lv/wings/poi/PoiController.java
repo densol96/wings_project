@@ -243,7 +243,7 @@ public class PoiController {
 		run = paragraph.createRun();
 		run.setText("Pasūtījuma Datums");
 		run.addBreak();
-		run.setText(source.getDeliveryDate().toString());
+		run.setText(source.getCreatedAt().toString());
 		run.addBreak();
 		run.setText("Pasūtījuma ID");
 		run.addBreak();
@@ -282,7 +282,7 @@ public class PoiController {
 
 		for (int i = 0; i < purchaseElements.size(); i++) {
 			int amount = purchaseElements.get(i).getAmount();
-			float price = purchaseElements.get(i).getProduct().getPrice();
+			double price = purchaseElements.get(i).getProduct().getPrice();
 
 			// tableRows.get(i + 1).getCell(0).getParagraphArray(0).createRun()
 			// .setText(purchaseElements.get(i).getProduct().getTitle() + "");

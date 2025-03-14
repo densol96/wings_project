@@ -22,7 +22,7 @@
     },
     "shop": {
       "title": "Veikals",
-      "href": "/shop"
+      "href": "/shop/categories/0-all-products"
     },
     "about": {
       "title": "Par Mums",
@@ -122,5 +122,11 @@
     "endDate": "Beigu datums",
     "postedOn": "Publicēts",
     "location": "Lokācija"
+  },
+  "shop": {
+    "meta": "Shop",
+    "title": "Visi produkti",
+    "description": "Atklājiet skaistus un unikālus rokdarbus, kas radīti ar mīlestību un rūpību! Izvēlieties no plaša klāsta ar rokām darinātu izstrādājumu, kas piepildīs jūsu mājokli ar siltumu un individualitāti. Katrs priekšmets ir īpašs – radīts, lai priecētu un iedvesmotu. Atrodiet savu ideālo darinājumu jau šodien!",
+    "toHome": "Uz galveno lapu"
   }
 }

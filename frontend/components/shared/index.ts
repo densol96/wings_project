@@ -1,6 +1,8 @@
-export { default as Logo } from "./Logo";
-export { default as Heading } from "./Heading";
-export { default as Button } from "./Button";
-export { default as StyledLink } from "./StyledLink";
-export { default as MyImage } from "./MyImage";
+export { default as RandomProductsSlider } from "./RandomProductsSlider";
+export { default as RandomProducts } from "./RandomProducts";
+export { default as Footer } from "./Footer";
+export { default as NavBar } from "./NavBar";
+export { default as Wallpaper } from "./Wallpaper";
+export { default as LangSelectMenu } from "./LangSelectMenu";
+export { default as Header } from "./Header";
 export { default as Gallery } from "./Gallery";

@@ -25,6 +25,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lv.wings.model.base.AuditableEntity;
 
 @NoArgsConstructor
 @Entity
@@ -33,15 +34,7 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE Purchase SET deleted = true WHERE purchase_id=?")
 @Where(clause = "deleted=false")
-public class Purchase {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Setter(value = AccessLevel.NONE)
-	private Integer id;
-
-	@Column(nullable = false, updatable = false)
-	private LocalDateTime deliveryDate;
+public class Purchase extends AuditableEntity {
 
 	private String deliveryDetails;
 
@@ -60,15 +53,6 @@ public class Purchase {
 	@OneToMany(mappedBy = "purchase")
 	private List<PurchaseElement> purchaseElement = new ArrayList<>();
 
-	@LastModifiedDate
-	@Column(insertable = false)
-	private LocalDateTime lastModifiedByAdmin;
-
-	@LastModifiedBy
-	@Column(insertable = false)
-	private Integer lastModifiedBy;
-
-	// Soft delete
 	@Column(name = "deleted")
 	private boolean deleted = false;
 
@@ -82,7 +66,6 @@ public class Purchase {
 		setDeliveryType(deliveryType);
 		setPaymentType(paymentType);
 		setCustomer(customer);
-		setDeliveryDate(deliveryDate);
 		setDeliveryDetails(deliveryDetails);
 	}
 

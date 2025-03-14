@@ -3,9 +3,9 @@
 import Link from "next/link";
 import React, { useState } from "react";
 
-import { NavBar } from "./";
-import { Logo } from "./shared";
-import { ToolsIcon, ExpandIcon, CloseIcon, CartIcon } from "./shared/icons";
+import { NavBar } from "@/components/shared";
+import { Logo } from "@/components/ui";
+import { ToolsIcon, ExpandIcon, CloseIcon, CartIcon } from "@/components/ui/icons";
 import { HeaderDictionary } from "./NavBar";
 import LangSelectMenu from "./LangSelectMenu";
 
@@ -29,9 +29,7 @@ const Header = ({ headerDictionary, lang }: Props) => {
       <div className={`${isExpanded ? "items-start" : "items-center"} justify-center flex h-full shrink p-4`}>
         <img
           draggable="false"
-          className={`${
-            isExpanded ? "invisible" : "opacity-100"
-          } absolute -left-20 rotate-75 w-96 h-auto lg:visible lg:opacity-100`}
+          className={`${isExpanded ? "invisible" : "opacity-100"} absolute -left-20 rotate-75 w-96 h-auto lg:visible lg:opacity-100`}
           src="/assets/prievites_nobackground.png"
           alt="Prievites-bilde"
         />
@@ -49,11 +47,7 @@ const Header = ({ headerDictionary, lang }: Props) => {
           {!isExpanded ? <ExpandIcon /> : <CloseIcon />}
         </button>
 
-        <div
-          className={`flex gap-x-4 h-full p-4 items-end ${
-            isExpanded ? "flex-col-reverse" : "flex-row"
-          } lg:flex-row gap-4 lg:gap-2`}
-        >
+        <div className={`flex gap-x-4 h-full p-4 items-end ${isExpanded ? "flex-col-reverse" : "flex-row"} lg:flex-row gap-4 lg:gap-2`}>
           <LangSelectMenu lang={lang} />
           <div className="flex flex-row gap-4 lg:gap-2">
             <Link className="size-6 self-end" href="/admin">

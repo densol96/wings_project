@@ -27,7 +27,7 @@ import lv.wings.model.translation.ProductTranslation;
 public class Product extends TranslatableEntity<ProductTranslation> {
 
 	@Column(nullable = false)
-	private Float price;
+	private Double price;
 
 	@Column(nullable = false)
 	private Integer amount;
@@ -43,7 +43,7 @@ public class Product extends TranslatableEntity<ProductTranslation> {
 	private List<PurchaseElement> purchaseElement = new ArrayList<>();
 
 	@Builder
-	public Product(Float price, Integer amount, ProductCategory category) {
+	public Product(Double price, Integer amount, ProductCategory category) {
 		setPrice(price);
 		setAmount(amount);
 		setCategory(category);

@@ -1,9 +1,9 @@
-import { PagePropsWithId, SingleNewsItem } from "@/@types/shared";
-import { Gallery, Heading } from "@/components/shared";
-import MyImage from "@/components/shared/MyImage";
+import React from "react";
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { fetcher, formatDate } from "@/utils";
-import React from "react";
+
+import { PagePropsWithId, SingleNewsItem } from "@/types";
+import { Gallery, Heading, MyImage } from "@/components";
 
 export const revalidate = 0;
 

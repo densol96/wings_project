@@ -1,3 +1,5 @@
+import { cn } from "@/utils";
+
 type Props = {
   children: String;
   className?: string;
@@ -17,7 +19,7 @@ const colors = {
 
 const Button = ({ children, size = "md", color = "primary", className, onClick }: Props) => {
   return (
-    <button onClick={onClick} className={`transition duration-250 ${colors[color]} ${sizes[size]} ${className}`}>
+    <button onClick={onClick} className={cn("transition duration-250", colors[color], sizes[size], className)}>
       {children}
     </button>
   );
