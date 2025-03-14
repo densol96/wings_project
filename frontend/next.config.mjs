@@ -21,15 +21,16 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/lv/about",
-        destination: "/lv/par-mums",
+        source: "/about",
+        destination: "/en/about",
         permanent: true,
       },
       {
-        source: "/about",
-        destination: "/lv/par-mums",
+        source: "/lv/about",
+        destination: "/par-mums",
         permanent: true,
       },
+
       // CONTACTS SECTIONS
       {
         source: "/en/kontakti",
@@ -37,13 +38,13 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/lv/contacts",
-        destination: "/lv/kontakti",
+        source: "/contacts",
+        destination: "/en/contacts",
         permanent: true,
       },
       {
-        source: "/contacts",
-        destination: "/lv/kontakti",
+        source: "/lv/contacts",
+        destination: "/kontakti",
         permanent: true,
       },
       // NEWS SECTION
@@ -53,13 +54,29 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/lv/news",
-        destination: "/lv/jaunumi",
+        source: "/news",
+        destination: "/en/news",
         permanent: true,
       },
       {
-        source: "/news",
-        destination: "/lv/news",
+        source: "/lv/news",
+        destination: "/jaunumi",
+        permanent: true,
+      },
+      // SHOP SECTION
+      {
+        source: "/en/veikals/kategorijas/:splat*",
+        destination: "/en/shop/categories/:splat*",
+        permanent: true,
+      },
+      {
+        source: "/shop/categories/:slug",
+        destination: "/en/shop/categories/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/lv/shop/categories/:slug",
+        destination: "/veikals/kategorijas/:slug*",
         permanent: true,
       },
     ];
@@ -79,6 +96,10 @@ const nextConfig = {
       {
         source: "/lv/jaunumi",
         destination: "/lv/news",
+      },
+      {
+        source: "/lv/veikals/kategorijas/:slug*",
+        destination: "/lv/shop/categories/:slug*",
       },
     ];
   },

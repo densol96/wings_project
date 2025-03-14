@@ -1,30 +1,24 @@
 import { getDictionary } from "@/dictionaries/dictionaries";
-import { Locale, PageProps, PagePropsWithSlug } from "@/types";
-import { Heading } from "@/components";
-import Link from "next/link";
-import { extractIdFromSlug, fetcher, slugify } from "@/utils";
-import { notFound } from "next/navigation";
-
-type SearchParams = {
-  page?: string | number;
-};
+import { PageProps, PagePropsWithSlug } from "@/types";
+import { ProductSearchParams, ProductSortType } from "@/types/sections/shop";
+import ProductGrid from "./ProductGrid";
 
 type Props = PagePropsWithSlug & {
-  searchParams: SearchParams;
+  searchParams: ProductSearchParams;
 };
 
 export const generateMetadata = async ({ params }: PageProps) => {
-  const dict = (await getDictionary(params.lang)).about;
+  const dict = (await getDictionary(params.lang)).shop;
   return {
-    title: dict.title,
+    title: dict.meta,
   };
 };
 
-export const revalidate = 0;
-
 const News = async function ({ params: { lang, slug }, searchParams }: Props) {
-  const page = searchParams.page ? +searchParams.page : 1;
-  return <p>HELLO WORLD!</p>;
+  const page = Number(searchParams.page) || 1;
+  const sortBy = (searchParams.sortBy as ProductSortType) || "default";
+
+  return <ProductGrid page={page} sortBy={sortBy} />;
 };
 
 export default News;

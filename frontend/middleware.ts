@@ -13,7 +13,6 @@ export function middleware(request: NextRequest) {
   const pathnameIsMissingLocale = i18n.locales.every((locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`);
 
   if (pathnameIsMissingLocale) {
-    console.log("I RUN");
     return NextResponse.rewrite(new URL(`/${defaultLocale}${pathname}${request.nextUrl.search}`, request.nextUrl.href));
   }
 }
