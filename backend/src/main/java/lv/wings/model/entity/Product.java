@@ -37,7 +37,7 @@ public class Product extends TranslatableEntity<ProductTranslation> {
 	private ProductCategory category;
 
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ProductPicture> images = new ArrayList<>();
+	private List<ProductImage> images = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
 	private List<PurchaseElement> purchaseElement = new ArrayList<>();
