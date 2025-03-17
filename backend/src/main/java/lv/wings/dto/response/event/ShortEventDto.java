@@ -13,6 +13,6 @@ import lv.wings.dto.response.ImageDto;
 public class ShortEventDto {
     private Integer id;
     private LocalDateTime createdAt;
-    private EventTranslationShortDto translation;
+    private ShortEventTranslationDto translation;
     private ImageDto image;
 }

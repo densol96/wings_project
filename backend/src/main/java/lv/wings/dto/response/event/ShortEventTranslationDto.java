@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class EventTranslationShortDto {
+public class ShortEventTranslationDto {
     private String title;
     private String description;
 }

@@ -10,10 +10,11 @@ import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 @Builder
 @Getter
 @Setter
-public class ShortProductDto {
+public class ProductDto {
     private Integer id;
     private Double price;
     private Integer amount;
     private List<ImageDto> images;
-    private ShortProductTranslationDto translation;
+    private ProductTranslationDto translation;
+    private ShortProductCategoryDto category;
 }

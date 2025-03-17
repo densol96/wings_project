@@ -8,29 +8,23 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import lv.wings.model.base.TranslatableEntity;
+import lv.wings.model.base.ImageableEntity;
 import lv.wings.model.translation.ProductImageTranslation;
 
 @Entity
-@Table(name = "product_Images")
+@Table(name = "product_images")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
-public class ProductImage extends TranslatableEntity<ProductImageTranslation> {
+public class ProductImage extends ImageableEntity<ProductImageTranslation, Product> {
 
-	@Column(nullable = false)
-	private String src;
-
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product product;
-
-
-	public ProductImage(Product product) {
-		setProduct(product);
+	@Builder
+	public ProductImage(Product product, String src) {
+		super(product, src);
 	}
 
 }

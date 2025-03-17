@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import lv.wings.dto.response.product_category.ProductCategoryDto;
 import lv.wings.dto.response.product_category.ProductCategoryWithAmountDto;
+import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 import lv.wings.mapper.ProductCategoryMapper;
 import lv.wings.model.entity.ProductCategory;
 import lv.wings.model.translation.ProductCategoryTranslation;
@@ -46,6 +47,12 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 		return mapper.translationToDto(getRightTranslation(findById(id), ProductCategoryTranslation.class));
 	}
 
+	@Override
+	public ShortProductCategoryDto getShortCategory(Integer id) {
+		ProductCategory category = findById(id);
+		return mapper.translationToShortDto(category, getRightTranslation(category, ProductCategoryTranslation.class));
+	}
+
 	private ProductCategoryWithAmountDto getSpecialAllCategoryWithAmount() {
 		return ProductCategoryWithAmountDto.builder()
 				.id(0)
@@ -55,7 +62,8 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 	}
 
 	private ProductCategoryWithAmountDto categoryToWithAmountDto(ProductCategory category) {
-		ProductCategoryTranslation translation = getRightTranslation(category, ProductCategoryTranslation.class);
-		return mapper.toWithAmountDto(category, translation.getTitle());
+		return mapper.toWithAmountDto(category, getRightTranslation(category, ProductCategoryTranslation.class));
 	}
+
+
 }

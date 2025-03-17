@@ -15,7 +15,9 @@ import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lv.wings.model.base.OwnerableEntity;
 import lv.wings.model.base.TranslatableEntity;
+import lv.wings.model.translation.EventTranslation;
 import lv.wings.model.translation.ProductTranslation;
 
 
@@ -24,7 +26,7 @@ import lv.wings.model.translation.ProductTranslation;
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
-public class Product extends TranslatableEntity<ProductTranslation> {
+public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 
 	@Column(nullable = false)
 	private Double price;
@@ -35,9 +37,6 @@ public class Product extends TranslatableEntity<ProductTranslation> {
 	@ManyToOne
 	@JoinColumn(name = "product_category_id")
 	private ProductCategory category;
-
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<ProductImage> images = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
 	private List<PurchaseElement> purchaseElement = new ArrayList<>();
