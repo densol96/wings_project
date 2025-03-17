@@ -25,13 +25,13 @@ import lombok.extern.slf4j.Slf4j;
 import lv.wings.enums.LocaleCode;
 import lv.wings.model.entity.Event;
 import lv.wings.model.entity.EventCategory;
-import lv.wings.model.entity.EventPicture;
+import lv.wings.model.entity.EventImage;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductCategory;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
 import lv.wings.model.translation.EventCategoryTranslation;
-import lv.wings.model.translation.EventPictureTranslation;
+import lv.wings.model.translation.EventImageTranslation;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.model.translation.ProductCategoryTranslation;
 import lv.wings.model.translation.ProductTranslation;
@@ -39,10 +39,9 @@ import lv.wings.repo.EventRepository;
 import lv.wings.repo.CustomerRepository;
 import lv.wings.repo.DeliveryTypeRepository;
 import lv.wings.repo.EventCategoryRepository;
-import lv.wings.repo.EventPictureRepository;
+import lv.wings.repo.EventImageRepository;
 import lv.wings.repo.PaymentTypeRepository;
 import lv.wings.repo.ProductCategoryRepository;
-import lv.wings.repo.ProductPictureRepository;
 import lv.wings.repo.ProductRepository;
 import lv.wings.repo.PurchaseElementRepository;
 import lv.wings.repo.PurchaseRepository;
@@ -71,12 +70,13 @@ public class SparniProjectApplication {
 			DeliveryTypeRepository deliveryTypeRepo,
 			PaymentTypeRepository paymentTypeRepo,
 			EventRepository eventRepo,
-			EventPictureRepository eventPictureRepo,
+			EventImageRepository eventImageRepo,
 			EventCategoryRepository eventCategoryRepo,
 			ProductCategoryRepository productCategoryRepo,
 			PurchaseElementRepository purchaseElementRepo,
 			ProductRepository productRepo,
-			ProductPictureRepository productPictureRepo, IMyAuthorityRepo authRepo,
+			// ProductImageRepository productImageRepo,
+			IMyAuthorityRepo authRepo,
 			IMyUserRepo userRepo) {
 		return new CommandLineRunner() {
 			@Override
@@ -145,78 +145,84 @@ public class SparniProjectApplication {
 				MyUser u1 = new MyUser("annija.user", encoder.encode("123"), a2);
 				userRepo.save(u1);
 
-				// EventCategory eventCategory1 = new EventCategory();
-				// EventCategoryTranslation eventCategory1Lv = EventCategoryTranslation.builder()
-				// .title("Veikala blogs")
-				// .locale(LocaleCode.LV)
-				// .category(eventCategory1)
-				// .build();
-				// EventCategoryTranslation eventCategory1En = EventCategoryTranslation.builder()
-				// .title("Shop blog")
-				// .locale(LocaleCode.EN)
-				// .category(eventCategory1)
-				// .build();
-				// eventCategory1.setTranslations(List.of(eventCategory1Lv, eventCategory1En));
-				// eventCategory1.setCreatedBy(u1);
-				// eventCategoryRepo.save(eventCategory1);
+				EventCategory eventCategory1 = new EventCategory();
+				EventCategoryTranslation eventCategory1Lv = EventCategoryTranslation.builder()
+						.title("Veikala blogs")
+						.locale(LocaleCode.LV)
+						.category(eventCategory1)
+						.build();
+				EventCategoryTranslation eventCategory1En = EventCategoryTranslation.builder()
+						.title("Shop blog")
+						.locale(LocaleCode.EN)
+						.category(eventCategory1)
+						.build();
+				eventCategory1.setTranslations(List.of(eventCategory1Lv, eventCategory1En));
+				eventCategory1.setCreatedBy(u1);
+				eventCategoryRepo.save(eventCategory1);
 
-				// for (int i = 1; i <= 10; i++) {
+				for (int i = 1; i <= 10; i++) {
 
-				// EventTranslation lv = EventTranslation.builder()
-				// .title("lv_title_" + i)
-				// .description("lv_description_" + i)
-				// .locale(LocaleCode.LV)
-				// .build();
+					EventTranslation lv = EventTranslation.builder()
+							.title("lv_title_" + i)
+							.description("lv_description_" + i)
+							.locale(LocaleCode.LV)
+							.build();
 
-				// EventTranslation en = EventTranslation.builder()
-				// .title("en_title_" + i)
-				// .description("en_description_" + i)
-				// .locale(LocaleCode.EN)
-				// .build();
-				// if (i <= 5) {
-				// lv.setLocation("Rīga");
-				// en.setLocation("Riga");
-				// }
-				// Event e = Event.builder()
-				// .startDate(LocalDate.now())
-				// .endDate(LocalDate.now().plusDays(1)) // 24hrs
-				// .category(eventCategory1)
-				// .build();
+					EventTranslation en = EventTranslation.builder()
+							.title("en_title_" + i)
+							.description("en_description_" + i)
+							.locale(LocaleCode.EN)
+							.build();
+					if (i <= 5) {
+						lv.setLocation("Rīga");
+						en.setLocation("Riga");
+					}
+					Event e = Event.builder()
+							.startDate(LocalDate.now())
+							.endDate(LocalDate.now().plusDays(1)) // 24hrs
+							.category(eventCategory1)
+							.build();
 
-				// lv.setEntity(e);
-				// en.setEntity(e);
-				// e.setTranslations(List.of(lv, en));
-				// e.setCreatedBy(u1);
-				// eventRepo.save(e);
-				// if (i <= 3) {
-				// EventPicture bilde = EventPicture.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
-				// EventPictureTranslation altEn = EventPictureTranslation.builder().alt("Good picture").picture(bilde).locale(LocaleCode.EN).build();
-				// EventPictureTranslation altLv = EventPictureTranslation.builder().alt("Laba bilde").picture(bilde).locale(LocaleCode.LV).build();
-				// bilde.setTranslations(List.of(altEn, altLv));
-				// bilde.setCreatedBy(u1);
-				// eventPictureRepo.save(bilde);
-				// if (i <= 2) {
-				// EventPicture bilde2 = EventPicture.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
-				// EventPictureTranslation altEn2 =
-				// EventPictureTranslation.builder().alt("Some other good picture").picture(bilde2).locale(LocaleCode.EN).build();
-				// EventPictureTranslation altLv2 = EventPictureTranslation.builder().alt("Kada cita laba bilde").picture(bilde2).locale(LocaleCode.LV).build();
-				// bilde2.setTranslations(List.of(altEn2, altLv2));
-				// bilde2.setCreatedBy(u1);
-				// eventPictureRepo.save(bilde2);
-				// }
-				// }
-				// }
+					lv.setEntity(e);
+					en.setEntity(e);
+					e.setTranslations(List.of(lv, en));
+					e.setCreatedBy(u1);
+					eventRepo.save(e);
+					if (i <= 3) {
+						EventImage bilde = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
+						EventImageTranslation altEn = EventImageTranslation.builder().alt("Good Image").image(bilde).locale(LocaleCode.EN).build();
+						EventImageTranslation altLv = EventImageTranslation.builder().alt("Laba bilde").image(bilde).locale(LocaleCode.LV).build();
+						bilde.setTranslations(List.of(altEn, altLv));
+						bilde.setCreatedBy(u1);
+						eventImageRepo.save(bilde);
+						if (i <= 2) {
+							EventImage bilde2 = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
+							EventImageTranslation altEn2 =
+									EventImageTranslation.builder().alt("Some other good Image").image(bilde2).locale(LocaleCode.EN).build();
+							EventImageTranslation altLv2 = EventImageTranslation.builder().alt("Kada cita laba bilde").image(bilde2).locale(LocaleCode.LV).build();
+							bilde2.setTranslations(List.of(altEn2, altLv2));
+							bilde2.setCreatedBy(u1);
+							eventImageRepo.save(bilde2);
+						}
+					}
+				}
 
 				// KATEGORIJAS
 				ProductCategory categoryOne = new ProductCategory();
 				categoryOne.setCreatedBy(u1);
-				ProductCategoryTranslation categoryOneLv = ProductCategoryTranslation.builder().title("Cepures").description(
-						"Piedāvājam dažādu stilu adītas cepures. Visām cepurēm ir standarta izmērs pieaugušajiem, tās staipās. Bumbuli iespējams akurāti nogriezt.")
+				ProductCategoryTranslation categoryOneLv = ProductCategoryTranslation
+						.builder()
+						.title("Cepures")
+						.description(
+								"Piedāvājam dažādu stilu adītas cepures. Visām cepurēm ir standarta izmērs pieaugušajiem, tās staipās. Bumbuli iespējams akurāti nogriezt.")
 						.category(categoryOne)
 						.locale(LocaleCode.LV)
 						.build();
-				ProductCategoryTranslation categoryOneEn = ProductCategoryTranslation.builder().title("Hats").description(
-						"We offer a variety of knitted hats in different styles. All hats come in a standard adult size and are stretchable. The pom-pom can be carefully removed if desired.")
+				ProductCategoryTranslation categoryOneEn = ProductCategoryTranslation
+						.builder()
+						.title("Hats")
+						.description(
+								"We offer a variety of knitted hats in different styles. All hats come in a standard adult size and are stretchable. The pom-pom can be carefully removed if desired.")
 						.category(categoryOne)
 						.locale(LocaleCode.EN)
 						.build();
@@ -227,12 +233,16 @@ public class SparniProjectApplication {
 				ProductCategory categoryTwo = new ProductCategory();
 				categoryTwo.setCreatedBy(u1);
 				ProductCategoryTranslation categoryTwoLv = ProductCategoryTranslation.builder().title("Cimdi").description(
-						"Ar rokām adīti latviešu rakstainie dūraiņi, kas glabā katra meistara sirds siltumu. Katrs cimdu pāris ir unikāls roku darbs, tāpēc iespējamas nelielas krāsu, dizaina un izmēru atšķirības no norādītā.")
+						"""
+								Ar rokām adīti latviešu rakstainie dūraiņi, kas glabā katra meistara sirds siltumu. Katrs cimdu pāris ir unikāls roku darbs, tāpēc iespējamas nelielas krāsu, dizaina un izmēru atšķirības no norādītā.
+								""")
 						.category(categoryTwo)
 						.locale(LocaleCode.LV)
 						.build();
 				ProductCategoryTranslation categoryTwoEn = ProductCategoryTranslation.builder().title("Gloves").description(
-						"Hand-knitted Latvian patterned mittens that carry the warmth of each artisan's heart. Each pair of mittens is a unique handmade creation, so slight variations in color, design, and size from the specified ones may occur.")
+						"""
+								Hand-knitted Latvian patterned mittens that carry the warmth of each artisan's heart. Each pair of mittens is a unique handmade creation, so slight variations in color, design, and size from the specified ones may occur.
+								""")
 						.category(categoryTwo)
 						.locale(LocaleCode.EN)
 						.build();
@@ -242,13 +252,23 @@ public class SparniProjectApplication {
 
 				ProductCategory categoryThree = new ProductCategory();
 				categoryThree.setCreatedBy(u1);
-				ProductCategoryTranslation categoryThreeLv = ProductCategoryTranslation.builder().title("Zeķes").description(
-						"Ar rokām adītas vilnas zeķes dažādos izmēros. Lai izvēlētos izmēru, nospiediet uz vēlamā produkta. Zeķēm, kuras pieejamas tikai vienā izmērā, izmērs norādīts nosaukumā. Ja neatrodat vēlamo skaitu vai izmēru, sazinieties ar mums shop@sparni.lv un mēs centīsimies palīdzēt.")
+				ProductCategoryTranslation categoryThreeLv = ProductCategoryTranslation.builder()
+						.title("Zeķes")
+						.description(
+								"""
+										Ar rokām adītas vilnas zeķes dažādos izmēros. Lai izvēlētos izmēru, nospiediet uz vēlamā produkta. Zeķēm, kuras pieejamas tikai vienā izmērā,
+										izmērs norādīts nosaukumā. Ja neatrodat vēlamo skaitu vai izmēru, sazinieties ar mums shop@sparni.lv un mēs centīsimies palīdzēt.
+										""")
 						.category(categoryThree)
 						.locale(LocaleCode.LV)
 						.build();
-				ProductCategoryTranslation categoryThreeEn = ProductCategoryTranslation.builder().title("Socks").description(
-						"Hand-knitted wool socks in various sizes. To choose a size, click on the desired product. For socks available in only one size, the size is indicated in the title. If you cannot find the desired quantity or size, contact us at shop@sparni.lv, and we will do our best to assist you.")
+				ProductCategoryTranslation categoryThreeEn = ProductCategoryTranslation.builder()
+						.title("Socks")
+						.description(
+								"""
+										Hand-knitted wool socks in various sizes. To choose a size, click on the desired product. For socks available in only one size, the size is
+										indicated in the title. If you cannot find the desired quantity or size, contact us at shop@sparni.lv, and we will do our best to assist you.
+										""")
 						.category(categoryThree)
 						.locale(LocaleCode.EN)
 						.build();
@@ -468,78 +488,78 @@ public class SparniProjectApplication {
 
 				// BILDES
 				// public Preces_bilde(String bilde, String apraksts, Prece product)
-				// ProductPicture bilde11 = new ProductPicture("cimdi1.jpg", "Cimdi1",
+				// ProductImage bilde11 = new ProductImage("cimdi1.jpg", "Cimdi1",
 				// product1);
-				// ProductPicture bilde22 = new ProductPicture("cimdi2.jpg", "Cimdi2",
+				// ProductImage bilde22 = new ProductImage("cimdi2.jpg", "Cimdi2",
 				// product2);
-				// ProductPicture bilde33 = new ProductPicture("cimdi3.jpg", "Cimdi3",
+				// ProductImage bilde33 = new ProductImage("cimdi3.jpg", "Cimdi3",
 				// product3);
 
-				// ProductPicture bilde44 = new ProductPicture("zekes1.jpg", "Zeķes1",
+				// ProductImage bilde44 = new ProductImage("zekes1.jpg", "Zeķes1",
 				// product4);
-				// ProductPicture bilde55 = new ProductPicture("zekes2.jpg", "Zeķes2",
+				// ProductImage bilde55 = new ProductImage("zekes2.jpg", "Zeķes2",
 				// product5);
-				// ProductPicture bilde66 = new ProductPicture("zekes3.jpg", "Zeķes3",
+				// ProductImage bilde66 = new ProductImage("zekes3.jpg", "Zeķes3",
 				// product6);
 
-				// ProductPicture bilde77 = new ProductPicture("dzemperi1.jpg", "Džemperis1",
+				// ProductImage bilde77 = new ProductImage("dzemperi1.jpg", "Džemperis1",
 				// product7);
-				// ProductPicture bilde88 = new ProductPicture("dzemperi2.jpg", "Džemperis2",
+				// ProductImage bilde88 = new ProductImage("dzemperi2.jpg", "Džemperis2",
 				// product8);
-				// ProductPicture bilde99 = new ProductPicture("dzemperi3.jpg", "Džemperis3",
+				// ProductImage bilde99 = new ProductImage("dzemperi3.jpg", "Džemperis3",
 				// product9);
 
-				// ProductPicture bilde100 = new ProductPicture("cepures1.jpg", "Cepure1",
+				// ProductImage bilde100 = new ProductImage("cepures1.jpg", "Cepure1",
 				// product10);
-				// ProductPicture bilde111 = new ProductPicture("cepures2.jpg", "Cepure2",
+				// ProductImage bilde111 = new ProductImage("cepures2.jpg", "Cepure2",
 				// product11);
-				// ProductPicture bilde122 = new ProductPicture("cepures3.jpg", "Cepure3",
+				// ProductImage bilde122 = new ProductImage("cepures3.jpg", "Cepure3",
 				// product12);
 
-				// ProductPicture bilde133 = new ProductPicture("salle1.jpg", "Šalle1",
+				// ProductImage bilde133 = new ProductImage("salle1.jpg", "Šalle1",
 				// product13);
-				// ProductPicture bilde144 = new ProductPicture("salle2.jpg", "Šalle2",
+				// ProductImage bilde144 = new ProductImage("salle2.jpg", "Šalle2",
 				// product14);
-				// ProductPicture bilde155 = new ProductPicture("salle3.jpg", "Šalle3",
+				// ProductImage bilde155 = new ProductImage("salle3.jpg", "Šalle3",
 				// product15);
 
-				// ProductPicture bilde166 = new ProductPicture("manta1.jpg", "Manta1",
+				// ProductImage bilde166 = new ProductImage("manta1.jpg", "Manta1",
 				// product16);
-				// ProductPicture bilde177 = new ProductPicture("manta2.jpg", "Manta2",
+				// ProductImage bilde177 = new ProductImage("manta2.jpg", "Manta2",
 				// product17);
-				// ProductPicture bilde188 = new ProductPicture("manta3.jpg", "Manta3",
+				// ProductImage bilde188 = new ProductImage("manta3.jpg", "Manta3",
 				// product18);
 
-				// ProductPicture bilde190 = new ProductPicture("aksesuars1.jpg", "Aksesuars 1",
+				// ProductImage bilde190 = new ProductImage("aksesuars1.jpg", "Aksesuars 1",
 				// product19);
-				// ProductPicture bilde200 = new ProductPicture("aksesuars2.jpg", "Aksesuars 2",
+				// ProductImage bilde200 = new ProductImage("aksesuars2.jpg", "Aksesuars 2",
 				// product20);
-				// ProductPicture bilde210 = new ProductPicture("aksesuars3.jpg", "Aksesuars 3",
+				// ProductImage bilde210 = new ProductImage("aksesuars3.jpg", "Aksesuars 3",
 				// product21);
-				// productPictureRepo.save(bilde11);
-				// productPictureRepo.save(bilde22);
-				// productPictureRepo.save(bilde33);
+				// productImageRepo.save(bilde11);
+				// productImageRepo.save(bilde22);
+				// productImageRepo.save(bilde33);
 
 				// USER & AUTHORITY
-				// productPictureRepo.save(bilde44);
-				// productPictureRepo.save(bilde55);
-				// productPictureRepo.save(bilde66);
-				// productPictureRepo.save(bilde77);
-				// productPictureRepo.save(bilde88);
-				// productPictureRepo.save(bilde99);
-				// productPictureRepo.save(bilde100);
-				// productPictureRepo.save(bilde111);
-				// productPictureRepo.save(bilde122);
-				// productPictureRepo.save(bilde133);
-				// productPictureRepo.save(bilde144);
-				// productPictureRepo.save(bilde155);
-				// productPictureRepo.save(bilde166);
-				// productPictureRepo.save(bilde177);
-				// productPictureRepo.save(bilde188);
+				// productImageRepo.save(bilde44);
+				// productImageRepo.save(bilde55);
+				// productImageRepo.save(bilde66);
+				// productImageRepo.save(bilde77);
+				// productImageRepo.save(bilde88);
+				// productImageRepo.save(bilde99);
+				// productImageRepo.save(bilde100);
+				// productImageRepo.save(bilde111);
+				// productImageRepo.save(bilde122);
+				// productImageRepo.save(bilde133);
+				// productImageRepo.save(bilde144);
+				// productImageRepo.save(bilde155);
+				// productImageRepo.save(bilde166);
+				// productImageRepo.save(bilde177);
+				// productImageRepo.save(bilde188);
 
-				// productPictureRepo.save(bilde190);
-				// productPictureRepo.save(bilde200);
-				// productPictureRepo.save(bilde210);
+				// productImageRepo.save(bilde190);
+				// productImageRepo.save(bilde200);
+				// productImageRepo.save(bilde210);
 
 				// USER & AUTHORITY
 				// MyAuthority a1 = new MyAuthority("ADMIN");
@@ -559,7 +579,7 @@ public class SparniProjectApplication {
 				// MyUser u3 = new MyUser("admin", encoder.encode("123"), a1);
 				// userRepo.save(u3);
 
-				//// create upload picture directories
+				//// create upload Image directories
 				/// (Wrong but fast version)
 				// Path path1 = Paths.get("uploads/images/events");
 				// Path path2 = Paths.get("uploads/images/products");

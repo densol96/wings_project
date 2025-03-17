@@ -1,6 +1,7 @@
 package lv.wings.service.impl;
 
 import java.util.List;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,29 +13,31 @@ import lv.wings.dto.response.event.ShortEventDto;
 import lv.wings.dto.response.event.SingleEventDto;
 import lv.wings.mapper.EventMapper;
 import lv.wings.model.entity.Event;
+import lv.wings.model.entity.EventImage;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.repo.EventRepository;
 import lv.wings.service.AbstractTranslatableCRUDService;
 import lv.wings.service.EventCategoryService;
 import lv.wings.service.EventService;
+import lv.wings.service.ImageService;
 import lv.wings.service.LocaleService;
 
 @Service
 public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, EventTranslation, Integer> implements EventService {
 
     private final EventMapper eventMapper;
-    private final EventPictureServiceImpl eventPictureService;
+    private final ImageService<EventImage, Integer> eventImageService;
     private final EventCategoryService eventCategoryService;
 
     public EventServiceImpl(
             EventRepository eventRepository,
             EventMapper eventMapper,
-            EventPictureServiceImpl eventPictureService,
+            ImageService<EventImage, Integer> eventImageService,
             LocaleService localeService,
             EventCategoryService eventCategoryService) {
         super(eventRepository, "Event", "entity.event", localeService);
         this.eventMapper = eventMapper;
-        this.eventPictureService = eventPictureService;
+        this.eventImageService = eventImageService;
         this.eventCategoryService = eventCategoryService;
     }
 
@@ -48,14 +51,14 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
         Event event = findById(id);
         EventTranslationDto translation = eventMapper.eventTranslationToDto(getRightTranslation(event, EventTranslation.class));
         String category = eventCategoryService.getCategoryTitleByEvent(event);
-        List<ImageDto> images = eventPictureService.getPicturesAsDtoPerEventId(id);
+        List<ImageDto> images = eventImageService.getImagesAsDtoPerOwnerId(id);
         return eventMapper.eventToFullDto(event, translation, images, category);
     }
 
     private ShortEventDto eventToShortPublicDto(Event event) {
         EventTranslation translation = getRightTranslation(event, EventTranslation.class);
         EventTranslationShortDto translationShortDto = eventMapper.eventTranslationToShortDto(translation);
-        ImageDto image = eventPictureService.getEventWallpaperById(event.getId());
+        ImageDto image = eventImageService.getWallpaperByOwnerId(event.getId());
         return eventMapper.eventToShortDto(event, translationShortDto, image);
     }
 

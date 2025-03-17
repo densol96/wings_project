@@ -1,12 +1,9 @@
 package lv.wings.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,15 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import lv.wings.dto.DTOMapper;
-import lv.wings.exception.old.NoContentException;
 import lv.wings.model.entity.Product;
-import lv.wings.model.entity.ProductPicture;
 import lv.wings.poi.PoiController;
-import lv.wings.responses.ApiListResponse;
-import lv.wings.responses.ApiResponse;
 import lv.wings.service.CRUDService;
-import lv.wings.service.ICRUDInsertedService;
 
 @Controller
 @RequestMapping("/prece")

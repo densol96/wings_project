@@ -5,12 +5,13 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import lv.wings.model.entity.Product;
-import lv.wings.model.entity.ProductPicture;
+import lv.wings.model.entity.ProductImage;
 
-public interface ProductPictureRepository extends JpaRepository<ProductPicture, Integer> {
+
+public interface ProductPictureRepository extends JpaRepository<ProductImage, Integer> {
 
 	// ProductPicture findByReferenceToPicture(String reference);
 
-	List<ProductPicture> findByProduct(Product product);
+	List<ProductImage> findByProduct(Product product);
 
 }

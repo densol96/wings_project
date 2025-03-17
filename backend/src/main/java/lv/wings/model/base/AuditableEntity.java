@@ -18,6 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lv.wings.model.interfaces.Auditable;
 import lv.wings.model.security.MyUser;
@@ -25,6 +26,7 @@ import lv.wings.model.security.MyUser;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@NoArgsConstructor
 public abstract class AuditableEntity implements Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

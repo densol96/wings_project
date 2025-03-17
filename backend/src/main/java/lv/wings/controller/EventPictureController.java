@@ -3,13 +3,13 @@ package lv.wings.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
-import lv.wings.service.EventPictureService;
+// import lv.wings.service.EventImageService;
 
 @RestController
 @RequestMapping("/api/v1/event-pictures")
 @RequiredArgsConstructor
 public class EventPictureController {
 
-	private final EventPictureService eventPictureService;
+	// private final EventPictureService eventPictureService;
 
 }

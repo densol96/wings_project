@@ -59,10 +59,12 @@ public class LocaleServiceImpl implements LocaleService {
     }
 
 
+    @Override
     public String getMessage(String messageCode) {
         return getMessage(messageCode, null);
     }
 
+    @Override
     public String getMessage(String messageCode, Object[] args) {
         return messageSource.getMessage(messageCode, args, getCurrentLocale());
     }
