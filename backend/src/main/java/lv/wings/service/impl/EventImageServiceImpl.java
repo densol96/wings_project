@@ -13,6 +13,6 @@ import lv.wings.service.LocaleService;
 public class EventImageServiceImpl extends AbstractImageService<EventImage, Event, EventImageTranslation, Integer> {
 
 	public EventImageServiceImpl(ImageRepository<EventImage, Integer> eventImageRepo, LocaleService localeService) {
-		super(eventImageRepo, EventImageTranslation.class, "EventImage", "entity.event-Image", localeService);
+		super(eventImageRepo, EventImageTranslation.class, "EventImage", "entity.event-image", localeService);
 	}
 }

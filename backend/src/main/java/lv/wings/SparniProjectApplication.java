@@ -28,12 +28,14 @@ import lv.wings.model.entity.EventCategory;
 import lv.wings.model.entity.EventImage;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductCategory;
+import lv.wings.model.entity.ProductImage;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
 import lv.wings.model.translation.EventCategoryTranslation;
 import lv.wings.model.translation.EventImageTranslation;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.model.translation.ProductCategoryTranslation;
+import lv.wings.model.translation.ProductImageTranslation;
 import lv.wings.model.translation.ProductTranslation;
 import lv.wings.repo.EventRepository;
 import lv.wings.repo.CustomerRepository;
@@ -42,6 +44,7 @@ import lv.wings.repo.EventCategoryRepository;
 import lv.wings.repo.EventImageRepository;
 import lv.wings.repo.PaymentTypeRepository;
 import lv.wings.repo.ProductCategoryRepository;
+import lv.wings.repo.ProductImageRepository;
 import lv.wings.repo.ProductRepository;
 import lv.wings.repo.PurchaseElementRepository;
 import lv.wings.repo.PurchaseRepository;
@@ -55,6 +58,12 @@ import net.datafaker.Faker;
 @EnableCaching
 @Slf4j
 public class SparniProjectApplication {
+
+	private final ProductImageRepository productImageRepository;
+
+	SparniProjectApplication(ProductImageRepository productImageRepository) {
+		this.productImageRepository = productImageRepository;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(SparniProjectApplication.class, args);
@@ -75,7 +84,7 @@ public class SparniProjectApplication {
 			ProductCategoryRepository productCategoryRepo,
 			PurchaseElementRepository purchaseElementRepo,
 			ProductRepository productRepo,
-			// ProductImageRepository productImageRepo,
+			ProductImageRepository productImageRepo,
 			IMyAuthorityRepo authRepo,
 			IMyUserRepo userRepo) {
 		return new CommandLineRunner() {
@@ -474,6 +483,49 @@ public class SparniProjectApplication {
 				glove7.setTranslations(List.of(glove7Lv, glove7En));
 				productRepo.save(glove7);
 
+				// BILDES
+				ProductImage bilde1 = ProductImage.builder().product(glove7).src("http://localhost:8080/images/products/cimdi1.jpg").build();
+				bilde1.setCreatedBy(u1);
+				ProductImageTranslation bilde1_lv = ProductImageTranslation.builder().alt("Labi cimdi 1").picture(bilde1).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde1_en = ProductImageTranslation.builder().alt("Good gloves 1").picture(bilde1).locale(LocaleCode.EN).build();
+				bilde1.setTranslations(List.of(bilde1_lv, bilde1_en));
+				productImageRepo.save(bilde1);
+
+				ProductImage bilde2 = ProductImage.builder().product(glove7).src("http://localhost:8080/images/products/cimdi2.jpg").build();
+				bilde2.setCreatedBy(u1);
+				ProductImageTranslation bilde2_lv = ProductImageTranslation.builder().alt("Labi cimdi 2").picture(bilde2).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde2_en = ProductImageTranslation.builder().alt("Good gloves 2").picture(bilde2).locale(LocaleCode.EN).build();
+				bilde2.setTranslations(List.of(bilde2_lv, bilde2_en));
+				productImageRepo.save(bilde2);
+
+				ProductImage bilde3 = ProductImage.builder().product(glove7).src("http://localhost:8080/images/products/cimdi3.jpg").build();
+				bilde3.setCreatedBy(u1);
+				ProductImageTranslation bilde3_lv = ProductImageTranslation.builder().alt("Labi cimdi 3").picture(bilde3).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde3_en = ProductImageTranslation.builder().alt("Good gloves 3").picture(bilde3).locale(LocaleCode.EN).build();
+				bilde3.setTranslations(List.of(bilde3_lv, bilde3_en));
+				productImageRepo.save(bilde3);
+
+				ProductImage bilde4 = ProductImage.builder().product(glove6).src("http://localhost:8080/images/products/cimdi1.jpg").build();
+				bilde4.setCreatedBy(u1);
+				ProductImageTranslation bilde4_lv = ProductImageTranslation.builder().alt("Labi cimdi 3").picture(bilde4).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde4_en = ProductImageTranslation.builder().alt("Good gloves 3").picture(bilde4).locale(LocaleCode.EN).build();
+				bilde4.setTranslations(List.of(bilde4_lv, bilde4_en));
+				productImageRepo.save(bilde4);
+
+				ProductImage bilde5 = ProductImage.builder().product(glove6).src("http://localhost:8080/images/products/cimdi2.jpg").build();
+				bilde5.setCreatedBy(u1);
+				ProductImageTranslation bilde5_lv = ProductImageTranslation.builder().alt("Labi cimdi 3").picture(bilde5).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde5_en = ProductImageTranslation.builder().alt("Good gloves 3").picture(bilde5).locale(LocaleCode.EN).build();
+				bilde5.setTranslations(List.of(bilde5_lv, bilde5_en));
+				productImageRepo.save(bilde5);
+
+				ProductImage bilde6 = ProductImage.builder().product(glove5).src("http://localhost:8080/images/products/cimdi3.jpg").build();
+				bilde6.setCreatedBy(u1);
+				ProductImageTranslation bilde6_lv = ProductImageTranslation.builder().alt("Labi cimdi 3").picture(bilde6).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde6_en = ProductImageTranslation.builder().alt("Good gloves 3").picture(bilde6).locale(LocaleCode.EN).build();
+				bilde6.setTranslations(List.of(bilde6_lv, bilde6_en));
+				productImageRepo.save(bilde6);
+
 
 				// PIRKUMA ELEMENTS
 				// PurchaseElement purchaseElement1 = new PurchaseElement(purchase1, product1,
@@ -485,60 +537,6 @@ public class SparniProjectApplication {
 				// purchaseElementRepo.save(purchaseElement1);
 				// purchaseElementRepo.save(purchaseElement2);
 				// purchaseElementRepo.save(purchaseElement3);
-
-				// BILDES
-				// public Preces_bilde(String bilde, String apraksts, Prece product)
-				// ProductImage bilde11 = new ProductImage("cimdi1.jpg", "Cimdi1",
-				// product1);
-				// ProductImage bilde22 = new ProductImage("cimdi2.jpg", "Cimdi2",
-				// product2);
-				// ProductImage bilde33 = new ProductImage("cimdi3.jpg", "Cimdi3",
-				// product3);
-
-				// ProductImage bilde44 = new ProductImage("zekes1.jpg", "Zeķes1",
-				// product4);
-				// ProductImage bilde55 = new ProductImage("zekes2.jpg", "Zeķes2",
-				// product5);
-				// ProductImage bilde66 = new ProductImage("zekes3.jpg", "Zeķes3",
-				// product6);
-
-				// ProductImage bilde77 = new ProductImage("dzemperi1.jpg", "Džemperis1",
-				// product7);
-				// ProductImage bilde88 = new ProductImage("dzemperi2.jpg", "Džemperis2",
-				// product8);
-				// ProductImage bilde99 = new ProductImage("dzemperi3.jpg", "Džemperis3",
-				// product9);
-
-				// ProductImage bilde100 = new ProductImage("cepures1.jpg", "Cepure1",
-				// product10);
-				// ProductImage bilde111 = new ProductImage("cepures2.jpg", "Cepure2",
-				// product11);
-				// ProductImage bilde122 = new ProductImage("cepures3.jpg", "Cepure3",
-				// product12);
-
-				// ProductImage bilde133 = new ProductImage("salle1.jpg", "Šalle1",
-				// product13);
-				// ProductImage bilde144 = new ProductImage("salle2.jpg", "Šalle2",
-				// product14);
-				// ProductImage bilde155 = new ProductImage("salle3.jpg", "Šalle3",
-				// product15);
-
-				// ProductImage bilde166 = new ProductImage("manta1.jpg", "Manta1",
-				// product16);
-				// ProductImage bilde177 = new ProductImage("manta2.jpg", "Manta2",
-				// product17);
-				// ProductImage bilde188 = new ProductImage("manta3.jpg", "Manta3",
-				// product18);
-
-				// ProductImage bilde190 = new ProductImage("aksesuars1.jpg", "Aksesuars 1",
-				// product19);
-				// ProductImage bilde200 = new ProductImage("aksesuars2.jpg", "Aksesuars 2",
-				// product20);
-				// ProductImage bilde210 = new ProductImage("aksesuars3.jpg", "Aksesuars 3",
-				// product21);
-				// productImageRepo.save(bilde11);
-				// productImageRepo.save(bilde22);
-				// productImageRepo.save(bilde33);
 
 				// USER & AUTHORITY
 				// productImageRepo.save(bilde44);

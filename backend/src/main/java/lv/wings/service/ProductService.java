@@ -1,9 +1,13 @@
 package lv.wings.service;
 
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.model.entity.Product;
 
 public interface ProductService extends CRUDService<Product, Integer> {
-    ShortProductDto getAll(Pageable pageable);
+    Page<ShortProductDto> getAllByCategory(Integer categoryId, Pageable pageable);
+
+    ProductDto getProductById(Integer id);
 }

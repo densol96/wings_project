@@ -15,7 +15,7 @@ import lv.wings.model.base.ImageableEntity;
 import lv.wings.model.translation.EventImageTranslation;
 
 @Entity
-@Table(name = "event_Images")
+@Table(name = "event_images")
 @EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data

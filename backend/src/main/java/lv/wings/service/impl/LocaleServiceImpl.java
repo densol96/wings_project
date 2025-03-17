@@ -1,5 +1,6 @@
 package lv.wings.service.impl;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 
@@ -40,11 +41,14 @@ public class LocaleServiceImpl implements LocaleService {
 
     @Override
     public <L extends Localable> L getRightTranslation(Translatable entity, Class<L> translationClass, Supplier<MissingTranslationException> exceptionSupplier) {
-        return entity.getTranslations()
+        List<Localable> translations = entity.getTranslations();
+        if (translations == null)
+            throw exceptionSupplier.get();
+        return translations
                 .stream()
                 .filter(translation -> translation.getLocale().getCode().equalsIgnoreCase(getCurrentLocaleCode()))
                 .findFirst()
-                .or(() -> entity.getTranslations()
+                .or(() -> translations
                         .stream()
                         .filter(t -> t.getLocale().getCode().equalsIgnoreCase(DEFAULT_LOCALE))
                         .findFirst())
@@ -57,7 +61,6 @@ public class LocaleServiceImpl implements LocaleService {
                 })
                 .orElseThrow(exceptionSupplier);
     }
-
 
     @Override
     public String getMessage(String messageCode) {

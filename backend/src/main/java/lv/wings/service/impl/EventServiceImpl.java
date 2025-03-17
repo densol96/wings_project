@@ -1,15 +1,15 @@
 package lv.wings.service.impl;
 
 import java.util.List;
-import org.apache.poi.ss.formula.functions.T;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lv.wings.dto.response.ImageDto;
 import lv.wings.dto.response.event.EventTranslationDto;
-import lv.wings.dto.response.event.EventTranslationShortDto;
 import lv.wings.dto.response.event.ShortEventDto;
+import lv.wings.dto.response.event.ShortEventTranslationDto;
 import lv.wings.dto.response.event.SingleEventDto;
 import lv.wings.mapper.EventMapper;
 import lv.wings.model.entity.Event;
@@ -57,7 +57,7 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
 
     private ShortEventDto eventToShortPublicDto(Event event) {
         EventTranslation translation = getRightTranslation(event, EventTranslation.class);
-        EventTranslationShortDto translationShortDto = eventMapper.eventTranslationToShortDto(translation);
+        ShortEventTranslationDto translationShortDto = eventMapper.eventTranslationToShortDto(translation);
         ImageDto image = eventImageService.getWallpaperByOwnerId(event.getId());
         return eventMapper.eventToShortDto(event, translationShortDto, image);
     }
