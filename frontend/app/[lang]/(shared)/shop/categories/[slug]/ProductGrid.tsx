@@ -4,6 +4,9 @@ import { ProductSearchParams, ShopDict, ShortProductDto } from "@/types/sections
 import { fetcher, parsePageableResponse } from "@/utils";
 import React from "react";
 import ProductCard from "./ProductCard";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
+import Pagination from "@/components/shared/Pagination";
 
 type Props = Lang &
   ProductSearchParams & {
@@ -23,17 +26,20 @@ const ProductGrid = async ({ page, sort, direction, categoryId, lang }: Props) =
     getDictionary(lang),
     fetcher<PageableResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/products?${queryParams}`),
   ]);
-  const { content: products, page: currentPage, size, totalPages, totalElements } = parsePageableResponse<ShortProductDto>(productsResult);
+  const { content: products, size, totalPages, totalElements } = parsePageableResponse<ShortProductDto>(productsResult);
   const dict: ShopDict = dictResult.shop;
 
   return !products.length ? (
     <p className="text-center mt-20">{dict.noProductsMessage}</p>
   ) : (
-    <section className="grid grid-cols-3 gap-x-6 gap-y-12">
-      {products.map((product) => (
-        <ProductCard key={product.id} product={product} lang={lang} dict={dict} />
-      ))}
-    </section>
+    <>
+      <section className="grid grid-cols-3 gap-x-6 gap-y-12">
+        {products.map((product) => (
+          <ProductCard key={product.id} product={product} lang={lang} dict={dict} />
+        ))}
+      </section>
+      <Pagination currentPage={+page} totalPages={totalPages} />
+    </>
   );
 };
 
