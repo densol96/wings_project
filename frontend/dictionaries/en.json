@@ -129,6 +129,29 @@
     "title": "All products",
     "description": "Discover beautiful and unique handmade crafts, created with love and care! Choose from a wide selection of handcrafted items that will fill your home with warmth and individuality. Each piece is special – made to bring joy and inspiration. Find your perfect creation today!",
     "toHome": "To the main page",
-    "categoryListTitle": "Product Categories"
+    "categoryListTitle": "Product Categories",
+    "select": {
+      "label": "Sort by",
+      "options": [
+        {
+          "label": "Latest",
+          "value": "createdAt-desc"
+        },
+        {
+          "label": "Oldest",
+          "value": "createdAt-asc"
+        },
+        {
+          "label": "Price (low to high)",
+          "value": "price-asc"
+        },
+        {
+          "label": "Price (high to low)",
+          "value": "price-desc"
+        }
+      ]
+    },
+    "noProductsMessage": "There are no any available products for this category.",
+    "addToCartBtn": "Add to cart"
   }
 }

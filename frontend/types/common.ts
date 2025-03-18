@@ -21,6 +21,8 @@ export type Image = {
   alt: string;
 };
 
+export type SortDirection = "asc" | "desc";
+
 export type ShortContent = {
   title: string;
   description: string;
@@ -43,8 +45,8 @@ export type PageableResponse = {
   };
 };
 
-export type PageableReturn = {
-  content: any;
+export type PageableReturn<T> = {
+  content: T[];
   page: number;
   size: number;
   totalPages: number;
