@@ -1,7 +1,7 @@
 "use client";
 
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { locales, defaultLocale } from "@/constants/locales";
 import { defaultLangIsSelected } from "@/services/helpers";
 
@@ -14,10 +14,12 @@ type Props = {
 const LangSelectMenu = ({ lang }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [selectedLang, setSelectedLang] = useState(lang);
 
   const assembleNewUrl = (newLocale: string) => {
-    return defaultLangIsSelected(pathname) ? newLocale + pathname : pathname.replace(/^\/[a-z]{2}/, newLocale);
+    const oldUrl = `${pathname}?${searchParams.toString()}`;
+    return defaultLangIsSelected(pathname) ? newLocale + oldUrl : oldUrl.replace(/^\/[a-z]{2}/, newLocale);
   };
 
   useEffect(() => {

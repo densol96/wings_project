@@ -128,6 +128,29 @@
     "title": "Visi produkti",
     "description": "Atklājiet skaistus un unikālus rokdarbus, kas radīti ar mīlestību un rūpību! Izvēlieties no plaša klāsta ar rokām darinātu izstrādājumu, kas piepildīs jūsu mājokli ar siltumu un individualitāti. Katrs priekšmets ir īpašs – radīts, lai priecētu un iedvesmotu. Atrodiet savu ideālo darinājumu jau šodien!",
     "toHome": "Uz galveno lapu",
-    "categoryListTitle": "Produktu Kategorijas"
+    "categoryListTitle": "Produktu Kategorijas",
+    "select": {
+      "label": "Kārtot pēc",
+      "options": [
+        {
+          "label": "Jaunākā",
+          "value": "createdAt-desc"
+        },
+        {
+          "label": "Vecākā",
+          "value": "createdAt-asc"
+        },
+        {
+          "label": "Cena (uz augšu)",
+          "value": "price-asc"
+        },
+        {
+          "label": "Cena (uz leju)",
+          "value": "price-desc"
+        }
+      ]
+    },
+    "noProductsMessage": "Šajā kategorijā nav pieejamu produktu.",
+    "addToCartBtn": "Pievienot grozam"
   }
 }

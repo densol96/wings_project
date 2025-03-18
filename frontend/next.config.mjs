@@ -65,8 +65,8 @@ const nextConfig = {
       },
       // SHOP SECTION
       {
-        source: "/en/veikals/kategorijas/:splat*",
-        destination: "/en/shop/categories/:splat*",
+        source: "/en/veikals/kategorijas/:slug*",
+        destination: "/en/shop/categories/:slug*",
         permanent: true,
       },
       {
@@ -82,7 +82,7 @@ const nextConfig = {
     ];
   },
 
-  // runs after middleware.ts
+  // // runs after middleware.ts
   async rewrites() {
     return [
       {

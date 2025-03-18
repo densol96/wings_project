@@ -5,15 +5,15 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { SelectOption } from "@/types";
 import { cn } from "@/utils";
+import { SelectOptions } from "@/types/sections/shop";
 
 type Props = {
   className?: string;
   optionClassName?: string;
-  options: SelectOption[];
-  page: number;
+  selectDict: SelectOptions;
 };
 
-const Select = ({ className, optionClassName, options, page }: Props) => {
+const Select = ({ className, optionClassName, selectDict }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -22,20 +22,24 @@ const Select = ({ className, optionClassName, options, page }: Props) => {
     const optionValue = e.target.value; // format: sorting-direction f.e. createdAt-desc
     const [sorting, direction] = optionValue.split("-");
     const params = new URLSearchParams(searchParams);
-    params.set("sorting", sorting);
+    params.set("sort", sorting);
     params.set("direction", direction);
-    // params.set("page", `${page}`);
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
   return (
-    <select onChange={onChange} id="sortProductBy" className={cn("border-1 border-gray-300 py-1", className)}>
-      {options.map((opt) => (
-        <option key={opt.label + "_" + opt.value} className={cn("text-center", optionClassName)} value={opt.value}>
-          {opt.label}
-        </option>
-      ))}
-    </select>
+    <div className="flex items-center gap-2">
+      <label className="normal-case" htmlFor="sortProductBy">
+        {selectDict.label}
+      </label>
+      <select onChange={onChange} id="sortProductBy" className={cn("border-1 border-gray-300 py-1", className)}>
+        {selectDict.options.map((opt) => (
+          <option key={opt.label + "_" + opt.value} className={cn("text-center", optionClassName)} value={opt.value}>
+            {opt.label}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 };
 

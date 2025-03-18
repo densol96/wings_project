@@ -42,7 +42,7 @@ const NewsGrid = function ({ lang, dict }: Props) {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/events?page=${currentPage}&lang=${lang}`);
       if (!response.ok) throw new Error("response.ok = false likely due to problems with network (is server up?)");
       const result = await response.json();
-      const { content, page, size, totalPages, totalElements } = parsePageableResponse(result);
+      const { content, page, size, totalPages, totalElements } = parsePageableResponse<ShortNewsItem>(result);
       setNews((prev) => ({
         news: [...prev.news, ...content],
         pageable: { page, size, totalPages, totalElements },
