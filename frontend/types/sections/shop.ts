@@ -3,7 +3,7 @@ import { Image, SortDirection } from "@/types";
 export type ProductSort = "price" | "createdAt";
 
 export type ProductSearchParams = {
-  page?: string | number;
+  page: string | number;
   sort: ProductSort;
   direction: SortDirection;
 };

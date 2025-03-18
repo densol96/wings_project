@@ -26,8 +26,6 @@ const Products = async function ({ params: { lang, slug }, searchParams }: Props
   let categoryId = extractIdFromSlug(slug);
   categoryId = categoryId >= 0 ? categoryId : 0;
 
-  console.log("SORT", sort);
-
   return (
     <Suspense fallback={<Spinner className="mt-20" />}>
       <ProductGrid page={page} sort={sort} direction={direction} categoryId={categoryId} lang={lang} />

@@ -2,8 +2,6 @@
 
 import React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
-import { SelectOption } from "@/types";
 import { cn } from "@/utils";
 import { SelectOptions } from "@/types/sections/shop";
 

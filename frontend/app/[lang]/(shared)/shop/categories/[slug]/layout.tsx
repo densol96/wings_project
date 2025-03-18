@@ -1,12 +1,14 @@
 import { Heading } from "@/components";
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { PageProps, PagePropsWithSlug } from "@/types";
+import { ProductSearchParams } from "@/types/sections/shop";
 import { extractIdFromSlug, fetcher, slugify } from "@/utils";
 import unslugify from "@/utils/unslugify";
 import Link from "next/link";
 import React from "react";
 
 type Props = PagePropsWithSlug & {
+  searchParams: ProductSearchParams;
   children: React.ReactNode;
   header: React.ReactNode;
 };
@@ -19,7 +21,7 @@ type CategoryLi = {
 
 export const revalidate = 0;
 
-const Layout = async ({ params: { lang, slug }, header, children }: Props) => {
+const Layout = async ({ params: { lang, slug }, header, children, searchParams }: Props) => {
   const categoryList = await fetcher<CategoryLi[]>(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/product-categories?lang=${lang}`);
   const categoryListTitle = (await getDictionary(lang)).shop.categoryListTitle;
   return (
