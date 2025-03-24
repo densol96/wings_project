@@ -24,7 +24,7 @@ const Header = ({ headerDictionary, lang }: Props) => {
     <nav
       className={`${
         isExpanded ? "h-96" : "h-24"
-      } p-1 sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center overflow-y-hidden bg-light-nav lg:text-lg z-50`}
+      } p-1 sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center overflow-y-hidden bg-light-nav lg:text-lg z-30`}
     >
       <div className={`${isExpanded ? "items-start" : "items-center"} justify-center flex h-full shrink p-4`}>
         <img

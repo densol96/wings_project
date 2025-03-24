@@ -6,3 +6,4 @@ export { default as Wallpaper } from "./Wallpaper";
 export { default as LangSelectMenu } from "./LangSelectMenu";
 export { default as Header } from "./Header";
 export { default as Gallery } from "./Gallery";
+export { default as LogoWithIcons } from "./LogoWithIcons";

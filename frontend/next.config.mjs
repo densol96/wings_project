@@ -11,6 +11,13 @@ const nextConfig = {
       },
     ],
   },
+  theme: {
+    extend: {
+      screens: {
+        tiny: "500px",
+      },
+    },
+  },
   // runs before middleware.ts
   async redirects() {
     return [
@@ -49,8 +56,8 @@ const nextConfig = {
       },
       // NEWS SECTION
       {
-        source: "/en/jaunumi",
-        destination: "/en/news",
+        source: "/en/jaunumi/:slug*",
+        destination: "/en/news/:slug*",
         permanent: true,
       },
       {
@@ -59,8 +66,8 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/lv/news",
-        destination: "/jaunumi",
+        source: "/lv/news/:slug*",
+        destination: "/jaunumi/:slug*",
         permanent: true,
       },
       // SHOP SECTION
@@ -100,6 +107,10 @@ const nextConfig = {
       {
         source: "/lv/veikals/kategorijas/:slug*",
         destination: "/lv/shop/categories/:slug*",
+      },
+      {
+        source: "/lv/jaunumi/:slug*",
+        destination: "/lv/news/:slug*",
       },
     ];
   },
