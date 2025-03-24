@@ -17,10 +17,11 @@ import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.apache.poi.xwpf.usermodel.XWPFTable.XWPFBorderType;
-import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
-import lv.wings.model.PurchaseElement;
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.Purchase;
+import lv.wings.model.entity.PurchaseElement;
+
+import org.apache.poi.xwpf.usermodel.XWPFTableRow;
 
 public class PoiController {
 	public static <T> byte[] buildSingle(String tabname, T source, String[] fields) throws Exception {
@@ -242,11 +243,11 @@ public class PoiController {
 		run = paragraph.createRun();
 		run.setText("Pasūtījuma Datums");
 		run.addBreak();
-		run.setText(source.getDeliveryDate().toString());
+		run.setText(source.getCreatedAt().toString());
 		run.addBreak();
 		run.setText("Pasūtījuma ID");
 		run.addBreak();
-		run.setText(source.getPurchaseId() + "");
+		run.setText(source.getId() + "");
 		run.addBreak();
 
 		paragraph = tableRows.get(0).getCell(2).getParagraphArray(0);
@@ -281,10 +282,10 @@ public class PoiController {
 
 		for (int i = 0; i < purchaseElements.size(); i++) {
 			int amount = purchaseElements.get(i).getAmount();
-			float price = purchaseElements.get(i).getProduct().getPrice();
+			double price = purchaseElements.get(i).getProduct().getPrice();
 
-			tableRows.get(i + 1).getCell(0).getParagraphArray(0).createRun()
-					.setText(purchaseElements.get(i).getProduct().getTitle() + "");
+			// tableRows.get(i + 1).getCell(0).getParagraphArray(0).createRun()
+			// .setText(purchaseElements.get(i).getProduct().getTitle() + "");
 			tableRows.get(i + 1).getCell(1).getParagraphArray(0).createRun().setText(amount + "");
 			tableRows.get(i + 1).getCell(2).getParagraphArray(0).createRun().setText(price + "");
 			summ += amount * price;

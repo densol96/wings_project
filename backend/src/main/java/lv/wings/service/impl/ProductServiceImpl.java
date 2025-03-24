@@ -1,176 +1,78 @@
 package lv.wings.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.Product;
-import lv.wings.model.ProductCategory;
-import lv.wings.model.ProductPicture;
-import lv.wings.model.PurchaseElement;
-import lv.wings.repo.IProductCategoryRepo;
-import lv.wings.repo.IProductPictureRepo;
-import lv.wings.repo.IProductRepo;
-import lv.wings.repo.IPurchaseElementRepo;
-import lv.wings.service.ICRUDInsertedService;
-import lv.wings.service.IProductsFilterService;
+import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.product.ProductDto;
+import lv.wings.dto.response.product.ShortProductDto;
+import lv.wings.dto.response.product_category.ShortProductCategoryDto;
+import lv.wings.exception.validation.InvalidQueryParameterException;
+import lv.wings.mapper.ProductMapper;
+import lv.wings.model.entity.Product;
+import lv.wings.model.entity.ProductImage;
+import lv.wings.model.translation.ProductTranslation;
+import lv.wings.repo.ProductRepository;
+import lv.wings.service.AbstractTranslatableCRUDService;
+import lv.wings.service.ImageService;
+import lv.wings.service.LocaleService;
+import lv.wings.service.ProductCategoryService;
+import lv.wings.service.ProductService;
 
 @Service
-public class ProductServiceImpl implements ICRUDInsertedService<Product>, IProductsFilterService {
+public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product, ProductTranslation, Integer> implements ProductService {
+	private final ProductRepository productRepository;
+	private final ProductMapper productMapper;
+	private final ImageService<ProductImage, Integer> productImageService;
+	private final ProductCategoryService productCategoryService;
 
-	@Autowired
-	private IProductRepo productRepo;
-
-	@Autowired
-	private IProductCategoryRepo productCategoryRepo;
-
-	@Autowired
-	private IPurchaseElementRepo elementRepo;
-
-	@Autowired
-	private IProductPictureRepo pictureRepo;
-
-	@Override
-	@Cacheable("Products")
-	public List<Product> retrieveAll() throws Exception {
-		// izmest izņēmumu, ja ir tukša tabula
-		if (productRepo.count() == 0)
-			throw new Exception("There are no products");
-
-		// pretējā gadījumā sameklēt visus ierakstus no repo
-		return (ArrayList<Product>) productRepo.findAll();
+	@Lazy
+	public ProductServiceImpl(
+			ProductRepository productRepository,
+			ProductMapper productMapper,
+			ImageService<ProductImage, Integer> productImageService,
+			LocaleService localeService,
+			ProductCategoryService productCategoryService) {
+		super(productRepository, "Product", "entity.product", localeService);
+		this.productRepository = productRepository;
+		this.productMapper = productMapper;
+		this.productImageService = productImageService;
+		this.productCategoryService = productCategoryService;
 	}
 
 	@Override
-	@Cacheable(value = "Products", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-	public Page<Product> retrieveAll(Pageable pageable) throws Exception {
-		if (productRepo.count() == 0)
-			throw new Exception("There are no products");
-		return (Page<Product>) productRepo.findAll(pageable);
+	public Page<ShortProductDto> getAllByCategory(Integer categoryId, Pageable pageable) {
+		if (categoryId < 0)
+			throw new InvalidQueryParameterException(entityNameKey, entityName, false);
+		// categoryId == 0 means "All products"
+		Page<Product> products = categoryId == 0 ? findAll(pageable) : productRepository.findAllByCategoryId(categoryId, pageable);
+		return products.map(this::mapToShortProductDto);
 	}
 
 	@Override
-	@Cacheable(value = "Products", key = "#id")
-	public Product retrieveById(Integer id) throws Exception {
-		if (id < 0)
-			throw new Exception("Id should be positive");
-
-		if (productRepo.existsById(id)) {
-			return productRepo.findById(id).get();
-		} else {
-			throw new Exception("Product with this id (" + id + ") does not exist");
-		}
+	public ProductDto getProductById(Integer id) {
+		Product product = findById(id);
+		return mapToProductDto(product);
 	}
 
-	@Override
-	@CacheEvict(value = "Products", allEntries = true)
-	public void deleteById(Integer id) throws Exception {
-		// atrast preci kuru gribam dzēst
-		Product productForDeleting = retrieveById(id);
-
-		// Ja tiek dzēsts pirkuma elements, tad pirkuma elementā prece tiek setota kā
-		// null
-		List<PurchaseElement> purchaseElement = elementRepo.findByProduct(productForDeleting);
-
-		for (Integer i = 0; i < purchaseElement.size(); i++) {
-			purchaseElement.get(i).setProduct(null);
-			elementRepo.save(purchaseElement.get(i));
-		}
-
-		// Ja tiek dzēsta preces bilde, tad preces bildē prece tiek setota kā null
-		List<ProductPicture> productPictures = pictureRepo.findByProduct(productForDeleting);
-
-		for (Integer i = 0; i < productPictures.size(); i++) {
-			productPictures.get(i).setProduct(null);
-			pictureRepo.save(productPictures.get(i));
-		}
-
-		// dzēšam no repo un DB
-		productRepo.delete(productForDeleting);
+	private ShortProductDto mapToShortProductDto(Product product) {
+		ProductTranslation localisedTranslation = getRightTranslation(product, ProductTranslation.class);
+		List<ImageDto> images = productImageService.getImagesAsDtoPerOwnerId(product.getId());
+		// Only 2 images are required on the fromt-end for an interactive card
+		List<ImageDto> limitedImages = images.size() > 2 ? images.subList(0, Math.min(images.size(), 2)) : images;
+		return productMapper.toShortDto(product, localisedTranslation, limitedImages);
 	}
 
-	@Override
-	@CacheEvict(value = "Products", allEntries = true)
-	public void create(Product product) throws Exception {
-		Product existedProduct = productRepo.findByTitle(product.getTitle());
-
-		// tāds pirkums jau eksistē
-		if (existedProduct != null)
-			throw new Exception("Product with name: " + product.getTitle() + " already exists");
-
-		// atrodu kategoriju pēc id
-		if (productCategoryRepo.findById(product.getProductCategory().getProductCategoryId()).isEmpty())
-			throw new Exception("Product Category with id: " + product.getProductCategory().getProductCategoryId()
-					+ " does not exist");
-
-		// tāds pirkuma elements vēl neeksistē
-		Product newProduct = product;
-		productRepo.save(newProduct);
+	private ProductDto mapToProductDto(Product product) {
+		ProductTranslation localisedTranslation = getRightTranslation(product, ProductTranslation.class);
+		List<ImageDto> images = productImageService.getImagesAsDtoPerOwnerId(product.getId());
+		ShortProductCategoryDto category = product.getCategory() != null
+				? productCategoryService.getShortCategory(product.getCategory().getId())
+				: null;
+		return productMapper.toDto(product, localisedTranslation, images, category);
 	}
-
-	@Override
-	@CacheEvict(value = "Products", allEntries = true)
-	public void create(Product product, Integer id) throws Exception {
-		Product existedProduct = productRepo.findByTitle(product.getTitle());
-
-		// tāds pirkums jau eksistē
-		if (existedProduct != null)
-			throw new Exception("Product with name: " + product.getTitle() + " already exists");
-
-		// atrodu kategoriju pēc id
-		if (productCategoryRepo.findById(id).isEmpty())
-			throw new Exception("Product Category with id: " + id + " does not exist");
-
-		// tāds pirkuma elements vēl neeksistē
-		Product newProduct = product;
-		newProduct.setProductCategory(productCategoryRepo.findById(id).get());
-		productRepo.save(newProduct);
-	}
-
-	@Override
-	@CacheEvict(value = "Products", allEntries = true)
-	@CachePut(value = "Products", key = "#id")
-	public void update(Integer id, Product product) throws Exception {
-		// atrodu
-		Product productForUpdating = retrieveById(id);
-
-		// izmainu
-		productForUpdating.setDescription(product.getDescription());
-		productForUpdating.setPrice(product.getPrice());
-		productForUpdating.setAmount(product.getAmount());
-		productForUpdating.setProductCategory(product.getProductCategory());
-		productForUpdating.setTitle(product.getTitle());
-
-		// saglabāju repo un DB
-		productRepo.save(productForUpdating);
-	}
-
-	@Override
-	@CachePut(value = "Products", key = "'c' + #categoryId")
-	public ArrayList<Product> selectAllByProductCategory(Integer categoryId) throws Exception {
-		ProductCategory productCategory = productCategoryRepo.findById(categoryId).get();
-		ArrayList<Product> products = new ArrayList<>();
-		if (productCategory != null) {
-			products = (ArrayList<Product>) productRepo.findByProductCategory(productCategory);
-			if (products.isEmpty())
-				throw new Exception("There are no products");
-			return products;
-		}
-
-		return products;
-	}
-
-	public List<Product> randomProducts() throws Exception {
-		List<Product> randomProducts = productRepo.findRandomProducts(6);
-
-		return randomProducts;
-	}
-
 }

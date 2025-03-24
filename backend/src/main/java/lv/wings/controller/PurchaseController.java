@@ -19,12 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.mail.MailSender;
-import lv.wings.model.Customer;
-import lv.wings.model.DeliveryType;
-import lv.wings.model.PaymentType;
-import lv.wings.model.Purchase;
+import lv.wings.model.entity.Customer;
+import lv.wings.model.entity.DeliveryType;
+import lv.wings.model.entity.PaymentType;
+import lv.wings.model.entity.Purchase;
 import lv.wings.poi.PoiController;
 import lv.wings.responses.ApiResponse;
+import lv.wings.service.CRUDService;
 import lv.wings.service.ICRUDService;
 
 @Controller
@@ -35,45 +36,13 @@ public class PurchaseController {
     private MailSender mailSender;
 
     @Autowired
-    private ICRUDService<Purchase> purchaseService;
+    private CRUDService<Purchase, Integer> purchaseService;
 
-    @Autowired
-    private ICRUDService<DeliveryType> deliveryTypeService;
-
-    @Autowired
-    private ICRUDService<PaymentType> paymentTypeService;
-
-    @Autowired
-    private ICRUDService<Customer> customerService;
-
-    @GetMapping("/show/all")
-    public String getShowAllPurchases(Model model) {
-        try {
-            List<Purchase> allPurchases = purchaseService.retrieveAll();
-            model.addAttribute("mydata", allPurchases);
-            return "pirkums-all-page";
-        } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
-            return "error-page";
-        }
-    }
-
-    @GetMapping("/show/all/{id}")
-    public String getShowOnePurchase(@PathVariable("id") int id, Model model) {
-        try {
-            Purchase purchase = purchaseService.retrieveById(id);
-            model.addAttribute("mydata", purchase);
-            return "pirkums-all-page";
-        } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
-            return "error-page";
-        }
-    }
 
     @GetMapping("/download/all/{id}") // localhost:8080/pirkums/download/all/{id}
     public ResponseEntity<byte[]> downloadPurchaseById(@PathVariable("id") int id) {
         try {
-            Purchase purchase = purchaseService.retrieveById(id);
+            Purchase purchase = purchaseService.findById(id);
             // iegūt faila baitus no preces ar definētiem laukiem
             byte[] fileBytes = PoiController.buildInvoice("pirkums-" + id, purchase);
 
@@ -91,7 +60,7 @@ public class PurchaseController {
     public ResponseEntity<ApiResponse<Boolean>> performPurchaseById(@PathVariable("id") int id) {
         try {
             System.out.println("smth");
-            Purchase purchase = purchaseService.retrieveById(id);
+            Purchase purchase = purchaseService.findById(id);
             System.out.println(purchase.getDeliveryDetails());
 
             // iegūt faila baitus no preces ar definētiem laukiem
@@ -103,58 +72,6 @@ public class PurchaseController {
         } catch (Exception e) {
             System.out.println("rip");
             return ResponseEntity.ok().body(new ApiResponse<>(null, false));
-        }
-    }
-
-    @GetMapping("/remove/{id}")
-    public String getDeleteOnePurchase(@PathVariable("id") int id, Model model) {
-        try {
-            purchaseService.deleteById(id);
-            List<Purchase> allPurchases = purchaseService.retrieveAll();
-            model.addAttribute("mydata", allPurchases);
-            return "pirkums-all-page";
-        } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
-            return "error-page";
-        }
-    }
-
-    @GetMapping("/add")
-    public String getAddPurchase(Model model) {
-        try {
-            List<PaymentType> paymentTypes = paymentTypeService.retrieveAll();
-            List<DeliveryType> deliveryTypes = deliveryTypeService.retrieveAll();
-            List<Customer> customers = customerService.retrieveAll();
-            model.addAttribute("pirkums", new Purchase());
-            model.addAttribute("samaksasVeidi", paymentTypes);
-            model.addAttribute("piegadesVeidi", deliveryTypes);
-            model.addAttribute("pirceji", customers);
-            model.addAttribute("pasutijumaDatums", LocalDateTime.now());
-            return "pirkums-add-page";
-        } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
-            return "error-page";
-        }
-    }
-
-    @PostMapping("/add")
-    public String postAddPurchase(@Valid Purchase purchase, BindingResult result, Model model) {
-        if (result.hasErrors()) {
-            System.out.println(purchase.getDeliveryType());
-            System.out.println(purchase.getPaymentType());
-            System.out.println(purchase.getCustomer());
-            System.out.println(purchase.getDeliveryDetails());
-            System.out.println(purchase.getDeliveryDate());
-            return "pirkums-add-page";
-        } else {
-            try {
-                System.out.println("aaaab");
-                purchaseService.create(purchase);
-                return "redirect:/pirkums/show/all";
-            } catch (Exception e) {
-                model.addAttribute("message", e.getMessage());
-                return "error-page";
-            }
         }
     }
 }

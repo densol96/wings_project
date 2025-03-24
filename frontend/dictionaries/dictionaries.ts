@@ -1,3 +1,4 @@
+import { Locale } from "@/types/";
 import "server-only";
 
 const dictionaries: any = {
@@ -5,4 +6,4 @@ const dictionaries: any = {
   lv: () => import("./lv.json").then((module) => module.default),
 };
 
-export const getDictionary = async (locale: string) => dictionaries[locale]();
+export const getDictionary = async (locale: Locale) => dictionaries[locale]();

@@ -1,38 +1,28 @@
-import { PageProps } from "@/@types/shared";
-import { Heading } from "@/components/shared";
+import { PageProps } from "@/types/common";
+import { NewsDictionaryType } from "@/types/sections/news";
+
 import { getDictionary } from "@/dictionaries/dictionaries";
+
+import { Heading } from "@/components/ui";
 import NewsGrid from "./NewsGrid";
 
-type SearchParams = {
-  category?: string;
-  page?: string | number;
+export const generateMetadata = async ({ params: { lang } }: PageProps) => {
+  const dict: NewsDictionaryType = (await getDictionary(lang)).news;
+  return {
+    title: dict.title,
+  };
 };
 
-type Props = PageProps & {
-  searchParams: SearchParams;
-};
-
-const parseSearchParams = (searchParams: SearchParams) => {
-  const category = searchParams.category || "all";
-  const page = searchParams.page ? +searchParams.page : 1;
-  return { category, page };
-};
-
-const News = async function ({ params: { lang }, searchParams }: Props) {
-  const dict = await getDictionary(lang);
-  const { category, page } = parseSearchParams(searchParams);
+const News = async function ({ params: { lang } }: PageProps) {
+  const dict: NewsDictionaryType = (await getDictionary(lang)).news;
 
   return (
     <>
       <Heading size="xl" className="text-center">
-        Jaunākās ziņas
+        {dict.title}
       </Heading>
-      <p className="mb-6">
-        Uzziniet par mūsu jaunākajiem projektiem, pasākumiem un amatniecības izstādēm! Sekojiet līdzi jaunumiem un
-        atklājiet unikālus rokdarbus, kas radīti ar mīlestību un rūpību. Pievienojieties mūsu aktivitātēm un atbalstiet
-        sieviešu radošumu un izaugsmi!
-      </p>
-      <NewsGrid />
+      <p className="mb-6 sm:text-left text-center">{dict.description}</p>
+      <NewsGrid dict={dict} lang={lang} />
     </>
   );
 };

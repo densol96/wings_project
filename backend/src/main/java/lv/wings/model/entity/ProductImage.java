@@ -1,0 +1,30 @@
+package lv.wings.model.entity;
+
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import lv.wings.model.base.ImageableEntity;
+import lv.wings.model.translation.ProductImageTranslation;
+
+@Entity
+@Table(name = "product_images")
+@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@Data
+public class ProductImage extends ImageableEntity<ProductImageTranslation, Product> {
+
+	@Builder
+	public ProductImage(Product product, String src) {
+		super(product, src);
+	}
+
+}

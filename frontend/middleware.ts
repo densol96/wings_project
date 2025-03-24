@@ -4,18 +4,13 @@ import { i18n } from "@/i18n-config";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
   if (pathname.startsWith(`/${defaultLocale}/`) || pathname === `/${defaultLocale}`) {
     // The incoming request is for /lv/whatever, so we'll reDIRECT to /whatever
-    return NextResponse.redirect(
-      new URL(pathname.replace(`/${defaultLocale}`, pathname === `/${defaultLocale}` ? "/" : ""), request.url)
-    );
+    const newUrl = new URL(pathname.replace(`/${defaultLocale}`, pathname === `/${defaultLocale}` ? "/" : ""), request.url);
+    newUrl.search = request.nextUrl.search;
+    return NextResponse.redirect(newUrl);
   }
-
-  const pathnameIsMissingLocale = i18n.locales.every(
-    (locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
-  );
-
+  const pathnameIsMissingLocale = i18n.locales.every((locale) => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`);
   if (pathnameIsMissingLocale) {
     return NextResponse.rewrite(new URL(`/${defaultLocale}${pathname}${request.nextUrl.search}`, request.nextUrl.href));
   }

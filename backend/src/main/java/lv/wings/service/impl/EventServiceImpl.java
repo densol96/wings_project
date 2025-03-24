@@ -1,103 +1,65 @@
 package lv.wings.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-import lv.wings.exception.old.NoContentException;
-import lv.wings.model.Event;
-import lv.wings.repo.IEventRepo;
-import lv.wings.service.ICRUDService;
-import lv.wings.service.IPasakumiFilteringService;
+import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.event.EventTranslationDto;
+import lv.wings.dto.response.event.ShortEventDto;
+import lv.wings.dto.response.event.ShortEventTranslationDto;
+import lv.wings.dto.response.event.SingleEventDto;
+import lv.wings.mapper.EventMapper;
+import lv.wings.model.entity.Event;
+import lv.wings.model.entity.EventImage;
+import lv.wings.model.translation.EventTranslation;
+import lv.wings.repo.EventRepository;
+import lv.wings.service.AbstractTranslatableCRUDService;
+import lv.wings.service.EventCategoryService;
+import lv.wings.service.EventService;
+import lv.wings.service.ImageService;
+import lv.wings.service.LocaleService;
 
 @Service
-@RequiredArgsConstructor
-public class EventServiceImpl implements ICRUDService<Event>, IPasakumiFilteringService {
+public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, EventTranslation, Integer> implements EventService {
 
-	private final IEventRepo eventRepo;
+    private final EventMapper eventMapper;
+    private final ImageService<EventImage, Integer> eventImageService;
+    private final EventCategoryService eventCategoryService;
 
-	@Override
-	@Cacheable("Events")
-	public List<Event> retrieveAll() {
-		return eventRepo.findAll();
-	}
+    public EventServiceImpl(
+            EventRepository eventRepository,
+            EventMapper eventMapper,
+            ImageService<EventImage, Integer> eventImageService,
+            LocaleService localeService,
+            EventCategoryService eventCategoryService) {
+        super(eventRepository, "Event", "entity.event", localeService);
+        this.eventMapper = eventMapper;
+        this.eventImageService = eventImageService;
+        this.eventCategoryService = eventCategoryService;
+    }
 
-	@Override
-	@Cacheable(value = "Events", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-	public Page<Event> retrieveAll(Pageable pageable) {
-		return eventRepo.findAll(pageable);
-	}
+    @Override
+    public Page<ShortEventDto> getPublicEvents(Pageable pageable) {
+        return findAll(pageable).map(this::eventToShortPublicDto);
+    }
 
-	@Override
-	@Cacheable(value = "Events", key = "#id")
-	public Event retrieveById(Integer id) throws Exception {
-		if (id < 1)
-			throw new Exception("Invalid ID");
-		Event foundEvent = eventRepo.findById(id)
-				.orElseThrow(() -> new Exception("Event with the id: (" + id + ") does not exist!"));
-		return foundEvent;
-	}
+    @Override
+    public SingleEventDto getPublicEvent(Integer id) {
+        Event event = findById(id);
+        EventTranslationDto translation = eventMapper.eventTranslationToDto(getRightTranslation(event, EventTranslation.class));
+        String category = eventCategoryService.getCategoryTitleByEvent(event);
+        List<ImageDto> images = eventImageService.getImagesAsDtoPerOwnerId(id);
+        return eventMapper.eventToFullDto(event, translation, images, category);
+    }
 
-	@Override
-	@Cacheable(value = "Events", key = "'desc'")
-	public List<Event> selectAllEventsDescOrder() throws Exception {
-		List<Event> events = eventRepo.findAllByOrderByIdDesc();
+    private ShortEventDto eventToShortPublicDto(Event event) {
+        EventTranslation translation = getRightTranslation(event, EventTranslation.class);
+        ShortEventTranslationDto translationShortDto = eventMapper.eventTranslationToShortDto(translation);
+        ImageDto image = eventImageService.getWallpaperByOwnerId(event.getId());
+        return eventMapper.eventToShortDto(event, translationShortDto, image);
+    }
 
-		if (events.isEmpty())
-			throw new Exception("There are no events");
-		return events;
-	}
-
-	@Override
-	@Cacheable(value = "Events", key = "'asc'")
-	public List<Event> selectAllEventsAscOrder() throws Exception {
-		List<Event> events = eventRepo.findAllByOrderByIdAsc();
-		if (events.isEmpty())
-			throw new Exception("There are no events");
-		return events;
-	}
-
-	@Override
-	@CacheEvict(value = "Events", allEntries = true)
-	public void deleteById(Integer id) throws Exception {
-		Event event = eventRepo.findById(id)
-				.orElseThrow(() -> new Exception("Event with id:" + id + " does not exist"));
-		eventRepo.delete(event);
-	}
-
-	@Override
-	@CacheEvict(value = "Events", allEntries = true)
-	public void create(Event event) throws Exception {
-		Event existedEvent = eventRepo.findByTitle(event.getTitle());
-
-		if (existedEvent != null)
-			throw new Exception("Event with title: " + event.getTitle() + " already exists");
-
-		eventRepo.save(event);
-	}
-
-	@Override
-	@CacheEvict(value = "Events", allEntries = true)
-	@CachePut(value = "Events", key = "#id")
-	public void update(Integer id, Event event) throws Exception {
-		Event foundEvent = eventRepo.findById(event.getId())
-				.orElseThrow(() -> new Exception("Event with (id:" + id + ") does not exist"));
-
-		foundEvent.setStartDate(event.getStartDate());
-		foundEvent.setEndDate(event.getEndDate());
-		foundEvent.setTitle(event.getTitle());
-		foundEvent.setLocation(event.getLocation());
-		foundEvent.setDescription(event.getDescription());
-		foundEvent.setKeyWords(event.getKeyWords());
-
-		eventRepo.save(event);
-	}
 }

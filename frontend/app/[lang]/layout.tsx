@@ -1,11 +1,14 @@
-import type { Metadata } from "next";
 import "./globals.css";
-import { AlternateURLs } from "next/dist/lib/metadata/types/alternative-urls-types";
-import { Header, Footer } from "@/components";
 
+import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
+import { AlternateURLs } from "next/dist/lib/metadata/types/alternative-urls-types";
+
 import { getDictionary } from "@/dictionaries/dictionaries";
-import { PageProps } from "@/@types/shared";
+import { PageProps } from "@/types/common";
+
+import { Header, Footer } from "@/components/shared";
+import { notFound } from "next/navigation";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -13,9 +16,9 @@ const roboto = Roboto({
   display: "swap",
 });
 
-export async function generateStaticParams() {
+export const generateStaticParams = async () => {
   return [{ lang: "en" }, { lang: "lv" }];
-}
+};
 
 export const generateMetadata = async ({ params }: PageProps) => {
   const { meta } = await getDictionary(params.lang);
@@ -54,15 +57,15 @@ type Props = PageProps & {
 
 const RootLayout = async ({ children, params: { lang } }: Props) => {
   const dict = await getDictionary(lang);
-
   return (
     <html lang={lang}>
       <body className={`${roboto.className} min-h-screen flex flex-col`}>
         <Header lang={lang} headerDictionary={dict.header} />
-        {children}
+        <main className="relative flex-1">{children}</main>
         <Footer footerDictionary={dict.footer} />
       </body>
     </html>
   );
 };
+
 export default RootLayout;

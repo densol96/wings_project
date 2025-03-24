@@ -11,6 +11,109 @@ const nextConfig = {
       },
     ],
   },
+  theme: {
+    extend: {
+      screens: {
+        tiny: "500px",
+      },
+    },
+  },
+  // runs before middleware.ts
+  async redirects() {
+    return [
+      // ABOUT SECTIONS
+      {
+        source: "/en/par-mums",
+        destination: "/en/about",
+        permanent: true,
+      },
+      {
+        source: "/about",
+        destination: "/en/about",
+        permanent: true,
+      },
+      {
+        source: "/lv/about",
+        destination: "/par-mums",
+        permanent: true,
+      },
+
+      // CONTACTS SECTIONS
+      {
+        source: "/en/kontakti",
+        destination: "/en/contacts",
+        permanent: true,
+      },
+      {
+        source: "/contacts",
+        destination: "/en/contacts",
+        permanent: true,
+      },
+      {
+        source: "/lv/contacts",
+        destination: "/kontakti",
+        permanent: true,
+      },
+      // NEWS SECTION
+      {
+        source: "/en/jaunumi/:slug*",
+        destination: "/en/news/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/news",
+        destination: "/en/news",
+        permanent: true,
+      },
+      {
+        source: "/lv/news/:slug*",
+        destination: "/jaunumi/:slug*",
+        permanent: true,
+      },
+      // SHOP SECTION
+      {
+        source: "/en/veikals/kategorijas/:slug*",
+        destination: "/en/shop/categories/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/shop/categories/:slug",
+        destination: "/en/shop/categories/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/lv/shop/categories/:slug",
+        destination: "/veikals/kategorijas/:slug*",
+        permanent: true,
+      },
+    ];
+  },
+
+  // // runs after middleware.ts
+  async rewrites() {
+    return [
+      {
+        source: "/lv/par-mums",
+        destination: "/lv/about",
+      },
+      {
+        source: "/lv/kontakti",
+        destination: "/lv/contacts",
+      },
+      {
+        source: "/lv/jaunumi",
+        destination: "/lv/news",
+      },
+      {
+        source: "/lv/veikals/kategorijas/:slug*",
+        destination: "/lv/shop/categories/:slug*",
+      },
+      {
+        source: "/lv/jaunumi/:slug*",
+        destination: "/lv/news/:slug*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

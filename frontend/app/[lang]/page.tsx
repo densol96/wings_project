@@ -1,8 +1,12 @@
-import { Wallpaper, RandomProducts } from "@/components";
-import { getDictionary } from "@/dictionaries/dictionaries";
 import Image from "next/image";
+
+import { PageProps } from "@/types/common";
+import { HomeContent } from "@/types/sections/main";
+
+import { Wallpaper, RandomProducts } from "@/components/shared";
+import { getDictionary } from "@/dictionaries/dictionaries";
+
 import lineOne from "@/public/line_1.png";
-import { PageProps, HomeContent } from "@/@types/shared";
 
 const Home = async function ({ params: { lang } }: PageProps) {
   const dict = await getDictionary(lang);
@@ -10,7 +14,7 @@ const Home = async function ({ params: { lang } }: PageProps) {
 
   return (
     <>
-      <Wallpaper homeDictionary={homeDictionary} />
+      <Wallpaper lang={lang} homeDictionary={homeDictionary} />
       <RandomProducts />
       <section className="px-6 py-12 bg-white relative mb-40">
         <Image

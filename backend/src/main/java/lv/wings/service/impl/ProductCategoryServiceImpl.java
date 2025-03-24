@@ -3,113 +3,67 @@ package lv.wings.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import lv.wings.model.Product;
-import lv.wings.model.ProductCategory;
-import lv.wings.repo.IProductCategoryRepo;
-import lv.wings.repo.IProductRepo;
-import lv.wings.service.ICRUDService;
+import lv.wings.dto.response.product_category.ProductCategoryDto;
+import lv.wings.dto.response.product_category.ProductCategoryWithAmountDto;
+import lv.wings.dto.response.product_category.ShortProductCategoryDto;
+import lv.wings.mapper.ProductCategoryMapper;
+import lv.wings.model.entity.ProductCategory;
+import lv.wings.model.translation.ProductCategoryTranslation;
+import lv.wings.repo.ProductCategoryRepository;
+import lv.wings.service.AbstractTranslatableCRUDService;
+import lv.wings.service.LocaleService;
+import lv.wings.service.ProductCategoryService;
+import lv.wings.service.ProductService;
 
 @Service
-public class ProductCategoryServiceImpl implements ICRUDService<ProductCategory> {
+public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<ProductCategory, ProductCategoryTranslation, Integer> implements ProductCategoryService {
 
-	@Autowired
-	private IProductCategoryRepo productCategoriesRepo;
+	private final ProductService productService;
+	private final ProductCategoryMapper mapper;
 
-	@Autowired
-	private IProductRepo productRepo;
-
-	@Override
-	@Cacheable("ProductCategories")
-	public ArrayList<ProductCategory> retrieveAll() throws Exception {
-		// izmest izņēmumu, ja ir tukša tabula
-		if (productCategoriesRepo.count() == 0)
-			throw new Exception("Product category table is empty");
-
-		// pretējā gadījumā sameklēt visus ierakstus no repo
-		return (ArrayList<ProductCategory>) productCategoriesRepo.findAll();
+	public ProductCategoryServiceImpl(
+			ProductCategoryRepository productCategoryRepo,
+			LocaleService localeService,
+			ProductService productService,
+			ProductCategoryMapper mapper) {
+		super(productCategoryRepo, "ProductCategory", "entity.product-category", localeService);
+		this.productService = productService;
+		this.mapper = mapper;
 	}
 
 	@Override
-	@Cacheable(value = "ProductCategories", key = "#pageable.pageNumber + '-' + #pageable.pageSize + '-' + #pageable.sort")
-	public Page<ProductCategory> retrieveAll(Pageable pageable) throws Exception {
-
-		if (productCategoriesRepo.count() == 0)
-			throw new Exception("Product category table is empty");
-
-		return (Page<ProductCategory>) productCategoriesRepo.findAll(pageable);
+	public List<ProductCategoryWithAmountDto> getAllCategories() {
+		List<ProductCategoryWithAmountDto> categories = new ArrayList<>(findAll().stream()
+				.map(this::categoryToWithAmountDto)
+				.toList());
+		categories.add(0, getSpecialAllCategoryWithAmount());
+		return categories;
 	}
 
 	@Override
-	@Cacheable(value = "ProductCategories", key = "#id")
-	public ProductCategory retrieveById(Integer id) throws Exception {
-		if (id < 0)
-			throw new Exception("Id should be positive");
-
-		if (productCategoriesRepo.existsById(id)) {
-			return productCategoriesRepo.findById(id).get();
-		} else {
-			throw new Exception("Product category with this id (" + id + ") is not in system");
-		}
+	public ProductCategoryDto getCategory(Integer id) {
+		return mapper.translationToDto(getRightTranslation(findById(id), ProductCategoryTranslation.class));
 	}
 
 	@Override
-	@CacheEvict(value = "ProductCategories", allEntries = true)
-	public void deleteById(Integer id) throws Exception {
-		if (retrieveById(id) == null)
-			throw new Exception("Product category with (id:" + id + ") does not exist!");
-
-		// atrast kategoriju kuru gribam dzēst
-		ProductCategory ProductCategoryForDeleting = retrieveById(id);
-
-		List<Product> product = productRepo.findByProductCategory(ProductCategoryForDeleting);
-
-		for (Integer i = 0; i < product.size(); i++) {
-			product.get(i).setProductCategory(null);
-			productRepo.save(product.get(i));
-		}
-
-		// dzēšam no repo un DB
-		productCategoriesRepo.delete(ProductCategoryForDeleting);
+	public ShortProductCategoryDto getShortCategory(Integer id) {
+		ProductCategory category = findById(id);
+		return mapper.translationToShortDto(category, getRightTranslation(category, ProductCategoryTranslation.class));
 	}
 
-	@Override
-	@CacheEvict(value = "ProductCategories", allEntries = true)
-	public void create(ProductCategory category) throws Exception {
-		ProductCategory existingProductCategory = productCategoriesRepo.findByTitleAndDescription(category.getTitle(),
-				category.getDescription());
-
-		// tāda category jau eksistē
-		if (existingProductCategory != null)
-			throw new Exception("Product category with name: " + category.getTitle() + " already exists in DB!");
-
-		// tāds driver vēl neeksistē
-		productCategoriesRepo.save(category);
-
+	private ProductCategoryWithAmountDto getSpecialAllCategoryWithAmount() {
+		return ProductCategoryWithAmountDto.builder()
+				.id(0)
+				.title(localeService.getMessage("translation.all"))
+				.productsTotal(productService.count())
+				.build();
 	}
 
-	@Override
-	@CacheEvict(value = "ProductCategories", allEntries = true)
-	@CachePut(value = "ProductCategories", key = "#id")
-	public void update(Integer id, ProductCategory category) throws Exception {
-		// atrodu
-		ProductCategory productCategoryForUpdating = retrieveById(id);
-
-		// izmainu
-		productCategoryForUpdating.setTitle(category.getTitle());
-		productCategoryForUpdating.setDescription(category.getDescription());
-		productCategoryForUpdating.setProducts(category.getProducts());
-
-		// saglabāju repo un DB
-		productCategoriesRepo.save(productCategoryForUpdating);
-
+	private ProductCategoryWithAmountDto categoryToWithAmountDto(ProductCategory category) {
+		return mapper.toWithAmountDto(category, getRightTranslation(category, ProductCategoryTranslation.class));
 	}
+
 
 }

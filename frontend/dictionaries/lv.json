@@ -18,19 +18,19 @@
     },
     "news": {
       "title": "Jaunumi",
-      "href": "/news"
+      "href": "/jaunumi"
     },
     "shop": {
       "title": "Veikals",
-      "href": "/shop"
+      "href": "/veikals/kategorijas"
     },
     "about": {
       "title": "Par Mums",
-      "href": "/about"
+      "href": "/par-mums"
     },
     "contacts": {
       "title": "Kontakti",
-      "href": "/contacts"
+      "href": "/kontakti"
     }
   },
   "footer": {
@@ -107,5 +107,55 @@
       { "label": "Adrese", "info": "Ventspils, Skolas iela 3" }
     ],
     "mapDescription": "Fiziskā veikala atrašanās vieta kartē"
+  },
+  "news": {
+    "title": "Jaunākās ziņas",
+    "description": "Uzziniet par mūsu jaunākajiem projektiem, pasākumiem un amatniecības izstādēm! Sekojiet līdzi jaunumiem un atklājiet unikālus rokdarbus, kas radīti ar mīlestību un rūpību. Pievienojieties mūsu aktivitātēm un atbalstiet sieviešu radošumu un izaugsmi!",
+    "button": "Citas ziņas",
+    "postedOn": "Publicēts",
+    "readMore": "Uzzināt vairāk",
+    "alt": "Jaunuma attēls",
+    "error": "Pašlaik nav ziņu, ko parādīt."
+  },
+  "newsItem": {
+    "startDate": "Sākuma datums",
+    "endDate": "Beigu datums",
+    "postedOn": "Publicēts",
+    "location": "Lokācija"
+  },
+  "shop": {
+    "allCategoryRedirect": "/lv/veikals/kategorijas/0-visi-produkti",
+    "meta": "Shop",
+    "title": "Visi produkti",
+    "description": "Atklājiet skaistus un unikālus rokdarbus, kas radīti ar mīlestību un rūpību! Izvēlieties no plaša klāsta ar rokām darinātu izstrādājumu, kas piepildīs jūsu mājokli ar siltumu un individualitāti. Katrs priekšmets ir īpašs – radīts, lai priecētu un iedvesmotu. Atrodiet savu ideālo darinājumu jau šodien!",
+    "toHome": "Uz galveno lapu",
+    "select": {
+      "label": "Kārtot pēc",
+      "options": [
+        {
+          "label": "Jaunākā",
+          "value": "createdAt-desc"
+        },
+        {
+          "label": "Vecākā",
+          "value": "createdAt-asc"
+        },
+        {
+          "label": "Cena (uz augšu)",
+          "value": "price-asc"
+        },
+        {
+          "label": "Cena (uz leju)",
+          "value": "price-desc"
+        }
+      ]
+    },
+    "noProductsMessage": "Šajā kategorijā nav pieejamu produktu.",
+    "addToCartBtn": "Pievienot grozam",
+    "categories": {
+      "title": "Produktu Kategorijas",
+      "shortTitle": "Kategorijas",
+      "footerTitle": "Rokdarbu izstrādājumi"
+    }
   }
 }

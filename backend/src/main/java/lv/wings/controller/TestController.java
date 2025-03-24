@@ -3,12 +3,13 @@ package lv.wings.controller;
 import java.util.Locale;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lv.wings.repo.IEventRepo;
-import lv.wings.repo.ITestRepo;
+
+import lv.wings.repo.TestRepository;
 
 @Getter
 class TestClass {
@@ -17,16 +18,16 @@ class TestClass {
     String FIELD = "FIELD";
 }
 
+
 @RestController
 @RequiredArgsConstructor
 public class TestController {
 
-    private final ITestRepo testRepo;
-    private final IEventRepo eventRepo;
+    private final TestRepository testRepo;
 
-    @GetMapping("/test")
-    public String test(Locale locale) {
-        System.out.println(locale);
+    @GetMapping("/test/{id}")
+    public String test(@PathVariable Integer id) {
+        System.out.println("IN CONTROLLER => " + id);
         return "IN TEST";
     }
 }

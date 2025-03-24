@@ -23,7 +23,7 @@
     },
     "shop": {
       "title": "Shop",
-      "href": "/en/shop"
+      "href": "/en/shop/categories"
     },
     "about": {
       "title": "About Us",
@@ -108,5 +108,55 @@
       { "label": "Address", "info": "Ventspils, Skolas iela 3" }
     ],
     "mapDescription": "Physical store location on the map"
+  },
+  "news": {
+    "title": "Latest News",
+    "description": "Learn about our latest projects, events, and craft exhibitions! Stay up to date with our news and discover unique handmade creations crafted with love and care. Join our activities and support women’s creativity and growth!",
+    "button": "Other news",
+    "postedOn": "Posted on",
+    "readMore": "Learn more",
+    "alt": "Event's image",
+    "error": "No any news to display at this time."
+  },
+  "newsItem": {
+    "startDate": "Start date",
+    "endDate": "End date",
+    "postedOn": "Posted on",
+    "location": "Location"
+  },
+  "shop": {
+    "allCategoryRedirect": "/en/shop/categories/0-all-produkts",
+    "meta": "Shop",
+    "title": "All products",
+    "description": "Discover beautiful and unique handmade crafts, created with love and care! Choose from a wide selection of handcrafted items that will fill your home with warmth and individuality. Each piece is special – made to bring joy and inspiration. Find your perfect creation today!",
+    "toHome": "To the main page",
+    "select": {
+      "label": "Sort by",
+      "options": [
+        {
+          "label": "Latest",
+          "value": "createdAt-desc"
+        },
+        {
+          "label": "Oldest",
+          "value": "createdAt-asc"
+        },
+        {
+          "label": "Price (low to high)",
+          "value": "price-asc"
+        },
+        {
+          "label": "Price (high to low)",
+          "value": "price-desc"
+        }
+      ]
+    },
+    "noProductsMessage": "There are no any available products for this category.",
+    "addToCartBtn": "Add to cart",
+    "categories": {
+      "title": "Product Categories",
+      "shortTitle": "Categories",
+      "footerTitle": "Handmade Products"
+    }
   }
 }
