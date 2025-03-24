@@ -208,7 +208,8 @@ public class SparniProjectApplication {
 							EventImage bilde2 = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
 							EventImageTranslation altEn2 =
 									EventImageTranslation.builder().alt("Some other good Image").image(bilde2).locale(LocaleCode.EN).build();
-							EventImageTranslation altLv2 = EventImageTranslation.builder().alt("Kada cita laba bilde").image(bilde2).locale(LocaleCode.LV).build();
+							EventImageTranslation altLv2 =
+									EventImageTranslation.builder().alt("Kada cita laba bilde").image(bilde2).locale(LocaleCode.LV).build();
 							bilde2.setTranslations(List.of(altEn2, altLv2));
 							bilde2.setCreatedBy(u1);
 							eventImageRepo.save(bilde2);

@@ -33,7 +33,7 @@ const ProductGrid = async ({ page, sort, direction, categoryId, lang }: Props) =
     <p className="text-center mt-20">{dict.noProductsMessage}</p>
   ) : (
     <>
-      <section className="grid grid-cols-3 gap-x-6 gap-y-12">
+      <section className="grid lg:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-6 gap-y-12">
         {products.map((product) => (
           <ProductCard key={product.id} product={product} lang={lang} dict={dict} />
         ))}

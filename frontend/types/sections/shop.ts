@@ -27,6 +27,11 @@ export type ShopDict = {
   select: SelectOptions;
   noProductsMessage: string;
   addToCartBtn: string;
+  categories: {
+    title: string;
+    shortTitle: string;
+    footerTitle: string;
+  };
 };
 
 export type ShortProductTranslationDto = {
@@ -39,4 +44,15 @@ export type ShortProductDto = {
   amount: number;
   images: Image[];
   translation: ShortProductTranslationDto;
+};
+
+export type CategoryLi = {
+  id: number | null;
+  title: string;
+  productsTotal: number;
+};
+
+export type CategoriesDict = {
+  title: string;
+  footerTitle: string;
 };

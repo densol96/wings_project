@@ -11,11 +11,10 @@ type Props = {
   children?: React.ReactNode;
   currentPage: number;
   totalPages: number;
+  maxVisible?: number;
 };
 
-const maxVisible = 5;
-
-const Pagination = ({ className, children, currentPage, totalPages }: Props) => {
+const Pagination = ({ className, children, currentPage, totalPages, maxVisible = 5 }: Props) => {
   const getPages = useCallback(() => {
     let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
     let end = Math.min(totalPages, start + maxVisible - 1);
@@ -23,7 +22,7 @@ const Pagination = ({ className, children, currentPage, totalPages }: Props) => 
       start = Math.max(1, end - maxVisible + 1);
     }
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }, [currentPage]);
+  }, [currentPage, maxVisible]);
 
   currentPage = currentPage > 1 ? currentPage : 1;
 

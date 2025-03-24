@@ -23,7 +23,7 @@
     },
     "shop": {
       "title": "Shop",
-      "href": "/en/shop/categories/0-all-products"
+      "href": "/en/shop/categories"
     },
     "about": {
       "title": "About Us",
@@ -125,11 +125,11 @@
     "location": "Location"
   },
   "shop": {
+    "allCategoryRedirect": "/en/shop/categories/0-all-produkts",
     "meta": "Shop",
     "title": "All products",
     "description": "Discover beautiful and unique handmade crafts, created with love and care! Choose from a wide selection of handcrafted items that will fill your home with warmth and individuality. Each piece is special – made to bring joy and inspiration. Find your perfect creation today!",
     "toHome": "To the main page",
-    "categoryListTitle": "Product Categories",
     "select": {
       "label": "Sort by",
       "options": [
@@ -152,6 +152,11 @@
       ]
     },
     "noProductsMessage": "There are no any available products for this category.",
-    "addToCartBtn": "Add to cart"
+    "addToCartBtn": "Add to cart",
+    "categories": {
+      "title": "Product Categories",
+      "shortTitle": "Categories",
+      "footerTitle": "Handmade Products"
+    }
   }
 }

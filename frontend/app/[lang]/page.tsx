@@ -8,9 +8,6 @@ import { getDictionary } from "@/dictionaries/dictionaries";
 
 import lineOne from "@/public/line_1.png";
 
-import { twMerge } from "tailwind-merge";
-import { cn } from "@/utils";
-
 const Home = async function ({ params: { lang } }: PageProps) {
   const dict = await getDictionary(lang);
   const homeDictionary: HomeContent = dict.home;

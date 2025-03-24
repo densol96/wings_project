@@ -42,10 +42,7 @@ const NavBar: React.FC<Props> = ({ isExpanded, headerDictionary }) => {
           const isAnIndexPage = ["/", "/en"].includes(item.href);
           return (
             <li key={item.title}>
-              <Link
-                className={(isAnIndexPage ? item.href == pathname : pathname.startsWith(item.href)) ? active : def}
-                href={item.href}
-              >
+              <Link className={(isAnIndexPage ? item.href == pathname : pathname.startsWith(item.href)) ? active : def} href={item.href}>
                 {item.title}
               </Link>
             </li>
