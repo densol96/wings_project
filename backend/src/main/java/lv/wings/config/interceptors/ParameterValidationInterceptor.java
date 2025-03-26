@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lv.wings.annotation.AllowedSortFields;
 import lv.wings.exception.validation.InvalidQueryParameterException;
+import lv.wings.util.CustomValidator;
 
 @Component
 public class ParameterValidationInterceptor implements HandlerInterceptor {
@@ -28,45 +29,17 @@ public class ParameterValidationInterceptor implements HandlerInterceptor {
 
         // validate an ID PathVariable
         String id = uriVariables != null ? uriVariables.get("id") : null;
-        shouldBeGreaterThanZero("id", id);
+        CustomValidator.shouldBeGreaterThanZero("id", id);
 
         // Validate pagination parameters
-        shouldBeGreaterThanZero("page", request.getParameter("page"));
-        shouldBeGreaterThanZero("size", request.getParameter("size"));
+        CustomValidator.shouldBeGreaterThanZero("page", request.getParameter("page"));
+        CustomValidator.shouldBeGreaterThanZero("size", request.getParameter("size"));
 
         // // Validate sorting parameters
-        validateAgainstAllowedValues("direction", request.getParameter("direction"), List.of("asc", "desc"));
-        validateAgainstAllowedValues("sort", request.getParameter("sort"), extractAllowedValuesFromAnnotation(handler));
+        CustomValidator.validateAgainstAllowedValues("direction", request.getParameter("direction"), List.of("asc", "desc"));
+        CustomValidator.validateAgainstAllowedValues("sort", request.getParameter("sort"),
+                CustomValidator.extractAllowedValuesFromAnnotation(handler));
 
         return true;
-    }
-
-    private List<String> extractAllowedValuesFromAnnotation(Object handler) {
-        if (handler instanceof HandlerMethod) {
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
-            AllowedSortFields allowedSortFields = handlerMethod.getMethodAnnotation(AllowedSortFields.class);
-            if (allowedSortFields != null)
-                return Arrays.asList(allowedSortFields.value());
-        }
-        return List.of();
-    }
-
-    private void shouldBeGreaterThanZero(String paramName, String paramValue) {
-        if (paramValue != null) {
-            var exception = new InvalidQueryParameterException(paramName, paramValue, true);
-            try {
-                int value = Integer.parseInt(paramValue);
-                if (value <= 0)
-                    throw exception;
-            } catch (NumberFormatException e) {
-                throw exception;
-            }
-        }
-    }
-
-    private void validateAgainstAllowedValues(String paramName, String paramValue, List<String> allowedValues) {
-        if (paramValue != null && allowedValues.stream().noneMatch(value -> value.equalsIgnoreCase(paramValue))) {
-            throw new InvalidQueryParameterException(paramName, paramValue, true);
-        }
     }
 }
