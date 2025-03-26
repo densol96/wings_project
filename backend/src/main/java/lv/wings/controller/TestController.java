@@ -25,9 +25,9 @@ public class TestController {
 
     private final TestRepository testRepo;
 
-    @GetMapping("/test/{id}")
-    public String test(@PathVariable Integer id) {
-        System.out.println("IN CONTROLLER => " + id);
-        return "IN TEST";
+    @GetMapping("/test")
+    public String test() {
+        throw new RuntimeException("HELLO");
+        // return "IN TEST";
     }
 }

@@ -37,6 +37,7 @@ public abstract class AbstractCRUDService<T, ID> implements CRUDService<T, ID> {
 
     @Override
     public T findById(ID id) {
+        System.out.println("I RUN!");
         return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(entityNameKey, entityName, id));
     }
 

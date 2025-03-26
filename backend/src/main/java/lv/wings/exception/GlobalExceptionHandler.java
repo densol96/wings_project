@@ -83,7 +83,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BasicErrorDto> handleUnexpectedException(Exception e) {
         log.error("*** Unexpected exception of type {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        e.printStackTrace();
+        // e.printStackTrace();
         return handleProceduralException(e);
     }
 
