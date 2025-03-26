@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -23,21 +24,28 @@ import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 
 import lv.wings.enums.LocaleCode;
+import lv.wings.model.entity.Color;
 import lv.wings.model.entity.Event;
 import lv.wings.model.entity.EventCategory;
 import lv.wings.model.entity.EventImage;
+import lv.wings.model.entity.Material;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductCategory;
 import lv.wings.model.entity.ProductImage;
+import lv.wings.model.entity.ProductMaterial;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
+import lv.wings.model.translation.ColorTranslation;
 import lv.wings.model.translation.EventCategoryTranslation;
 import lv.wings.model.translation.EventImageTranslation;
 import lv.wings.model.translation.EventTranslation;
+import lv.wings.model.translation.MaterialTranslation;
 import lv.wings.model.translation.ProductCategoryTranslation;
 import lv.wings.model.translation.ProductImageTranslation;
 import lv.wings.model.translation.ProductTranslation;
 import lv.wings.repo.EventRepository;
+import lv.wings.repo.MaterialRepository;
+import lv.wings.repo.ColorRepository;
 import lv.wings.repo.CustomerRepository;
 import lv.wings.repo.DeliveryTypeRepository;
 import lv.wings.repo.EventCategoryRepository;
@@ -45,6 +53,7 @@ import lv.wings.repo.EventImageRepository;
 import lv.wings.repo.PaymentTypeRepository;
 import lv.wings.repo.ProductCategoryRepository;
 import lv.wings.repo.ProductImageRepository;
+import lv.wings.repo.ProductMaterialRepository;
 import lv.wings.repo.ProductRepository;
 import lv.wings.repo.PurchaseElementRepository;
 import lv.wings.repo.PurchaseRepository;
@@ -74,6 +83,9 @@ public class SparniProjectApplication {
 	// @Profile("seed")
 	// @Transactional
 	public CommandLineRunner sparniDB(
+			ColorRepository colorRepo,
+			ProductMaterialRepository productMaterialRepo,
+			MaterialRepository materialRepo,
 			CustomerRepository customerRepo,
 			PurchaseRepository purchaseRepo,
 			DeliveryTypeRepository deliveryTypeRepo,
@@ -217,6 +229,65 @@ public class SparniProjectApplication {
 					}
 				}
 
+				// =============== EVERYTHING PRODUCT RELATED =========================
+				List<Color> colors = new ArrayList<>();
+
+				String[][] colorNames = {
+						{"Red", "Sarkans"},
+						{"Blue", "Zils"},
+						{"Green", "Zaļš"},
+						{"Yellow", "Dzeltens"},
+						{"Black", "Melns"},
+						{"White", "Balts"},
+						{"Orange", "Oranžs"},
+						{"Purple", "Violets"},
+						{"Pink", "Rozā"},
+						{"Gray", "Pelēks"}
+				};
+
+				for (String[] pair : colorNames) {
+					Color color = new Color();
+
+					ColorTranslation en = ColorTranslation.builder()
+							.color(color)
+							.locale(LocaleCode.EN)
+							.name(pair[0])
+							.build();
+
+					ColorTranslation lv = ColorTranslation.builder()
+							.color(color)
+							.locale(LocaleCode.LV)
+							.name(pair[1])
+							.build();
+
+					color.setTranslations(List.of(en, lv));
+					color.setCreatedBy(u1);
+
+					colors.add(color);
+				}
+
+				colorRepo.saveAll(colors);
+
+				// Materials
+				String[][] materialNames = {
+						{"Wool", "Vilna"},
+						{"Cotton", "Kokvilna"},
+						{"Linen", "Lins"},
+						{"Silk", "Zīds"}
+				};
+				List<Material> materials = new ArrayList<>();
+
+				for (String[] mTranslations : materialNames) {
+					Material m = new Material();
+					MaterialTranslation m_en = MaterialTranslation.builder().material(m).locale(LocaleCode.EN).name(mTranslations[0]).build();
+					MaterialTranslation m_lv = MaterialTranslation.builder().material(m).locale(LocaleCode.LV).name(mTranslations[1]).build();
+					m.setCreatedBy(u1);
+					m.setTranslations(Arrays.asList(m_en, m_lv));
+					materials.add(m);
+				}
+				materialRepo.saveAll(materials);
+
+
 				// KATEGORIJAS
 				ProductCategory categoryOne = new ProductCategory();
 				categoryOne.setCreatedBy(u1);
@@ -304,7 +375,14 @@ public class SparniProjectApplication {
 						.product(hat1)
 						.build();
 				hat1.setTranslations(List.of(hat1Lv, hat1En));
+				hat1.setColors(colors.subList(0, 3));
 				productRepo.save(hat1);
+
+				ProductMaterial pm1 = ProductMaterial.builder().product(hat1).material(materials.get(0)).percentage(50).build();
+				pm1.setCreatedBy(u1);
+				ProductMaterial pm2 = ProductMaterial.builder().product(hat1).material(materials.get(1)).percentage(50).build();
+				pm2.setCreatedBy(u1);
+				productMaterialRepo.saveAll(Arrays.asList(pm1, pm2));
 
 				Product hat2 = Product.builder().price(12.0).amount(5).category(categoryOne).build();
 				hat2.setCreatedBy(u1);
@@ -321,7 +399,14 @@ public class SparniProjectApplication {
 						.product(hat2)
 						.build();
 				hat2.setTranslations(List.of(hat2Lv, hat2En));
+				hat2.setColors(colors.subList(3, 5));
 				productRepo.save(hat2);
+
+				ProductMaterial pm3 = ProductMaterial.builder().product(hat2).material(materials.get(2)).percentage(70).build();
+				pm3.setCreatedBy(u1);
+				ProductMaterial pm4 = ProductMaterial.builder().product(hat2).material(materials.get(3)).percentage(30).build();
+				pm4.setCreatedBy(u1);
+				productMaterialRepo.saveAll(Arrays.asList(pm3, pm4));
 
 				Product hat3 = Product.builder().price(11.0).amount(0).category(categoryOne).build();
 				hat3.setCreatedBy(u1);
@@ -339,7 +424,13 @@ public class SparniProjectApplication {
 						.build();
 
 				hat3.setTranslations(List.of(hat3Lv, hat3En));
+				hat3.getColors().add(colors.get(6));
 				productRepo.save(hat3);
+
+				ProductMaterial pm5 = ProductMaterial.builder().product(hat2).material(materials.get(0)).percentage(100).build();
+				pm5.setCreatedBy(u1);
+				productMaterialRepo.save(pm5);
+
 
 				Product hat4 = Product.builder().price(13.0).amount(4).category(categoryOne).build();
 				hat4.setCreatedBy(u1);
