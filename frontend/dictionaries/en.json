@@ -39,38 +39,23 @@
     "description": "All rights reserved",
     "categories": [
       {
-        "title": "Association",
+        "title": "Customer service",
         "links": [
-          { "title": "Example", "href": "/" },
-          { "title": "Example", "href": "/" },
-          { "title": "Example", "href": "/" }
+          { "title": "Payment options", "href": "/" },
+          { "title": "Delivery", "href": "/" },
+          { "title": "Returns", "href": "/" }
         ]
       },
       {
-        "title": "Association",
-        "links": [
-          { "title": "Example", "href": "/" },
-          { "title": "Example", "href": "/" },
-          { "title": "Example", "href": "/" }
-        ]
-      },
-      {
-        "title": "Association",
-        "links": [
-          { "title": "Example", "href": "/" },
-          { "title": "Example", "href": "/" },
-          { "title": "Example", "href": "/" }
-        ]
-      },
-      {
-        "title": "Association",
-        "links": [
-          { "title": "Example", "href": "/" },
-          { "title": "Example", "href": "/" },
-          { "title": "Example", "href": "/" }
-        ]
+        "title": "Privacy & Terms",
+        "links": [{ "title": "Cookies policy", "href": "/en/cookies" }]
       }
-    ]
+    ],
+    "subscribeSection": {
+      "title": "Subscribe to newsletter",
+      "email": "Email address",
+      "subscribe": "Subscribe"
+    }
   },
   "home": {
     "title": "Association Wings",
