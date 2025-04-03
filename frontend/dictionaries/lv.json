@@ -38,38 +38,23 @@
     "description": "Visas tiesības aizsargātas",
     "categories": [
       {
-        "title": "Biedrība",
+        "title": "Klientu serviss",
         "links": [
-          { "title": "Piemers", "href": "/" },
-          { "title": "Piemers", "href": "/" },
-          { "title": "Piemers", "href": "/" }
+          { "title": "Apmaksas veidi", "href": "/" },
+          { "title": "Piegāde", "href": "/" },
+          { "title": "Atgriešana", "href": "/" }
         ]
       },
       {
-        "title": "Biedrība",
-        "links": [
-          { "title": "Piemers", "href": "/" },
-          { "title": "Piemers", "href": "/" },
-          { "title": "Piemers", "href": "/" }
-        ]
-      },
-      {
-        "title": "Biedrība",
-        "links": [
-          { "title": "Piemers", "href": "/" },
-          { "title": "Piemers", "href": "/" },
-          { "title": "Piemers", "href": "/" }
-        ]
-      },
-      {
-        "title": "Biedrība",
-        "links": [
-          { "title": "Piemers", "href": "/" },
-          { "title": "Piemers", "href": "/" },
-          { "title": "Piemers", "href": "/" }
-        ]
+        "title": "Privātums un noteikumi",
+        "links": [{ "title": "Sīkdatņu politika", "href": "/sikdatnes" }]
       }
-    ]
+    ],
+    "subscribeSection": {
+      "title": "Piesakies jaunumiem",
+      "email": "E-pasta adrese",
+      "subscribe": "Piesakies"
+    }
   },
   "home": {
     "title": "Biedrība spārni",

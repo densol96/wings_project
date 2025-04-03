@@ -5,4 +5,5 @@ export { default as Heading } from "./Heading";
 export { default as Button } from "./Button";
 export { default as MyImage } from "./MyImage";
 export { default as CloseBtn } from "./CloseBtn";
+export { default as Input } from "./Input";
 export * from "./icons";
