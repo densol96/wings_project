@@ -2,7 +2,6 @@ package lv.wings.mapper;
 
 import java.util.List;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import lv.wings.dto.response.ImageDto;
 import lv.wings.dto.response.event.EventTranslationDto;
@@ -21,9 +20,6 @@ public interface EventMapper {
 
     ShortEventDto eventToShortDto(Event event, ShortEventTranslationDto translation, ImageDto image);
 
-    @Mapping(target = "translation", source = "translation")
-    @Mapping(target = "category", source = "categoryTitle")
-    @Mapping(target = "images", source = "images")
-    SingleEventDto eventToFullDto(Event event, EventTranslationDto translation, List<ImageDto> images, String categoryTitle);
+    SingleEventDto eventToFullDto(Event event, EventTranslationDto translationDto, List<ImageDto> imageDtos, String categoryName);
 
 }

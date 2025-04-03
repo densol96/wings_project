@@ -7,3 +7,4 @@ export { default as slugify } from "./slugify";
 export { default as extractIdFromSlug } from "./extractIdFromSlug";
 export { default as formatPrice } from "./formatPrice";
 export { default as extractActiveSegment } from "./extractActiveSegment";
+export { default as capitalize } from "./capitalize";

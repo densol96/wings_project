@@ -16,7 +16,7 @@ export type PagePropsWithSlug = {
   };
 };
 
-export type Image = {
+export type ImageDto = {
   src: string;
   alt: string;
 };

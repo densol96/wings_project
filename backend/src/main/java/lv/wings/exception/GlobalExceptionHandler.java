@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.wings.dto.response.BasicErrorDto;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
-import lv.wings.exception.validation.InvalidQueryParameterException;
+import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.model.security.MyUser;
 import lv.wings.service.LocaleService;
 
@@ -33,11 +33,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BasicErrorDto> handleConversionError(MethodArgumentTypeMismatchException e) {
         log.error("*** Conversion error as MethodArgumentTypeMismatchException: {}.", e.getMessage());
         return handleInvalidQueryParameterException(
-                new InvalidQueryParameterException(e.getName(), e.getValue().toString(), false));
+                new InvalidParameterException(e.getName(), e.getValue().toString(), false));
     }
 
-    @ExceptionHandler(InvalidQueryParameterException.class)
-    public ResponseEntity<BasicErrorDto> handleInvalidQueryParameterException(InvalidQueryParameterException e) {
+    @ExceptionHandler(InvalidParameterException.class)
+    public ResponseEntity<BasicErrorDto> handleInvalidQueryParameterException(InvalidParameterException e) {
         if (e.getFromInterceptor()) {
             log.error("*** Interceptor detected InvalidQueryParameterException: {}", e.getMessage());
         } else {

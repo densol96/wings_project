@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-
+import lombok.NonNull;
 import lv.wings.dto.response.product_category.ProductCategoryDto;
 import lv.wings.dto.response.product_category.ProductCategoryWithAmountDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
@@ -18,7 +18,8 @@ import lv.wings.service.ProductCategoryService;
 import lv.wings.service.ProductService;
 
 @Service
-public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<ProductCategory, ProductCategoryTranslation, Integer> implements ProductCategoryService {
+public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<ProductCategory, ProductCategoryTranslation, Integer>
+		implements ProductCategoryService {
 
 	private final ProductService productService;
 	private final ProductCategoryMapper mapper;
@@ -49,14 +50,29 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 
 	@Override
 	public ShortProductCategoryDto getShortCategory(Integer id) {
-		ProductCategory category = findById(id);
+		return mapToShortDto(findById(id));
+	}
+
+
+	/**
+	 * This method is intended for cases where a ProductCategory entity is already loaded
+	 * in the current Hibernate session (e.g., by another service).
+	 *
+	 * It would be inefficient to use a method that accepts only an ID and re-fetches
+	 * the entity from the database unnecessarily.
+	 * 
+	 * Since this method is part of a public interface, the @NonNull annotation is used
+	 * to ensure that a NullPointerException is not thrown at runtime.
+	 */
+	@Override
+	public ShortProductCategoryDto mapToShortDto(@NonNull ProductCategory category) {
 		return mapper.translationToShortDto(category, getRightTranslation(category, ProductCategoryTranslation.class));
 	}
 
 	private ProductCategoryWithAmountDto getSpecialAllCategoryWithAmount() {
 		return ProductCategoryWithAmountDto.builder()
 				.id(0)
-				.title(localeService.getMessage("translation.all"))
+				.title(localeService.getMessage("translation.all-products"))
 				.productsTotal(productService.count())
 				.build();
 	}
@@ -64,6 +80,4 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 	private ProductCategoryWithAmountDto categoryToWithAmountDto(ProductCategory category) {
 		return mapper.toWithAmountDto(category, getRightTranslation(category, ProductCategoryTranslation.class));
 	}
-
-
 }

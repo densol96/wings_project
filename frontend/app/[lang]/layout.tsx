@@ -9,6 +9,7 @@ import { PageProps } from "@/types/common";
 
 import { Header, Footer } from "@/components/shared";
 import { notFound } from "next/navigation";
+import TestBtn from "./TestBtn";
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -60,6 +61,7 @@ const RootLayout = async ({ children, params: { lang } }: Props) => {
   return (
     <html lang={lang}>
       <body className={`${roboto.className} min-h-screen flex flex-col`}>
+        <TestBtn />
         <Header lang={lang} headerDictionary={dict.header} />
         <main className="relative flex-1">{children}</main>
         <Footer footerDictionary={dict.footer} />

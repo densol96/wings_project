@@ -21,44 +21,44 @@ import lv.wings.responses.ApiResponse;
 public class ImagesController {
 
     @Value("${upload.directory.events}")
-	private String uploadEventsDir;
+    private String uploadEventsDir;
 
     @Value("${upload.directory.products}")
-	private String uploadProductsDir;
+    private String uploadProductsDir;
 
 
-    @GetMapping("images/{picturePath}")
-    public ResponseEntity<?> getEventImage(@PathVariable String picturePath){
+    // @GetMapping("images/{picturePath}")
+    // public ResponseEntity<?> getEventImage(@PathVariable String picturePath){
 
-        try {
-            File imageFile1 = new File(uploadEventsDir + "/" + picturePath);
-            File imageFile2 = new File(uploadProductsDir + "/" + picturePath);
+    // try {
+    // File imageFile1 = new File(uploadEventsDir + "/" + picturePath);
+    // File imageFile2 = new File(uploadProductsDir + "/" + picturePath);
 
-            
-        
-             if (!imageFile1.exists() && !imageFile2.exists()){
-                ApiResponse<String> notFoundResponse = new ApiResponse<>("No picture found!", null);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundResponse);
-            } 
 
-            File existingFile = imageFile1.exists() ? imageFile1 : imageFile2;
-    
-            FileSystemResource fileSystemResource = new FileSystemResource(existingFile);
 
-            String contentType = URLConnection.guessContentTypeFromName(existingFile.getName());
-            if (contentType == null) {
-                contentType = "application/octet-stream";
-            }
-            
-            return ResponseEntity.ok()
-            .contentType(MediaType.valueOf(contentType))
-            .body(fileSystemResource);
-            
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(
-                new ApiResponse<>(e.getMessage(), null)
-            );
-        }
-       
-    }
+    // if (!imageFile1.exists() && !imageFile2.exists()){
+    // ApiResponse<String> notFoundResponse = new ApiResponse<>("No picture found!", null);
+    // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(notFoundResponse);
+    // }
+
+    // File existingFile = imageFile1.exists() ? imageFile1 : imageFile2;
+
+    // FileSystemResource fileSystemResource = new FileSystemResource(existingFile);
+
+    // String contentType = URLConnection.guessContentTypeFromName(existingFile.getName());
+    // if (contentType == null) {
+    // contentType = "application/octet-stream";
+    // }
+
+    // return ResponseEntity.ok()
+    // .contentType(MediaType.valueOf(contentType))
+    // .body(fileSystemResource);
+
+    // } catch (Exception e) {
+    // return ResponseEntity.internalServerError().body(
+    // new ApiResponse<>(e.getMessage(), null)
+    // );
+    // }
+
+    // }
 }

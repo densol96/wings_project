@@ -1,10 +1,13 @@
 package lv.wings.mapper;
 
 import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
+import lv.wings.dto.response.product.ProductMaterialDto;
 import lv.wings.dto.response.product.ProductTranslationDto;
 import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.dto.response.product.ShortProductTranslationDto;
@@ -19,11 +22,13 @@ public interface ProductMapper {
     ShortProductTranslationDto toShortTranslationDto(ProductTranslation translated);
 
     @Mapping(target = "id", source = "product.id")
-    @Mapping(target = "images", source = "images")
-    ShortProductDto toShortDto(Product product, ProductTranslation translation, List<ImageDto> images);
+    ShortProductDto toShortDto(Product product, ProductTranslation translationDto, List<ImageDto> imageDtos);
 
     @Mapping(target = "id", source = "product.id")
-    @Mapping(target = "images", source = "images")
-    @Mapping(target = "category", source = "category")
-    ProductDto toDto(Product product, ProductTranslation translation, List<ImageDto> images, ShortProductCategoryDto category);
+    ProductDto toDto(Product product,
+            ProductTranslation translationDto,
+            ShortProductCategoryDto categoryDto,
+            List<ImageDto> imageDtos,
+            List<ColorDto> colorDtos,
+            List<ProductMaterialDto> materialDtos);
 }

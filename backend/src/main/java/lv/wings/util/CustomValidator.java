@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.springframework.web.method.HandlerMethod;
 import lv.wings.annotation.AllowedSortFields;
-import lv.wings.exception.validation.InvalidQueryParameterException;
+import lv.wings.exception.validation.InvalidIdException;
+import lv.wings.exception.validation.InvalidParameterException;
 
 public class CustomValidator {
 
@@ -20,7 +21,7 @@ public class CustomValidator {
 
     public static void shouldBeGreaterThanZero(String paramName, String paramValue) {
         if (paramValue != null) {
-            var exception = new InvalidQueryParameterException(paramName, paramValue, true);
+            var exception = new InvalidParameterException(paramName, paramValue, true);
             try {
                 int value = Integer.parseInt(paramValue);
                 if (value <= 0)
@@ -33,7 +34,16 @@ public class CustomValidator {
 
     public static void validateAgainstAllowedValues(String paramName, String paramValue, List<String> allowedValues) {
         if (paramValue != null && allowedValues.stream().noneMatch(value -> value.equalsIgnoreCase(paramValue))) {
-            throw new InvalidQueryParameterException(paramName, paramValue, true);
+            throw new InvalidParameterException(paramName, paramValue, true);
         }
+    }
+
+    public static void isValidId(String idName, Integer idValue) {
+        if (idValue == null || idValue < 1)
+            throw new InvalidIdException(idName, idValue);
+    }
+
+    public static void isValidId(Integer id) {
+        isValidId("id", id);
     }
 }

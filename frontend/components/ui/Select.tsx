@@ -9,9 +9,10 @@ type Props = {
   className?: string;
   optionClassName?: string;
   selectDict: SelectOptions;
+  activeValue: string;
 };
 
-const Select = ({ className, optionClassName, selectDict }: Props) => {
+const Select = ({ className, optionClassName, selectDict, activeValue }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -30,7 +31,7 @@ const Select = ({ className, optionClassName, selectDict }: Props) => {
       <label className="normal-case" htmlFor="sortProductBy">
         {selectDict.label}
       </label>
-      <select onChange={onChange} id="sortProductBy" className={cn("border-1 border-gray-300 py-1", className)}>
+      <select value={activeValue} onChange={onChange} id="sortProductBy" className={cn("border-1 border-gray-300 py-1", className)}>
         {selectDict.options.map((opt) => (
           <option key={opt.label + "_" + opt.value} className={cn("text-center", optionClassName)} value={opt.value}>
             {opt.label}

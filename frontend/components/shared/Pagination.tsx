@@ -55,8 +55,12 @@ const Pagination = ({ className, children, currentPage, totalPages, maxVisible =
         {getPages().map((page) => {
           return (
             <button
+              disabled={currentPage === page}
               onClick={() => setPage(page)}
-              className={cn("border-2 border-primary-bright rounded-full w-10 h-10", page === currentPage && "bg-primary-bright text-gray-50")}
+              className={cn(
+                "border-2 border-primary-bright rounded-full w-10 h-10 hover:bg-primary-bright hover:text-gray-50 transition duration-200",
+                page === currentPage && "bg-primary-bright text-gray-50"
+              )}
             >
               {page}
             </button>
