@@ -9,14 +9,14 @@ export type ShortNewsItem = {
 
 export type SingleNewsItem = {
   id: number;
-  images: Image[];
-  translation: ShortContent & {
+  imageDtos: Image[];
+  translationDto: ShortContent & {
     location: string;
   };
   createdAt: Date;
   startDate: Date;
   endDate: Date;
-  category: string;
+  categoryName: string;
 };
 
 export type NewsDictionaryType = {

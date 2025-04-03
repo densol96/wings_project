@@ -1,4 +1,4 @@
-import { Image, SortDirection } from "@/types";
+import { ImageDto, PagePropsWithSlug, SortDirection } from "@/types";
 
 export type ProductSort = "price" | "createdAt";
 
@@ -6,6 +6,10 @@ export type ProductSearchParams = {
   page: string | number;
   sort: ProductSort;
   direction: SortDirection;
+};
+
+export type ProductsPageProps = PagePropsWithSlug & {
+  searchParams: ProductSearchParams;
 };
 
 export type SortOption = {
@@ -38,12 +42,44 @@ export type ShortProductTranslationDto = {
   title: string;
 };
 
+export type ProductTranslationDto = ShortProductTranslationDto & {
+  description: string;
+};
+
 export type ShortProductDto = {
   id: number;
   price: number;
   amount: number;
-  images: Image[];
-  translation: ShortProductTranslationDto;
+  imageDtos: ImageDto[];
+  translationDto: ShortProductTranslationDto;
+};
+
+export type ShortProductCategoryDto = {
+  id: number;
+  title: string;
+};
+
+export type ColorDto = {
+  id: number;
+  name: string;
+};
+
+export type MaterialDto = ColorDto;
+
+export type ProductMaterialDto = {
+  material: MaterialDto;
+  percentage: number;
+};
+
+export type ProductDto = {
+  id: number;
+  price: number;
+  amount: number;
+  translationDto: ProductTranslationDto;
+  categoryDto: ShortProductCategoryDto;
+  imageDtos: ImageDto[];
+  colorDtos: ColorDto[];
+  materialDtos: ProductMaterialDto[];
 };
 
 export type CategoryLi = {
@@ -55,4 +91,15 @@ export type CategoryLi = {
 export type CategoriesDict = {
   title: string;
   footerTitle: string;
+};
+
+export type ProductDict = {
+  toHome: string;
+  isAvailable: string;
+  isNotAvailable: string;
+  addToCart: string;
+  additionalInformation: string;
+  color: string;
+  material: string;
+  invalidAmount: string;
 };

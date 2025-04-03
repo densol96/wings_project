@@ -33,7 +33,7 @@ const LangSelectMenu = ({ lang }: Props) => {
     Navigating using the router from next/naviagtion does not work properly. 
     Therefore, am doing a hard page refresh on that page only.
     */
-    if (pathname.includes("/news/") || pathname.includes("/jaunumi/")) {
+    if (pathname.includes("/news/") || pathname.includes("/jaunumi/") || pathname.includes("/shop/products/") || pathname.includes("/veikals/produkti/")) {
       window.location.href = assembleNewUrl("/" + e.target.value);
     } else {
       setSelectedLang(e.target.value as Locales);

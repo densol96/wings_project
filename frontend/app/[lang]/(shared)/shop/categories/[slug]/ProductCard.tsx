@@ -1,6 +1,6 @@
 import React from "react";
 import { ShopDict, ShortProductDto } from "@/types/sections/shop";
-import { cn, formatPrice } from "@/utils";
+import { cn, formatPrice, slugify } from "@/utils";
 import { MyImage } from "@/components";
 import { Locale } from "@/types";
 import Link from "next/link";
@@ -14,14 +14,15 @@ type Props = {
 };
 
 const ProductCard = ({ className, product, lang, dict }: Props) => {
-  const imagesTotal = product.images?.length || 0;
+  const imagesTotal = product.imageDtos?.length || 0;
+  const href = `/${lang}/shop/products/${product.id}-${slugify(product.translationDto?.title)}`;
 
   return (
     <article className={cn("shadow-2xl pb-8", className)}>
-      <Link href={`/shop/products/${product.id}`} className="min-h-[250px] relative block">
+      <Link href={href} className="min-h-[250px] relative block">
         {/* Should be 2 coming from the backend, but front-end logic will handle if less as well */}
         {imagesTotal === 0 && <MyImage />}
-        {product.images.map(
+        {product.imageDtos.map(
           (img, i) =>
             i < 2 && (
               <MyImage
@@ -40,8 +41,8 @@ const ProductCard = ({ className, product, lang, dict }: Props) => {
         )}
       </Link>
       <div className="px-6">
-        <Link className="text-gray-500 hover:underline mt-6 block" href={`/shop/products/${product.id}`}>
-          {product.translation.title}
+        <Link className="text-gray-500 hover:underline mt-6 block" href={href}>
+          {product.translationDto.title}
         </Link>
         <p className="text-sm font-bold">{formatPrice(product.price)}</p>
         <p className="flex justify-center mt-4">

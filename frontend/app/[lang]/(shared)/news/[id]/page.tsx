@@ -27,18 +27,18 @@ export default async function Page({ params: { id, lang } }: PagePropsWithId) {
   return (
     <div className="md:block flex md:flex-row flex-col">
       <div className="min-h-[400px] relative overflow-hidden rounded-md shadow-lg lg:w-[50%] lg:float-right lg:ml-16 my-10 w-full">
-        {event.images.length <= 0 ? <MyImage lang={lang} /> : <Gallery images={event.images} />}
-        {event.images.length > 1 && (
+        {event.imageDtos.length <= 0 ? <MyImage lang={lang} /> : <Gallery images={event.imageDtos} />}
+        {event.imageDtos.length > 1 && (
           <span className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 bg-slate-100 rounded-lg opacity-60 font-bold text-xl group-hover:opacity-90 transition-opacity">
-            {`1/${event.images.length}`}
+            {`1/${event.imageDtos.length}`}
           </span>
         )}
       </div>
       <article className="flex-col items-start gap-2">
         <div className="lg:block sm:flex flex-row block justify-between items-center">
           <header>
-            {event.category && <p className="font-bold uppercase text-primary-bright tracking-wider">{event.category}</p>}
-            <Heading size="xl">{event.translation.title}</Heading>
+            {event.categoryName && <p className="font-bold uppercase text-primary-bright tracking-wider">{event.category}</p>}
+            <Heading size="xl">{event.translationDto.title}</Heading>
           </header>
           <div className="mb-6 flex gap-8 lg:mb-8">
             <div className="flex flex-col gap-2">
@@ -53,32 +53,34 @@ export default async function Page({ params: { id, lang } }: PagePropsWithId) {
               <span className="font-medium">{dict.postedOn}:</span>
               <span className="text-gray-500">{formatDate(event.createdAt)}</span>
             </div>
-            {event.translation.location && (
+            {event.translationDto.location && (
               <div className="flex flex-col gap-2">
                 <span className="font-medium">{dict.location}:</span>
-                <span className="text-gray-500">{event.translation.location}</span>
+                <span className="text-gray-500">{event.translationDto.location}</span>
               </div>
             )}
           </div>
         </div>
 
-        <div className="mb-8 mt-8 h-px lg:w-[45%] w-full bg-gray-400 opacity-50"></div>
+        <div className="mb-8 mt-8 h-[0.3px] lg:w-[45%] w-full bg-gray-700 opacity-50"></div>
         <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Exercitationem quae atque, ut aliquid impedit obcaecati. In dolore impedit omnis. Expedita eius
-          cupiditate amet voluptate, nostrum facilis numquam repellendus suscipit corporis. Delectus suscipit rem, dolores est quaerat quo optio nam quia quam eum tempora
-          neque assumenda eligendi. Animi ut blanditiis aliquam totam veniam, ipsa reprehenderit deserunt ullam. Nihil saepe voluptatibus qui? Enim quam natus odit
-          ratione, ipsa placeat totam accusamus quod blanditiis dignissimos aliquam dolores officiis rerum neque commodi, quaerat dolore eligendi asperiores incidunt
-          numquam minus. Distinctio esse quos commodi minima. Alias aut voluptate quidem possimus voluptas, harum accusantium quae pariatur, itaque id voluptatibus
-          officiis quasi eius quod et eligendi vitae, autem sequi soluta quas. Quam nulla alias harum ipsam voluptates. Eveniet neque, tenetur voluptas accusamus quae
-          laudantium cumque libero minima esse quos iste nihil quis non nemo provident necessitatibus asperiores eum iure adipisci doloribus! Cupiditate voluptatum
-          dignissimos maxime enim sed! Enim quae voluptates dicta vitae asperiores totam quos ipsam earum eaque tenetur labore voluptatum quidem in repudiandae fugit ad a
-          nisi corrupti unde voluptatibus quibusdam, ex dolore voluptate architecto! Nobis. Sapiente illo id animi ipsam voluptatibus distinctio architecto voluptates!
-          Recusandae necessitatibus consequatur porro iste earum ut nam, maiores ullam labore veritatis perferendis, assumenda harum perspiciatis cupiditate voluptate
-          esse laboriosam delectus. Animi, voluptates magnam, odit unde at corrupti delectus asperiores ipsum vel nisi in a aliquam, sed enim! Consectetur temporibus
-          nihil tempore veritatis eaque dignissimos, magnam, molestias quis amet repellendus non? Vitae alias rerum iusto quibusdam dolore accusantium blanditiis, rem
-          velit, ratione sint nesciunt ipsum optio nostrum officiis maxime recusandae. Quaerat quas possimus non ducimus perspiciatis quisquam dolores asperiores,
-          officiis voluptatum. Alias itaque magni nihil architecto qui cumque minima quod facilis praesentium dolore optio porro accusantium quasi saepe impedit nobis
-          sint veritatis, quam ex voluptatem nemo. Delectus suscipit nulla illo consequuntur?
+          {event.translationDto.description}
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Exercitationem quae atque, ut aliquid impedit obcaecati. In dolore impedit omnis. Expedita
+          eius cupiditate amet voluptate, nostrum facilis numquam repellendus suscipit corporis. Delectus suscipit rem, dolores est quaerat quo optio nam quia
+          quam eum tempora neque assumenda eligendi. Animi ut blanditiis aliquam totam veniam, ipsa reprehenderit deserunt ullam. Nihil saepe voluptatibus qui?
+          Enim quam natus odit ratione, ipsa placeat totam accusamus quod blanditiis dignissimos aliquam dolores officiis rerum neque commodi, quaerat dolore
+          eligendi asperiores incidunt numquam minus. Distinctio esse quos commodi minima. Alias aut voluptate quidem possimus voluptas, harum accusantium quae
+          pariatur, itaque id voluptatibus officiis quasi eius quod et eligendi vitae, autem sequi soluta quas. Quam nulla alias harum ipsam voluptates. Eveniet
+          neque, tenetur voluptas accusamus quae laudantium cumque libero minima esse quos iste nihil quis non nemo provident necessitatibus asperiores eum iure
+          adipisci doloribus! Cupiditate voluptatum dignissimos maxime enim sed! Enim quae voluptates dicta vitae asperiores totam quos ipsam earum eaque
+          tenetur labore voluptatum quidem in repudiandae fugit ad a nisi corrupti unde voluptatibus quibusdam, ex dolore voluptate architecto! Nobis. Sapiente
+          illo id animi ipsam voluptatibus distinctio architecto voluptates! Recusandae necessitatibus consequatur porro iste earum ut nam, maiores ullam labore
+          veritatis perferendis, assumenda harum perspiciatis cupiditate voluptate esse laboriosam delectus. Animi, voluptates magnam, odit unde at corrupti
+          delectus asperiores ipsum vel nisi in a aliquam, sed enim! Consectetur temporibus nihil tempore veritatis eaque dignissimos, magnam, molestias quis
+          amet repellendus non? Vitae alias rerum iusto quibusdam dolore accusantium blanditiis, rem velit, ratione sint nesciunt ipsum optio nostrum officiis
+          maxime recusandae. Quaerat quas possimus non ducimus perspiciatis quisquam dolores asperiores, officiis voluptatum. Alias itaque magni nihil
+          architecto qui cumque minima quod facilis praesentium dolore optio porro accusantium quasi saepe impedit nobis sint veritatis, quam ex voluptatem
+          nemo. Delectus suscipit nulla illo consequuntur?
         </p>
       </article>
     </div>

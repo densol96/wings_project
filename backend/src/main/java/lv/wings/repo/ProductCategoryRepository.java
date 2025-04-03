@@ -6,6 +6,4 @@ import lv.wings.model.entity.ProductCategory;
 
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory, Integer> {
 
-	// ProductCategory findByTitleAndDescription(String title, String description);
-
 }

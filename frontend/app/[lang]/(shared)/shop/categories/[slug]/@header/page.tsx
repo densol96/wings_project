@@ -1,25 +1,21 @@
 import Select from "@/components/ui/Select";
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { PagePropsWithSlug } from "@/types";
-import { ShopDict } from "@/types/sections/shop";
+import { ProductsPageProps, ShopDict } from "@/types/sections/shop";
 import { extractIdFromSlug, fetcher, slugify } from "@/utils";
 import unslugify from "@/utils/unslugify";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 import ToggleCategoriesSidebar from "../ToggleCategoriesSidebar";
-
-type Props = {
-  className?: string;
-  children?: React.ReactNode;
-};
+import syncSlug from "@/utils/syncSlug";
 
 type ActiveCategory = {
   title: string;
   description: string;
 };
 
-const Header = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
+const Header = async ({ params: { lang, slug }, searchParams: { sort, direction } }: ProductsPageProps) => {
   const dict: ShopDict = (await getDictionary(lang)).shop;
   const categoryId = extractIdFromSlug(slug);
   const activeCategory: ActiveCategory =
@@ -27,9 +23,7 @@ const Header = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
       ? await fetcher(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/product-categories/${categoryId}?lang=${lang}`, [404, 400])
       : { title: dict.title, description: dict.description };
 
-  // If locale was changes, f.e. from /en/*/1-hats to /lv/*/hats-1 we get a localised activeCategory(cepures) and we can change the displayed url to /lv/*/1-cepures
-  const newLocalisedSlug = `${categoryId}-${slugify(activeCategory.title)}`;
-  if (newLocalisedSlug !== slug) redirect(newLocalisedSlug);
+  syncSlug(categoryId, activeCategory.title, slug);
 
   return (
     <>
@@ -43,7 +37,7 @@ const Header = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
         </div>
         <div className="flex justify-between flex-row items-center sm:mt-0 mt-4">
           <ToggleCategoriesSidebar title={dict.categories.shortTitle} />
-          <Select selectDict={dict.select} />
+          <Select activeValue={`${sort}-${direction}`} selectDict={dict.select} />
         </div>
       </div>
       <p>{activeCategory.description}</p>

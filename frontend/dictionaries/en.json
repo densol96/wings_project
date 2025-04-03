@@ -23,7 +23,7 @@
     },
     "shop": {
       "title": "Shop",
-      "href": "/en/shop/categories"
+      "href": "/en/shop"
     },
     "about": {
       "title": "About Us",
@@ -158,5 +158,15 @@
       "shortTitle": "Categories",
       "footerTitle": "Handmade Products"
     }
+  },
+  "product": {
+    "toHome": "To the main page",
+    "isAvailable": "In stock - %%AMOUNT%% available",
+    "isNotAvailable": "Out of stock",
+    "addToCart": "Add to basket",
+    "additionalInformation": "Additional information",
+    "color": "Color",
+    "material": "Material",
+    "invalidAmount": "Enter a valid amount!"
   }
 }

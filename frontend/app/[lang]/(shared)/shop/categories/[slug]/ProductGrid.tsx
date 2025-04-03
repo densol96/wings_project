@@ -1,5 +1,5 @@
 import { getDictionary } from "@/dictionaries/dictionaries";
-import { Image, Lang, PageableResponse } from "@/types";
+import { Lang, PageableResponse } from "@/types";
 import { ProductSearchParams, ShopDict, ShortProductDto } from "@/types/sections/shop";
 import { fetcher, parsePageableResponse } from "@/utils";
 import React from "react";

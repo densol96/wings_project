@@ -82,8 +82,24 @@ const nextConfig = {
         permanent: true,
       },
       {
-        source: "/lv/shop/categories/:slug",
+        source: "/lv/shop/categories/:slug*",
         destination: "/veikals/kategorijas/:slug*",
+        permanent: true,
+      },
+      // PRODUCT
+      {
+        source: "/en/veikals/produkti/:slug*",
+        destination: "/en/shop/products/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/shop/products/:slug*",
+        destination: "/en/shop/products/:slug*",
+        permanent: true,
+      },
+      {
+        source: "/lv/shop/products/:slug*",
+        destination: "/veikals/produkti/:slug*",
         permanent: true,
       },
     ];
@@ -105,12 +121,20 @@ const nextConfig = {
         destination: "/lv/news",
       },
       {
+        source: "/lv/jaunumi/:slug*",
+        destination: "/lv/news/:slug*",
+      },
+      {
         source: "/lv/veikals/kategorijas/:slug*",
         destination: "/lv/shop/categories/:slug*",
       },
       {
-        source: "/lv/jaunumi/:slug*",
-        destination: "/lv/news/:slug*",
+        source: "/lv/veikals/produkti/:slug*",
+        destination: "/lv/shop/products/:slug*",
+      },
+      {
+        source: "/lv/veikals",
+        destination: "/lv/shop",
       },
     ];
   },

@@ -15,7 +15,7 @@ public class SingleEventDto {
     private LocalDateTime createdAt;
     private LocalDate startDate;
     private LocalDate endDate;
-    private EventTranslationDto translation;
-    private List<ImageDto> images;
-    private String category;
+    private EventTranslationDto translationDto;
+    private List<ImageDto> imageDtos;
+    private String categoryName;
 }

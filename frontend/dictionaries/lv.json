@@ -22,7 +22,7 @@
     },
     "shop": {
       "title": "Veikals",
-      "href": "/veikals/kategorijas"
+      "href": "/veikals"
     },
     "about": {
       "title": "Par Mums",
@@ -157,5 +157,15 @@
       "shortTitle": "Kategorijas",
       "footerTitle": "Rokdarbu izstrādājumi"
     }
+  },
+  "product": {
+    "toHome": "Uz galveno lapu",
+    "isAvailable": "Pieejams - %%AMOUNT%% gab.",
+    "isNotAvailable": "Nav noliktavā",
+    "addToCart": "Pievienot grozam",
+    "additionalInformation": "Papildu informācija",
+    "color": "Krāsa",
+    "material": "Materiāls",
+    "invalidAmount": "Ievadiet derīgu daudzumu!"
   }
 }

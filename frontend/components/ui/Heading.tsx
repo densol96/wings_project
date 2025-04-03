@@ -4,12 +4,13 @@ import React from "react";
 type Props = {
   className?: string;
   children: string;
-  size: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
-  as?: "h1" | "h2" | "h3" | "h4" | "h5";
+  size: "tiny" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
+  as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 };
 
 const Heading = ({ className, children, size = "xl", as = "h1" }: Props) => {
   const mapTagBySize = {
+    tiny: "h6",
     xs: "h5",
     sm: "h4",
     md: "h3",
@@ -19,6 +20,7 @@ const Heading = ({ className, children, size = "xl", as = "h1" }: Props) => {
   } as const;
 
   const mapClassNameBySize = {
+    tiny: "text-sm",
     xs: "text-lg",
     sm: "text-xl",
     md: "text-2xl",

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 
 @Builder
@@ -14,7 +15,9 @@ public class ProductDto {
     private Integer id;
     private Double price;
     private Integer amount;
-    private List<ImageDto> images;
-    private ProductTranslationDto translation;
-    private ShortProductCategoryDto category;
+    private ProductTranslationDto translationDto;
+    private ShortProductCategoryDto categoryDto;
+    private List<ImageDto> imageDtos;
+    private List<ColorDto> colorDtos;
+    private List<ProductMaterialDto> materialDtos;
 }

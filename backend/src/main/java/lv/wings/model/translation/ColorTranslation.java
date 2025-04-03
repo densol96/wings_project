@@ -18,6 +18,7 @@ import lv.wings.model.entity.Color;
 @NoArgsConstructor
 @Data
 public class ColorTranslation extends LocalableEntity<Color> {
+
     @Column(nullable = false, unique = true)
     String name;
 
