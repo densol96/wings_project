@@ -7,3 +7,4 @@ export { default as LangSelectMenu } from "./LangSelectMenu";
 export { default as Header } from "./Header";
 export { default as Gallery } from "./Gallery";
 export { default as LogoWithIcons } from "./LogoWithIcons";
+export { default as CookiesPopup } from "./CookiesPopup";

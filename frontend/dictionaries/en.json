@@ -168,5 +168,50 @@
     "color": "Color",
     "material": "Material",
     "invalidAmount": "Enter a valid amount!"
+  },
+  "cookiesPopup": {
+    "text": "We inform you that this website uses cookies. By continuing to use this website, you agree to our terms of use.",
+    "moreBtn": "Learn more",
+    "close": "Close",
+    "href": "/en/cookies"
+  },
+  "cookiesPolicy": {
+    "pageTitle": "Cookies Policy",
+    "lastUpdated": "Last updated: April 2025",
+    "sections": [
+      {
+        "title": "What are cookies?",
+        "content": [
+          "Cookies are small text files stored on your device by your web browser.",
+          "They are commonly used to store preferences, authenticate users, and improve website functionality."
+        ]
+      },
+      {
+        "title": "What cookies do we use?",
+        "content": [
+          "We only use cookies that are strictly necessary for the website to function properly.",
+          "Specifically: Authentication cookies, which are required to log in, stay logged in, and access protected parts of the website.",
+          "We do not use analytics cookies, advertising cookies, or any third-party cookies."
+        ]
+      },
+      {
+        "title": "Do I need to give consent?",
+        "content": [
+          "No. According to the GDPR and ePrivacy Directive, strictly necessary cookies do not require user consent.",
+          "However, we still provide this information to maintain transparency."
+        ]
+      },
+      {
+        "title": "Managing cookies",
+        "content": [
+          "You can block all cookies using your browser settings.",
+          "However, blocking cookies may prevent you from logging in or using some features of the site."
+        ]
+      },
+      {
+        "title": "Contact",
+        "content": ["If you have any questions regarding our cookie use, feel free to contact us at [email]."]
+      }
+    ]
   }
 }

@@ -167,5 +167,50 @@
     "color": "Krāsa",
     "material": "Materiāls",
     "invalidAmount": "Ievadiet derīgu daudzumu!"
+  },
+  "cookiesPopup": {
+    "text": "Informējam, ka šajā tīmekļa vietnē tiek izmantotas sīkdatnes. Turpinot lietot šo tīmekļa vietni, jūs piekrītat mūsu lietošanas noteikumiem.",
+    "moreBtn": "Uzzināt vairāk",
+    "close": "Aizvērt",
+    "href": "/sikdatnes"
+  },
+  "cookiesPolicy": {
+    "pageTitle": "Sīkdatņu politika",
+    "lastUpdated": "Pēdējās izmaiņas: 2025. gada aprīlis",
+    "sections": [
+      {
+        "title": "Kas ir sīkdatnes?",
+        "content": [
+          "Sīkdatnes ir mazi teksta faili, ko pārlūkprogramma saglabā jūsu ierīcē.",
+          "Tās tiek izmantotas, lai saglabātu iestatījumus, autentificētu lietotājus un uzlabotu vietnes darbību."
+        ]
+      },
+      {
+        "title": "Kādas sīkdatnes mēs izmantojam?",
+        "content": [
+          "Mēs izmantojam tikai tehniski nepieciešamās sīkdatnes, kas ir būtiskas vietnes pareizai darbībai.",
+          "Konkrēti: autentifikācijas sīkdatnes, kas nepieciešamas, lai pieteiktos un piekļūtu aizsargātām lapām.",
+          "Mēs neizmantojam analītiskās, reklāmas vai trešo pušu sīkdatnes."
+        ]
+      },
+      {
+        "title": "Vai nepieciešama piekrišana?",
+        "content": [
+          "Nē. Saskaņā ar GDPR un e-privātuma direktīvu tehniski nepieciešamām sīkdatnēm nav nepieciešama lietotāja piekrišana.",
+          "Tomēr mēs sniedzam šo informāciju caurspīdīguma nolūkā."
+        ]
+      },
+      {
+        "title": "Sīkdatņu pārvaldība",
+        "content": [
+          "Jūs varat bloķēt visas sīkdatnes pārlūkprogrammas iestatījumos.",
+          "Tomēr tas var liegt iespēju pieteikties vai izmantot dažas vietnes funkcijas."
+        ]
+      },
+      {
+        "title": "Saziņa",
+        "content": ["Jautājumu gadījumā, lūdzu, sazinieties ar mums pa e-pastu: [e-pasts]."]
+      }
+    ]
   }
 }

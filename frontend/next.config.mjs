@@ -102,6 +102,22 @@ const nextConfig = {
         destination: "/veikals/produkti/:slug*",
         permanent: true,
       },
+      // COOKIES
+      {
+        source: "/en/sikdatnes",
+        destination: "/en/cookies",
+        permanent: true,
+      },
+      {
+        source: "/cookies",
+        destination: "/en/cookies",
+        permanent: true,
+      },
+      {
+        source: "/lv/cookies",
+        destination: "/sikdatnes",
+        permanent: true,
+      },
     ];
   },
 
@@ -135,6 +151,10 @@ const nextConfig = {
       {
         source: "/lv/veikals",
         destination: "/lv/shop",
+      },
+      {
+        source: "/lv/sikdatnes",
+        destination: "/lv/cookies",
       },
     ];
   },

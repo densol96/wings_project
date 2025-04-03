@@ -1,11 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./pages/**/*.{js,ts,jsx,tsx,mdx}", "./components/**/*.{js,ts,jsx,tsx,mdx}", "./app/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
@@ -20,6 +16,7 @@ const config: Config = {
       },
       boxShadow: {
         "custom-light": "0px 10px 15px rgba(0, 0, 0, 0.1)",
+        "custom-med": "0px 0px 20px 0px rgba(0, 0, 0, 0.3)",
         "custom-dark": "0px 0px 35px 5px rgba(0, 0, 0, 0.55)",
       },
       transitionProperty: {
