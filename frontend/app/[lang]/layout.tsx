@@ -8,8 +8,10 @@ import { getDictionary } from "@/dictionaries/dictionaries";
 import { PageProps } from "@/types/common";
 
 import { Header, Footer } from "@/components/shared";
-import { notFound } from "next/navigation";
 import TestBtn from "./TestBtn";
+
+import dynamic from "next/dynamic";
+const CookiesPopup = dynamic(() => import("@/components/shared/CookiesPopup"), { ssr: false });
 
 const roboto = Roboto({
   subsets: ["latin"],
@@ -65,6 +67,7 @@ const RootLayout = async ({ children, params: { lang } }: Props) => {
         <Header lang={lang} headerDictionary={dict.header} />
         <main className="relative flex-1">{children}</main>
         <Footer footerDictionary={dict.footer} />
+        <CookiesPopup lang={lang} dict={dict.cookiesPopup} />
       </body>
     </html>
   );

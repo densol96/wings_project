@@ -9,21 +9,22 @@ import { redirect } from "next/navigation";
 import React from "react";
 import ToggleCategoriesSidebar from "../ToggleCategoriesSidebar";
 import syncSlug from "@/utils/syncSlug";
+import validateSearchParams from "@/utils/validateSearchParams";
 
 type ActiveCategory = {
   title: string;
   description: string;
 };
 
-const Header = async ({ params: { lang, slug }, searchParams: { sort, direction } }: ProductsPageProps) => {
+const Header = async ({ params: { lang, slug }, searchParams }: ProductsPageProps) => {
   const dict: ShopDict = (await getDictionary(lang)).shop;
   const categoryId = extractIdFromSlug(slug);
   const activeCategory: ActiveCategory =
     categoryId !== 0
       ? await fetcher(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/product-categories/${categoryId}?lang=${lang}`, [404, 400])
       : { title: dict.title, description: dict.description };
-
-  syncSlug(categoryId, activeCategory.title, slug);
+  const { page, sort, direction } = validateSearchParams(searchParams);
+  syncSlug(categoryId, activeCategory.title, slug, `sort=${sort}&direction=${direction}&page=${page}`);
 
   return (
     <>

@@ -39,6 +39,9 @@ const ProductCard = ({ className, product, lang, dict }: Props) => {
               />
             )
         )}
+        {product.amount === 0 && (
+          <div className="absolute top-1/2 w-full text-center py-6 bg-gray-200 opacity-85 uppercase font-medium -translate-y-1/2">Nav noliktavā</div>
+        )}
       </Link>
       <div className="px-6">
         <Link className="text-gray-500 hover:underline mt-6 block" href={href}>

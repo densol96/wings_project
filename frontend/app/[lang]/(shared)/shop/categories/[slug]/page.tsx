@@ -6,6 +6,7 @@ import validateValues from "@/utils/validateValues";
 import { extractIdFromSlug } from "@/utils";
 import { Suspense } from "react";
 import { Spinner } from "@/components";
+import validateSearchParams from "@/utils/validateSearchParams";
 
 type Props = PagePropsWithSlug & {
   searchParams: ProductSearchParams;
@@ -19,12 +20,9 @@ export const generateMetadata = async ({ params }: PageProps) => {
 };
 
 const Products = async function ({ params: { lang, slug }, searchParams }: Props) {
-  const pageNum = Number(searchParams.page);
-  const page = pageNum && pageNum > 0 ? pageNum : 1;
-  const sort = validateValues<ProductSort>(searchParams.sort, ["price", "createdAt"], "createdAt");
-  const direction = validateValues<SortDirection>(searchParams.direction, ["asc", "desc"], "desc");
+  const { page, sort, direction } = validateSearchParams(searchParams);
   let categoryId = extractIdFromSlug(slug);
-  categoryId = categoryId >= 0 ? categoryId : 0;
+  categoryId = categoryId >= 0 ? categoryId : 0; // 0 for all products
 
   return (
     <Suspense fallback={<Spinner className="mt-20" />}>
