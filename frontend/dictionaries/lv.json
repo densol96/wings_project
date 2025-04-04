@@ -40,7 +40,7 @@
       {
         "title": "Klientu serviss",
         "links": [
-          { "title": "Apmaksas veidi", "href": "/" },
+          { "title": "Apmaksas veidi", "href": "/apmaksas-veidi" },
           { "title": "Piegāde", "href": "/" },
           { "title": "Atgriešana", "href": "/" }
         ]
@@ -160,41 +160,64 @@
     "href": "/sikdatnes"
   },
   "cookiesPolicy": {
-    "pageTitle": "Sīkdatņu politika",
-    "lastUpdated": "Pēdējās izmaiņas: 2025. gada aprīlis",
+    "title": "Sīkdatņu politika",
+    "lastUpdatedAt": "Pēdējās izmaiņas: 2025. gada aprīlis",
     "sections": [
       {
-        "title": "Kas ir sīkdatnes?",
-        "content": [
-          "Sīkdatnes ir mazi teksta faili, ko pārlūkprogramma saglabā jūsu ierīcē.",
-          "Tās tiek izmantotas, lai saglabātu iestatījumus, autentificētu lietotājus un uzlabotu vietnes darbību."
-        ]
+        "name": "Kas ir sīkdatnes?",
+        "description": "Sīkdatnes ir mazi teksta faili, ko pārlūkprogramma saglabā jūsu ierīcē. Tās tiek izmantotas, lai saglabātu iestatījumus, autentificētu lietotājus un uzlabot vietnes darbību."
       },
       {
-        "title": "Kādas sīkdatnes mēs izmantojam?",
-        "content": [
-          "Mēs izmantojam tikai tehniski nepieciešamās sīkdatnes, kas ir būtiskas vietnes pareizai darbībai.",
-          "Konkrēti: autentifikācijas sīkdatnes, kas nepieciešamas, lai pieteiktos un piekļūtu aizsargātām lapām.",
-          "Mēs neizmantojam analītiskās, reklāmas vai trešo pušu sīkdatnes."
-        ]
+        "name": "Kādas sīkdatnes mēs izmantojam?",
+        "description": "Mēs izmantojam tikai tehniski nepieciešamās sīkdatnes, kas ir būtiskas vietnes pareizai darbībai. Konkrēti: autentifikācijas sīkdatnes, kas nepieciešamas, lai pieteiktos un piekļūtu aizsargātām lapām. Mēs neizmantojam analītiskās, reklāmas vai trešo pušu sīkdatnes."
       },
       {
-        "title": "Vai nepieciešama piekrišana?",
-        "content": [
-          "Nē. Saskaņā ar GDPR un e-privātuma direktīvu tehniski nepieciešamām sīkdatnēm nav nepieciešama lietotāja piekrišana.",
-          "Tomēr mēs sniedzam šo informāciju caurspīdīguma nolūkā."
-        ]
+        "name": "Vai nepieciešama piekrišana?",
+        "description": "Nē. Saskaņā ar GDPR un e-privātuma direktīvu tehniski nepieciešamām sīkdatnēm nav nepieciešama lietotāja piekrišana. Tomēr mēs sniedzam šo informāciju caurspīdīguma nolūkā."
       },
       {
-        "title": "Sīkdatņu pārvaldība",
-        "content": [
-          "Jūs varat bloķēt visas sīkdatnes pārlūkprogrammas iestatījumos.",
-          "Tomēr tas var liegt iespēju pieteikties vai izmantot dažas vietnes funkcijas."
-        ]
+        "name": "Sīkdatņu pārvaldība",
+        "description": "Jūs varat bloķēt visas sīkdatnes pārlūkprogrammas iestatījumos. Tomēr tas var liegt iespēju pieteikties vai izmantot dažas vietnes funkcijas."
       },
       {
-        "title": "Saziņa",
-        "content": ["Jautājumu gadījumā, lūdzu, sazinieties ar mums pa e-pastu: [e-pasts]."]
+        "name": "Saziņa",
+        "description": "Jautājumu gadījumā, lūdzu, sazinieties ar mums pa e-pastu: [e-pasts]."
+      }
+    ]
+  },
+  "paymentMethods": {
+    "title": "Apmaksas veidi",
+    "description": "Veicot pasūtījumu Amatu Maja interneta veikalā, jūs varat izvēlēties vienu no trim apmaksas veidiem: tiešsaistes maksājums ar bankas karti, bankas pārskaitījums vai priekšpasūtījums ar apmaksu uz vietas.",
+    "sections": [
+      {
+        "name": "Tiešsaistes maksājums ar bankas karti",
+        "description": "Ātrākais un mūsu ieteiktais apmaksas veids. Pēc pogas 'Veikt pasūtījumu' nospiešanas ievadiet savas kartes datus, lai pabeigtu maksājumu."
+      },
+      {
+        "name": "Bankas pārskaitījums",
+        "description": "Kad jūsu pasūtījums būs apstiprināts, maksājuma rekvizīti tiks nosūtīti uz jūsu e-pastu. Lūdzu, norādiet pasūtījuma numuru, veicot maksājumu."
+      },
+      {
+        "name": "Priekšpasūtījums ar apmaksu uz vietas",
+        "description": "Veiciet pasūtījumu tiešsaistē un apmaksājiet to Amatu Maja veikalā. Pirms ierodaties, lūdzu, sagaidiet apstiprinājuma e-pastu, ka pasūtījums ir gatavs saņemšanai."
+      }
+    ]
+  },
+  "deliveryMethods": {
+    "title": "Delivery Methods",
+    "description": "When placing an order in the Amatu Maja online store, you can choose the most convenient delivery option: Omniva parcel machine, in-store pickup, or courier delivery.",
+    "sections": [
+      {
+        "name": "Omniva Parcel Machine",
+        "description": "If the product is in stock, we will hand it over to Omniva for delivery within 1–5 business days. Delivery to the parcel machine usually takes 1–2 days after Omniva receives the package. Once the shipment is handed over to Omniva, you will receive an email notification. Parcel machines are serviced from Monday to Saturday. When your package reaches its destination, you will receive an SMS and an email from Omniva. Please note that during busy holiday seasons, delivery times may be longer."
+      },
+      {
+        "name": "In-Store Pickup at Amatu Maja",
+        "description": "This is a free delivery method. Once your order is ready, you will receive a confirmation email. You can pick up your order at the Amatu Maja store. Please check the store address and working hours here: https://tines.lv/salons-tines/"
+      },
+      {
+        "name": "Courier Delivery",
+        "description": "Courier delivery is made to the address you provided. The courier will contact you to arrange the delivery time. Please make sure your contact information in the order is correct."
       }
     ]
   }
