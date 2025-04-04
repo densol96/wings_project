@@ -1,8 +1,10 @@
 package lv.wings.enums;
 
+import java.util.Arrays;
+import java.util.Optional;
+
 public enum LocaleCode {
-    EN("en"),
-    LV("lv");
+    EN("en"), LV("lv");
 
     private final String code;
 
@@ -12,5 +14,12 @@ public enum LocaleCode {
 
     public String getCode() {
         return code;
+    }
+
+    public static LocaleCode from(String code) {
+        return Arrays.stream(values())
+                .filter(locale -> locale.code.equalsIgnoreCase(code))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Unable to LocaleCode.from due to unknown locale: " + code));
     }
 }

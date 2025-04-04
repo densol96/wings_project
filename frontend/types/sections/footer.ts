@@ -1,3 +1,5 @@
+import { Locale } from "../common";
+
 export type FooterLink = {
   title: string;
   href: string;
@@ -12,6 +14,7 @@ export type FooterSubscribeSection = {
   title: string;
   email: string;
   subscribe: string;
+  generalError: string;
 };
 
 export type FooterContent = {
@@ -23,4 +26,5 @@ export type FooterContent = {
 
 export type FooterProps = {
   footerDictionary: FooterContent;
+  lang: Locale;
 };

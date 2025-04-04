@@ -38,6 +38,10 @@
   a {
     cursor: pointer;
   }
+
+  .custom-input {
+    @apply py-2 pl-2 outline-none border-1 border-gray-300 rounded-md;
+  }
 }
 
 @layer components {
