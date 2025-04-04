@@ -150,6 +150,22 @@ const nextConfig = {
         destination: "/piegade",
         permanent: true,
       },
+      // RETURNS
+      {
+        source: "/en/atgriesana",
+        destination: "/en/returns",
+        permanent: true,
+      },
+      {
+        source: "/returns",
+        destination: "/en/returns",
+        permanent: true,
+      },
+      {
+        source: "/lv/returns",
+        destination: "/atgriesana",
+        permanent: true,
+      },
     ];
   },
 
@@ -195,6 +211,10 @@ const nextConfig = {
       {
         source: "/lv/piegade",
         destination: "/lv/delivery",
+      },
+      {
+        source: "/lv/atgriesana",
+        destination: "/lv/returns",
       },
     ];
   },

@@ -43,7 +43,7 @@
         "links": [
           { "title": "Payment options", "href": "/en/payment-methods" },
           { "title": "Delivery", "href": "/en/delivery" },
-          { "title": "Returns", "href": "/" }
+          { "title": "Returns", "href": "/en/returns" }
         ]
       },
       {
@@ -219,6 +219,24 @@
       {
         "name": "Courier Delivery",
         "description": "Courier delivery is made to the address you provided. The courier will contact you to arrange the delivery time. Please make sure your contact information in the order is correct."
+      }
+    ]
+  },
+  "returns": {
+    "title": "Returns and Right of Withdrawal",
+    "description": "The right of withdrawal allows EU customers to cancel an online purchase within 14 days. If you'd like to return your order, please follow the instructions below.",
+    "sections": [
+      {
+        "name": "Return Conditions",
+        "description": "You have 14 days to decide if the item is right for you. We will refund any item(s), as long as they have not been damaged, soiled, washed, altered, or worn, and all labels and tags are intact. Products must be returned in original condition with all Tīnes branding and documentation. Return shipping is at your own cost. Shipping fees are non-refundable."
+      },
+      {
+        "name": "Return Process",
+        "description": "If you wish to return an item, please contact us at info@tines.lv to receive the return form. Fill it out, include it with the returned goods, and send everything to: SIA Tīnes, Amatu iela 5, Rīga, LV-1050, Latvia. Once we receive the return, the refund will be processed within 30 days to your bank account."
+      },
+      {
+        "name": "Additional Information",
+        "description": "We are not responsible for lost, stolen, or misdirected returns. Please use a trackable shipping method. For returns or unclaimed deliveries from outside the EU, a 23% fee will be deducted from the refund."
       }
     ]
   }
