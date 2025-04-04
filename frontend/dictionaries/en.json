@@ -54,7 +54,8 @@
     "subscribeSection": {
       "title": "Subscribe to newsletter",
       "email": "Email address",
-      "subscribe": "Subscribe"
+      "subscribe": "Subscribe",
+      "generalError": "The newsletter subscription service is currently unavailable."
     }
   },
   "home": {

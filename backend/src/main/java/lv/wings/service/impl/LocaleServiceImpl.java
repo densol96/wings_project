@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
-
+import lv.wings.enums.LocaleCode;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.model.interfaces.Localable;
 import lv.wings.model.interfaces.Translatable;
@@ -35,18 +34,24 @@ public class LocaleServiceImpl implements LocaleService {
     }
 
     @Override
-    public String getCurrentLocaleCode() {
+    public String getCurrentLocaleString() {
         return getCurrentLocale().getLanguage();
     }
 
     @Override
-    public <L extends Localable> L getRightTranslation(Translatable entity, Class<L> translationClass, Supplier<MissingTranslationException> exceptionSupplier) {
+    public LocaleCode getCurrentLocaleCode() {
+        return LocaleCode.from(getCurrentLocaleString());
+    }
+
+    @Override
+    public <L extends Localable> L getRightTranslation(Translatable entity, Class<L> translationClass,
+            Supplier<MissingTranslationException> exceptionSupplier) {
         List<Localable> translations = entity.getTranslations();
         if (translations == null)
             throw exceptionSupplier.get();
         return translations
                 .stream()
-                .filter(translation -> translation.getLocale().getCode().equalsIgnoreCase(getCurrentLocaleCode()))
+                .filter(translation -> translation.getLocale() == getCurrentLocaleCode()) // fine for enums since ther are singletones
                 .findFirst()
                 .or(() -> translations
                         .stream()
@@ -71,5 +76,4 @@ public class LocaleServiceImpl implements LocaleService {
     public String getMessage(String messageCode, Object[] args) {
         return messageSource.getMessage(messageCode, args, getCurrentLocale());
     }
-
 }

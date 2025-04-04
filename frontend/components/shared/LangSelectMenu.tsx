@@ -24,7 +24,6 @@ const LangSelectMenu = ({ lang }: Props) => {
 
   useEffect(() => {
     const newPath = assembleNewUrl("/" + selectedLang);
-    console.log(newPath);
     router.push(newPath, { scroll: false });
   }, [selectedLang]);
 

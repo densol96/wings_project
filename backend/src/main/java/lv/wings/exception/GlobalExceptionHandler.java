@@ -1,19 +1,29 @@
 package lv.wings.exception;
 
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.TransactionSystemException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import lv.wings.dto.response.BasicErrorDto;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
+import lv.wings.exception.other.AlreadySubscribedException;
 import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.model.security.MyUser;
 import lv.wings.service.LocaleService;
@@ -56,6 +66,57 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(BasicErrorDto.builder().message(message).build());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.error("*** MethodArgumentNotValidException: {}", e.getMessage());
+
+        Map<String, String> errors = new HashMap<>();
+
+        e.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.put(error.getField(), error.getDefaultMessage());
+        });
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errors);
+    }
+
+    @ExceptionHandler(AlreadySubscribedException.class)
+    public ResponseEntity<BasicErrorDto> handleAlreadySubscribedException(AlreadySubscribedException e) {
+        log.error("*** AlreadySubscribedException: {}", e.getMessage());
+
+        return ResponseEntity
+                .badRequest()
+                .body(BasicErrorDto.builder().message(localeService.getMessage("newslettersubscriber.already-subscribed")).build());
+    }
+
+    /**
+     * Hibernate actually checks Bean Validation annotations during .save but wraps ConstraintViolationException inside TransactionSystemException class.
+     * 
+     * In my app, I do @Valid on DTOs anyway, but I added this handler as a reference for future.
+     */
+
+    @ExceptionHandler(TransactionSystemException.class)
+    public ResponseEntity<Map<String, String>> handleFailedTransaction(TransactionSystemException e) {
+        Throwable cause = e.getCause();
+        while (cause != null) {
+            if (cause instanceof ConstraintViolationException cve) {
+                Map<String, String> errors = new HashMap<>();
+                for (ConstraintViolation<?> violation : cve.getConstraintViolations()) {
+                    String field = violation.getPropertyPath().toString();
+                    String message = violation.getMessage();
+                    errors.put(field, message);
+                }
+
+                return ResponseEntity.badRequest().body(errors);
+            }
+            cause = cause.getCause();
+        }
+
+        return ResponseEntity.internalServerError().body(Map.of(
+                "message", "Unexpected transaction error"));
     }
 
     @ExceptionHandler(MissingTranslationException.class)

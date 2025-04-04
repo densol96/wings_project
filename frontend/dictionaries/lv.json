@@ -53,7 +53,8 @@
     "subscribeSection": {
       "title": "Piesakies jaunumiem",
       "email": "E-pasta adrese",
-      "subscribe": "Piesakies"
+      "subscribe": "Piesakies",
+      "generalError": "Jaunumu abonēšanas pakalpojums pašlaik nav pieejams."
     }
   },
   "home": {

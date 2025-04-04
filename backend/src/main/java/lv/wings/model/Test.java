@@ -1,38 +1,17 @@
 package lv.wings.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
-// @Entity
-// @Getter
-// @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-// class TestParent {
-//     @Id
-//     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//     @Setter(value = AccessLevel.NONE)
-//     private Integer id;
-// }
 
 @Entity
-@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Test extends TestParent {
+    @Email(message = "Should be an email!")
     private String name;
 }
-
-// @Entity
-// @Getter
-// class TestAdditional extends TestParent {
-// // @Id
-// // @GeneratedValue(strategy = GenerationType.IDENTITY)
-// // @Setter(value = AccessLevel.NONE)
-// // private Integer id;
-
-// private String surname;
-// }

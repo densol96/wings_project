@@ -4,7 +4,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 
 type Props = {
   className?: string;
-  color?: "black" | "primary";
+  color?: "black" | "primary" | "white";
   size?: "md";
 };
 
