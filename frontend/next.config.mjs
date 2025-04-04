@@ -118,6 +118,22 @@ const nextConfig = {
         destination: "/sikdatnes",
         permanent: true,
       },
+      // PAYMENT METHODS
+      {
+        source: "/en/apmaksas-veidi",
+        destination: "/en/payment-methods",
+        permanent: true,
+      },
+      {
+        source: "/payment-methods",
+        destination: "/en/payment-methods",
+        permanent: true,
+      },
+      {
+        source: "/lv/payment-methods",
+        destination: "/apmaksas-veidi",
+        permanent: true,
+      },
     ];
   },
 
@@ -155,6 +171,10 @@ const nextConfig = {
       {
         source: "/lv/sikdatnes",
         destination: "/lv/cookies",
+      },
+      {
+        source: "/lv/apmaksas-veidi",
+        destination: "/lv/payment-methods",
       },
     ];
   },

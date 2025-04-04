@@ -41,7 +41,7 @@
       {
         "title": "Customer service",
         "links": [
-          { "title": "Payment options", "href": "/" },
+          { "title": "Payment options", "href": "/en/payment-methods" },
           { "title": "Delivery", "href": "/" },
           { "title": "Returns", "href": "/" }
         ]
@@ -161,41 +161,64 @@
     "href": "/en/cookies"
   },
   "cookiesPolicy": {
-    "pageTitle": "Cookies Policy",
-    "lastUpdated": "Last updated: April 2025",
+    "title": "Cookies Policy",
+    "lastUpdatedAt": "Last updated: April 2025",
     "sections": [
       {
-        "title": "What are cookies?",
-        "content": [
-          "Cookies are small text files stored on your device by your web browser.",
-          "They are commonly used to store preferences, authenticate users, and improve website functionality."
-        ]
+        "name": "What are cookies?",
+        "description": "Cookies are small text files stored on your device by your web browser. They are commonly used to store preferences, authenticate users, and improve website functionality."
       },
       {
-        "title": "What cookies do we use?",
-        "content": [
-          "We only use cookies that are strictly necessary for the website to function properly.",
-          "Specifically: Authentication cookies, which are required to log in, stay logged in, and access protected parts of the website.",
-          "We do not use analytics cookies, advertising cookies, or any third-party cookies."
-        ]
+        "name": "What cookies do we use?",
+        "description": "We only use cookies that are strictly necessary for the website to function properly. Specifically: Authentication cookies, which are required to log in, stay logged in, and access protected parts of the website. We do not use analytics cookies, advertising cookies, or any third-party cookies."
       },
       {
-        "title": "Do I need to give consent?",
-        "content": [
-          "No. According to the GDPR and ePrivacy Directive, strictly necessary cookies do not require user consent.",
-          "However, we still provide this information to maintain transparency."
-        ]
+        "name": "Do I need to give consent?",
+        "description": "No. According to the GDPR and ePrivacy Directive, strictly necessary cookies do not require user consent. However, we still provide this information to maintain transparency."
       },
       {
-        "title": "Managing cookies",
-        "content": [
-          "You can block all cookies using your browser settings.",
-          "However, blocking cookies may prevent you from logging in or using some features of the site."
-        ]
+        "name": "Managing cookies",
+        "description": "You can block all cookies using your browser settings. However, blocking cookies may prevent you from logging in or using some features of the site."
       },
       {
-        "title": "Contact",
-        "content": ["If you have any questions regarding our cookie use, feel free to contact us at [email]."]
+        "name": "Contact",
+        "description": "If you have any questions regarding our cookie use, feel free to contact us at [email]."
+      }
+    ]
+  },
+  "paymentMethods": {
+    "title": "Payment methods",
+    "description": "At the Amatu Maja online store, you can place your order and choose from three payment methods: online card payment, bank transfer or pre-order with on-site payment.",
+    "methods": [
+      {
+        "name": "Online card payment",
+        "description": "The fastest and recommended by us method of payment. After clicking 'Place Order', enter your card details to complete the payment. This is our recommended method."
+      },
+      {
+        "name": "Bank transfer",
+        "description": "Once your order is confirmed, the payment details will be sent to your email. Please include your order number when making the transfer."
+      },
+      {
+        "name": "Pre-Order and Pay On Site",
+        "description": "Place your order online, and then pay for your purchase at the Amatu Maja store. Please wait for an email confirmation before visiting the store"
+      }
+    ]
+  },
+  "deliveryMethods": {
+    "title": "Piegādes veidi",
+    "description": "Veicot pasūtījumu Amatu Maja interneta veikalā, jūs varat izvēlēties sev ērtāko preces saņemšanas veidu: Omniva pakomāts, pasūtījuma saņemšana veikalā vai piegāde ar kurjeru.",
+    "sections": [
+      {
+        "name": "Omniva pakomāts",
+        "description": "Ja prece ir noliktavā, mēs to nodosim Omniva piegādei 1–5 darba dienu laikā. Piegāde pakomātā notiek 1–2 dienu laikā pēc nodošanas Omniva. Kad sūtījums būs nodots Omniva, jūs saņemsiet e-pastu ar informāciju par sūtījuma statusu. Pakomāti tiek apkalpoti no pirmdienas līdz sestdienai. Kad sūtījums sasniegs galamērķi, saņemsiet SMS un e-pastu no Omniva. Lūdzu, ņemiet vērā, ka gada noslogotākajā laikā piegādes var aizkavēties par vairākām dienām."
+      },
+      {
+        "name": "Pasūtījuma saņemšana Amatu Maja veikalā",
+        "description": "Šis ir bezmaksas pasūtījuma saņemšanas veids. Kad jūsu pasūtījums būs gatavs, jūs saņemsiet apstiprinājuma e-pastu. Pasūtījumu varēsiet izņemt veikalā Amatu Maja. Lūdzu, skatiet salona adresi un darba laikus: https://tines.lv/salons-tines/"
+      },
+      {
+        "name": "Piegāde ar kurjeru",
+        "description": "Piegāde ar kurjeru tiek nodrošināta līdz jūsu norādītajai adresei. Kurjers sazināsies ar jums, lai vienotos par piegādes laiku. Lūdzu, pārliecinieties, ka kontaktinformācija pasūtījumā ir pareiza."
       }
     ]
   }
