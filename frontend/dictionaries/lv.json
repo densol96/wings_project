@@ -42,7 +42,7 @@
         "links": [
           { "title": "Apmaksas veidi", "href": "/apmaksas-veidi" },
           { "title": "Piegāde", "href": "/piegade" },
-          { "title": "Atgriešana", "href": "/" }
+          { "title": "Atgriešana", "href": "/atgriesana" }
         ]
       },
       {
@@ -218,6 +218,24 @@
       {
         "name": "Piegāde ar kurjeru",
         "description": "Piegāde ar kurjeru tiek nodrošināta līdz jūsu norādītajai adresei. Kurjers sazināsies ar jums, lai vienotos par piegādes laiku. Lūdzu, pārliecinieties, ka kontaktinformācija pasūtījumā ir pareiza."
+      }
+    ]
+  },
+  "returns": {
+    "title": "Atgriešana un atteikuma tiesības",
+    "description": "Saskaņā ar ES likumiem jums ir tiesības atteikties no pirkuma, kas veikts tiešsaistē, 14 dienu laikā. Ja vēlaties atgriezt savu pasūtījumu, lūdzu, iepazīstieties ar zemāk redzamo informāciju.",
+    "sections": [
+      {
+        "name": "Atgriešanas nosacījumi",
+        "description": "Jums ir 14 dienas, lai izlemtu, vai prece jums der. Atmaksāsim jebkuru preci, ja tā nav bojāta, netīra, mazgāta, pārveidota vai valkāta, un visi oriģinālie marķējumi un birkas ir saglabāti. Precei jābūt oriģinālā kvalitātē ar Tīnes zīmolu un visiem pirkuma dokumentiem. Atgriešanas sūtīšanas izmaksas sedz klients. Piegādes maksa netiek atmaksāta."
+      },
+      {
+        "name": "Atgriešanas kārtība",
+        "description": "Lai atgrieztu preci, sazinieties ar mums pa e-pastu info@tines.lv un mēs nosūtīsim jums atgriešanas veidlapu. Aizpildiet to, pievienojiet atgriežamajām precēm un nosūtiet uz: SIA Tīnes, Amatu iela 5, Rīga, LV-1050, Latvija. Pēc preces saņemšanas mēs veiksim naudas atmaksu 30 dienu laikā uz jūsu bankas kontu."
+      },
+      {
+        "name": "Papildu informācija",
+        "description": "Mēs neesam atbildīgi par pazudušiem vai nepareizi nosūtītiem sūtījumiem. Lūdzu, izmantojiet izsekojamu piegādes metodi. Atgriežot sūtījumu no ārpus ES vai ja sūtījums nav izņemts, no atmaksas tiks ieturēti 23% no pasūtījuma summas."
       }
     ]
   }
