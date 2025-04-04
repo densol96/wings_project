@@ -134,6 +134,22 @@ const nextConfig = {
         destination: "/apmaksas-veidi",
         permanent: true,
       },
+      // DELIVERY
+      {
+        source: "/en/piegade",
+        destination: "/en/delivery",
+        permanent: true,
+      },
+      {
+        source: "/delivery",
+        destination: "/en/delivery",
+        permanent: true,
+      },
+      {
+        source: "/lv/delivery",
+        destination: "/piegade",
+        permanent: true,
+      },
     ];
   },
 
@@ -175,6 +191,10 @@ const nextConfig = {
       {
         source: "/lv/apmaksas-veidi",
         destination: "/lv/payment-methods",
+      },
+      {
+        source: "/lv/piegade",
+        destination: "/lv/delivery",
       },
     ];
   },

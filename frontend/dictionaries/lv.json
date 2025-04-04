@@ -41,7 +41,7 @@
         "title": "Klientu serviss",
         "links": [
           { "title": "Apmaksas veidi", "href": "/apmaksas-veidi" },
-          { "title": "Piegāde", "href": "/" },
+          { "title": "Piegāde", "href": "/piegade" },
           { "title": "Atgriešana", "href": "/" }
         ]
       },
@@ -204,20 +204,20 @@
     ]
   },
   "deliveryMethods": {
-    "title": "Delivery Methods",
-    "description": "When placing an order in the Amatu Maja online store, you can choose the most convenient delivery option: Omniva parcel machine, in-store pickup, or courier delivery.",
+    "title": "Piegādes veidi",
+    "description": "Veicot pasūtījumu Amatu Maja interneta veikalā, jūs varat izvēlēties sev ērtāko preces saņemšanas veidu: Omniva pakomāts, pasūtījuma saņemšana veikalā vai piegāde ar kurjeru.",
     "sections": [
       {
-        "name": "Omniva Parcel Machine",
-        "description": "If the product is in stock, we will hand it over to Omniva for delivery within 1–5 business days. Delivery to the parcel machine usually takes 1–2 days after Omniva receives the package. Once the shipment is handed over to Omniva, you will receive an email notification. Parcel machines are serviced from Monday to Saturday. When your package reaches its destination, you will receive an SMS and an email from Omniva. Please note that during busy holiday seasons, delivery times may be longer."
+        "name": "Omniva pakomāts",
+        "description": "Ja prece ir noliktavā, mēs to nodosim Omniva piegādei 1–5 darba dienu laikā. Piegāde pakomātā notiek 1–2 dienu laikā pēc nodošanas Omniva. Kad sūtījums būs nodots Omniva, jūs saņemsiet e-pastu ar informāciju par sūtījuma statusu. Pakomāti tiek apkalpoti no pirmdienas līdz sestdienai. Kad sūtījums sasniegs galamērķi, saņemsiet SMS un e-pastu no Omniva. Lūdzu, ņemiet vērā, ka gada noslogotākajā laikā piegādes var aizkavēties par vairākām dienām."
       },
       {
-        "name": "In-Store Pickup at Amatu Maja",
-        "description": "This is a free delivery method. Once your order is ready, you will receive a confirmation email. You can pick up your order at the Amatu Maja store. Please check the store address and working hours here: https://tines.lv/salons-tines/"
+        "name": "Pasūtījuma saņemšana Amatu Maja veikalā",
+        "description": "Šis ir bezmaksas pasūtījuma saņemšanas veids. Kad jūsu pasūtījums būs gatavs, jūs saņemsiet apstiprinājuma e-pastu. Pasūtījumu varēsiet izņemt veikalā Amatu Maja. Lūdzu, skatiet salona adresi un darba laikus: https://tines.lv/salons-tines/"
       },
       {
-        "name": "Courier Delivery",
-        "description": "Courier delivery is made to the address you provided. The courier will contact you to arrange the delivery time. Please make sure your contact information in the order is correct."
+        "name": "Piegāde ar kurjeru",
+        "description": "Piegāde ar kurjeru tiek nodrošināta līdz jūsu norādītajai adresei. Kurjers sazināsies ar jums, lai vienotos par piegādes laiku. Lūdzu, pārliecinieties, ka kontaktinformācija pasūtījumā ir pareiza."
       }
     ]
   }

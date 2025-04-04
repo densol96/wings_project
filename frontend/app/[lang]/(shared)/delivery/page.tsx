@@ -4,7 +4,7 @@ import { PageProps } from "@/types";
 import React from "react";
 
 const Page = async ({ params: { lang } }: PageProps) => {
-  return <InfoPageTemplate subject={(await getDictionary(lang)).cookiesPolicy} />;
+  return <InfoPageTemplate subject={(await getDictionary(lang)).deliveryMethods} />;
 };
 
 export default Page;
