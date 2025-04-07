@@ -46,14 +46,6 @@ export type ProductTranslationDto = ShortProductTranslationDto & {
   description: string;
 };
 
-export type ShortProductDto = {
-  id: number;
-  price: number;
-  amount: number;
-  imageDtos: ImageDto[];
-  translationDto: ShortProductTranslationDto;
-};
-
 export type ShortProductCategoryDto = {
   id: number;
   title: string;
@@ -82,6 +74,23 @@ export type ProductDto = {
   materialDtos: ProductMaterialDto[];
 };
 
+export type ShortProductDto = {
+  id: number;
+  price: number;
+  amount: number;
+  imageDtos: ImageDto[];
+  translationDto: ShortProductTranslationDto;
+};
+
+export type RandomProductDto = {
+  id: number;
+  price: number;
+  amount: number;
+  translationDto: ProductTranslationDto;
+  categoryDto: ShortProductCategoryDto;
+  imageDtos: ImageDto[];
+};
+
 export type CategoryLi = {
   id: number | null;
   title: string;
@@ -102,4 +111,5 @@ export type ProductDict = {
   color: string;
   material: string;
   invalidAmount: string;
+  relatedProducts: string;
 };

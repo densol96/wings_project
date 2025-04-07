@@ -152,7 +152,8 @@
     "additionalInformation": "Papildu informācija",
     "color": "Krāsa",
     "material": "Materiāls",
-    "invalidAmount": "Ievadiet derīgu daudzumu!"
+    "invalidAmount": "Ievadiet derīgu daudzumu!",
+    "relatedProducts": "Līdzīgi produkti"
   },
   "cookiesPopup": {
     "text": "Informējam, ka šajā tīmekļa vietnē tiek izmantotas sīkdatnes. Turpinot lietot šo tīmekļa vietni, jūs piekrītat mūsu lietošanas noteikumiem.",

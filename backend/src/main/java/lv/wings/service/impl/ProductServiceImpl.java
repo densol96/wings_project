@@ -91,6 +91,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		 * If a new locale => user wants to see the translation of the previously randomly assembled list.
 		 * Else, randomly select a new list.
 		 */
+
 		if (randomProducts == null || localeService.getCurrentLocaleCode() == lastRequestedLocaleCode) {
 			randomProducts = isAllCategories
 					? productRepository.findAvaialableRandomProductsFromAll(amount)
@@ -119,10 +120,8 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 					}
 				}
 			}
-
-			lastRequestedLocaleCode = localeService.getCurrentLocaleCode();
 		}
-
+		lastRequestedLocaleCode = localeService.getCurrentLocaleCode();
 		return randomProducts.stream().map(this::mapToRandomProductDto).toList();
 	}
 

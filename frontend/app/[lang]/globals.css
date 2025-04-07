@@ -77,6 +77,11 @@
   .slick-active .custom-dot {
     @apply bg-gray-700 !important;
   }
+
+  .slider-with-gap .slick-track {
+    display: flex;
+    gap: 1rem;
+  }
 }
 
 @keyframes mulShdSpin {

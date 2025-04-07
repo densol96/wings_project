@@ -5,16 +5,17 @@ import { AnimatedProductImage, MyImage } from "@/components";
 import { Locale } from "@/types";
 import Link from "next/link";
 import { BsCartPlusFill } from "react-icons/bs";
+import { GrView } from "react-icons/gr";
 
 type Props = {
   className?: string;
   product: ShortProductDto;
   lang: Locale;
-  dict: ShopDict;
+  dict?: ShopDict;
+  viewBtn?: string;
 };
 
-const ProductCard = ({ className, product, lang, dict }: Props) => {
-  const imagesTotal = product.imageDtos?.length || 0;
+const ProductCard = ({ className, product, lang, dict, viewBtn }: Props) => {
   const href = `/${lang}/shop/products/${product.id}-${slugify(product.translationDto?.title)}`;
 
   return (
@@ -29,8 +30,18 @@ const ProductCard = ({ className, product, lang, dict }: Props) => {
         <p className="text-sm font-bold">{formatPrice(product.price)}</p>
         <p className="flex justify-center mt-4">
           <button className="flex gap-2 items-center hover:underline">
-            <BsCartPlusFill size={24} />
-            <span>{dict.addToCartBtn}</span>
+            {viewBtn && !dict && (
+              <>
+                <GrView size={24} />
+                <span>{viewBtn}</span>
+              </>
+            )}
+            {!viewBtn && dict && (
+              <>
+                <BsCartPlusFill size={24} />
+                <span>{dict.addToCartBtn}</span>
+              </>
+            )}
           </button>
         </p>
       </div>
