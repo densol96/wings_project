@@ -9,8 +9,9 @@ type Props = {
 };
 
 const ProductDisplay = ({ images, lang }: Props) => {
+  console.log(images);
   return (
-    <div className="min-h-[400px] md:min-h-[600px] relative w-[80%] mx-auto overflow-hidde">
+    <div className="min-h-[400px] md:min-h-[600px] relative w-[90%] mr-auto overflow-hidden">
       {images.length <= 0 ? <MyImage className="object-center" lang={lang} /> : <Gallery images={images} />}
       {images.length > 1 && (
         <span className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 bg-slate-100 rounded-lg opacity-60 font-bold text-xl group-hover:opacity-90 transition-opacity">

@@ -153,7 +153,8 @@
     "additionalInformation": "Additional information",
     "color": "Color",
     "material": "Material",
-    "invalidAmount": "Enter a valid amount!"
+    "invalidAmount": "Enter a valid amount!",
+    "relatedProducts": "Related products"
   },
   "cookiesPopup": {
     "text": "We inform you that this website uses cookies. By continuing to use this website, you agree to our terms of use.",

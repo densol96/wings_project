@@ -1,4 +1,4 @@
-import { Locale, ProductDto } from "@/types";
+import { Locale, RandomProductDto } from "@/types";
 import React from "react";
 import AnimatedProductImage from "./AnimatedProductImage";
 import { Button, Heading } from "../ui";
@@ -6,7 +6,7 @@ import Link from "next/link";
 import { cn, formatPrice, slugify } from "@/utils";
 
 type Props = {
-  product: ProductDto;
+  product: RandomProductDto;
   lang: Locale;
 };
 
