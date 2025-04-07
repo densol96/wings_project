@@ -1,6 +1,6 @@
 "use client";
 
-import { Image } from "@/types/";
+import { ImageDto } from "@/types/";
 import MyImage from "../ui/MyImage";
 import Link from "next/link";
 
@@ -14,18 +14,11 @@ const LightGalleryComponent = dynamic(() => import("lightgallery/react"), { ssr:
 import lgZoom from "lightgallery/plugins/zoom";
 import lgThumbnail from "lightgallery/plugins/thumbnail";
 
-import { useEffect, useRef } from "react";
-import { usePathname, useRouter } from "next/navigation";
-
 type Props = {
-  images: Image[];
+  images: ImageDto[];
 };
 
 const Gallery = ({ images }: Props) => {
-  const galleryRef = useRef(null);
-  const router = useRouter();
-  const pathname = usePathname();
-
   return (
     <LightGalleryComponent speed={500} plugins={[lgZoom, lgThumbnail]} closable={true} zoomFromOrigin={true}>
       {images.map((img, i) => {

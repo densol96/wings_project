@@ -1,6 +1,5 @@
 package lv.wings.exception;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -54,7 +53,8 @@ public class GlobalExceptionHandler {
             log.error("*** Control flow from MethodArgumentTypeMismatchException: {}", e.getMessage());
         }
 
-        String message = localeService.getMessage("error.invalid-query-param", new Object[] {e.getQueryName(), e.getQueryValue()});
+        String localisedParameterName = localeService.getMessage(e.getQueryNameCode());
+        String message = localeService.getMessage("error.invalid-query-param", new Object[] {localisedParameterName, e.getQueryParamValue()});
         return ResponseEntity.badRequest().body(BasicErrorDto.builder().message(message).build());
     }
 

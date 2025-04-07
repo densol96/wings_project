@@ -19,8 +19,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lv.wings.model.base.OwnerableEntity;
-import lv.wings.model.base.TranslatableEntity;
-import lv.wings.model.translation.EventTranslation;
 import lv.wings.model.translation.ProductTranslation;
 
 
@@ -38,7 +36,7 @@ public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 	private Integer amount;
 
 	@ManyToOne
-	@JoinColumn(name = "product_category_id")
+	@JoinColumn(name = "product_category_id", nullable = false)
 	private ProductCategory category;
 
 	@OneToMany(mappedBy = "product")

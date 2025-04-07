@@ -41,7 +41,7 @@ const CookiesPopup = ({ dict }: Props) => {
   if (!needsFreshConsent()) return null;
 
   return (
-    <div className="fixed left-0 bottom-0 w-full flex px-12 py-6 bg-gray-50 opacity-90 shadow-custom-med items-center gap-4">
+    <div className="fixed left-0 bottom-0 w-full flex px-12 py-6 bg-gray-50 opacity-90 shadow-custom-med items-center gap-4 z-20">
       <p className="flex-1 text-center">{dict.text}</p>
       <Link href={dict.href}>
         <Button>{dict.moreBtn}</Button>

@@ -18,7 +18,17 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	Page<Product> findAllByCategoryId(Integer categoryId, Pageable pageable);
 
-	@Query(value = "SELECT * FROM product ORDER BY RAND() LIMIT :count", nativeQuery = true)
-	List<Product> findRandomProducts(@Param("count") int count);
+	// This should work in MySQL but wil need to be changed for other DBMSs
+	@Query(value = "SELECT * FROM products WHERE amount > 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
+	List<Product> findAvaialableRandomProductsFromAll(@Param("amount") Integer amount);
+
+	@Query(value = "SELECT * FROM products WHERE product_category_id = :productCategoryId and amount > 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
+	List<Product> findAvaialableRandomProductsByCategory(@Param("productCategoryId") Integer productCategoryId, @Param("amount") Integer amount);
+
+	@Query(value = "SELECT * FROM products WHERE amount = 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
+	List<Product> findUnavaialableRandomProductsFromAll(@Param("amount") Integer amount);
+
+	@Query(value = "SELECT * FROM products WHERE product_category_id = :productCategoryId and amount = 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
+	List<Product> findUnavaialableRandomProductsByCategory(@Param("productCategoryId") Integer productCategoryId, @Param("amount") Integer amount);
 
 }

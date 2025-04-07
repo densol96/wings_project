@@ -11,9 +11,11 @@ import lv.wings.dto.response.ImageDto;
 import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ProductMaterialDto;
+import lv.wings.dto.response.product.RandomProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
-
+import lv.wings.enums.LocaleCode;
+import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.mapper.ProductMapper;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
@@ -37,6 +39,10 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	private final ColorService colorService;
 	private final ProductMaterialService productMaterialService;
 
+	// From the previous request
+	private List<Product> randomProducts;
+	private LocaleCode lastRequestedLocaleCode;
+
 	@Lazy
 	public ProductServiceImpl(
 			ProductRepository productRepository,
@@ -58,7 +64,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	@Override
 	public Page<ShortProductDto> getAllByCategory(Integer categoryId, Pageable pageable) {
 		if (categoryId < 0)
-			throw new lv.wings.exception.validation.InvalidParameterException(entityNameKey, entityName, false);
+			throw new InvalidParameterException("category.id", categoryId + "", false);
 		// categoryId == 0 means "All products"
 		Page<Product> products = categoryId == 0 ? findAll(pageable) : productRepository.findAllByCategoryId(categoryId, pageable);
 		return products.map(this::mapToShortProductDto);
@@ -70,12 +76,69 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		return mapToProductDto(product);
 	}
 
+	@Override
+	public List<RandomProductDto> getRandomProducts(Integer categoryId, Integer amount) {
+		if (categoryId < 0)
+			throw new InvalidParameterException("category.id", categoryId + "", false);
+		if (amount < 1)
+			throw new InvalidParameterException("general.amount", amount + "", false);
+
+		boolean isAllCategories = categoryId == 0;
+
+		/**
+		 * Cache randomised list.
+		 * 
+		 * If a new locale => user wants to see the translation of the previously randomly assembled list.
+		 * Else, randomly select a new list.
+		 */
+		if (randomProducts == null || localeService.getCurrentLocaleCode() == lastRequestedLocaleCode) {
+			randomProducts = isAllCategories
+					? productRepository.findAvaialableRandomProductsFromAll(amount)
+					: productRepository.findAvaialableRandomProductsByCategory(categoryId, amount);
+
+			/**
+			 * Ideally, we do not want to show products that are currently unavailable (aka amount = 0), however if there are no enough avaialable products, use
+			 * unavailable * as it might still interest the customer and he / she will add the product page to Bookmarks and check it later.
+			 * 
+			 * Or if we are doing the search by category, get available products from other categories to advertise.
+			 */
+
+			int missing = amount - randomProducts.size();
+			if (missing > 0) {
+				if (!isAllCategories) {
+					randomProducts.addAll(productRepository.findAvaialableRandomProductsFromAll(missing));
+					missing = amount - randomProducts.size();
+				}
+				if (missing > 0) {
+					if (!isAllCategories) {
+						randomProducts.addAll(productRepository.findUnavaialableRandomProductsByCategory(categoryId, missing));
+						missing = amount - randomProducts.size();
+					}
+					if (missing > 0) {
+						randomProducts.addAll(productRepository.findUnavaialableRandomProductsFromAll(missing));
+					}
+				}
+			}
+
+			lastRequestedLocaleCode = localeService.getCurrentLocaleCode();
+		}
+
+		return randomProducts.stream().map(this::mapToRandomProductDto).toList();
+	}
+
+	private RandomProductDto mapToRandomProductDto(Product product) {
+		return productMapper.toRandomDto(
+				product,
+				getRightTranslation(product, ProductTranslation.class),
+				productCategoryService.mapToShortDto(product.getCategory()),
+				productImageService.getTwoImagesForCover(product.getId()));
+	}
+
 	private ShortProductDto mapToShortProductDto(Product product) {
-		ProductTranslation localisedTranslation = getRightTranslation(product, ProductTranslation.class);
-		List<ImageDto> images = productImageService.getImagesAsDtoPerOwnerId(product.getId());
-		// Only 2 images are required on the fromt-end for an interactive card
-		List<ImageDto> limitedImages = images.size() > 2 ? images.subList(0, Math.min(images.size(), 2)) : images;
-		return productMapper.toShortDto(product, localisedTranslation, limitedImages);
+		return productMapper.toShortDto(
+				product,
+				getRightTranslation(product, ProductTranslation.class),
+				productImageService.getTwoImagesForCover(product.getId()));
 	}
 
 	private ProductDto mapToProductDto(Product product) {

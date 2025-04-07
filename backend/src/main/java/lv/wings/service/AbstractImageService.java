@@ -2,8 +2,9 @@ package lv.wings.service;
 
 import java.util.List;
 import org.apache.poi.ss.formula.functions.T;
-
+import lombok.NonNull;
 import lv.wings.dto.response.ImageDto;
+import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.model.base.ImageLocalableEntity;
 import lv.wings.model.base.ImageableEntity;
 import lv.wings.model.interfaces.HasImages;
@@ -29,6 +30,9 @@ public abstract class AbstractImageService<T extends ImageableEntity<L, O>, O ex
 
     @Override
     public List<ImageDto> getImagesAsDtoPerOwnerId(Integer id) {
+        if (id == null || id < 1)
+            // entity.product-owner --> entity.product
+            throw new InvalidParameterException(entityNameKey.split("-")[0], id + "", false);
         return repository.findAllByOwnerId(id).stream().map(this::mapImageToDto).toList();
     }
 
@@ -40,10 +44,20 @@ public abstract class AbstractImageService<T extends ImageableEntity<L, O>, O ex
     }
 
     @Override
-    public ImageDto mapImageToDto(T image) {
+    public ImageDto mapImageToDto(@NonNull T image) {
         return ImageDto.builder()
                 .src(image.getSrc())
                 .alt(getRightTranslation(image, expectedTranslationClass).getAlt())
                 .build();
+    }
+
+    @Override
+    public List<ImageDto> getTwoImagesForCover(@NonNull List<ImageDto> images) {
+        return images.size() > 2 ? images.subList(0, Math.min(images.size(), 2)) : images;
+    }
+
+    @Override
+    public List<ImageDto> getTwoImagesForCover(Integer id) {
+        return getTwoImagesForCover(getImagesAsDtoPerOwnerId(id));
     }
 }
