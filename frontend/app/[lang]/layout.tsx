@@ -12,6 +12,7 @@ import TestBtn from "./TestBtn";
 
 import dynamic from "next/dynamic";
 import { Toaster } from "react-hot-toast";
+import Scroll from "@/components/shared/Scroll";
 const CookiesPopup = dynamic(() => import("@/components/shared/CookiesPopup"), { ssr: false });
 
 const roboto = Roboto({
@@ -63,6 +64,7 @@ const RootLayout = async ({ children, params: { lang } }: Props) => {
   const dict = await getDictionary(lang);
   return (
     <html lang={lang}>
+      <Scroll />
       <body className={`${roboto.className} min-h-screen flex flex-col`}>
         <TestBtn />
         <Header lang={lang} headerDictionary={dict.header} />

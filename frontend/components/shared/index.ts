@@ -9,3 +9,4 @@ export { default as Gallery } from "./Gallery";
 export { default as LogoWithIcons } from "./LogoWithIcons";
 export { default as CookiesPopup } from "./CookiesPopup";
 export { default as InfoPageTemplate } from "./InfoPageTemplate";
+export { default as AnimatedProductImage } from "./AnimatedProductImage";

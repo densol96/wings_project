@@ -15,8 +15,8 @@ const Home = async function ({ params: { lang } }: PageProps) {
   return (
     <>
       <Wallpaper lang={lang} homeDictionary={homeDictionary} />
-      <RandomProducts />
-      <section className="px-6 py-12 bg-white relative mb-40">
+      <RandomProducts cardOption="random" className="2xl:w-[60%] sm:w-[80%] w-full mx-auto mt-32 mb-60" lang={lang} />
+      <section className="px-6 py-12 bg-white relative my-40">
         <Image
           className="absolute sm:bottom-[-20%] lg:bottom-[0%] right-[15%] sm:w-[125px] lg:w-[200px] block w-[75px] bottom-0"
           src={lineOne}

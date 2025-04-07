@@ -10,4 +10,8 @@ public interface ImageService<T extends Imageable, ID> extends CRUDService<T, ID
     List<ImageDto> getImagesAsDtoPerOwnerId(Integer id);
 
     ImageDto mapImageToDto(T image);
+
+    List<ImageDto> getTwoImagesForCover(List<ImageDto> images);
+
+    List<ImageDto> getTwoImagesForCover(Integer id);
 }

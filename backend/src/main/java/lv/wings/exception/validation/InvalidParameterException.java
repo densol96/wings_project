@@ -4,14 +4,14 @@ import lombok.Getter;
 
 @Getter
 public class InvalidParameterException extends RuntimeException {
-    private final String queryName;
-    private final String queryValue;
+    private final String queryNameCode;
+    private final String queryParamValue;
     private final Boolean fromInterceptor;
 
-    public InvalidParameterException(String queryName, String queryValue, boolean fromInterceptor) {
-        super("Invalid parameter: " + queryName + " with value: " + queryValue);
-        this.queryName = queryName;
-        this.queryValue = queryValue;
+    public InvalidParameterException(String queryNameCode, String queryParamValue, boolean fromInterceptor) {
+        super("Invalid parameter: " + queryNameCode + " with value: " + queryParamValue);
+        this.queryNameCode = queryNameCode;
+        this.queryParamValue = queryParamValue;
         this.fromInterceptor = fromInterceptor;
     }
 }

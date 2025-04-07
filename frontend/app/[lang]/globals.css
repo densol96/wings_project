@@ -72,6 +72,11 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  /* FOR STICK SLIDER */
+  .slick-active .custom-dot {
+    @apply bg-gray-700 !important;
+  }
 }
 
 @keyframes mulShdSpin {
