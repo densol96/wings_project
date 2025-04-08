@@ -1,5 +1,6 @@
 package lv.wings.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.context.annotation.Lazy;
@@ -12,6 +13,7 @@ import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ProductMaterialDto;
 import lv.wings.dto.response.product.RandomProductDto;
+import lv.wings.dto.response.product.SearchedProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 import lv.wings.enums.LocaleCode;
@@ -21,6 +23,7 @@ import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
 import lv.wings.model.translation.ProductTranslation;
 import lv.wings.repo.ProductRepository;
+import lv.wings.repo.ProductTranslationRepository;
 import lv.wings.service.AbstractTranslatableCRUDService;
 import lv.wings.service.ColorService;
 import lv.wings.service.ImageService;
@@ -33,6 +36,7 @@ import lv.wings.service.ProductService;
 public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product, ProductTranslation, Integer> implements ProductService {
 
 	private final ProductRepository productRepository;
+	private final ProductTranslationRepository productTranslationRepository;
 	private final ProductMapper productMapper;
 	private final ImageService<ProductImage, Integer> productImageService;
 	private final ProductCategoryService productCategoryService;
@@ -46,6 +50,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	@Lazy
 	public ProductServiceImpl(
 			ProductRepository productRepository,
+			ProductTranslationRepository productTranslationRepository,
 			ProductMapper productMapper,
 			ImageService<ProductImage, Integer> productImageService,
 			LocaleService localeService,
@@ -53,6 +58,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			ColorService colorService,
 			ProductMaterialService productMaterialService) {
 		super(productRepository, "Product", "entity.product", localeService);
+		this.productTranslationRepository = productTranslationRepository;
 		this.productRepository = productRepository;
 		this.productMapper = productMapper;
 		this.productImageService = productImageService;
@@ -123,6 +129,21 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		}
 		lastRequestedLocaleCode = localeService.getCurrentLocaleCode();
 		return randomProducts.stream().map(this::mapToRandomProductDto).toList();
+	}
+
+	@Override
+	public List<SearchedProductDto> getSearchedProducts(String q) {
+		if (q.equals(""))
+			return new ArrayList<>();
+
+		return productTranslationRepository.findByTitleContainingIgnoreCaseAndLocaleEquals(q, localeService.getCurrentLocaleCode()).stream()
+				.map(this::mapToSearchedProductDto)
+				.toList();
+	}
+
+	private SearchedProductDto mapToSearchedProductDto(ProductTranslation productTranslation) {
+		Product product = productTranslation.getEntity();
+		return productMapper.toSearchedProductDto(product, productTranslation, productImageService.getWallpaperByOwnerId(product.getId()));
 	}
 
 	private RandomProductDto mapToRandomProductDto(Product product) {

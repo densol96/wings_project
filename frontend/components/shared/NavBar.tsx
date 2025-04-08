@@ -3,6 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SearchMenu from "./SearchMenu";
+import { Locale } from "@/types";
 
 export type HeaderDictionary = {
   [key: string]: {
@@ -14,6 +16,7 @@ export type HeaderDictionary = {
 type Props = {
   isExpanded: boolean;
   headerDictionary: HeaderDictionary;
+  lang: Locale;
 };
 
 const classOptions = {
@@ -23,7 +26,7 @@ const classOptions = {
     "p-3 tracking-wider text-shadow-sm transition-opacity  active:scale-50  duration-200 hover:shadow-neutral-500 opacity-65 relative hover:opacity-90 before:content-[''] before:w-0  before:duration-150 before:bg-amber-900 before:rounded-md before:absolute before:bottom-0 before:left-0 hover:before:w-full before:h-0.5",
 };
 
-const NavBar: React.FC<Props> = ({ isExpanded, headerDictionary }) => {
+const NavBar = ({ isExpanded, headerDictionary, lang }: Props) => {
   const pathname = usePathname();
   const { active, default: def } = classOptions;
 
@@ -31,7 +34,7 @@ const NavBar: React.FC<Props> = ({ isExpanded, headerDictionary }) => {
     <div
       className={`${
         isExpanded ? "opacity-100 grow" : `hidden`
-      } text-gray-900 shrink-0 z-10 p-10 bg-cover flex justify-center items-center  bg-[url('/assets/knitting_img.jpg')] h-full bg-no-repeat bg-center rounded-xl overflow-hidden lg:block lg:grow-0`}
+      } text-gray-900 shrink-0 z-10 p-10 bg-cover flex justify-center items-center  bg-[url('/assets/knitting_img.jpg')] h-full bg-no-repeat bg-center rounded-xl lg:block lg:grow-0`}
     >
       <ul
         className={`${
@@ -48,6 +51,7 @@ const NavBar: React.FC<Props> = ({ isExpanded, headerDictionary }) => {
             </li>
           );
         })}
+        <SearchMenu lang={lang} />
       </ul>
     </div>
   );
