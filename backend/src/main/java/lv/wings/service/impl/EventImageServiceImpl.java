@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import lv.wings.model.entity.Event;
 import lv.wings.model.entity.EventImage;
 import lv.wings.model.translation.EventImageTranslation;
-import lv.wings.repo.ImageRepository;
+import lv.wings.repo.base.ImageRepository;
 import lv.wings.service.AbstractImageService;
 import lv.wings.service.LocaleService;
 

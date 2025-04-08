@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
@@ -83,6 +84,17 @@ public class GlobalExceptionHandler {
                 .body(errors);
     }
 
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<BasicErrorDto> handleMissingParams(MissingServletRequestParameterException e) {
+        String name = e.getParameterName();
+        log.error("*** MissingServletRequestParameterException: Parameter name - {}", name);
+
+        String message = localeService.getMessage("error.missing-parameter", new Object[] {name});
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(BasicErrorDto.builder().message(message).build());
+    }
+
     @ExceptionHandler(AlreadySubscribedException.class)
     public ResponseEntity<BasicErrorDto> handleAlreadySubscribedException(AlreadySubscribedException e) {
         log.error("*** AlreadySubscribedException: {}", e.getMessage());
@@ -144,7 +156,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BasicErrorDto> handleUnexpectedException(Exception e) {
         log.error("*** Unexpected exception of type {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        // e.printStackTrace();
+        e.printStackTrace();
         return handleProceduralException(e);
     }
 

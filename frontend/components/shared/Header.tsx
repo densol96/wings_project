@@ -22,21 +22,19 @@ const Header = ({ headerDictionary, lang }: Props) => {
 
   return (
     <nav
-      className={`${
-        isExpanded ? "h-96" : "h-24"
-      } p-1 sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center overflow-y-hidden bg-light-nav lg:text-lg z-30`}
+      className={`${isExpanded ? "h-96" : "h-24"} sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center bg-light-nav lg:text-lg z-30`}
     >
-      <div className={`${isExpanded ? "items-start" : "items-center"} justify-center flex h-full shrink p-4`}>
+      <div className={`${isExpanded ? "items-start" : "items-center"} justify-center flex h-full relative shrink p-4 overflow-hidden`}>
         <img
           draggable="false"
-          className={`${isExpanded ? "invisible" : "opacity-100"} absolute -left-20 rotate-75 w-96 h-auto lg:visible lg:opacity-100`}
+          className={`${isExpanded ? "invisible" : "opacity-100"} absolute left-0 rotate-75 w-96 h-auto lg:visible lg:opacity-100`}
           src="/assets/prievites_nobackground.png"
           alt="Prievites-bilde"
         />
         <Logo />
       </div>
 
-      <NavBar isExpanded={isExpanded} headerDictionary={headerDictionary} />
+      <NavBar lang={lang} isExpanded={isExpanded} headerDictionary={headerDictionary} />
 
       <section className="flex flex-col items-end h-full">
         <button

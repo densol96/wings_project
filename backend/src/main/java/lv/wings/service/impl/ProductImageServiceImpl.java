@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
 import lv.wings.model.translation.ProductImageTranslation;
-import lv.wings.repo.ImageRepository;
+import lv.wings.repo.base.ImageRepository;
 import lv.wings.service.AbstractImageService;
 import lv.wings.service.LocaleService;
 

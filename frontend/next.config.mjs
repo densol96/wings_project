@@ -16,6 +16,9 @@ const nextConfig = {
       screens: {
         tiny: "500px",
       },
+      transitionDuration: {
+        250: "250ms",
+      },
     },
   },
   // runs before middleware.ts

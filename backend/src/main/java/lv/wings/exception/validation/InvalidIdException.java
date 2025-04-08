@@ -5,7 +5,7 @@ public class InvalidIdException extends InvalidParameterException {
         super("id", idValue + "", false);
     }
 
-    public InvalidIdException(String idName, Integer idValue) {
-        super(idName, idValue + "", false);
+    public InvalidIdException(String idNameCode, Integer idValue) {
+        super(idNameCode, idValue + "", false);
     }
 }

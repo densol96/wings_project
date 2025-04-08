@@ -30,5 +30,4 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	@Query(value = "SELECT * FROM products WHERE product_category_id = :productCategoryId and amount = 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
 	List<Product> findUnavaialableRandomProductsByCategory(@Param("productCategoryId") Integer productCategoryId, @Param("amount") Integer amount);
-
 }

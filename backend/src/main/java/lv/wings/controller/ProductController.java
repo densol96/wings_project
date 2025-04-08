@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.wings.annotation.AllowedSortFields;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.RandomProductDto;
+import lv.wings.dto.response.product.SearchedProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.service.ProductService;
 import java.util.List;
@@ -50,6 +51,13 @@ public class ProductController {
             @RequestParam(defaultValue = "1") Integer amount) {
         log.info("Received GET request on /api/v1/products/random with category id of {} and amount of {}", categoryId, amount);
         return ResponseEntity.ok().body(productService.getRandomProducts(categoryId, amount));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<SearchedProductDto>> searchProducts(
+            @RequestParam String q) {
+        log.info("Received GET request on /api/v1/products/search with q parameter of {}", q);
+        return ResponseEntity.ok().body(productService.getSearchedProducts(q));
     }
 
 }
