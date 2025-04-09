@@ -1,9 +1,7 @@
 import { Heading, RandomProducts } from "@/components";
 import { getDictionary } from "@/dictionaries/dictionaries";
-import { PagePropsWithSlug, ProductDict, ProductDto, ShopDict } from "@/types";
-import { extractIdFromSlug, fetcher } from "@/utils";
-
-import syncSlug from "@/utils/syncSlug";
+import { PagePropsWithSlug, ProductDict, ProductDto } from "@/types";
+import { extractIdFromSlug, fetcher, syncSlug } from "@/utils";
 import React from "react";
 import ProductDisplay from "./ProductDisplay";
 import ProductInfo from "./ProductInfo";

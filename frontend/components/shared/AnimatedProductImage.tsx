@@ -11,7 +11,7 @@ type Props = {
   imagePosition?: string;
 };
 
-const AnimatedProductImage = ({ images, lang, className, isNotAvailable, imagePosition }: Props) => {
+const AnimatedProductImage = ({ images, className, isNotAvailable, imagePosition }: Props) => {
   const imagesTotal = images?.length || 0;
 
   return (
@@ -24,7 +24,6 @@ const AnimatedProductImage = ({ images, lang, className, isNotAvailable, imagePo
               key={img.alt + "_" + i}
               withEffect={false}
               image={img}
-              lang={lang}
               className={cn(
                 "transition duration-500",
                 imagePosition,

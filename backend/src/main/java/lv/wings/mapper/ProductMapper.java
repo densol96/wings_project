@@ -13,7 +13,6 @@ import lv.wings.dto.response.product.RandomProductDto;
 import lv.wings.dto.response.product.SearchedProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.dto.response.product.ShortProductTranslationDto;
-import lv.wings.dto.response.product_category.ProductCategoryDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 import lv.wings.model.entity.Product;
 import lv.wings.model.translation.ProductTranslation;

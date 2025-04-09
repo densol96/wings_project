@@ -13,6 +13,7 @@ import TestBtn from "./TestBtn";
 import dynamic from "next/dynamic";
 import { Toaster } from "react-hot-toast";
 import Scroll from "@/components/shared/Scroll";
+import { LangProvider } from "@/context/LangContext";
 const CookiesPopup = dynamic(() => import("@/components/shared/CookiesPopup"), { ssr: false });
 
 const roboto = Roboto({
@@ -62,36 +63,39 @@ type Props = PageProps & {
 
 const RootLayout = async ({ children, params: { lang } }: Props) => {
   const dict = await getDictionary(lang);
+
   return (
-    <html lang={lang}>
-      <Scroll />
-      <body className={`${roboto.className} min-h-screen flex flex-col`}>
-        <TestBtn />
-        <Header lang={lang} headerDictionary={dict.header} />
-        <main className="relative flex-1">{children}</main>
-        <Footer lang={lang} footerDictionary={dict.footer} />
-        <CookiesPopup lang={lang} dict={dict.cookiesPopup} />
-        <Toaster
-          position="top-center"
-          gutter={12}
-          containerStyle={{ margin: "8px" }}
-          toastOptions={{
-            success: {
-              duration: 5000,
-            },
-            error: {
-              duration: 5000,
-            },
-            style: {
-              fontSize: "16px",
-              maxWidth: "400px",
-              padding: "16px 24px",
-              textAlign: "center",
-            },
-          }}
-        />
-      </body>
-    </html>
+    <LangProvider langValueFromServer={lang}>
+      <html lang={lang}>
+        <Scroll />
+        <body className={`${roboto.className} min-h-screen flex flex-col`}>
+          <TestBtn />
+          <Header headerDictionary={dict.header} />
+          <main className="relative flex-1">{children}</main>
+          <Footer footerDictionary={dict.footer} />
+          <CookiesPopup dict={dict.cookiesPopup} />
+          <Toaster
+            position="top-center"
+            gutter={12}
+            containerStyle={{ margin: "8px" }}
+            toastOptions={{
+              success: {
+                duration: 5000,
+              },
+              error: {
+                duration: 5000,
+              },
+              style: {
+                fontSize: "16px",
+                maxWidth: "400px",
+                padding: "16px 24px",
+                textAlign: "center",
+              },
+            }}
+          />
+        </body>
+      </html>
+    </LangProvider>
   );
 };
 

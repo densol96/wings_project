@@ -13,10 +13,9 @@ type Props = {
   className?: string;
   children?: React.ReactNode;
   headerDictionary: HeaderDictionary;
-  lang: "lv" | "en";
 };
 
-const Header = ({ headerDictionary, lang }: Props) => {
+const Header = ({ headerDictionary }: Props) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const toggle = () => setIsExpanded(!isExpanded);
 
@@ -34,7 +33,7 @@ const Header = ({ headerDictionary, lang }: Props) => {
         <Logo />
       </div>
 
-      <NavBar lang={lang} isExpanded={isExpanded} headerDictionary={headerDictionary} />
+      <NavBar isExpanded={isExpanded} headerDictionary={headerDictionary} />
 
       <section className="flex flex-col items-end h-full">
         <button
@@ -46,7 +45,7 @@ const Header = ({ headerDictionary, lang }: Props) => {
         </button>
 
         <div className={`flex gap-x-4 h-full p-4 items-end ${isExpanded ? "flex-col-reverse" : "flex-row"} lg:flex-row gap-4 lg:gap-2`}>
-          <LangSelectMenu lang={lang} />
+          <LangSelectMenu />
           <div className="flex flex-row gap-4 lg:gap-2">
             <Link className="size-6 self-end" href="/admin">
               <ToolsIcon />

@@ -133,7 +133,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 
 	@Override
 	public List<SearchedProductDto> getSearchedProducts(String q) {
-		if (q.equals(""))
+		if (q.isBlank())
 			return new ArrayList<>();
 
 		return productTranslationRepository.findByTitleContainingIgnoreCaseAndLocaleEquals(q, localeService.getCurrentLocaleCode()).stream()

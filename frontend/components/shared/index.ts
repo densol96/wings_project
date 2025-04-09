@@ -10,3 +10,6 @@ export { default as LogoWithIcons } from "./LogoWithIcons";
 export { default as CookiesPopup } from "./CookiesPopup";
 export { default as InfoPageTemplate } from "./InfoPageTemplate";
 export { default as AnimatedProductImage } from "./AnimatedProductImage";
+export { default as SearchedProductItem } from "./SearchedProductItem";
+export { default as SearchedNewsItem } from "./SearchedNewsItem";
+export { default as SearchForm } from "./SearchForm";

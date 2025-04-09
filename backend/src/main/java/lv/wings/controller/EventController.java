@@ -1,5 +1,6 @@
 package lv.wings.controller;
 
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -8,13 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.annotation.AllowedSortFields;
+import lv.wings.dto.response.event.SearchedEventDto;
 import lv.wings.dto.response.event.ShortEventDto;
 import lv.wings.dto.response.event.SingleEventDto;
+import lv.wings.dto.response.product.SearchedProductDto;
 import lv.wings.service.EventService;
 
 @Slf4j
@@ -37,5 +41,12 @@ public class EventController {
 	public ResponseEntity<SingleEventDto> getSingleNews(@PathVariable("id") Integer id) {
 		log.info("Received GET request on /api/v1/{}", id);
 		return ResponseEntity.ok(eventsService.getPublicEvent(id));
+	}
+
+	@GetMapping("/search")
+	public ResponseEntity<List<SearchedEventDto>> searchProducts(
+			@RequestParam String q) {
+		log.info("Received GET request on /api/v1/events/search with q parameter of {}", q);
+		return ResponseEntity.ok().body(eventsService.getSearchedEvents(q));
 	}
 }

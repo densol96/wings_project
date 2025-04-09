@@ -15,7 +15,7 @@ const NewsItem = function ({ item, lang, dict }: { item: ShortNewsItem; lang: Lo
     <div className="flex flex-col shadow-md rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all duration-300 max-w-sm w-full mx-auto">
       <div className="h-auto overflow-hidden">
         <div className="h-44 overflow-hidden relative">
-          <MyImage image={item.image} lang={lang} />
+          <MyImage image={item.imageDto} lang={lang} />
         </div>
       </div>
       <div className="bg-white py-4 px-6">

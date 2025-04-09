@@ -9,7 +9,7 @@ type Props = {
   className?: string;
   cardOption: SliderCardOption;
   sliderSettings?: SliderSettings;
-  dotsClassname: string;
+  dotsClassname?: string;
 };
 
 const RandomProducts = async ({ lang, className, cardOption, categoryId = 0, amount = 5, sliderSettings, dotsClassname }: Props) => {

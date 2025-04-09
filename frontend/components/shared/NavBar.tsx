@@ -16,7 +16,6 @@ export type HeaderDictionary = {
 type Props = {
   isExpanded: boolean;
   headerDictionary: HeaderDictionary;
-  lang: Locale;
 };
 
 const classOptions = {
@@ -26,7 +25,7 @@ const classOptions = {
     "p-3 tracking-wider text-shadow-sm transition-opacity  active:scale-50  duration-200 hover:shadow-neutral-500 opacity-65 relative hover:opacity-90 before:content-[''] before:w-0  before:duration-150 before:bg-amber-900 before:rounded-md before:absolute before:bottom-0 before:left-0 hover:before:w-full before:h-0.5",
 };
 
-const NavBar = ({ isExpanded, headerDictionary, lang }: Props) => {
+const NavBar = ({ isExpanded, headerDictionary }: Props) => {
   const pathname = usePathname();
   const { active, default: def } = classOptions;
 
@@ -51,7 +50,7 @@ const NavBar = ({ isExpanded, headerDictionary, lang }: Props) => {
             </li>
           );
         })}
-        <SearchMenu lang={lang} />
+        <SearchMenu />
       </ul>
     </div>
   );

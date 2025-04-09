@@ -13,5 +13,5 @@ public class SearchedProductDto {
     private Double price;
     private Integer amount;
     private ImageDto imageDto;
-    private ShortProductTranslationDto translationDto;
+    private String title;
 }
