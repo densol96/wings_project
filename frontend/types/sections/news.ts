@@ -1,15 +1,15 @@
-import { Image, ShortContent } from "@/types/common";
+import { ImageDto, ShortContent } from "@/types/common";
 
 export type ShortNewsItem = {
   id: number;
-  image: Image;
+  imageDto: ImageDto;
   translation: ShortContent;
   createdAt: Date;
 };
 
 export type SingleNewsItem = {
   id: number;
-  imageDtos: Image[];
+  imageDtos: ImageDto[];
   translationDto: ShortContent & {
     location: string;
   };

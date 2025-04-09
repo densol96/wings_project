@@ -4,18 +4,15 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { locales, defaultLocale } from "@/constants/locales";
 import { defaultLangIsSelected } from "@/services/helpers";
+import { useLangContext } from "@/context/LangContext";
 
 type Locales = "lv" | "en";
 
-type Props = {
-  lang: Locales;
-};
-
-const LangSelectMenu = ({ lang }: Props) => {
+const LangSelectMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [selectedLang, setSelectedLang] = useState(lang);
+  const [selectedLang, setSelectedLang] = useState(useLangContext().lang);
 
   const assembleNewUrl = (newLocale: string) => {
     const oldUrl = `${pathname}?${searchParams.toString()}`;

@@ -5,15 +5,16 @@ import { Button, Spinner } from "../ui";
 import { FooterSubscribeSection } from "@/types/sections/footer";
 import { Locale } from "@/types";
 import toast from "react-hot-toast";
+import { useLangContext } from "@/context/LangContext";
 
 type Props = {
   subscribeSection: FooterSubscribeSection;
-  lang: Locale;
 };
 
-const SubscribeForm = ({ subscribeSection, lang }: Props) => {
+const SubscribeForm = ({ subscribeSection }: Props) => {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { lang } = useLangContext();
 
   const subscribeForNewsNotifications = async () => {
     try {

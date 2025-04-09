@@ -18,6 +18,13 @@ const config: Config = {
         "custom-light": "0px 10px 15px rgba(0, 0, 0, 0.1)",
         "custom-med": "0px 0px 20px 0px rgba(0, 0, 0, 0.3)",
         "custom-dark": "0px 0px 35px 5px rgba(0, 0, 0, 0.55)",
+        "custom-pro": `
+          rgba(0, 0, 0, 0.25) 0px 54px 55px,
+          rgba(0, 0, 0, 0.12) 0px -12px 30px,
+          rgba(0, 0, 0, 0.12) 0px 4px 6px,
+          rgba(0, 0, 0, 0.17) 0px 12px 13px,
+          rgba(0, 0, 0, 0.09) 0px -3px 5px
+        `,
       },
       transitionProperty: {
         width: "width",

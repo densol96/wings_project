@@ -1,15 +1,10 @@
 import Select from "@/components/ui/Select";
 import { getDictionary } from "@/dictionaries/dictionaries";
-import { PagePropsWithSlug } from "@/types";
 import { ProductsPageProps, ShopDict } from "@/types/sections/shop";
-import { extractIdFromSlug, fetcher, slugify } from "@/utils";
-import unslugify from "@/utils/unslugify";
+import { extractIdFromSlug, fetcher, syncSlug, validateSearchParams } from "@/utils";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import React from "react";
 import ToggleCategoriesSidebar from "../ToggleCategoriesSidebar";
-import syncSlug from "@/utils/syncSlug";
-import validateSearchParams from "@/utils/validateSearchParams";
 
 type ActiveCategory = {
   title: string;

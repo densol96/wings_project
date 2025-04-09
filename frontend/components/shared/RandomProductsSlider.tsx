@@ -44,8 +44,10 @@ const RandomProductsSlider: React.FC<Props> = ({ randomProducts, className, card
   let mp = { x0: 0, y0: 0, x: 0, y: 0, md: false };
 
   const sliderCardOptions = {
-    random: (product: RandomProductDto) => <RandomProduct lang={lang} product={product} />,
-    related: (product: RandomProductDto) => <ProductCard className="shadow-none" viewBtn={viewBtn[lang]} lang={lang} product={product} />,
+    random: (product: RandomProductDto, i: number) => <RandomProduct key={product.id + "_" + i} lang={lang} product={product} />,
+    related: (product: RandomProductDto, i: number) => (
+      <ProductCard key={product.id + "_" + i} className="shadow-none" viewBtn={viewBtn[lang]} lang={lang} product={product} />
+    ),
   };
 
   const settings = {

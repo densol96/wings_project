@@ -55,6 +55,7 @@ const Pagination = ({ className, children, currentPage, totalPages, maxVisible =
         {getPages().map((page) => {
           return (
             <button
+              key={"paination_" + page}
               disabled={currentPage === page}
               onClick={() => setPage(page)}
               className={cn(

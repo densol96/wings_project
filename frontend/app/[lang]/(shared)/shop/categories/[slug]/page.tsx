@@ -1,12 +1,10 @@
 import { getDictionary } from "@/dictionaries/dictionaries";
-import { PageProps, PagePropsWithSlug, SortDirection } from "@/types";
-import { ProductSearchParams, ProductSort } from "@/types/sections/shop";
+import { PageProps, PagePropsWithSlug } from "@/types";
+import { ProductSearchParams } from "@/types/sections/shop";
 import ProductGrid from "./ProductGrid";
-import validateValues from "@/utils/validateValues";
-import { extractIdFromSlug } from "@/utils";
+import { extractIdFromSlug, validateSearchParams } from "@/utils";
 import { Suspense } from "react";
 import { Spinner } from "@/components";
-import validateSearchParams from "@/utils/validateSearchParams";
 
 type Props = PagePropsWithSlug & {
   searchParams: ProductSearchParams;

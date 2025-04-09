@@ -26,5 +26,4 @@ export type FooterContent = {
 
 export type FooterProps = {
   footerDictionary: FooterContent;
-  lang: Locale;
 };

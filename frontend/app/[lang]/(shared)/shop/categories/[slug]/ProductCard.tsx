@@ -15,6 +15,11 @@ type Props = {
   viewBtn?: string;
 };
 
+const viewBtn = {
+  en: "View product",
+  lv: "Skatīt produktu",
+};
+
 const ProductCard = ({ className, product, lang, dict, viewBtn }: Props) => {
   const href = `/${lang}/shop/products/${product.id}-${slugify(product.translationDto?.title)}`;
 

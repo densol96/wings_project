@@ -17,7 +17,6 @@ export type CookiesPopup = {
 
 type Props = {
   dict: CookiesPopup;
-  lang: Locale;
 };
 
 const LOCAL_STORAGE_KEY = "cookies_agreed_to_by_user";

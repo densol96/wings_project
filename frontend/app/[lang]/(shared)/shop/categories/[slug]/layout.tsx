@@ -3,7 +3,7 @@ import { CategoriesSidebarProvider } from "@/context/CategoriesSidebarContext";
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { PagePropsWithSlug } from "@/types";
 import { CategoriesDict, CategoryLi, ProductSearchParams } from "@/types/sections/shop";
-import { fetcher, slugify } from "@/utils";
+import { fetcher } from "@/utils";
 import Link from "next/link";
 import React from "react";
 import CategoriesSidebar from "./CategoriesSidebar";
