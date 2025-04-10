@@ -13,3 +13,5 @@ export { default as AnimatedProductImage } from "./AnimatedProductImage";
 export { default as SearchedProductItem } from "./SearchedProductItem";
 export { default as SearchedNewsItem } from "./SearchedNewsItem";
 export { default as SearchForm } from "./SearchForm";
+export { default as Sidebar } from "./Sidebar";
+export { default as NavSidebar } from "./NavSidebar";

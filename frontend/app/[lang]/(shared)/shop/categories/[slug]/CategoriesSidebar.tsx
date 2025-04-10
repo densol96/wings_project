@@ -1,11 +1,10 @@
 "use client";
 
 import { CloseBtn, Heading, LogoWithIcons } from "@/components";
-import { useCategoriesSidebarContext } from "@/context/CategoriesSidebarContext";
+import { useSidebarContext } from "@/context/SidebarContext";
 import { CategoriesDict, CategoryLi } from "@/types/sections/shop";
-import { cn, slugify } from "@/utils";
-import Link from "next/link";
-import React, { MouseEventHandler, useRef } from "react";
+import { cn } from "@/utils";
+import React, { useRef } from "react";
 import CategoryList from "./CategoryList";
 
 type Props = {
@@ -15,7 +14,7 @@ type Props = {
 };
 
 const CategoriesSidebar = ({ className, dict, categoryList }: Props) => {
-  const { isOpen, close } = useCategoriesSidebarContext();
+  const { isOpen, close } = useSidebarContext();
   const sidebar = useRef<HTMLElement | null>(null);
 
   const interactiveStyles =

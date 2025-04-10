@@ -12,7 +12,7 @@
       "siteName": "Spārni Association"
     }
   },
-  "header": {
+  "navMenu": {
     "home": {
       "title": "Home",
       "href": "/en"

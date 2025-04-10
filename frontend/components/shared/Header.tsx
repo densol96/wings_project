@@ -6,54 +6,44 @@ import React, { useState } from "react";
 import { NavBar } from "@/components/shared";
 import { Logo } from "@/components/ui";
 import { ToolsIcon, ExpandIcon, CloseIcon, CartIcon } from "@/components/ui/icons";
-import { HeaderDictionary } from "./NavBar";
 import LangSelectMenu from "./LangSelectMenu";
+import { Locale, NavigationDictionary } from "@/types";
+import { useSidebarContext } from "@/context/SidebarContext";
 
 type Props = {
-  className?: string;
-  children?: React.ReactNode;
-  headerDictionary: HeaderDictionary;
+  lang: Locale;
+  navMenu: NavigationDictionary;
 };
 
-const Header = ({ headerDictionary }: Props) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const toggle = () => setIsExpanded(!isExpanded);
+const Header = ({ lang, navMenu }: Props) => {
+  const { isOpen, close, open, toggle } = useSidebarContext();
 
   return (
-    <nav
-      className={`${isExpanded ? "h-96" : "h-24"} sticky top-0 transition-all shadow-md lg:h-40 flex justify-between items-center bg-light-nav lg:text-lg z-30`}
-    >
-      <div className={`${isExpanded ? "items-start" : "items-center"} justify-center flex h-full relative shrink p-4 overflow-hidden`}>
-        <img
-          draggable="false"
-          className={`${isExpanded ? "invisible" : "opacity-100"} absolute left-0 rotate-75 w-96 h-auto lg:visible lg:opacity-100`}
-          src="/assets/prievites_nobackground.png"
-          alt="Prievites-bilde"
-        />
+    <nav className={`h-24 lg:h-40 sticky top-0 transition-all shadow-md flex justify-between items-center bg-light-nav text-lg z-10`}>
+      <div className={`items-center justify-center flex h-full relative shrink p-4 overflow-hidden`}>
+        <img draggable="false" className={`opacity-100 absolute left-0 rotate-75 w-96 h-auto`} src="/assets/prievites_nobackground.png" alt="Prievites-bilde" />
         <Logo />
       </div>
 
-      <NavBar isExpanded={isExpanded} headerDictionary={headerDictionary} />
+      <NavBar navMenu={navMenu} />
 
-      <section className="flex flex-col items-end h-full">
+      <section className="flex flex-col justify-between items-end h-full py-1 mr-2">
         <button
           onClick={toggle}
           className="size-10 flex  justify-center align-center items-center lg:hidden"
           aria-label={!toggle ? "Show navigation" : "Hide navigation"}
         >
-          {!isExpanded ? <ExpandIcon /> : <CloseIcon />}
+          {!isOpen && <ExpandIcon />}
         </button>
 
-        <div className={`flex gap-x-4 h-full p-4 items-end ${isExpanded ? "flex-col-reverse" : "flex-row"} lg:flex-row gap-4 lg:gap-2`}>
+        <div className="flex flex-row gap-4 lg:gap-2 mt-auto">
           <LangSelectMenu />
-          <div className="flex flex-row gap-4 lg:gap-2">
-            <Link className="size-6 self-end" href="/admin">
-              <ToolsIcon />
-            </Link>
-            <button className="size-6 self-end">
-              <CartIcon />
-            </button>
-          </div>
+          <Link className="size-6 self-end" href="/admin">
+            <ToolsIcon />
+          </Link>
+          <button className="size-6 self-end">
+            <CartIcon />
+          </button>
         </div>
       </section>
     </nav>

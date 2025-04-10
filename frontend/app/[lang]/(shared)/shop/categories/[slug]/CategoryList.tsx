@@ -5,7 +5,7 @@ import { CategoryLi } from "@/types/sections/shop";
 import { cn, extractActiveSegment, slugify } from "@/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCategoriesSidebarContext } from "@/context/CategoriesSidebarContext";
+import { useSidebarContext } from "@/context/SidebarContext";
 
 type Props = {
   className?: string;
@@ -13,7 +13,7 @@ type Props = {
 };
 
 const CategoryList = ({ className, list }: Props) => {
-  const { close } = useCategoriesSidebarContext();
+  const { close } = useSidebarContext();
   const segment = extractActiveSegment(usePathname());
 
   return (

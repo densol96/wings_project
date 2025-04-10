@@ -10,8 +10,11 @@ import { Heading, RadioGroup } from "../ui";
 
 import { SearchedProductDto, SearchedNewsDto } from "@/types";
 import { useLangContext } from "@/context/LangContext";
+import { cn } from "@/utils";
 
-type Props = {};
+type Props = {
+  className?: string;
+};
 
 type CheckboxType = "news" | "products";
 
@@ -52,7 +55,7 @@ const dict = {
   },
 };
 
-const SearchForm = ({}: Props) => {
+const SearchForm = ({ className }: Props) => {
   const [selectedOption, setSelectedOption] = useState<CheckboxType>("products");
   const [query, setQuery] = useState("");
   const [foundItems, setFoundItems] = useState<SearchResultMap[CheckboxType]>([]);
@@ -78,7 +81,7 @@ const SearchForm = ({}: Props) => {
   );
 
   return (
-    <div className="w-full p-4">
+    <div className={cn("w-full p-4", className)}>
       <Heading size="xs" className="mb-3 uppercase tracking-wide mt-4 font-medium text-center">
         {`${dict[lang].title}:`}
       </Heading>
@@ -87,7 +90,7 @@ const SearchForm = ({}: Props) => {
         <RadioGroup label={dict[lang].news.label} name="searchIn" value="news" selectedOption={selectedOption} setSelectedOption={onCategoryChange} />
       </div>
       <input value={query} onChange={(e) => setQuery(e.target.value)} className="custom-input w-full mb-6" placeholder={dict[lang][selectedOption].search} />
-      <ul className="flex flex-col gap-3">
+      <ul className="flex flex-col gap-3 max-h-[40vh] overflow-y-scroll">
         {selectedOption === "products" &&
           foundItems.map((item) => <SearchedProductItem key={item.id + "_" + item.title} product={item as SearchedProductDto} lang={lang} query={query} />)}
         {selectedOption === "news" &&

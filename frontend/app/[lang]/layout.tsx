@@ -7,13 +7,14 @@ import { AlternateURLs } from "next/dist/lib/metadata/types/alternative-urls-typ
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { PageProps } from "@/types/common";
 
-import { Header, Footer } from "@/components/shared";
+import { Header, Footer, NavSidebar } from "@/components/shared";
 import TestBtn from "./TestBtn";
 
 import dynamic from "next/dynamic";
 import { Toaster } from "react-hot-toast";
 import Scroll from "@/components/shared/Scroll";
 import { LangProvider } from "@/context/LangContext";
+import { CategoriesSidebarProvider } from "@/context/SidebarContext";
 const CookiesPopup = dynamic(() => import("@/components/shared/CookiesPopup"), { ssr: false });
 
 const roboto = Roboto({
@@ -70,7 +71,10 @@ const RootLayout = async ({ children, params: { lang } }: Props) => {
         <Scroll />
         <body className={`${roboto.className} min-h-screen flex flex-col`}>
           <TestBtn />
-          <Header headerDictionary={dict.header} />
+          <CategoriesSidebarProvider>
+            <Header navMenu={dict.navMenu} lang={lang} />
+            <NavSidebar navMenu={dict.navMenu} />
+          </CategoriesSidebarProvider>
           <main className="relative flex-1">{children}</main>
           <Footer footerDictionary={dict.footer} />
           <CookiesPopup dict={dict.cookiesPopup} />

@@ -4,47 +4,34 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SearchMenu from "./SearchMenu";
-import { Locale } from "@/types";
-
-export type HeaderDictionary = {
-  [key: string]: {
-    title: string;
-    href: string;
-  };
-};
+import { cn, isAnIndexPage } from "@/utils";
+import { NavigationDictionary } from "@/types";
 
 type Props = {
-  isExpanded: boolean;
-  headerDictionary: HeaderDictionary;
+  navMenu: NavigationDictionary;
 };
 
 const classOptions = {
-  active:
-    "p-3 font-bold opacity-100 text-shadow-sm shadow-neutral-500 tracking-wider relative opacity-100 before:content-[''] before:w-0  before:duration-150 before:bg-amber-900 before:rounded-md before:absolute before:bottom-0 before:left-0 before:w-full before:h-0.5",
-  default:
-    "p-3 tracking-wider text-shadow-sm transition-opacity  active:scale-50  duration-200 hover:shadow-neutral-500 opacity-65 relative hover:opacity-90 before:content-[''] before:w-0  before:duration-150 before:bg-amber-900 before:rounded-md before:absolute before:bottom-0 before:left-0 hover:before:w-full before:h-0.5",
+  active: `font-bold opacity-100 shadow-neutral-500 before:w-[80%]`,
+  def: `transition-opacity active:scale-50 duration-200 hover:shadow-neutral-500 opacity-65 hover:opacity-90 hover:before:w-[80%]`,
 };
 
-const NavBar = ({ isExpanded, headerDictionary }: Props) => {
+const NavBar = ({ navMenu }: Props) => {
   const pathname = usePathname();
-  const { active, default: def } = classOptions;
 
   return (
-    <div
-      className={`${
-        isExpanded ? "opacity-100 grow" : `hidden`
-      } text-gray-900 shrink-0 z-10 p-10 bg-cover flex justify-center items-center  bg-[url('/assets/knitting_img.jpg')] h-full bg-no-repeat bg-center rounded-xl lg:block lg:grow-0`}
-    >
-      <ul
-        className={`${
-          isExpanded ? "opacity-100" : `invisible divide-x`
-        } divide-amber-900 bg-light-nav bg-opacity-80 rounded-xl transition-opacity p-4 backdrop-opacity-10 opacity-0 duration-500 flex flex-col items-center gap-y-8 lg:opacity-100 lg:visible lg:flex lg:static lg:flex-row lg:-translate-x-0 lg:translate-y-0`}
-      >
-        {Object.values(headerDictionary).map((item) => {
-          const isAnIndexPage = ["/", "/en"].includes(item.href);
+    <div className="xl:p-10 p-8 bg-cover flex justify-center items-center  bg-[url('/assets/knitting_img.jpg')] bg-no-repeat bg-center rounded-xl xl:text-lg text-sm hidden lg:block">
+      <ul className="divide-x divide-amber-900 bg-light-nav bg-opacity-80 rounded-xl p-4 flex items-center divid text-gray-800">
+        {Object.values(navMenu).map((item) => {
           return (
             <li key={item.title}>
-              <Link className={(isAnIndexPage ? item.href == pathname : pathname.startsWith(item.href)) ? active : def} href={item.href}>
+              <Link
+                className={cn(
+                  "p-3 tracking-wider text-shadow-sm relative before:content-[''] before:w-0 before:duration-200 before:bg-amber-900 before:absolute before:bottom-0 before:left-[10%] before:h-0.5 ",
+                  (isAnIndexPage(item.href) ? item.href == pathname : pathname.startsWith(item.href)) ? classOptions["active"] : classOptions["def"]
+                )}
+                href={item.href}
+              >
                 {item.title}
               </Link>
             </li>

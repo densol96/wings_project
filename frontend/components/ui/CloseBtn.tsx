@@ -8,7 +8,7 @@ type Props = {
 
 const CloseBtn = ({ className }: Props) => {
   return (
-    <button className={cn("text-gray-300 hover:text-gray-50 text-6xl font-bold transition duration-300 md:hidden", className)}>
+    <button className={cn("text-gray-300 hover:text-gray-50 text-6xl font-bold transition duration-300", className)}>
       <IoMdClose />
     </button>
   );
