@@ -115,6 +115,7 @@
     "title": "Visi produkti",
     "description": "Atklājiet skaistus un unikālus rokdarbus, kas radīti ar mīlestību un rūpību! Izvēlieties no plaša klāsta ar rokām darinātu izstrādājumu, kas piepildīs jūsu mājokli ar siltumu un individualitāti. Katrs priekšmets ir īpašs – radīts, lai priecētu un iedvesmotu. Atrodiet savu ideālo darinājumu jau šodien!",
     "toHome": "Uz galveno lapu",
+    "alreadyInCart": "Jau grozā",
     "select": {
       "label": "Kārtot pēc",
       "options": [
@@ -240,5 +241,8 @@
         "description": "Mēs neesam atbildīgi par pazudušiem vai nepareizi nosūtītiem sūtījumiem. Lūdzu, izmantojiet izsekojamu piegādes metodi. Atgriežot sūtījumu no ārpus ES vai ja sūtījums nav izņemts, no atmaksas tiks ieturēti 23% no pasūtījuma summas."
       }
     ]
+  },
+  "shared": {
+    "isAlreadyInCart": "Jau grozā"
   }
 }

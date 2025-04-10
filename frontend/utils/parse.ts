@@ -1,4 +1,4 @@
-import { PageableResponse, PageableReturn } from "@/types";
+import { PageableResponse, PageableReturn, ShortProductDto } from "@/types";
 import clsx from "clsx";
 import { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -26,4 +26,14 @@ export const cn = (...inputs: ClassValue[]) => {
 
 export const removeDiacritics = (str: string) => {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
+export const createCartItem = (product: ShortProductDto) => {
+  return {
+    id: product.id,
+    title: product.translationDto.title,
+    price: product.price,
+    image: product.imageDtos.at(1)?.src,
+    inStockAmount: product.amount,
+  };
 };

@@ -5,7 +5,7 @@ import BeatLoader from "react-spinners/BeatLoader";
 type Props = {
   className?: string;
   color?: "black" | "primary" | "white";
-  size?: "md";
+  size?: "md" | "sm";
 };
 
 const override: CSSProperties = {};
@@ -13,6 +13,7 @@ const override: CSSProperties = {};
 const Spinner = ({ className, color = "primary", size = "md" }: Props) => {
   const theme = color === "primary" ? "#751521" : color;
   const mapSizeInPx = {
+    sm: 10,
     md: 20,
   } as const;
 

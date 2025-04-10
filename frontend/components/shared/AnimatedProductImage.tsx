@@ -1,7 +1,10 @@
+"use client";
+
 import { ImageDto, Locale } from "@/types";
 import React from "react";
 import { MyImage } from "../ui";
 import { cn } from "@/utils";
+import { useLangContext } from "@/context";
 
 type Props = {
   images: ImageDto[];
@@ -11,8 +14,15 @@ type Props = {
   imagePosition?: string;
 };
 
+const dict = {
+  lv: "Nav noliktavā",
+  en: "Out of stock",
+};
+
 const AnimatedProductImage = ({ images, className, isNotAvailable, imagePosition }: Props) => {
   const imagesTotal = images?.length || 0;
+
+  const { lang } = useLangContext();
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
@@ -35,7 +45,7 @@ const AnimatedProductImage = ({ images, className, isNotAvailable, imagePosition
           )
       )}
       {isNotAvailable && (
-        <div className="absolute top-1/2 w-full text-center py-6 bg-gray-200 opacity-85 uppercase font-medium -translate-y-1/2">Nav noliktavā</div>
+        <div className="absolute top-1/2 w-full text-center py-6 bg-gray-200 opacity-85 uppercase font-medium -translate-y-1/2">{dict[lang]}</div>
       )}
     </div>
   );

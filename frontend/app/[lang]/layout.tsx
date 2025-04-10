@@ -1,6 +1,5 @@
 import "./globals.css";
 
-import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { AlternateURLs } from "next/dist/lib/metadata/types/alternative-urls-types";
 
@@ -15,6 +14,7 @@ import { Toaster } from "react-hot-toast";
 import Scroll from "@/components/shared/Scroll";
 import { LangProvider } from "@/context/LangContext";
 import { SidebarProvider } from "@/context/SidebarContext";
+import { CartProvider } from "@/context/CartContext";
 const CookiesPopup = dynamic(() => import("@/components/shared/CookiesPopup"), { ssr: false });
 
 const roboto = Roboto({
@@ -71,11 +71,13 @@ const RootLayout = async ({ children, params: { lang } }: Props) => {
         <Scroll />
         <body className={`${roboto.className} min-h-screen flex flex-col`}>
           <TestBtn />
-          <SidebarProvider>
-            <Header navMenu={dict.navMenu} lang={lang} />
-            <NavSidebar navMenu={dict.navMenu} />
-          </SidebarProvider>
-          <main className="relative flex-1">{children}</main>
+          <CartProvider>
+            <SidebarProvider>
+              <Header navMenu={dict.navMenu} />
+              <NavSidebar navMenu={dict.navMenu} />
+            </SidebarProvider>
+            <main className="relative flex-1">{children}</main>
+          </CartProvider>
           <Footer footerDictionary={dict.footer} />
           <CookiesPopup dict={dict.cookiesPopup} />
           <Toaster

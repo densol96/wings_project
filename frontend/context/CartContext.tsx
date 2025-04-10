@@ -1,6 +1,7 @@
 "use client";
 
-import { createContext, ReactNode, useCallback, useContext, useState } from "react";
+import { useEffectOnce, useLocalStorage } from "@/hooks";
+import { createContext, ReactNode, useContext, useState } from "react";
 
 export type CartItem = {
   id: number;
@@ -11,67 +12,89 @@ export type CartItem = {
   inStockAmount: number; // total avaialable in stock
 };
 
-type CartContextType = {
+export type ProductData = Omit<CartItem, "quantity">;
+
+export type CartContextProps = {
   items: CartItem[];
-  addProduct: (product: CartItem, quantity?: number) => void;
+  addProduct: (product: ProductData, quantity?: number) => void;
+  productIsInCart: (id: number) => boolean;
   incrementProduct: (id: number) => void;
   decrementProduct: (id: number) => void;
   removeProduct: (id: number) => void;
   clearCart: () => void;
-  getTotal: () => number;
+  getTotalPrice: () => number;
+  getTotalNumberOfProducts: () => number;
+  cartIsLoaded: boolean;
 };
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+const CartContext = createContext<CartContextProps | undefined>(undefined);
 
 type ProviderProps = {
   children: ReactNode;
 };
 
-export const CartProvider = ({ children }: ProviderProps) => {
-  const [items, setItems] = useState<CartItem[]>([]);
+const STORAGE_KEY = "my_cart_v1";
 
-  const addProduct = (product: CartItem, quantity: number = 1) => {
+export const CartProvider = ({ children }: ProviderProps) => {
+  const { value: items, updateLocalStorage: setItems } = useLocalStorage<CartItem[]>(STORAGE_KEY, []);
+
+  const [cartIsLoaded, setCartIsLoaded] = useState(false);
+
+  useEffectOnce(() => {
+    setCartIsLoaded(true);
+  });
+
+  const addProduct = (product: ProductData, quantity: number = 1) => {
     const availableQty = Math.min(quantity, product.inStockAmount);
     setItems((prev) => {
-      const existing = items.find((p) => p.id === product.id);
+      const existing = prev?.find((p) => p.id === product.id);
       if (existing) {
         const newQty = Math.min(existing.quantity + availableQty, existing.inStockAmount);
-        return prev.map((p) => (p.id === product.id ? { ...p, quantity: newQty } : p));
+        return prev?.map((p) => (p.id === product.id ? { ...p, quantity: newQty } : p)) || [];
       }
-      return [...prev, { ...product, quantity: availableQty }];
+      return [...(prev !== null ? prev : []), { ...product, quantity: availableQty }];
     });
   };
 
+  const productIsInCart = (id: number) => items?.some((p) => p.id === id) || false;
+
   const incrementProduct = (id: number) => {
-    setItems((prev) => prev.map((p) => (p.id === id && p.quantity < p.inStockAmount ? { ...p, quantity: p.quantity + 1 } : p)));
+    setItems((prev) => prev?.map((p) => (p.id === id && p.quantity < p.inStockAmount ? { ...p, quantity: p.quantity + 1 } : p)) || []);
   };
 
   const decrementProduct = (id: number) => {
-    setItems((prev) => prev.map((p) => (p.id === id && p.quantity > 1 ? { ...p, quantity: p.quantity - 1 } : p)));
+    setItems((prev) => prev?.map((p) => (p.id === id && p.quantity > 1 ? { ...p, quantity: p.quantity - 1 } : p)) || []);
   };
 
   const removeProduct = (id: number) => {
-    setItems((prev) => prev.filter((p) => p.id !== id));
+    setItems((prev) => prev?.filter((p) => p.id !== id) || []);
   };
 
   const clearCart = () => {
     setItems([]);
   };
 
-  const getTotal = () => {
-    return items.reduce((total, item) => total + item.price * item.quantity, 0);
+  const getTotalPrice = () => {
+    return items?.reduce((total, item) => total + item.price * item.quantity, 0) || 0;
+  };
+
+  const getTotalNumberOfProducts = () => {
+    return items?.reduce((total, item) => total + item.quantity, 0) || 0;
   };
 
   return (
     <CartContext.Provider
       value={{
-        items,
+        items: items as CartItem[],
+        productIsInCart,
         addProduct,
         incrementProduct,
         decrementProduct,
         removeProduct,
         clearCart,
-        getTotal,
+        getTotalPrice,
+        getTotalNumberOfProducts,
+        cartIsLoaded,
       }}
     >
       {children}

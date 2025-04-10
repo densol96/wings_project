@@ -66,6 +66,10 @@
     animation: mulShdSpin 1.3s infinite linear;
     transform: translateZ(0);
   }
+
+  .slideUp {
+    animation: fadeUp 0.4s ease-out forwards;
+  }
 }
 
 @layer utilities {
@@ -109,5 +113,16 @@
   }
   87.5% {
     box-shadow: 0em -3em 0 0, 2em -2em 0 -1em, 3em 0 0 -1em, 2em 2em 0 -1em, 0 3em 0 -1em, -2em 2em 0 0, -3em 0em 0 0, -2em -2em 0 0.2em;
+  }
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

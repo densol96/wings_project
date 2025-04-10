@@ -31,6 +31,7 @@ export type ShopDict = {
   select: SelectOptions;
   noProductsMessage: string;
   addToCartBtn: string;
+  alreadyInCart: string;
   categories: {
     title: string;
     shortTitle: string;
@@ -112,4 +113,5 @@ export type ProductDict = {
   material: string;
   invalidAmount: string;
   relatedProducts: string;
+  isAlreadyInCart: string; // shared
 };

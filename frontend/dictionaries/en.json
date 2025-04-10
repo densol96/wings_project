@@ -116,6 +116,7 @@
     "title": "All products",
     "description": "Discover beautiful and unique handmade crafts, created with love and care! Choose from a wide selection of handcrafted items that will fill your home with warmth and individuality. Each piece is special – made to bring joy and inspiration. Find your perfect creation today!",
     "toHome": "To the main page",
+    "alreadyInCart": "Already in cart",
     "select": {
       "label": "Sort by",
       "options": [
@@ -241,5 +242,8 @@
         "description": "We are not responsible for lost, stolen, or misdirected returns. Please use a trackable shipping method. For returns or unclaimed deliveries from outside the EU, a 23% fee will be deducted from the refund."
       }
     ]
+  },
+  "shared": {
+    "isAlreadyInCart": "Already in cart"
   }
 }

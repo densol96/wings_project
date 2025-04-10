@@ -26,7 +26,6 @@ export const slugify = (url: string): string => {
 };
 
 export const syncSlug = (id: string | number, title: string, oldSlug: string, searchParamsString: string = "") => {
-  console.log("OLD SLUG: " + oldSlug);
   const newLocalisedSlug = `${id}-${slugify(title)}`;
   if (newLocalisedSlug !== oldSlug) redirect(newLocalisedSlug + `?${searchParamsString}`);
 };
