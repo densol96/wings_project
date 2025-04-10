@@ -18,7 +18,7 @@ const NavSidebar = ({ navMenu }: Props) => {
   const { close } = useSidebarContext();
 
   return (
-    <Sidebar className="lg:hidden overflow-auto flex flex-col justify-between" breakpoint="lg">
+    <Sidebar className="lg:hidden overflow-auto" breakpoint="lg">
       <SearchForm className="p-0" />
       <ul className="flex flex-col gap-2 mt-6 mb-10">
         {Object.values(navMenu).map((item) => {

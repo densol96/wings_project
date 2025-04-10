@@ -39,6 +39,9 @@ const config: Config = {
       backdropBlur: {
         nano: "1px",
       },
+      screens: {
+        xs: "550px",
+      },
     },
   },
   plugins: [],

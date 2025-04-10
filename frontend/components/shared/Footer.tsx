@@ -9,8 +9,8 @@ import SubscribeForm from "./SubscribeForm";
 const Footer = ({ footerDictionary }: FooterProps) => {
   return (
     <footer className="w-full body-font mt-auto flex flex-col text-gray-700 bg-gray-200">
-      <main className="w-[70%] mx-auto pt-24 pb-14 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-8 text-center">
-        <LogoWithIcons title={footerDictionary.title} />
+      <main className="px-10 w-full lg:max-w-[1200px] mx-auto py-24 grid grid-cols-1 xs:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-8 text-center">
+        <LogoWithIcons className="xs:w-full w-[70%] mx-auto" />
         {footerDictionary.categories.map((category, index) => (
           <div key={index} className="w-full">
             <h2 className="mb-3 text-sm font-bold tracking-widest text-gray-800 uppercase">{category.title}</h2>

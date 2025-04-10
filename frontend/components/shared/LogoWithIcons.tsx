@@ -1,10 +1,12 @@
+"use client";
+
 import { cn } from "@/utils";
 import React from "react";
 import { Logo } from "../ui";
+import { useLangContext } from "@/context/LangContext";
 
 type Props = {
   className?: string;
-  title: string;
 };
 
 type IconLink = {
@@ -40,11 +42,18 @@ const iconLinks: IconLink[] = [
   },
 ];
 
-const LogoWithIcons = ({ className, title }: Props) => {
+const dict = {
+  lv: "Rokdarbu izstrādājumi",
+  en: "Handmade Products",
+};
+
+const LogoWithIcons = ({ className }: Props) => {
+  const { lang } = useLangContext();
+
   return (
     <div className={cn("w-full text-center", className)}>
       <Logo />
-      <p className="mt-2 text-sm">{title}</p>
+      <p className="mt-2 text-sm">{dict[lang]}</p>
       <div className="mt-4 flex justify-center space-x-3">
         {iconLinks.map((il, i) => (
           <a key={il.href + "_icon_" + i} href={il.href} className="hover:text-gray-700">
