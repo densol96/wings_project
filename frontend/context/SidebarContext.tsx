@@ -15,9 +15,8 @@ type ProviderProps = {
   children: ReactNode;
 };
 
-export const CategoriesSidebarProvider = ({ children }: ProviderProps) => {
+export const SidebarProvider = ({ children }: ProviderProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
   const close = useCallback(() => setIsOpen(false), []);
   const open = useCallback(() => setIsOpen(true), []);
   const toggle = useCallback(() => setIsOpen((val) => !val), []);

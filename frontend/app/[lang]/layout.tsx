@@ -14,7 +14,7 @@ import dynamic from "next/dynamic";
 import { Toaster } from "react-hot-toast";
 import Scroll from "@/components/shared/Scroll";
 import { LangProvider } from "@/context/LangContext";
-import { CategoriesSidebarProvider } from "@/context/SidebarContext";
+import { SidebarProvider } from "@/context/SidebarContext";
 const CookiesPopup = dynamic(() => import("@/components/shared/CookiesPopup"), { ssr: false });
 
 const roboto = Roboto({
@@ -71,10 +71,10 @@ const RootLayout = async ({ children, params: { lang } }: Props) => {
         <Scroll />
         <body className={`${roboto.className} min-h-screen flex flex-col`}>
           <TestBtn />
-          <CategoriesSidebarProvider>
+          <SidebarProvider>
             <Header navMenu={dict.navMenu} lang={lang} />
             <NavSidebar navMenu={dict.navMenu} />
-          </CategoriesSidebarProvider>
+          </SidebarProvider>
           <main className="relative flex-1">{children}</main>
           <Footer footerDictionary={dict.footer} />
           <CookiesPopup dict={dict.cookiesPopup} />

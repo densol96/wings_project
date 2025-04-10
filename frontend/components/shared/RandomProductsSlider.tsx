@@ -54,7 +54,7 @@ const RandomProductsSlider: React.FC<Props> = ({ randomProducts, className, card
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    autoplay: false,
     autoplaySpeed: 4000,
     arrows: true,
     nextArrow: <CustomArrow arrowsClassname={arrowsClassname} direction="right" />,
@@ -74,7 +74,7 @@ const RandomProductsSlider: React.FC<Props> = ({ randomProducts, className, card
   };
 
   return (
-    <div className={cn("my-40 overflow-visible relative", className)}>
+    <div className={cn("overflow-visible relative", className)}>
       <Slider {...finalSettings}>{randomProducts.map(sliderCardOptions[cardOption])}</Slider>
     </div>
   );

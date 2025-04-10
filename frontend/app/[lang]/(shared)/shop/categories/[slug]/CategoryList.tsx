@@ -22,7 +22,13 @@ const CategoryList = ({ className, list }: Props) => {
         const href = `${category.id}-${slugify(category.title)}`;
         return (
           <Link key={category.title} href={href}>
-            <li onClick={close} className={cn("flex justify-between items-center", segment === href ? "text-gray-700 font-medium" : "text-gray-500")}>
+            <li
+              onClick={() => segment === href && close()}
+              className={cn(
+                "flex justify-between items-center",
+                segment === href ? "text-gray-800 font-medium cursor-default" : "text-gray-500 hover:text-gray-700"
+              )}
+            >
               <p>{category.title}</p>
               <p className="text-sm">({category.productsTotal})</p>
             </li>
