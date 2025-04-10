@@ -11,7 +11,7 @@
       "siteName": "Spārni biedrība"
     }
   },
-  "header": {
+  "navMenu": {
     "home": {
       "title": "Sākums",
       "href": "/"

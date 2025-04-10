@@ -1,5 +1,5 @@
 import { Heading } from "@/components";
-import { CategoriesSidebarProvider } from "@/context/CategoriesSidebarContext";
+import { CategoriesSidebarProvider } from "@/context/SidebarContext";
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { PagePropsWithSlug } from "@/types";
 import { CategoriesDict, CategoryLi, ProductSearchParams } from "@/types/sections/shop";
@@ -19,6 +19,7 @@ export const revalidate = 0;
 const Layout = async ({ params: { lang, slug }, header, children, searchParams }: Props) => {
   const categoryList = await fetcher<CategoryLi[]>(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/product-categories?lang=${lang}`);
   const categoriesDict: CategoriesDict = (await getDictionary(lang)).shop.categories;
+
   return (
     <CategoriesSidebarProvider>
       {header}

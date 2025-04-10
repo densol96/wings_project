@@ -9,7 +9,7 @@ export type ContextProps = {
   toggle: () => void;
 };
 
-const CategoriesSidebarContext = createContext<ContextProps | undefined>(undefined);
+const SidebarContext = createContext<ContextProps | undefined>(undefined);
 
 type ProviderProps = {
   children: ReactNode;
@@ -22,11 +22,11 @@ export const CategoriesSidebarProvider = ({ children }: ProviderProps) => {
   const open = useCallback(() => setIsOpen(true), []);
   const toggle = useCallback(() => setIsOpen((val) => !val), []);
 
-  return <CategoriesSidebarContext.Provider value={{ isOpen, close, open, toggle }}>{children}</CategoriesSidebarContext.Provider>;
+  return <SidebarContext.Provider value={{ isOpen, close, open, toggle }}>{children}</SidebarContext.Provider>;
 };
 
-export const useCategoriesSidebarContext = () => {
-  const context = useContext(CategoriesSidebarContext);
-  if (!context) throw new Error("useCategoriesSidebarContext must be used within a CategoriesSidebarProvider");
+export const useSidebarContext = () => {
+  const context = useContext(SidebarContext);
+  if (!context) throw new Error("useSidebarContext must be used within a SidebarProvider");
   return context;
 };

@@ -26,7 +26,7 @@ const CustomArrow = ({ direction, onClick, arrowsClassname }: { direction: "left
   <button
     onClick={onClick}
     className={cn(
-      "absolute top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition text-primary-bright hidden xl:block",
+      "absolute top-1/2 -translate-y-1/2 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition text-primary-bright hidden xl:block",
       direction === "left" ? "-left-14" : "-right-14",
       arrowsClassname
     )}
