@@ -3,11 +3,11 @@
 import { Locale } from "@/types";
 import { createContext, ReactNode, useCallback, useContext, useState } from "react";
 
-export type ContextProps = {
+export type LangContextProps = {
   lang: Locale;
 };
 
-const LangContext = createContext<ContextProps | undefined>(undefined);
+const LangContext = createContext<LangContextProps | undefined>(undefined);
 
 type ProviderProps = {
   children: ReactNode;

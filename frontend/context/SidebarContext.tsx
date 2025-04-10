@@ -2,14 +2,14 @@
 
 import { createContext, ReactNode, useCallback, useContext, useState } from "react";
 
-export type ContextProps = {
+export type SidebarContextProps = {
   isOpen: boolean;
   close: () => void;
   open: () => void;
   toggle: () => void;
 };
 
-const SidebarContext = createContext<ContextProps | undefined>(undefined);
+const SidebarContext = createContext<SidebarContextProps | undefined>(undefined);
 
 type ProviderProps = {
   children: ReactNode;

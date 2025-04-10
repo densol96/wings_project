@@ -1,7 +1,7 @@
 import { Button, Heading } from "@/components";
 import { Locale } from "@/i18n-config";
 import { ProductDict, ProductDto } from "@/types";
-import { cn, formatPrice, isAvailableStyling } from "@/utils";
+import { cn, createCartItem, formatPrice, isAvailableStyling } from "@/utils";
 import React from "react";
 import AdditionalInfo from "./AdditionalInfo";
 import ProductBreadcrumbs from "./ProductBreadcrumbs";
@@ -15,7 +15,8 @@ type Props = {
 };
 
 const ProductInfo = ({ product, lang, dict }: Props) => {
-  const isAvaiable = product.amount > 0;
+  const isAvailable = product.amount > 0;
+
   return (
     <div>
       <ProductBreadcrumbs lang={lang} dict={dict} category={product.categoryDto} />
@@ -26,9 +27,16 @@ const ProductInfo = ({ product, lang, dict }: Props) => {
       <p className="mt-2">{product.translationDto.description}</p>
       <AdditionalInfo product={product} dict={dict} />
       <p className={cn("font-bold mt-6", isAvailableStyling(product))}>
-        {isAvaiable ? dict.isAvailable.replace("%%AMOUNT%%", product.amount + "") : dict.isNotAvailable}
+        {isAvailable ? dict.isAvailable.replace("%%AMOUNT%%", product.amount + "") : dict.isNotAvailable}
       </p>
-      <AddToCart amountTotal={product.amount} btnTitle={dict.addToCart} invalidAmountTitle={dict.invalidAmount} />
+      <AddToCart
+        dict={{
+          isAlreadyInCart: dict.isAlreadyInCart,
+          btnTitle: dict.addToCart,
+          invalidAmountTitle: dict.invalidAmount,
+        }}
+        product={createCartItem(product)}
+      />
       <SocialLinks />
     </div>
   );

@@ -14,18 +14,19 @@ const Page = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
     getDictionary(lang),
     fetcher<ProductDto>(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/products/${productId}?lang=${lang}`),
   ]);
-  const dict: ProductDict = dictResult.product;
+
+  const fullDict: ProductDict = { ...dictResult.product, isAlreadyInCart: dictResult.shared.isAlreadyInCart };
   syncSlug(productId, product.translationDto.title, slug);
 
   return (
     <>
       <section className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <ProductDisplay lang={lang} images={product.imageDtos} />
-        <ProductInfo lang={lang} product={product} dict={dict} />
+        <ProductDisplay images={product.imageDtos} />
+        <ProductInfo lang={lang} product={product} dict={fullDict} />
       </section>
       <section>
         <Heading className="uppercase mt-10 tracking-wider font-medium" size="md">
-          {`${dict.relatedProducts}:`}
+          {`${fullDict.relatedProducts}:`}
         </Heading>
         <RandomProducts
           categoryId={product.categoryDto.id}

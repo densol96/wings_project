@@ -2,7 +2,6 @@
 
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { locales, defaultLocale } from "@/constants/locales";
 import { defaultLangIsSelected } from "@/services/helpers";
 import { useLangContext } from "@/context/LangContext";
 
@@ -38,7 +37,7 @@ const LangSelectMenu = () => {
   };
 
   return (
-    <select className="bg-transparent text-base cursor-pointer" value={selectedLang} onChange={handleSelectChange}>
+    <select className="bg-transparent cursor-pointer text-lg" value={selectedLang} onChange={handleSelectChange}>
       <option value="lv">Latviešu 🇱🇻</option>
       <option value="en">English 🇬🇧</option>
     </select>

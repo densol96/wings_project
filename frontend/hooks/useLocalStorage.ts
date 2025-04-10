@@ -1,23 +1,19 @@
 import { useEffect, useState } from "react";
+import useEffectOnce from "./useEffectOnce";
 
 const useLocalStorage = <T>(key: string, initialValue: T | null = null) => {
-  const [value, setValue] = useState<T | null>(() => {
+  const [value, setValue] = useState<T | null>(initialValue);
+
+  useEffectOnce(() => {
     const storedValue = localStorage.getItem(key);
     try {
-      return storedValue ? JSON.parse(storedValue) : initialValue;
+      if (storedValue) {
+        setValue(JSON.parse(storedValue));
+      }
     } catch (err) {
       console.error("Failed to extract/parse value from localStorage:", err);
-      return initialValue;
     }
   });
-
-  const updateLocalStorage = (newValue: T) => {
-    setValue(newValue);
-  };
-
-  const deleteFromLocalStorage = () => {
-    setValue(null);
-  };
 
   useEffect(() => {
     try {
@@ -31,7 +27,15 @@ const useLocalStorage = <T>(key: string, initialValue: T | null = null) => {
     }
   }, [value]);
 
-  return { value, updateLocalStorage, deleteFromLocalStorage };
+  // const updateLocalStorage = (newValue: T) => {
+  //   setValue(newValue);
+  // };
+
+  const deleteFromLocalStorage = () => {
+    setValue(null);
+  };
+
+  return { value, updateLocalStorage: setValue, deleteFromLocalStorage };
 };
 
 export default useLocalStorage;

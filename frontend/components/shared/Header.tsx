@@ -1,21 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 
 import { NavBar } from "@/components/shared";
 import { Logo } from "@/components/ui";
-import { ToolsIcon, ExpandIcon, CloseIcon, CartIcon } from "@/components/ui/icons";
+import { ToolsIcon, ExpandIcon } from "@/components/ui/icons";
 import LangSelectMenu from "./LangSelectMenu";
-import { Locale, NavigationDictionary } from "@/types";
+import { NavigationDictionary } from "@/types";
 import { useSidebarContext } from "@/context/SidebarContext";
+import CartIconLink from "./CartIconLink";
 
 type Props = {
-  lang: Locale;
   navMenu: NavigationDictionary;
 };
 
-const Header = ({ lang, navMenu }: Props) => {
+const Header = ({ navMenu }: Props) => {
   const { isOpen, close, open, toggle } = useSidebarContext();
 
   return (
@@ -27,7 +27,14 @@ const Header = ({ lang, navMenu }: Props) => {
 
       <NavBar navMenu={navMenu} />
 
-      <section className="flex flex-col justify-between items-end h-full py-1 mr-2">
+      <div className="flex flex-row gap-4 lg:gap-2 mt-auto mr-5 mb-5">
+        <LangSelectMenu />
+        {/* <Link className="size-10 self-end" href="/admin">
+            <ToolsIcon />
+          </Link> */}
+        <button className="size-10 self-end">
+          <CartIconLink />
+        </button>
         <button
           onClick={toggle}
           className="size-10 flex  justify-center align-center items-center lg:hidden"
@@ -35,17 +42,7 @@ const Header = ({ lang, navMenu }: Props) => {
         >
           {!isOpen && <ExpandIcon />}
         </button>
-
-        <div className="flex flex-row gap-4 lg:gap-2 mt-auto">
-          <LangSelectMenu />
-          <Link className="size-6 self-end" href="/admin">
-            <ToolsIcon />
-          </Link>
-          <button className="size-6 self-end">
-            <CartIcon />
-          </button>
-        </div>
-      </section>
+      </div>
     </nav>
   );
 };

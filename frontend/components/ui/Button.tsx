@@ -6,7 +6,7 @@ type Props = {
   children: React.ReactNode;
   className?: string;
   size?: "sm" | "md" | "lg"; // add more as neeeded
-  color?: "primary" | "transparent";
+  color?: "primary" | "transparent" | "green";
   onClick?: () => Promise<any> | void;
   disabled?: boolean;
 };
@@ -20,6 +20,7 @@ const sizes = {
 const colors = {
   primary: "bg-primary-bright text-gray-50 hover:bg-primary-bright-light disabled:bg-primary-bright",
   transparent: "",
+  green: "bg-green-500 text-gray-50 hover:bg-green-700 font-medium",
 } as const;
 
 const Button = ({ children, size = "md", color = "primary", className, onClick, disabled = false }: Props) => {
