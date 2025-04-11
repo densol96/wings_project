@@ -243,6 +243,31 @@
     ]
   },
   "shared": {
-    "isAlreadyInCart": "Jau grozā"
+    "isAlreadyInCart": "Jau grozā",
+    "total": "Summa",
+    "price": "Cena",
+    "isAvailable": "Pieejams - %%AMOUNT%% gab.",
+    "isNotAvailable": "Nav pieejams"
+  },
+  "checkout": {
+    "cartDelivery": {
+      "title": "Grozs un piegāde",
+      "description": "Pārskatiet izvēlētos produktus un izvēlieties piegādes veidu.",
+      "clearCart": "Notīrīt grozu",
+      "continueShopping": "Turpināt iepirkties",
+      "proceedWithOrder": "Turpināt pasūtījumu",
+      "cartSummary": "Grozs kopsavilkums",
+      "deliveryType": "Piegāde",
+      "choosePackomat": "Izvēlēties pakomātu",
+      "emptyCart": "Izskatās, ka jūsu grozs pašlaik ir tukšs. Pārlūkojiet mūsu katalogu, lai sāktu!"
+    },
+    "personalInfo": {
+      "title": "Personīgā informācija",
+      "description": "Ievadiet savu kontaktinformāciju un piegādes datus."
+    },
+    "payment": {
+      "title": "Maksājums",
+      "description": "Ievadiet maksājuma datus un pabeidziet pasūtījumu."
+    }
   }
 }

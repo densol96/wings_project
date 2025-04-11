@@ -3,7 +3,7 @@ import React from "react";
 import AnimatedProductImage from "./AnimatedProductImage";
 import { Button, Heading } from "../ui";
 import Link from "next/link";
-import { cn, formatPrice, isAvailableStyling, slugify } from "@/utils";
+import { cn, formatPrice, slugify } from "@/utils";
 
 type Props = {
   product: RandomProductDto;
@@ -47,7 +47,7 @@ const RandomProduct = ({ product, lang }: Props) => {
             </Heading>
             <p className="text-2xl font-bold">{formatPrice(product.price)}</p>
             <p className="mt-2">{product.translationDto.description}</p>
-            <p className={cn("font-bold mt-6", isAvailableStyling(product))}>
+            <p className={cn("font-bold mt-6", product.amount > 0 ? "text-green-700" : "text-red-700")}>
               {product.amount > 0 ? `${dict[lang].available}: ${product.amount}` : dict[lang].notAvailable}
             </p>
           </div>

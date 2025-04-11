@@ -2,7 +2,7 @@ import { Locale, SearchedProductDto } from "@/types";
 import Link from "next/link";
 import React from "react";
 import { MyImage } from "../ui";
-import { cn, formatPrice, highlightWithDiacritics, isAvailableStyling } from "@/utils";
+import { cn, formatPrice, highlightWithDiacritics } from "@/utils";
 
 type Props = {
   product: SearchedProductDto;
@@ -17,7 +17,7 @@ const SearchedProductItem = ({ product, lang, query }: Props) => {
         <div className="relative w-[40px] h-[40px] rounded-full overflow-hidden flex-shrink-0">
           <MyImage image={product.imageDto} />
         </div>
-        <p className={cn(isAvailableStyling(product))}>{highlightWithDiacritics(product.title, query)}</p>
+        <p className={product.amount > 0 ? "text-green-700" : "text-red-700"}>{highlightWithDiacritics(product.title, query)}</p>
         <p className="ml-auto text-xs">{formatPrice(product.price)}</p>
       </li>
     </Link>

@@ -244,6 +244,31 @@
     ]
   },
   "shared": {
-    "isAlreadyInCart": "Already in cart"
+    "isAlreadyInCart": "Already in cart",
+    "total": "Total",
+    "price": "Price",
+    "isAvailable": "In stock - %%AMOUNT%% available",
+    "isNotAvailable": "Not available"
+  },
+  "checkout": {
+    "cartDelivery": {
+      "title": "Cart & Delivery",
+      "description": "Review your selected items and choose a delivery method.",
+      "continueShopping": "Continue shopping",
+      "clearCart": "Clear cart",
+      "proceedWithOrder": "Proceed with Order",
+      "cartSummary": "Cart summary",
+      "deliveryType": "Delivery",
+      "choosePackomat": "Choose parcel locker",
+      "emptyCart": "Looks like your cart is currently empty. Browse our catalog to get started!"
+    },
+    "personalInfo": {
+      "title": "Personal Info",
+      "description": "Enter your contact details and delivery information."
+    },
+    "payment": {
+      "title": "Payment",
+      "description": "Provide payment details and complete your order."
+    }
   }
 }

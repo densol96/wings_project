@@ -28,11 +28,11 @@ const SearchMenu = ({ className }: Props) => {
           <div className="absolute top-0 left-0 -right-6 bottom-[-18px] z-20 cursor-pointer" />
           {/* Tail + Menu */}
           <div className="absolute bottom-[-18px] left-4 w-4 h-4 bg-gray-50 rotate-45 shadow-2xl" />
-          <div className="absolute top-[115%] left-[-200px] border-2 w-[350px] bg-gray-50 shadow-custom-pro h-auto">
-            <SearchForm />
-          </div>
         </>
       )}
+      <div className={cn("absolute top-[115%] left-[-200px] border-2 w-[350px] bg-gray-50 shadow-custom-pro h-auto", !isHovered ? "hidden" : "block")}>
+        <SearchForm />
+      </div>
     </div>
   );
 };

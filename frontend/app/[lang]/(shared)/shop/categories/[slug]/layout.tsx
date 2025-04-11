@@ -14,15 +14,12 @@ type Props = PagePropsWithSlug & {
 
 export const revalidate = 0;
 
-const Layout = async ({ params: { lang, slug }, header, children, searchParams }: Props) => {
-  const categoryList = await fetcher<CategoryLi[]>(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/product-categories?lang=${lang}`);
-  const categoriesDict: CategoriesDict = (await getDictionary(lang)).shop.categories;
-
+const Layout = ({ params: { lang }, header, children }: Props) => {
   return (
     <SidebarProvider>
       {header}
       <div className="grid grid-cols-1 md:grid-cols-[15rem_1fr] gap-20 mt-10">
-        <CategoriesSidebar dict={categoriesDict} categoryList={categoryList} />
+        <CategoriesSidebar lang={lang} />
         <div>{children}</div>
       </div>
     </SidebarProvider>

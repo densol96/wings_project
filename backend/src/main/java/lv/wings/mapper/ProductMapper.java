@@ -8,6 +8,7 @@ import lv.wings.dto.response.ImageDto;
 import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ProductMaterialDto;
+import lv.wings.dto.response.product.ProductTitleDto;
 import lv.wings.dto.response.product.ProductTranslationDto;
 import lv.wings.dto.response.product.RandomProductDto;
 import lv.wings.dto.response.product.SearchedProductDto;
@@ -39,4 +40,7 @@ public interface ProductMapper {
 
         @Mapping(target = "id", source = "product.id")
         SearchedProductDto toSearchedProductDto(Product product, ProductTranslation translationDto, ImageDto imageDto);
+
+        @Mapping(target = "id", source = "product.id")
+        ProductTitleDto toProductTitleDto(Product product, ProductTranslation translationDto);
 }

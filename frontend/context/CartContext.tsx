@@ -1,16 +1,9 @@
 "use client";
 
 import { useEffectOnce, useLocalStorage } from "@/hooks";
-import { createContext, ReactNode, useContext, useState } from "react";
-
-export type CartItem = {
-  id: number;
-  title: string;
-  price: number;
-  image?: string;
-  quantity: number; // added to the cart
-  inStockAmount: number; // total avaialable in stock
-};
+import { CartItem } from "@/types";
+import { createContext, ReactNode, useContext, useEffect, useRef, useState } from "react";
+import { useLangContext } from "./LangContext";
 
 export type ProductData = Omit<CartItem, "quantity">;
 
@@ -37,8 +30,55 @@ const STORAGE_KEY = "my_cart_v1";
 
 export const CartProvider = ({ children }: ProviderProps) => {
   const { value: items, updateLocalStorage: setItems } = useLocalStorage<CartItem[]>(STORAGE_KEY, []);
-
   const [cartIsLoaded, setCartIsLoaded] = useState(false);
+
+  const { lang } = useLangContext();
+  const hasRun = useRef(false);
+
+  const updatedProductTitlesInCartPerLocale = async () => {
+    // Do not want to make an extra call on mount..
+    if (!hasRun.current) {
+      hasRun.current = true;
+      return;
+    }
+    const ids = items?.map((item) => item.id)?.join(",") || [];
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/products/localised-titles?lang=${lang}&ids=${ids}`);
+      // if a request failed, just show non-translated products in a cart. It's better than showing an error in this case
+      if (!response.ok) throw new Error((await response.json()).message);
+      const result: {
+        id: number;
+        title: string;
+      }[] = await response.json();
+      setItems((prev) => {
+        const updated =
+          prev?.map((item) => {
+            const translated = result.find((t) => t.id === item.id);
+            const newTitle = translated?.title || item.title;
+
+            if (item.title !== newTitle) {
+              return { ...item, title: newTitle };
+            }
+
+            return item;
+          }) || [];
+
+        const hasChanges = updated?.some((item, i) => item.title !== prev?.[i]?.title);
+        return hasChanges ? updated : prev;
+      });
+    } catch (e) {
+      console.log("Unable to update the cart on a lang changed. Returned response:");
+      if (e instanceof Error) {
+        console.log(e.message);
+      } else {
+        console.log("Unknown error:", e);
+      }
+    }
+  };
+
+  useEffect(() => {
+    updatedProductTitlesInCartPerLocale();
+  }, [items]);
 
   useEffectOnce(() => {
     setCartIsLoaded(true);

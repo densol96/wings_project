@@ -12,6 +12,7 @@ import lv.wings.dto.response.ImageDto;
 import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ProductMaterialDto;
+import lv.wings.dto.response.product.ProductTitleDto;
 import lv.wings.dto.response.product.RandomProductDto;
 import lv.wings.dto.response.product.SearchedProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
@@ -139,6 +140,18 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		return productTranslationRepository.findByTitleContainingIgnoreCaseAndLocaleEquals(q, localeService.getCurrentLocaleCode()).stream()
 				.map(this::mapToSearchedProductDto)
 				.toList();
+	}
+
+	@Override
+	public List<ProductTitleDto> getProductsByIds(List<Integer> ids) {
+		if (ids.size() == 0)
+			return List.of();
+		List<Product> products = productRepository.findAllById(ids);
+		return products.stream().map(this::mapToProductTitleDto).toList();
+	}
+
+	private ProductTitleDto mapToProductTitleDto(Product product) {
+		return productMapper.toProductTitleDto(product, getRightTranslation(product, ProductTranslation.class));
 	}
 
 	private SearchedProductDto mapToSearchedProductDto(ProductTranslation productTranslation) {

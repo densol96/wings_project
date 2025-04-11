@@ -19,7 +19,3 @@ export const highlightWithDiacritics = (original: string, query: string): React.
     </>
   );
 };
-
-export const isAvailableStyling = (product: { amount: number }) => {
-  return product.amount > 0 ? "text-green-700" : "text-red-700";
-};
