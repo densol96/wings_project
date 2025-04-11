@@ -64,7 +64,7 @@ type Props = PageProps & {
 
 const RootLayout = async ({ children, params: { lang } }: Props) => {
   const dict = await getDictionary(lang);
-
+  console.log("ROOT LAYOUT CHANGED!");
   return (
     <LangProvider langValueFromServer={lang}>
       <html lang={lang}>

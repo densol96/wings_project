@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, Spinner } from "@/components";
+import { Button, Spinner, AmountSelector } from "@/components";
 import { FaPlus, FaMinus } from "react-icons/fa6";
 import { TiTick } from "react-icons/ti";
 import { ProductData, useCartContext, useLangContext } from "@/context";
@@ -62,32 +62,14 @@ const AddToCart = ({ product, dict }: Props) => {
   ) : (
     product.inStockAmount > 0 && (
       <div className="flex gap-4 mt-2 flex-wrap">
-        <div className="border-1 border-gray-400 flex">
-          <Button
-            onClick={decr}
-            color="transparent"
-            size="sm"
-            className="border-r-1 border-gray-400 h-full"
-            disabled={selectedAmount === null || selectedAmount === 1}
-          >
-            <FaMinus />
-          </Button>
-          <input
-            value={selectedAmount === null ? "" : selectedAmount}
-            onChange={handleChange}
-            className="custom-number-input py-2 w-14 outline-none text-center"
-            type="number"
-          />
-          <Button
-            onClick={incr}
-            color="transparent"
-            size="sm"
-            className="border-l-1 border-gray-400 h-full"
-            disabled={selectedAmount === product.inStockAmount}
-          >
-            <FaPlus />
-          </Button>
-        </div>
+        <AmountSelector
+          className="min-h-[40px]"
+          handleChange={handleChange}
+          inStockAmount={product.inStockAmount}
+          selectedAmount={selectedAmount}
+          incr={incr}
+          decr={decr}
+        />
         <Button disabled={addToCartIsDisabled} onClick={() => addProduct(product, selectedAmount as number)}>
           {dict.btnTitle}
         </Button>

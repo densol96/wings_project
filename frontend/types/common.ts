@@ -52,3 +52,11 @@ export type PageableReturn<T> = {
   totalPages: number;
   totalElements: number;
 };
+
+export type SharedDict = {
+  isAlreadyInCart: string;
+  total: string;
+  price: string;
+  isAvailable: string;
+  isNotAvailable: string;
+};

@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import lv.wings.annotation.AllowedSortFields;
 import lv.wings.dto.response.product.ProductDto;
+import lv.wings.dto.response.product.ProductTitleDto;
 import lv.wings.dto.response.product.RandomProductDto;
 import lv.wings.dto.response.product.SearchedProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
@@ -58,6 +59,13 @@ public class ProductController {
             @RequestParam String q) {
         log.info("Received GET request on /api/v1/products/search with q parameter of {}", q);
         return ResponseEntity.ok().body(productService.getSearchedProducts(q));
+    }
+
+    @GetMapping("/localised-titles")
+    public ResponseEntity<List<ProductTitleDto>> getProductTitlesByIds(
+            @RequestParam List<Integer> ids) {
+        log.info("Received GET request on /api/v1/products/localised-titles with {} id(s): {}", ids.size(), ids);
+        return ResponseEntity.ok().body(productService.getProductsByIds(ids));
     }
 
 }

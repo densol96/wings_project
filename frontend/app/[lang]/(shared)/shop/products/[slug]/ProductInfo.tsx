@@ -1,7 +1,7 @@
 import { Button, Heading } from "@/components";
 import { Locale } from "@/i18n-config";
 import { ProductDict, ProductDto } from "@/types";
-import { cn, createCartItem, formatPrice, isAvailableStyling } from "@/utils";
+import { cn, createCartItem, formatPrice } from "@/utils";
 import React from "react";
 import AdditionalInfo from "./AdditionalInfo";
 import ProductBreadcrumbs from "./ProductBreadcrumbs";
@@ -26,7 +26,7 @@ const ProductInfo = ({ product, lang, dict }: Props) => {
       <p className="text-2xl font-bold">{formatPrice(product.price)}</p>
       <p className="mt-2">{product.translationDto.description}</p>
       <AdditionalInfo product={product} dict={dict} />
-      <p className={cn("font-bold mt-6", isAvailableStyling(product))}>
+      <p className={cn("font-bold mt-6", product.amount > 0 ? "text-green-700" : "text-red-700")}>
         {isAvailable ? dict.isAvailable.replace("%%AMOUNT%%", product.amount + "") : dict.isNotAvailable}
       </p>
       <AddToCart

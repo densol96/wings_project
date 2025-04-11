@@ -62,8 +62,8 @@ const SearchForm = ({ className }: Props) => {
   const { lang } = useLangContext();
 
   const onCategoryChange = (newCategoryName: CheckboxType) => {
-    setFoundItems([]);
     setSelectedOption(newCategoryName);
+    setFoundItems([]);
   };
 
   useDebounceEffect(

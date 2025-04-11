@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ShopDict, ShortProductDto } from "@/types/sections/shop";
-import { cn, formatPrice, slugify } from "@/utils";
+import { cn, createCartItem, formatPrice, slugify } from "@/utils";
 import { AnimatedProductImage, MyImage } from "@/components";
 import { Locale } from "@/types";
 import Link from "next/link";
@@ -31,16 +31,6 @@ const ProductCard = ({ className, product, lang, dict, viewBtn }: Props) => {
 
   const isInCart = productIsInCart(product.id);
 
-  const onAddToCart = () => {
-    addProduct({
-      id: product.id,
-      title: product.translationDto.title,
-      price: product.price,
-      image: product.imageDtos.at(1)?.src,
-      inStockAmount: product.amount,
-    });
-  };
-
   return (
     <article className={cn("shadow-2xl pb-8", className)}>
       <Link href={href}>
@@ -62,7 +52,7 @@ const ProductCard = ({ className, product, lang, dict, viewBtn }: Props) => {
             dict &&
             cartIsLoaded &&
             (!isInCart ? (
-              <button className="flex items-center gap-1" onClick={onAddToCart}>
+              <button className="flex items-center gap-1" onClick={() => addProduct(createCartItem(product))}>
                 <BsCartPlusFill size={24} />
                 <span>{dict.addToCartBtn}</span>
               </button>

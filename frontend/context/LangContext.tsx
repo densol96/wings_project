@@ -15,6 +15,7 @@ type ProviderProps = {
 };
 
 export const LangProvider = ({ children, langValueFromServer }: ProviderProps) => {
+  console.log("CLIENT");
   const [lang] = useState<Locale>(langValueFromServer);
   return <LangContext.Provider value={{ lang }}>{children}</LangContext.Provider>;
 };

@@ -30,7 +30,7 @@ const NewsGrid = function ({ lang, dict }: Props) {
   // in Next.js in a dev mode, Strict mode is activated (effects run twice) and with [...state, ...news] this will be a bit of a problem, so pevent this with a ref
   const isFirstRender = useRef(true);
 
-  async function getNews() {
+  const getNews = async () => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
@@ -53,7 +53,7 @@ const NewsGrid = function ({ lang, dict }: Props) {
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     getNews();

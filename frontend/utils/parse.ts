@@ -33,7 +33,7 @@ export const createCartItem = (product: ShortProductDto) => {
     id: product.id,
     title: product.translationDto.title,
     price: product.price,
-    image: product.imageDtos.at(1)?.src,
+    image: product.imageDtos.at(0),
     inStockAmount: product.amount,
   };
 };

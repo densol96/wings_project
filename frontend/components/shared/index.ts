@@ -15,3 +15,4 @@ export { default as SearchedNewsItem } from "./SearchedNewsItem";
 export { default as SearchForm } from "./SearchForm";
 export { default as Sidebar } from "./Sidebar";
 export { default as NavSidebar } from "./NavSidebar";
+export { default as AmountSelector } from "./AmountSelector";
