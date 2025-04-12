@@ -23,7 +23,6 @@ import lv.wings.model.translation.PaymentTypeTranslation;
 @Table(name = "payment_types")
 @NoArgsConstructor
 @Data
-@EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE Payment_Type SET deleted = true WHERE payment_type_id=?")
 @Where(clause = "deleted=false")
 public class PaymentType extends TranslatableEntity<PaymentTypeTranslation> {

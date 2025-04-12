@@ -19,7 +19,6 @@ import lv.wings.model.base.OwnerableEntity;
 
 @Entity
 @Table(name = "events")
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
 public class Event extends OwnerableEntity<EventTranslation, EventImage> {

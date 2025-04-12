@@ -17,7 +17,6 @@ import lv.wings.model.translation.EventCategoryTranslation;
 
 @Entity
 @Table(name = "event_categories")
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
 public class EventCategory extends TranslatableEntity<EventCategoryTranslation> {

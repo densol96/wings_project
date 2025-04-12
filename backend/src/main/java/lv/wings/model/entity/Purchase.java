@@ -31,7 +31,6 @@ import lv.wings.model.base.AuditableEntity;
 @Entity
 @Data
 @Table(name = "purchases")
-@EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE Purchase SET deleted = true WHERE purchase_id=?")
 @Where(clause = "deleted=false")
 public class Purchase extends AuditableEntity {

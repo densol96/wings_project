@@ -3,6 +3,7 @@ import CartSummary from "./CartSummary";
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { CartDeliveryRequiredTranslation, CartDeliveryTranslation, Locale, PageProps, SharedDict } from "@/types";
 import { Heading } from "@/components";
+import DeliverySummary from "./DeliverySummary";
 
 type Props = {
   lang: Locale;
@@ -26,9 +27,9 @@ const Page = async ({ params: { lang } }: PageProps) => {
         {requiredTranslations.title}
       </Heading>
       <p>{requiredTranslations.description}</p>
-      <div className="grid grid-cols-[6fr_4fr] gap-x-16 mt-10">
+      <div className="grid grid-cols-[6fr_3fr] gap-x-16 mt-10">
         <CartSummary translations={requiredTranslations} />
-        <div className="border-2 border-red-700">SUMMARY</div>
+        <DeliverySummary />
       </div>
     </>
   );

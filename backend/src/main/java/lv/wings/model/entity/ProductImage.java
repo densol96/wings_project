@@ -17,7 +17,6 @@ import lv.wings.model.translation.ProductImageTranslation;
 
 @Entity
 @Table(name = "product_images")
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
 public class ProductImage extends ImageableEntity<ProductImageTranslation, Product> {

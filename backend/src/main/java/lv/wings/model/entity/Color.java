@@ -16,7 +16,6 @@ import lv.wings.model.translation.ColorTranslation;
 @Table(name = "colors")
 @Data
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class Color extends TranslatableEntity<ColorTranslation> {
 
     @ManyToMany(mappedBy = "colors")
