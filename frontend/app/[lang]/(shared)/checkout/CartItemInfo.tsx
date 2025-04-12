@@ -6,6 +6,7 @@ import { CartDeliveryRequiredTranslation, CartItem } from "@/types";
 import { cn, formatPrice } from "@/utils";
 import Link from "next/link";
 import React from "react";
+import { MdDelete } from "react-icons/md";
 
 type Props = {
   product: CartItem;
@@ -23,11 +24,11 @@ const DisplayPrice = ({ price, label, className }: { price: number; label: strin
 
 const CartItemInfo = ({ product, translations }: Props) => {
   const { lang } = useLangContext();
-  const { incrementProduct, decrementProduct } = useCartContext();
+  const { incrementProduct, decrementProduct, removeProduct } = useCartContext();
   const href = `/${lang}/shop/products/${product.id}`;
 
   return (
-    <li className="grid grid-cols-[100px_1fr_50px_auto_50px] gap-x-10 border-2 items-center pr-6">
+    <li className="grid grid-cols-[100px_1fr_auto_auto_auto_auto] gap-x-10 border-2 items-center pr-6">
       <Link href={href} className="w-[100px] h-[100px] relative">
         <MyImage image={product.image} />
       </Link>
@@ -49,6 +50,10 @@ const CartItemInfo = ({ product, translations }: Props) => {
       </div>
 
       <DisplayPrice className="font-bold text-gray-700" label={translations.total} price={product.price * product.quantity} />
+
+      <button onClick={() => removeProduct(product.id)} className="text-primary-bright hover:text-primary-bright-light transition duration-250">
+        <MdDelete size={30} />
+      </button>
     </li>
   );
 };

@@ -32,7 +32,6 @@ import lombok.ToString;
 @ToString
 @Table(name = "Purchase_Elements")
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE Purchase_Elements SET deleted = true WHERE purchase_element_id=?")
 @Where(clause = "deleted=false")
 public class PurchaseElement {

@@ -24,7 +24,6 @@ import lv.wings.model.translation.ProductCategoryTranslation;
 @ToString
 @Table(name = "product_categories")
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 public class ProductCategory extends TranslatableEntity<ProductCategoryTranslation> {
 
 	@OneToMany(mappedBy = "category")

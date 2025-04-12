@@ -19,7 +19,6 @@ import lv.wings.model.base.AuditableEntityExtended;
         uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "material_id"})})
 @NoArgsConstructor
 @Data
-@EntityListeners(AuditingEntityListener.class)
 public class ProductMaterial extends AuditableEntityExtended {
 
     @ManyToOne

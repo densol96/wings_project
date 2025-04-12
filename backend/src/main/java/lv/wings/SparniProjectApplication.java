@@ -28,6 +28,7 @@ import lv.wings.model.entity.Color;
 import lv.wings.model.entity.Event;
 import lv.wings.model.entity.EventCategory;
 import lv.wings.model.entity.EventImage;
+import lv.wings.model.entity.GlobalParam;
 import lv.wings.model.entity.Material;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductCategory;
@@ -44,6 +45,7 @@ import lv.wings.model.translation.ProductCategoryTranslation;
 import lv.wings.model.translation.ProductImageTranslation;
 import lv.wings.model.translation.ProductTranslation;
 import lv.wings.repo.EventRepository;
+import lv.wings.repo.GlobalParamsRepository;
 import lv.wings.repo.MaterialRepository;
 import lv.wings.repo.ColorRepository;
 import lv.wings.repo.CustomerRepository;
@@ -682,6 +684,19 @@ public class SparniProjectApplication {
 				// Files.createDirectories(path2);
 				// }
 				log.info("Data has been successfully seeded.");
+			}
+		};
+	}
+
+	// @Bean
+	public CommandLineRunner globalParamsTable(GlobalParamsRepository globalParamsRepo, IMyUserRepo userRepo) {
+		return new CommandLineRunner() {
+			@Override
+			public void run(String... args) throws Exception {
+				System.out.println("Global Params Seeded");
+				GlobalParam gb = GlobalParam.builder().title("omniva_api_link").value("https://www.omniva.ee/locations.json").build();
+				gb.setCreatedBy(userRepo.findById(1).get());
+				globalParamsRepo.save(gb);
 			}
 		};
 	}

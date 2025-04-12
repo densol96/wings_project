@@ -24,7 +24,6 @@ import lv.wings.model.translation.ProductTranslation;
 
 @Entity
 @Table(name = "products")
-@EntityListeners(AuditingEntityListener.class)
 @NoArgsConstructor
 @Data
 public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {

@@ -16,7 +16,6 @@ import lv.wings.model.translation.MaterialTranslation;
 @Table(name = "materials")
 @Data
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 public class Material extends TranslatableEntity<MaterialTranslation> {
 
     @OneToMany(mappedBy = "material")
