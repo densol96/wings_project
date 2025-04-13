@@ -1,5 +1,6 @@
 package lv.wings;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,9 +23,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
-
+import lv.wings.enums.Country;
+import lv.wings.enums.DeliveryMethod;
 import lv.wings.enums.LocaleCode;
 import lv.wings.model.entity.Color;
+import lv.wings.model.entity.DeliveryPrice;
+import lv.wings.model.entity.DeliveryType;
 import lv.wings.model.entity.Event;
 import lv.wings.model.entity.EventCategory;
 import lv.wings.model.entity.EventImage;
@@ -37,6 +41,7 @@ import lv.wings.model.entity.ProductMaterial;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
 import lv.wings.model.translation.ColorTranslation;
+import lv.wings.model.translation.DeliveryTypeTranslation;
 import lv.wings.model.translation.EventCategoryTranslation;
 import lv.wings.model.translation.EventImageTranslation;
 import lv.wings.model.translation.EventTranslation;
@@ -689,14 +694,101 @@ public class SparniProjectApplication {
 	}
 
 	// @Bean
-	public CommandLineRunner globalParamsTable(GlobalParamsRepository globalParamsRepo, IMyUserRepo userRepo) {
+	public CommandLineRunner createDeliveryTypesAndPrices(DeliveryTypeRepository deliveryTypeRepo, IMyUserRepo userRepo) {
 		return new CommandLineRunner() {
 			@Override
 			public void run(String... args) throws Exception {
-				System.out.println("Global Params Seeded");
-				GlobalParam gb = GlobalParam.builder().title("omniva_api_link").value("https://www.omniva.ee/locations.json").build();
-				gb.setCreatedBy(userRepo.findById(1).get());
-				globalParamsRepo.save(gb);
+				System.out.println("=== createDeliveryTypesAndPrices ===");
+				MyUser u1 = userRepo.findById(1).get();
+
+				List<DeliveryType> deliveryTypes = new ArrayList<>();
+
+				// ---------- 1. PICKUP ----------
+				DeliveryType pickup = new DeliveryType(DeliveryMethod.PICKUP);
+				pickup.setCreatedBy(u1);
+
+				DeliveryTypeTranslation pickup_lv = DeliveryTypeTranslation.builder()
+						.title("Saņemšana veikalā")
+						.description("Bezmaksas pasūtījuma saņemšana mūsu veikalā Ventspilī")
+						.locale(LocaleCode.LV)
+						.deliveryType(pickup)
+						.build();
+
+				DeliveryTypeTranslation pickup_en = DeliveryTypeTranslation.builder()
+						.title("Store pickup")
+						.description("Free pickup from our store in Ventspils")
+						.locale(LocaleCode.EN)
+						.deliveryType(pickup)
+						.build();
+
+				pickup.setTranslations(List.of(pickup_lv, pickup_en));
+				pickup.setPrices(List.of(
+						DeliveryPrice.builder()
+								.country(Country.LV)
+								.price(BigDecimal.ZERO)
+								.deliveryType(pickup)
+								.build()));
+
+				deliveryTypes.add(pickup);
+
+				// ---------- 2. OMNIVA ----------
+				DeliveryType omniva = new DeliveryType(DeliveryMethod.PARCEL_MACHINE);
+				omniva.setCreatedBy(u1);
+
+				DeliveryTypeTranslation omniva_lv = DeliveryTypeTranslation.builder()
+						.title("Omniva pakomāts")
+						.description("Piegāde uz Omniva pakomātu. 5 EUR Latvijā, 10 EUR uz Lietuvu un Igauniju.")
+						.locale(LocaleCode.LV)
+						.deliveryType(omniva)
+						.build();
+
+				DeliveryTypeTranslation omniva_en = DeliveryTypeTranslation.builder()
+						.title("Omniva parcel locker")
+						.description("Delivery to Omniva parcel locker. €5 in Latvia, €10 to LT and EE.")
+						.locale(LocaleCode.EN)
+						.deliveryType(omniva)
+						.build();
+
+				omniva.setTranslations(List.of(omniva_lv, omniva_en));
+				omniva.setPrices(List.of(
+						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("5.00")).deliveryType(omniva).build(),
+						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("10.00")).deliveryType(omniva).build(),
+						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("10.00")).deliveryType(omniva).build()));
+
+				deliveryTypes.add(omniva);
+
+
+				// ---------- 3. COURIER ----------
+				DeliveryType courier = new DeliveryType(DeliveryMethod.COURIER);
+				courier.setCreatedBy(u1);
+
+				DeliveryTypeTranslation courier_lv = DeliveryTypeTranslation.builder()
+						.title("Kurjers")
+						.description("Kurjera piegāde līdz durvīm. 10 EUR Latvijā, 20 EUR uz Lietuvu un Igauniju.")
+						.locale(LocaleCode.LV)
+						.deliveryType(courier)
+						.build();
+
+				DeliveryTypeTranslation courier_en = DeliveryTypeTranslation.builder()
+						.title("Courier")
+						.description("Courier delivery to your door. €10 in Latvia, €20 to Lithuania and Estonia")
+						.locale(LocaleCode.EN)
+						.deliveryType(courier)
+						.build();
+
+				courier.setTranslations(List.of(courier_lv, courier_en));
+				courier.setPrices(List.of(
+						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("10.00")).deliveryType(courier).build(),
+						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("20.00")).deliveryType(courier).build(),
+						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("20.00")).deliveryType(courier).build()));
+
+				deliveryTypes.add(courier);
+
+
+				// ---------- Save all ----------
+				deliveryTypeRepo.saveAll(deliveryTypes);
+
+				System.out.println("=== createDeliveryTypesAndPrices SEEDED ===");
 			}
 		};
 	}

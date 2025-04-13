@@ -31,7 +31,7 @@ const SearchMenu = ({ className }: Props) => {
         </>
       )}
       <div className={cn("absolute top-[115%] left-[-200px] border-2 w-[350px] bg-gray-50 shadow-custom-pro h-auto", !isHovered ? "hidden" : "block")}>
-        <SearchForm />
+        <SearchForm groupName="searchInHeader" />
       </div>
     </div>
   );

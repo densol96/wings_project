@@ -8,7 +8,14 @@ import { CartDeliveryRequiredTranslation } from "@/types";
 import { Button, Spinner } from "@/components";
 
 type Props = {
-  translations: CartDeliveryRequiredTranslation;
+  translations: {
+    emptyCart: string;
+    continueShopping: string;
+    clearCart: string;
+    isAvailable: string;
+    total: string;
+    price: string;
+  };
 };
 
 const CartSummary = ({ translations }: Props) => {
@@ -40,7 +47,7 @@ const CartSummary = ({ translations }: Props) => {
       </div>
     );
 
-  return cartIsLoaded ? cartContent : <Spinner />;
+  return cartIsLoaded ? cartContent : <Spinner className="justify-end" />;
 };
 
 export default CartSummary;

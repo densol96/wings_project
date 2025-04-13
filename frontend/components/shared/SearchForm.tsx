@@ -14,6 +14,7 @@ import { cn } from "@/utils";
 
 type Props = {
   className?: string;
+  groupName: string;
 };
 
 type CheckboxType = "news" | "products";
@@ -55,7 +56,7 @@ const dict = {
   },
 };
 
-const SearchForm = ({ className }: Props) => {
+const SearchForm = ({ className, groupName }: Props) => {
   const [selectedOption, setSelectedOption] = useState<CheckboxType>("products");
   const [query, setQuery] = useState("");
   const [foundItems, setFoundItems] = useState<SearchResultMap[CheckboxType]>([]);
@@ -85,9 +86,9 @@ const SearchForm = ({ className }: Props) => {
       <Heading size="xs" className="mb-3 uppercase tracking-wide mt-4 font-medium text-center">
         {`${dict[lang].title}:`}
       </Heading>
-      <div className="flex items-center justify-center gap-4 mb-2">
-        <RadioGroup label={dict[lang].products.label} name="searchIn" value="products" selectedOption={selectedOption} setSelectedOption={onCategoryChange} />
-        <RadioGroup label={dict[lang].news.label} name="searchIn" value="news" selectedOption={selectedOption} setSelectedOption={onCategoryChange} />
+      <div className="flex items-center justify-center gap-6 mb-2">
+        <RadioGroup label={dict[lang].products.label} name={groupName} value="products" selectedOption={selectedOption} setSelectedOption={onCategoryChange} />
+        <RadioGroup label={dict[lang].news.label} name={groupName} value="news" selectedOption={selectedOption} setSelectedOption={onCategoryChange} />
       </div>
       <input value={query} onChange={(e) => setQuery(e.target.value)} className="custom-input w-full mb-6" placeholder={dict[lang][selectedOption].search} />
       <ul className="flex flex-col gap-3 max-h-[40vh] overflow-y-scroll">

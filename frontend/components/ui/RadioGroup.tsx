@@ -13,17 +13,17 @@ type Props<T extends string> = {
 
 const RadioGroup = <T extends string>({ className, checkboxClassName, name, value, selectedOption, setSelectedOption, label }: Props<T>) => {
   return (
-    <div className={cn("flex flex-row gap-1 items-center", className)}>
+    <div className={cn("flex flex-row gap-2 items-center", className)}>
       <input
         className={cn("accent-primary-bright", checkboxClassName)}
         type="radio"
-        id={value}
+        id={name + value}
         name={name}
         value={value}
         checked={selectedOption === value}
         onChange={(e) => setSelectedOption(e.target.value as T)}
       />
-      <label htmlFor={value}>{label}</label>
+      <label htmlFor={name + value}>{label}</label>
     </div>
   );
 };

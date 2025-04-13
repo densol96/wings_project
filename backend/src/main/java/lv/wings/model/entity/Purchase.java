@@ -37,9 +37,9 @@ public class Purchase extends AuditableEntity {
 
 	private String deliveryDetails;
 
-	@ManyToOne
-	@JoinColumn(name = "delivery_type_id", nullable = false)
-	private DeliveryType deliveryType;
+	// @ManyToOne
+	// @JoinColumn(name = "delivery_type_id", nullable = false)
+	// private DeliveryType deliveryType;
 
 	@ManyToOne
 	@JoinColumn(name = "payment_type_id", nullable = false)

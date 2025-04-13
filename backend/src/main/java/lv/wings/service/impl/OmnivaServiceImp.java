@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,27 +18,39 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.dto.request.omniva.TerminalLocationDto;
+import lv.wings.dto.response.terminal.TerminalDto;
 import lv.wings.enums.Country;
 import lv.wings.enums.Status;
+import lv.wings.mapper.TerminalMapper;
 import lv.wings.model.entity.ActionLog;
 import lv.wings.model.entity.GlobalParam;
 import lv.wings.model.entity.Terminal;
 import lv.wings.repo.ActionLogRepository;
 import lv.wings.repo.GlobalParamsRepository;
 import lv.wings.repo.TerminalRepository;
+import lv.wings.service.AbstractCRUDService;
 import lv.wings.service.OmnivaService;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-public class OmnivaServiceImp implements OmnivaService {
+public class OmnivaServiceImp extends AbstractCRUDService<Terminal, Integer> implements OmnivaService {
 
     private final GlobalParamsRepository paramRepo;
     private final ActionLogRepository actionLogRepository;
     private final TerminalRepository terminalRepo;
+    private final TerminalMapper terminalMapper;
 
     private final String PARAM_KEY = "omniva_api_link";
     private final String JOB_KEY = "omniva_sync_job";
+
+    public OmnivaServiceImp(GlobalParamsRepository paramRepo, ActionLogRepository actionLogRepository, TerminalRepository terminalRepo,
+            TerminalMapper terminalMapper) {
+        super(terminalRepo, "Terminal", "entity.terminal");
+        this.paramRepo = paramRepo;
+        this.actionLogRepository = actionLogRepository;
+        this.terminalRepo = terminalRepo;
+        this.terminalMapper = terminalMapper;
+    }
 
 
     private List<TerminalLocationDto> loadFreshDataFromApi() {
@@ -55,7 +68,7 @@ public class OmnivaServiceImp implements OmnivaService {
     }
 
     @Override
-    @Scheduled(cron = "0 44 13 * * *") // 4am everyday
+    @Scheduled(cron = "0 0 4 * * *") // 4am everyday
     public void syncDbDataWithApi() {
         List<TerminalLocationDto> terminalsFromApi = loadFreshDataFromApi();
         if (terminalsFromApi.isEmpty()) {
@@ -63,7 +76,7 @@ public class OmnivaServiceImp implements OmnivaService {
             return;
         }
         if (terminalRepo.count() == 0) {
-            terminalsFromApi.forEach(this::saveToDb);
+            terminalsFromApi.forEach((t) -> terminalRepo.save(mapApiLocationToTerminal(t)));
         } else {
             Map<String, TerminalLocationDto> terminalsFromApiMap = new HashMap<>();
             terminalsFromApi.forEach((tl -> terminalsFromApiMap.put(tl.getZip(), tl)));
@@ -74,7 +87,7 @@ public class OmnivaServiceImp implements OmnivaService {
 
             for (TerminalLocationDto tFromApi : terminalsFromApi) {
                 if (!terminalsFromDbMap.containsKey(tFromApi.getZip())) {
-                    saveToDb(tFromApi);
+                    terminalRepo.save(mapApiLocationToTerminal(tFromApi));
                 } else {
                     Terminal isActive = terminalsFromDbMap.get(tFromApi.getZip());
                     Terminal versionFromApi = mapApiLocationToTerminal(tFromApi);
@@ -93,9 +106,13 @@ public class OmnivaServiceImp implements OmnivaService {
     }
 
     @Override
-    public List<Terminal> getAllTerminals() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getAllTerminals'");
+    public List<TerminalDto> getAllTerminals() {
+        return findAll().stream().map(terminalMapper::toCheckoutDto).toList();
+    }
+
+    @Override
+    public List<TerminalDto> getAllTerminalsPerCountry(Country country) {
+        return terminalRepo.findAllByCountry(country).stream().map(terminalMapper::toCheckoutDto).toList();
     }
 
     private void logTheJob(Status status, String message) {
@@ -140,11 +157,4 @@ public class OmnivaServiceImp implements OmnivaService {
                 .yCoordinate(Double.parseDouble(t.getYCoordinate()))
                 .build();
     }
-
-    private void saveToDb(TerminalLocationDto t) {
-        terminalRepo.save(mapApiLocationToTerminal(t));
-    }
-
-
-
 }
