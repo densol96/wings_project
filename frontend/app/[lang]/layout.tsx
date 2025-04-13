@@ -10,11 +10,12 @@ import { Header, Footer, NavSidebar } from "@/components/shared";
 import TestBtn from "./TestBtn";
 
 import dynamic from "next/dynamic";
-import { Toaster } from "react-hot-toast";
+import { Toaster, ToastOptions } from "react-hot-toast";
 import Scroll from "@/components/shared/Scroll";
 import { LangProvider } from "@/context/LangContext";
 import { SidebarProvider } from "@/context/SidebarContext";
 import { CartProvider } from "@/context/CartContext";
+import { ReactQueryProvider } from "@/context";
 const CookiesPopup = dynamic(() => import("@/components/shared/CookiesPopup"), { ssr: false });
 
 const roboto = Roboto({
@@ -62,43 +63,41 @@ type Props = PageProps & {
   children: React.ReactNode;
 };
 
+const toasterSettings: ToastOptions = {
+  success: {
+    duration: 5000,
+  },
+  error: {
+    duration: 5000,
+  },
+  style: {
+    fontSize: "16px",
+    maxWidth: "400px",
+    padding: "16px 24px",
+    textAlign: "center",
+  },
+};
+
 const RootLayout = async ({ children, params: { lang } }: Props) => {
   const dict = await getDictionary(lang);
-  console.log("ROOT LAYOUT CHANGED!");
   return (
     <LangProvider langValueFromServer={lang}>
       <html lang={lang}>
         <Scroll />
         <body className={`${roboto.className} min-h-screen flex flex-col`}>
-          <TestBtn />
-          <CartProvider>
-            <SidebarProvider>
-              <Header navMenu={dict.navMenu} />
-              <NavSidebar navMenu={dict.navMenu} />
-            </SidebarProvider>
-            <main className="relative flex-1">{children}</main>
-          </CartProvider>
-          <Footer footerDictionary={dict.footer} />
-          <CookiesPopup dict={dict.cookiesPopup} />
-          <Toaster
-            position="top-center"
-            gutter={12}
-            containerStyle={{ margin: "8px" }}
-            toastOptions={{
-              success: {
-                duration: 5000,
-              },
-              error: {
-                duration: 5000,
-              },
-              style: {
-                fontSize: "16px",
-                maxWidth: "400px",
-                padding: "16px 24px",
-                textAlign: "center",
-              },
-            }}
-          />
+          <ReactQueryProvider>
+            <TestBtn />
+            <CartProvider>
+              <SidebarProvider>
+                <Header navMenu={dict.navMenu} />
+                <NavSidebar navMenu={dict.navMenu} />
+              </SidebarProvider>
+              <main className="relative flex-1">{children}</main>
+            </CartProvider>
+            <Footer footerDictionary={dict.footer} />
+            <CookiesPopup dict={dict.cookiesPopup} />
+            <Toaster position="top-center" gutter={12} containerStyle={{ margin: "8px" }} toastOptions={toasterSettings} />
+          </ReactQueryProvider>
         </body>
       </html>
     </LangProvider>

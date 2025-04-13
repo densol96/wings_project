@@ -8,6 +8,7 @@ import SearchForm from "./SearchForm";
 import { cn, isAnIndexPage } from "@/utils";
 import { usePathname } from "next/navigation";
 import { useSidebarContext } from "@/context/SidebarContext";
+import { useWindowWidth } from "@/hooks";
 
 type Props = {
   navMenu: NavigationDictionary;
@@ -19,7 +20,7 @@ const NavSidebar = ({ navMenu }: Props) => {
 
   return (
     <Sidebar className="lg:hidden overflow-auto" breakpoint="lg">
-      <SearchForm className="p-0" />
+      <SearchForm groupName="searchInSidebar" className="p-0" />
       <ul className="flex flex-col gap-2 mt-6 mb-10">
         {Object.values(navMenu).map((item) => {
           const isActiveTab = isAnIndexPage(item.href) ? item.href == pathname : pathname.startsWith(item.href);

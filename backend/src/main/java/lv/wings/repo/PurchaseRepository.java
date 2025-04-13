@@ -13,7 +13,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
 
     List<Purchase> findByPaymentType(PaymentType paymentType);
 
-    List<Purchase> findByDeliveryType(DeliveryType deliveryType);
+    // List<Purchase> findByDeliveryType(DeliveryType deliveryType);
 
     List<Purchase> findByCustomer(Customer customer);
 

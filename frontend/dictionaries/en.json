@@ -245,10 +245,18 @@
   },
   "shared": {
     "isAlreadyInCart": "Already in cart",
-    "total": "Total",
+    "total": "Subtotal",
+    "totalTogether": "Total",
     "price": "Price",
     "isAvailable": "In stock - %%AMOUNT%% available",
-    "isNotAvailable": "Not available"
+    "isNotAvailable": "Not available",
+    "delivery": "Delivery",
+    "country": "Country",
+    "countryList": [
+      { "name": "Latvia", "code": "LV" },
+      { "name": "Estonia", "code": "EE" },
+      { "name": "Lithuania", "code": "LT" }
+    ]
   },
   "checkout": {
     "cartDelivery": {
@@ -257,14 +265,13 @@
       "continueShopping": "Continue shopping",
       "clearCart": "Clear cart",
       "proceedWithOrder": "Proceed with Order",
-      "cartSummary": "Cart summary",
-      "deliveryType": "Delivery",
+      "cartTotals": "Cart totals",
       "choosePackomat": "Choose parcel locker",
       "emptyCart": "Looks like your cart is currently empty. Browse our catalog to get started!"
     },
     "personalInfo": {
-      "title": "Personal Info",
-      "description": "Enter your contact details and delivery information."
+      "title": "Personal Info and Payment Method",
+      "description": "Enter your contact details and ccomplete the payment"
     },
     "payment": {
       "title": "Payment",

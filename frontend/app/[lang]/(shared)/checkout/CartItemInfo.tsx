@@ -10,7 +10,11 @@ import { MdDelete } from "react-icons/md";
 
 type Props = {
   product: CartItem;
-  translations: CartDeliveryRequiredTranslation;
+  translations: {
+    isAvailable: string;
+    total: string;
+    price: string;
+  };
 };
 
 const DisplayPrice = ({ price, label, className }: { price: number; label: string; className?: string }) => {
@@ -30,7 +34,7 @@ const CartItemInfo = ({ product, translations }: Props) => {
   return (
     <li className="grid grid-cols-[100px_1fr_auto_auto_auto_auto] gap-x-10 border-2 items-center pr-6">
       <Link href={href} className="w-[100px] h-[100px] relative">
-        <MyImage image={product.image} />
+        <MyImage withEffect={false} image={product.image} />
       </Link>
       <Link href={href} className="underline hover:no-underline">
         <p className="text-lg">{product.title}</p>

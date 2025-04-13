@@ -7,3 +7,4 @@ export { default as Button } from "./Button";
 export { default as MyImage } from "./MyImage";
 export { default as CloseBtn } from "./CloseBtn";
 export { default as RadioGroup } from "./RadioGroup";
+export { default as SimpleSelect } from "./SimpleSelect";

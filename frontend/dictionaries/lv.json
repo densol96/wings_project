@@ -246,8 +246,16 @@
     "isAlreadyInCart": "Jau grozā",
     "total": "Summa",
     "price": "Cena",
+    "totalTogether": "Kopā",
     "isAvailable": "Pieejams - %%AMOUNT%% gab.",
-    "isNotAvailable": "Nav pieejams"
+    "isNotAvailable": "Nav pieejams",
+    "delivery": "Piegāde",
+    "country": "Valsts",
+    "countryList": [
+      { "name": "Latvija", "code": "LV" },
+      { "name": "Igaunija", "code": "EE" },
+      { "name": "Lietuva", "code": "LT" }
+    ]
   },
   "checkout": {
     "cartDelivery": {
@@ -257,7 +265,7 @@
       "continueShopping": "Turpināt iepirkties",
       "proceedWithOrder": "Turpināt pasūtījumu",
       "cartSummary": "Grozs kopsavilkums",
-      "deliveryType": "Piegāde",
+      "cartTotals": "Grozā kopsumma",
       "choosePackomat": "Izvēlēties pakomātu",
       "emptyCart": "Izskatās, ka jūsu grozs pašlaik ir tukšs. Pārlūkojiet mūsu katalogu, lai sāktu!"
     },

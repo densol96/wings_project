@@ -55,8 +55,8 @@ public class GlobalExceptionHandler {
         }
 
         String localisedParameterName = localeService.getMessage(e.getQueryNameCode());
-        String message = localeService.getMessage("error.invalid-query-param", new Object[] {localisedParameterName, e.getQueryParamValue()});
-        return ResponseEntity.badRequest().body(BasicErrorDto.builder().message(message).build());
+        String message = localeService.getMessage("error.invalid-query-param", new Object[] {e.getQueryParamValue(), localisedParameterName});
+        return ResponseEntity.badRequest().body(new BasicErrorDto(message));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
         String message = localeService.getMessage("error.entity-not-found", new Object[] {localizedEntityName, e.getEntityId()});
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(BasicErrorDto.builder().message(message).build());
+                .body(new BasicErrorDto(message));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -92,7 +92,7 @@ public class GlobalExceptionHandler {
         String message = localeService.getMessage("error.missing-parameter", new Object[] {name});
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(BasicErrorDto.builder().message(message).build());
+                .body(new BasicErrorDto(message));
     }
 
     @ExceptionHandler(AlreadySubscribedException.class)
@@ -150,7 +150,7 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
-                .body(BasicErrorDto.builder().message(message).build());
+                .body(new BasicErrorDto(message));
     }
 
     @ExceptionHandler(Exception.class)
@@ -167,7 +167,7 @@ public class GlobalExceptionHandler {
         String message = localeService.getMessage("error.internal");
         return ResponseEntity
                 .internalServerError()
-                .body(BasicErrorDto.builder().message(message).build());
+                .body(new BasicErrorDto(message));
     }
 }
 

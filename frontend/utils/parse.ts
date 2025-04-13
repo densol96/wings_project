@@ -37,3 +37,10 @@ export const createCartItem = (product: ShortProductDto) => {
     inStockAmount: product.amount,
   };
 };
+
+export const pickLabels = <T extends object, K extends keyof T>(dict: T, keys: K[]): Pick<T, K> => {
+  return keys.reduce((acc, key) => {
+    acc[key] = dict[key];
+    return acc;
+  }, {} as Pick<T, K>);
+};

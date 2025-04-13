@@ -59,4 +59,12 @@ export type SharedDict = {
   price: string;
   isAvailable: string;
   isNotAvailable: string;
+  delivery: string;
+};
+
+export type CountryCode = "LV" | "LT" | "EE";
+
+export type Country = {
+  name: string;
+  code: CountryCode;
 };
