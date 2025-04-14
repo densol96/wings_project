@@ -17,61 +17,61 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import jakarta.validation.Valid;
-import lv.wings.mail.MailSender;
-import lv.wings.model.entity.Customer;
-import lv.wings.model.entity.DeliveryType;
-import lv.wings.model.entity.PaymentType;
-import lv.wings.model.entity.Purchase;
-import lv.wings.poi.PoiController;
-import lv.wings.responses.ApiResponse;
-import lv.wings.service.CRUDService;
-import lv.wings.service.ICRUDService;
+// import jakarta.validation.Valid;
+// import lv.wings.mail.MailSender;
+// import lv.wings.model.entity.Customer;
+// import lv.wings.model.entity.DeliveryType;
+// import lv.wings.model.entity.PaymentType;
+// import lv.wings.model.entity.Purchase;
+// import lv.wings.poi.PoiController;
+// import lv.wings.responses.ApiResponse;
+// import lv.wings.service.CRUDService;
+// import lv.wings.service.ICRUDService;
 
-@Controller
-@RequestMapping("/pirkums")
-public class PurchaseController {
+// @Controller
+// @RequestMapping("/pirkums")
+// public class PurchaseController {
 
-    @Autowired
-    private MailSender mailSender;
+// @Autowired
+// private MailSender mailSender;
 
-    @Autowired
-    private CRUDService<Purchase, Integer> purchaseService;
+// @Autowired
+// private CRUDService<Purchase, Integer> purchaseService;
 
 
-    @GetMapping("/download/all/{id}") // localhost:8080/pirkums/download/all/{id}
-    public ResponseEntity<byte[]> downloadPurchaseById(@PathVariable("id") int id) {
-        try {
-            Purchase purchase = purchaseService.findById(id);
-            // iegūt faila baitus no preces ar definētiem laukiem
-            byte[] fileBytes = PoiController.buildInvoice("pirkums-" + id, purchase);
+// @GetMapping("/download/all/{id}") // localhost:8080/pirkums/download/all/{id}
+// public ResponseEntity<byte[]> downloadPurchaseById(@PathVariable("id") int id) {
+// try {
+// Purchase purchase = purchaseService.findById(id);
+// // iegūt faila baitus no preces ar definētiem laukiem
+// byte[] fileBytes = PoiController.buildInvoice("pirkums-" + id, purchase);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", "invoice-" + id + ".docx");
+// HttpHeaders headers = new HttpHeaders();
+// headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+// headers.setContentDispositionFormData("attachment", "invoice-" + id + ".docx");
 
-            return ResponseEntity.ok().headers(headers).body(fileBytes);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+// return ResponseEntity.ok().headers(headers).body(fileBytes);
+// } catch (Exception e) {
+// return ResponseEntity.notFound().build();
+// }
+// }
 
-    @GetMapping("/purchace/{id}") // localhost:8080/pirkums/purchace/{id}
-    public ResponseEntity<ApiResponse<Boolean>> performPurchaseById(@PathVariable("id") int id) {
-        try {
-            System.out.println("smth");
-            Purchase purchase = purchaseService.findById(id);
-            System.out.println(purchase.getDeliveryDetails());
+// @GetMapping("/purchace/{id}") // localhost:8080/pirkums/purchace/{id}
+// public ResponseEntity<ApiResponse<Boolean>> performPurchaseById(@PathVariable("id") int id) {
+// try {
+// System.out.println("smth");
+// Purchase purchase = purchaseService.findById(id);
+// System.out.println(purchase.getDeliveryDetails());
 
-            // iegūt faila baitus no preces ar definētiem laukiem
-            byte[] fileBytes = PoiController.buildInvoice("pirkums-" + id, purchase);
+// // iegūt faila baitus no preces ar definētiem laukiem
+// byte[] fileBytes = PoiController.buildInvoice("pirkums-" + id, purchase);
 
-            mailSender.sendMessage(/* purchase.getCustomer().getEmail() */mailSender.getDestinationEmail(), "Delivery",
-                    "some contents", "invoice-" + id + ".docx", new ByteArrayResource(fileBytes));
-            return ResponseEntity.ok().body(new ApiResponse<>(null, true));
-        } catch (Exception e) {
-            System.out.println("rip");
-            return ResponseEntity.ok().body(new ApiResponse<>(null, false));
-        }
-    }
-}
+// mailSender.sendMessage(/* purchase.getCustomer().getEmail() */mailSender.getDestinationEmail(), "Delivery",
+// "some contents", "invoice-" + id + ".docx", new ByteArrayResource(fileBytes));
+// return ResponseEntity.ok().body(new ApiResponse<>(null, true));
+// } catch (Exception e) {
+// System.out.println("rip");
+// return ResponseEntity.ok().body(new ApiResponse<>(null, false));
+// }
+// }
+// }

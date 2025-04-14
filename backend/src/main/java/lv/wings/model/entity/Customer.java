@@ -7,19 +7,23 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
 import lv.wings.model.base.AuditableEntity;
 
 
 @Entity
 @Table(name = "customers")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @SQLDelete(sql = "UPDATE Customer SET deleted = true WHERE customer_id=?")
 @Where(clause = "deleted=false")
 public class Customer extends AuditableEntity {
@@ -35,6 +39,9 @@ public class Customer extends AuditableEntity {
 
 	@Column(nullable = false)
 	private String adress;
+
+	@OneToOne(mappedBy = "customer")
+	private Order order;
 
 	// Soft delete
 	@Column(name = "deleted")

@@ -10,15 +10,17 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
 import lv.wings.model.base.TranslatableEntity;
 import lv.wings.model.translation.EventCategoryTranslation;
 
 @Entity
 @Table(name = "event_categories")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class EventCategory extends TranslatableEntity<EventCategoryTranslation> {
 
 	@OneToMany(mappedBy = "category")

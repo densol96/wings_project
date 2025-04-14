@@ -3,14 +3,17 @@ package lv.wings.model.entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lv.wings.enums.LocaleCode;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
 @Table(name = "newsletter_subscribers")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class NewsletterSubscriber {
     @Id

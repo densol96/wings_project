@@ -10,7 +10,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lv.wings.model.base.AuditableEntityExtended;
 
 @Entity
@@ -18,7 +20,8 @@ import lv.wings.model.base.AuditableEntityExtended;
         name = "product_material",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "material_id"})})
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class ProductMaterial extends AuditableEntityExtended {
 
     @ManyToOne

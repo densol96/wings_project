@@ -12,15 +12,17 @@ import jakarta.persistence.Table;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.model.base.OwnerableEntity;
 
 @Entity
 @Table(name = "events")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Event extends OwnerableEntity<EventTranslation, EventImage> {
 
 	private LocalDate startDate;

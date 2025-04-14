@@ -9,15 +9,17 @@ import jakarta.persistence.Table;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
 import lv.wings.model.base.ImageableEntity;
 import lv.wings.model.translation.EventImageTranslation;
 
 @Entity
 @Table(name = "event_images")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class EventImage extends ImageableEntity<EventImageTranslation, Event> {
 
 	@Builder

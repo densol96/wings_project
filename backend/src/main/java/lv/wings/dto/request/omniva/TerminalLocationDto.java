@@ -1,9 +1,12 @@
 package lv.wings.dto.request.omniva;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 
-@Data
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class TerminalLocationDto {
 
     @JsonProperty("ZIP")

@@ -8,13 +8,16 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lv.wings.model.base.TranslatableEntity;
 import lv.wings.model.translation.ColorTranslation;
 
 @Entity
 @Table(name = "colors")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class Color extends TranslatableEntity<ColorTranslation> {
 

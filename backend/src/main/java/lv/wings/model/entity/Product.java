@@ -17,7 +17,9 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lv.wings.model.base.OwnerableEntity;
 import lv.wings.model.translation.ProductTranslation;
 
@@ -25,7 +27,8 @@ import lv.wings.model.translation.ProductTranslation;
 @Entity
 @Table(name = "products")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 
 	@Column(nullable = false)
@@ -39,7 +42,7 @@ public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 	private ProductCategory category;
 
 	@OneToMany(mappedBy = "product")
-	private List<PurchaseElement> purchaseElement = new ArrayList<>();
+	private List<OrderItem> orderItems = new ArrayList<>();
 
 	@OneToMany(mappedBy = "product")
 	private List<ProductMaterial> madeOfMaterials = new ArrayList<>();
