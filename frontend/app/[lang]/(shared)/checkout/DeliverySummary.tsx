@@ -3,27 +3,35 @@
 import { Button, Heading, SimpleSelect } from "@/components";
 import { useCartContext, useLangContext } from "@/context";
 import { Country, CountryCode, DeliveryMethod } from "@/types";
-import { formatPrice } from "@/utils";
+import { formatPrice, pickLabels } from "@/utils";
 import React, { useState } from "react";
 import DeliveryMethods from "./DeliveryMethods";
 import { useCheckoutContext } from "@/context/CheckoutContext";
 import { useRouter } from "next/navigation";
+import ApplyCoupon from "./ApplyCoupon";
+
+type Translations = {
+  cartTotals: string;
+  total: string;
+  delivery: string;
+  country: string;
+  countryList: Country[];
+  totalTogether: string;
+  proceedWithOrder: string;
+  useCoupon: string;
+  applyCoupon: string;
+  discount: string;
+  enterDescription: string;
+  explanation: string;
+};
 
 type Props = {
-  translations: {
-    cartTotals: string;
-    total: string;
-    delivery: string;
-    country: string;
-    countryList: Country[];
-    totalTogether: string;
-    proceedWithOrder: string;
-  };
+  translations: Translations;
 };
 
 const DeliverySummary = ({ translations }: Props) => {
   const { getTotalPrice, cartIsLoaded, items } = useCartContext();
-  const { selectedDeliveryMethod, selectedTerminal, selectedCountry, setSelectedCountry } = useCheckoutContext();
+  const { selectedDeliveryMethod, selectedTerminal, selectedCountry, setSelectedCountry, coupon } = useCheckoutContext();
   const { lang } = useLangContext();
   const router = useRouter();
 
@@ -54,13 +62,14 @@ const DeliverySummary = ({ translations }: Props) => {
       </div>
       <p className="mt-4">{translations.delivery}</p>
       <DeliveryMethods country={selectedCountry} />
+      <ApplyCoupon translations={pickLabels(translations, ["applyCoupon", "useCoupon", "discount", "enterDescription", "explanation"])} />
       <div className="mt-4 border-t-1 border-gray-300 flex justify-between items-center pt-2">
         <p className="uppercase font-medium">{translations.totalTogether}</p>
-        <p className="font-bold">{formatPrice(getTotalPrice() + (selectedDeliveryMethod?.price || 0))}</p>
+        <p className="font-bold">{formatPrice(getTotalPrice() + (selectedDeliveryMethod?.price || 0) - (coupon?.discount || 0))}</p>
       </div>
       {readyToProceed && (
         <div>
-          <Button onClick={() => router.push(`/${lang}/checkout/payment`)} className="w-full mt-4">
+          <Button color="green" onClick={() => router.push(`/${lang}/checkout/payment`)} className="w-full mt-4">
             {translations.proceedWithOrder}
           </Button>
         </div>

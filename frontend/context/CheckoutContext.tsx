@@ -1,15 +1,17 @@
 "use client";
 
-import { CountryCode, DeliveryDto, DeliveryMethod, TerminalDto } from "@/types";
+import { CountryCode, Coupon, DeliveryDto, DeliveryMethod, TerminalDto } from "@/types";
 import { createContext, ReactNode, useContext, useState } from "react";
 
 export type CheckoutState = {
   selectedDeliveryMethod?: DeliveryDto;
   selectedTerminal?: TerminalDto;
   selectedCountry: CountryCode;
+  coupon?: Coupon;
   setSelectedDeliveryMethod: (dm: DeliveryDto) => void;
   setSelectedTerminal: (t: TerminalDto) => void;
   setSelectedCountry: (c: CountryCode) => void;
+  setCoupon: (c?: Coupon) => void;
 };
 
 const CheckoutContext = createContext<CheckoutState | undefined>(undefined);
@@ -18,6 +20,7 @@ export const CheckoutProvider = ({ children }: { children: React.ReactNode }) =>
   const [selectedDeliveryMethod, setSelectedDeliveryMethod] = useState<DeliveryDto>();
   const [selectedTerminal, setSelectedTerminal] = useState<TerminalDto>();
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>("LV");
+  const [coupon, setCoupon] = useState<Coupon>();
   //   const [contactInfo, setContactInfo] = useState<ContactFormData>();
 
   return (
@@ -29,6 +32,8 @@ export const CheckoutProvider = ({ children }: { children: React.ReactNode }) =>
         setSelectedDeliveryMethod,
         setSelectedTerminal,
         setSelectedCountry,
+        coupon,
+        setCoupon,
       }}
     >
       {children}

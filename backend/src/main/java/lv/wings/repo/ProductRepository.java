@@ -12,8 +12,6 @@ import lv.wings.model.entity.ProductCategory;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
-	// Product findByTitle(String title);
-
 	List<Product> findByCategory(ProductCategory category);
 
 	Page<Product> findAllByCategoryId(Integer categoryId, Pageable pageable);

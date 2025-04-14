@@ -30,6 +30,11 @@ type CartDeliveryDictionary = {
   cartTotals: string;
   choosePackomat: string;
   emptyCart: string;
+  useCoupon: string;
+  applyCoupon: string;
+  discount: string;
+  enterDescription: string;
+  explanation: string;
 };
 
 export type CartDeliveryRequiredTranslation = SharedDictionary & CartDeliveryDictionary;
@@ -70,4 +75,9 @@ export type TerminalDto = {
   name: string;
   address: string;
   country: CountryCode;
+};
+
+export type Coupon = {
+  code: string;
+  discount: number;
 };

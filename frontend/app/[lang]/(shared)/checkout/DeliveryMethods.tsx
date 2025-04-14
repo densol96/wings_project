@@ -41,7 +41,7 @@ const DeliveryMethods = ({ country }: Props) => {
   if (error || !deliveryMethods || deliveryMethods.length === 0) return <ServiceUnavailable />;
   return (
     <>
-      <ul className="flex flex-col gap-6 mt-1 ml-2">
+      <ul className="flex flex-col gap-6 mt-2 ml-2">
         {deliveryMethods?.map((dm) => {
           return (
             <li key={dm.id}>

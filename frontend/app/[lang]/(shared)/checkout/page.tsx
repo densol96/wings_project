@@ -26,7 +26,20 @@ const Page = async ({ params: { lang } }: PageProps) => {
       <div className="grid grid-cols-[6fr_3fr] gap-x-16 mt-10">
         <CartSummary translations={pickLabels(requiredTranslations, ["emptyCart", "continueShopping", "clearCart", "isAvailable", "total", "price"])} />
         <DeliverySummary
-          translations={pickLabels(requiredTranslations, ["cartTotals", "total", "delivery", "country", "countryList", "totalTogether", "proceedWithOrder"])}
+          translations={pickLabels(requiredTranslations, [
+            "cartTotals",
+            "total",
+            "delivery",
+            "country",
+            "countryList",
+            "totalTogether",
+            "proceedWithOrder",
+            "useCoupon",
+            "applyCoupon",
+            "discount",
+            "enterDescription",
+            "explanation",
+          ])}
         />
       </div>
     </>

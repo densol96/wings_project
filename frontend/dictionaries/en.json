@@ -267,7 +267,12 @@
       "proceedWithOrder": "Proceed with Order",
       "cartTotals": "Cart totals",
       "choosePackomat": "Choose parcel locker",
-      "emptyCart": "Looks like your cart is currently empty. Browse our catalog to get started!"
+      "emptyCart": "Looks like your cart is currently empty. Browse our catalog to get started!",
+      "useCoupon": "Use a coupon (optional)",
+      "applyCoupon": "Apply coupon",
+      "discount": "Discount",
+      "enterDescription": "Enter coupon code",
+      "explanation": "The coupon gives a fixed or percentage discount on the total product price."
     },
     "personalInfo": {
       "title": "Personal Info and Payment Method",

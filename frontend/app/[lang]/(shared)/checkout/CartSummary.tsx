@@ -33,7 +33,7 @@ const CartSummary = ({ translations }: Props) => {
       </div>
     ) : (
       <div>
-        <ul className="flex flex-col gap-4 max-h-[500px] overflow-y-auto">
+        <ul className="flex flex-col gap-4 max-h-[580px] overflow-y-auto">
           {items.map((item) => (
             <CartItemInfo translations={translations} key={item.id + "_" + item.title} product={item} />
           ))}

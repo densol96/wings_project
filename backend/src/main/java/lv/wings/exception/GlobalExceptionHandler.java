@@ -21,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import lv.wings.dto.response.BasicErrorDto;
+import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.exception.other.AlreadySubscribedException;
@@ -151,6 +152,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new BasicErrorDto(message));
+    }
+
+    @ExceptionHandler(InvalidCouponException.class)
+    public ResponseEntity<BasicErrorDto> handleInvalidCoupon(InvalidCouponException e) {
+        /**
+         * Various scenarios available for this type of Exception => aproch to handle slightly differs.
+         * 
+         * Pass in an appropriate code and minimum amount required to spend.
+         */
+        String localizedMessage = localeService.getMessage(
+                e.getMessageCode(),
+                new Object[] {e.getMinAmount()});
+        log.error("*** InvalidCouponException: {}", localizedMessage);
+        return ResponseEntity.badRequest().body(new BasicErrorDto(localizedMessage));
     }
 
     @ExceptionHandler(Exception.class)
