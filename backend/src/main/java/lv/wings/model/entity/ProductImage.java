@@ -10,15 +10,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-
+import lombok.Setter;
 import lv.wings.model.base.ImageableEntity;
 import lv.wings.model.translation.ProductImageTranslation;
 
 @Entity
 @Table(name = "product_images")
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 public class ProductImage extends ImageableEntity<ProductImageTranslation, Product> {
 
 	@Builder

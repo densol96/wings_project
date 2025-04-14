@@ -1,11 +1,11 @@
 package lv.wings.model.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,54 +18,46 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import lv.wings.model.base.AuditableEntity;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
-@Data
-@Table(name = "purchases")
-@SQLDelete(sql = "UPDATE Purchase SET deleted = true WHERE purchase_id=?")
+@Table(name = "order_items")
+@SQLDelete(sql = "UPDATE order_items SET deleted = true WHERE id = ?")
 @Where(clause = "deleted=false")
-public class Purchase extends AuditableEntity {
-
-	private String deliveryDetails;
-
-	// @ManyToOne
-	// @JoinColumn(name = "delivery_type_id", nullable = false)
-	// private DeliveryType deliveryType;
+public class OrderItem extends AuditableEntity {
 
 	@ManyToOne
-	@JoinColumn(name = "payment_type_id", nullable = false)
-	private PaymentType paymentType;
+	@JoinColumn(name = "order_id", nullable = false)
+	private Order order;
 
 	@ManyToOne
-	@JoinColumn(name = "customer_id", nullable = false)
-	private Customer customer;
+	@JoinColumn(name = "product_id", nullable = false)
+	private Product product;
 
-	@OneToMany(mappedBy = "purchase")
-	private List<PurchaseElement> purchaseElement = new ArrayList<>();
+	@Column(nullable = false)
+	private Integer amount;
 
+	@Column(nullable = false)
+	private BigDecimal priceAtOrderTime;
+
+	// Soft delete
 	@Column(name = "deleted")
 	private boolean deleted = false;
 
 	@Builder
-	public Purchase(
-			DeliveryType deliveryType,
-			PaymentType paymentType,
-			Customer customer,
-			LocalDateTime deliveryDate,
-			String deliveryDetails) {
-		setDeliveryType(deliveryType);
-		setPaymentType(paymentType);
-		setCustomer(customer);
-		setDeliveryDetails(deliveryDetails);
-	}
+	public OrderItem(Order purchase, Product product, Integer amount) {
 
+	}
 }

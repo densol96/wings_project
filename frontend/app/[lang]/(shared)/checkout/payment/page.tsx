@@ -2,21 +2,22 @@ import { Heading } from "@/components";
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { PageProps } from "@/types";
 import React from "react";
+import { StripeWrapper } from "./StripeWrapper";
+import { CheckoutForm } from "./CheckoutForm";
 
 const Page = async ({ params: { lang } }: PageProps) => {
   const dict = await getDictionary(lang);
   return (
     <>
       <Heading size="xl" className="">
-        {requiredTranslations.title}
+        {"MAKE A PAYMENT"}
       </Heading>
-      <p>{requiredTranslations.description}</p>
-      <div className="grid grid-cols-[6fr_3fr] gap-x-16 mt-10">
-        <CartSummary translations={pickLabels(requiredTranslations, ["emptyCart", "continueShopping", "clearCart", "isAvailable", "total", "price"])} />
-        <DeliverySummary
-          translations={pickLabels(requiredTranslations, ["cartTotals", "total", "delivery", "country", "countryList", "totalTogether", "proceedWithOrder"])}
-        />
-      </div>
+      <p>{"ENter personal details and make a payment! "}</p>
+      <StripeWrapper>
+        <div className="flex justify-center items-center min-h-screen">
+          <CheckoutForm />
+        </div>
+      </StripeWrapper>
     </>
   );
 };

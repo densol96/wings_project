@@ -15,21 +15,21 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lv.wings.enums.DeliveryMethod;
 import lv.wings.model.base.TranslatableEntity;
 import lv.wings.model.translation.DeliveryTypeTranslation;
 
 @Entity
 @Table(name = "delivery_types")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE delivery_type SET deleted = true WHERE delivery_type_id=?")
 @Where(clause = "deleted=false")
 public class DeliveryType extends TranslatableEntity<DeliveryTypeTranslation> {
-
-	// @OneToMany(mappedBy = "deliveryType")
-	// private List<Purchase> purchases = new ArrayList<>();
 
 	@OneToMany(mappedBy = "deliveryType", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DeliveryPrice> prices = new ArrayList<>();
