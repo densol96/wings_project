@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 
-import { Button, Heading, Logo } from "@/components/ui";
 import LogoWithIcons from "./LogoWithIcons";
 import { FooterProps } from "@/types/sections/footer";
 import SubscribeForm from "./SubscribeForm";

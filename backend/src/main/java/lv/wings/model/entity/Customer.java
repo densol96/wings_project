@@ -2,17 +2,14 @@ package lv.wings.model.entity;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,31 +25,55 @@ import lv.wings.model.base.AuditableEntity;
 @Where(clause = "deleted=false")
 public class Customer extends AuditableEntity {
 
-	@Column(nullable = false)
-	private String name;
+	@Column(nullable = false, length = 50)
+	private String firstName;
 
-	@Column(nullable = false)
-	private String surname;
+	@Column(nullable = false, length = 50)
+	private String lastName;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false, length = 100)
 	private String email;
 
-	@Column(nullable = false)
-	private String adress;
+	@Column(nullable = false, length = 100)
+	private String street;
 
-	@OneToOne(mappedBy = "customer")
+	@Column(nullable = false, length = 10)
+	private String houseNumber;
+
+	@Column(length = 10)
+	private String apartment;
+
+	@Column(nullable = false, length = 50)
+	private String city;
+
+	@Column(nullable = false, length = 10)
+	private String postalCode;
+
+	@Column(nullable = false, length = 50)
+	private String country;
+
+	@Column(length = 500)
+	private String additionalDetails;
+
+	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
 	private Order order;
 
-	// Soft delete
-	@Column(name = "deleted")
+	@Column(nullable = false)
 	private boolean deleted = false;
 
 	@Builder
-	public Customer(String name, String surname, String email, String adress) {
-		setName(name);
-		setSurname(surname);
-		setEmail(email);
-		setAdress(adress);
+	public Customer(String firstName, String lastName, String email,
+			String street, String houseNumber, String apartment,
+			String city, String postalCode, String country, Order order, String additionalDetails) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.street = street;
+		this.houseNumber = houseNumber;
+		this.apartment = apartment;
+		this.city = city;
+		this.postalCode = postalCode;
+		this.country = country;
+		this.additionalDetails = additionalDetails;
 	}
-
 }

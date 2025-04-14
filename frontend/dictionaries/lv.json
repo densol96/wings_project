@@ -267,7 +267,12 @@
       "cartSummary": "Grozs kopsavilkums",
       "cartTotals": "Grozā kopsumma",
       "choosePackomat": "Izvēlēties pakomātu",
-      "emptyCart": "Izskatās, ka jūsu grozs pašlaik ir tukšs. Pārlūkojiet mūsu katalogu, lai sāktu!"
+      "emptyCart": "Izskatās, ka jūsu grozs pašlaik ir tukšs. Pārlūkojiet mūsu katalogu, lai sāktu!",
+      "useCoupon": "Ievadīt kuponu (nav obligāti)",
+      "applyCoupon": "Izmantot kuponu",
+      "discount": "Atlaide",
+      "enterDescription": "Ievadiet kupona kodu",
+      "explanation": "Kupons piešķir fiksētu vai procentuālu atlaidi no kopējās preču cenas."
     },
     "personalInfo": {
       "title": "Personīgā informācija",
