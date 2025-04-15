@@ -57,13 +57,10 @@ import lv.wings.repo.CustomerRepository;
 import lv.wings.repo.DeliveryTypeRepository;
 import lv.wings.repo.EventCategoryRepository;
 import lv.wings.repo.EventImageRepository;
-import lv.wings.repo.PaymentTypeRepository;
 import lv.wings.repo.ProductCategoryRepository;
 import lv.wings.repo.ProductImageRepository;
 import lv.wings.repo.ProductMaterialRepository;
 import lv.wings.repo.ProductRepository;
-import lv.wings.repo.PurchaseElementRepository;
-import lv.wings.repo.PurchaseRepository;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
 

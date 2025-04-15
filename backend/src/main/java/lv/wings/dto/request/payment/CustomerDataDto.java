@@ -28,10 +28,7 @@ public class CustomerDataDto {
         @NotBlank(message = "{email.required}")
         private String email;
 
-        @Pattern(regexp = "^\\+?[0-9\\-\\s]{7,20}$", message = "{phone.invalid}")
-        @Pattern(
-                        regexp = "^(\\+371|\\+370|\\+372)\\s?\\d{6,10}$",
-                        message = "{phone.invalid}")
+        @Pattern(regexp = "^\\+37[0-2]\\d{8}$", message = "{phone.invalid}")
         private String phoneNumber;
 
         @Valid
