@@ -65,7 +65,7 @@ public class ProductController {
     public ResponseEntity<List<ProductTitleDto>> getProductTitlesByIds(
             @RequestParam List<Integer> ids) {
         log.info("Received GET request on /api/v1/products/localised-titles with {} id(s): {}", ids.size(), ids);
-        return ResponseEntity.ok().body(productService.getProductsByIds(ids));
+        return ResponseEntity.ok().body(productService.getProductDtosByIds(ids));
     }
 
 }

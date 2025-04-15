@@ -2,10 +2,11 @@ package lv.wings.model.entity;
 
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-
+import org.hibernate.event.spi.EventManager.CacheActionDescription;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -13,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lv.wings.enums.Country;
 import lv.wings.model.base.AuditableEntity;
 
 
@@ -34,46 +36,26 @@ public class Customer extends AuditableEntity {
 	@Column(nullable = false, length = 100)
 	private String email;
 
-	@Column(nullable = false, length = 100)
-	private String street;
+	@Column(nullable = false, length = 12)
+	private String phoneNumber;
 
-	@Column(nullable = false, length = 10)
-	private String houseNumber;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "address_id")
+	private Address address;
 
-	@Column(length = 10)
-	private String apartment;
-
-	@Column(nullable = false, length = 50)
-	private String city;
-
-	@Column(nullable = false, length = 10)
-	private String postalCode;
-
-	@Column(nullable = false, length = 50)
-	private String country;
-
-	@Column(length = 500)
-	private String additionalDetails;
-
-	@OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "customer")
 	private Order order;
 
 	@Column(nullable = false)
 	private boolean deleted = false;
 
 	@Builder
-	public Customer(String firstName, String lastName, String email,
-			String street, String houseNumber, String apartment,
-			String city, String postalCode, String country, Order order, String additionalDetails) {
+	public Customer(String firstName, String lastName, String email, String phoneNumber, Address address, Order order) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
-		this.street = street;
-		this.houseNumber = houseNumber;
-		this.apartment = apartment;
-		this.city = city;
-		this.postalCode = postalCode;
-		this.country = country;
-		this.additionalDetails = additionalDetails;
+		this.phoneNumber = phoneNumber;
+		this.address = address;
+		this.order = order;
 	}
 }

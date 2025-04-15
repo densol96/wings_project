@@ -3,9 +3,11 @@ package lv.wings.service.impl;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import io.micrometer.common.lang.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
 import lv.wings.dto.request.payment.NewCouponDto;
 import lv.wings.dto.response.payment.CouponCodeDto;
 import lv.wings.dto.response.payment.CouponDiscountDto;
@@ -13,15 +15,20 @@ import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.mapper.CouponMapper;
 import lv.wings.model.entity.Coupon;
 import lv.wings.repo.CouponRepository;
+import lv.wings.service.AbstractCRUDService;
 import lv.wings.service.CouponService;
 
 @Service
-@RequiredArgsConstructor
-public class CouponServiceImpl implements CouponService {
+public class CouponServiceImpl extends AbstractCRUDService<Coupon, Integer> implements CouponService {
 
     private final CouponRepository couponRepository;
     private final CouponMapper couponMapper;
 
+    public CouponServiceImpl(CouponRepository couponRepository, CouponMapper couponMapper) {
+        super(couponRepository, "Coupon", "entity.coupon");
+        this.couponRepository = couponRepository;
+        this.couponMapper = couponMapper;
+    }
 
     @Override
     public CouponCodeDto createNewCoupon(@NonNull NewCouponDto newCouponeDto) {
@@ -35,6 +42,12 @@ public class CouponServiceImpl implements CouponService {
     public CouponDiscountDto applyCouponToCalculation(@NonNull String code, @NonNull BigDecimal orderTotal) {
         Coupon coupon = validateCoupon(code, orderTotal);
         return new CouponDiscountDto(calculateDiscount(coupon, orderTotal));
+    }
+
+
+    @Override
+    public Coupon findByCode(String code) {
+        return couponRepository.findByCodeIgnoreCase(code).orElse(null);
     }
 
     private String generateCouponCode(int length) {

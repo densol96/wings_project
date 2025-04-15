@@ -25,6 +25,7 @@ import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.exception.other.AlreadySubscribedException;
+import lv.wings.exception.payment.FailedIntentException;
 import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.model.security.MyUser;
 import lv.wings.service.LocaleService;
@@ -165,6 +166,15 @@ public class GlobalExceptionHandler {
                 e.getMessageCode(),
                 new Object[] {e.getMinAmount()});
         log.error("*** InvalidCouponException: {}", localizedMessage);
+        return ResponseEntity.badRequest().body(new BasicErrorDto(localizedMessage));
+    }
+
+    @ExceptionHandler(FailedIntentException.class)
+    public ResponseEntity<BasicErrorDto> handleFailedIntentException(FailedIntentException e) {
+        String localizedMessage = localeService.getMessage(
+                e.getNameKey(),
+                new Object[] {e.getMaxAmount()});
+        log.error("*** FailedIntentException: {}", localizedMessage);
         return ResponseEntity.badRequest().body(new BasicErrorDto(localizedMessage));
     }
 

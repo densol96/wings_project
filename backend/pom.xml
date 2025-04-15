@@ -132,6 +132,12 @@
             <optional>true</optional>
         </dependency>
 
+        <dependency>
+            <groupId>com.stripe</groupId>
+            <artifactId>stripe-java</artifactId>
+            <version>24.0.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>

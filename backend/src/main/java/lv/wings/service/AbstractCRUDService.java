@@ -21,6 +21,11 @@ public abstract class AbstractCRUDService<T, ID> implements CRUDService<T, ID> {
     }
 
     @Override
+    public boolean existsById(ID id) {
+        return repository.existsById(id);
+    }
+
+    @Override
     public long count() {
         return repository.count();
     }
@@ -37,7 +42,6 @@ public abstract class AbstractCRUDService<T, ID> implements CRUDService<T, ID> {
 
     @Override
     public T findById(ID id) {
-        System.out.println("I RUN!");
         return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(entityNameKey, entityName, id));
     }
 
@@ -47,6 +51,7 @@ public abstract class AbstractCRUDService<T, ID> implements CRUDService<T, ID> {
         return repository.save(entity);
     }
 
+    // remove or update later
     @Override
     @PreAuthorize("hasRole('ADMIN')")
     public T update(ID id, T entity) {

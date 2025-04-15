@@ -19,5 +19,7 @@ public interface ProductService extends CRUDService<Product, Integer> {
 
     List<SearchedProductDto> getSearchedProducts(String q);
 
-    List<ProductTitleDto> getProductsByIds(List<Integer> ids);
+    List<ProductTitleDto> getProductDtosByIds(List<Integer> ids);
+
+    List<Product> getProductsByIds(List<Integer> ids);
 }

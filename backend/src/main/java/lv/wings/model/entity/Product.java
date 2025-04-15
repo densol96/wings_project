@@ -1,6 +1,7 @@
 package lv.wings.model.entity;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -32,7 +33,7 @@ import lv.wings.model.translation.ProductTranslation;
 public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 
 	@Column(nullable = false)
-	private Double price;
+	private BigDecimal price;
 
 	@Column(nullable = false)
 	private Integer amount;
@@ -55,10 +56,10 @@ public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 	private List<Color> colors = new ArrayList<>();
 
 	@Builder
-	public Product(Double price, Integer amount, ProductCategory category) {
-		setPrice(price);
-		setAmount(amount);
-		setCategory(category);
+	public Product(BigDecimal price, Integer amount, ProductCategory category) {
+		this.price = price;
+		this.amount = amount;
+		this.category = category;
 	}
 
 }

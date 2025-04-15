@@ -1,5 +1,6 @@
 package lv.wings.dto.request.payment;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -28,12 +29,16 @@ public class AddressDto {
     private String city;
 
     @NotBlank(message = "{postalCode.required}")
-    @Size(min = 4, max = 10, message = "{postalCode.size}")
     @Pattern(
-            regexp = "^(LV|LT|EE)?-?\\d{4,5}$",
+            regexp = "^(LV|LT|EE)-\\d{4,5}$",
             message = "{postalCode.invalid}")
     private String postalCode;
 
     @NotNull(message = "{country.required}")
     private Country country;
+
+    @AssertTrue(message = "{postalCode.must-match}")
+    public boolean isPostalAndCountryMatch() {
+        return postalCode.toUpperCase().startsWith(country.name());
+    }
 }

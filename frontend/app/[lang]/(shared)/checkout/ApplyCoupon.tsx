@@ -34,7 +34,7 @@ const ApplyCoupon = ({ translations: { useCoupon, applyCoupon, discount: discoun
   } = useRequestAction<{ discount: number }>({
     endpoint: "coupons/calc",
     queryParams: {
-      code: couponCode,
+      code: coupon?.code || couponCode,
       total: `${totalPrice}`,
     },
   });
@@ -44,7 +44,9 @@ const ApplyCoupon = ({ translations: { useCoupon, applyCoupon, discount: discoun
   }, [totalPrice]);
 
   useEffect(() => {
-    if (response) setCoupon({ discount: response.discount, code: couponCode });
+    if (response) {
+      setCoupon({ discount: response.discount, code: coupon?.code || couponCode });
+    }
     if (error) {
       toast.error(error.message);
       setCoupon(undefined);

@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderItemDto {
-    @NotNull(message = "{productId.required}")
+    @NotNull(message = "{product.id.required}")
     @JsonProperty("id")
     private Integer productId;
 

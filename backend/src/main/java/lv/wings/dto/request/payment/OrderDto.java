@@ -7,11 +7,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lv.wings.dto.response.payment.OrderItemDto;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class OrderDto {
     @NotNull(message = "{order.items.required}")
     @Valid
@@ -26,9 +28,11 @@ public class OrderDto {
     @Valid
     private CustomerDataDto customerInfo;
 
+    private String couponCode;
+
     @NotNull(message = "{total.required}")
     @Positive(message = "{total.positive}")
-    private BigDecimal total; // products + delivery
+    private BigDecimal total; // products + delivery - discount
 
     @Size(max = 500, message = "{additionDetails.size}")
     private String additionDetails;

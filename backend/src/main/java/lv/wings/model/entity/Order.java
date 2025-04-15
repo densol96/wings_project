@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import com.stripe.param.billingportal.SessionCreateParams.Locale;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,6 +20,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lv.wings.enums.LocaleCode;
 import lv.wings.enums.OrderStatus;
 import lv.wings.model.base.AuditableEntity;
 
@@ -31,12 +33,12 @@ import lv.wings.model.base.AuditableEntity;
 @Where(clause = "deleted=false")
 public class Order extends AuditableEntity {
 
+	@Column(nullable = false, unique = true)
+	private String paymentIntentId;
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private OrderStatus status = OrderStatus.IN_PROGRESS;
-
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<OrderItem> orderItems = new ArrayList<>();
 
 	@ManyToOne
 	@JoinColumn(name = "delivery_price_id", nullable = false)
@@ -49,7 +51,7 @@ public class Order extends AuditableEntity {
 	@JoinColumn(name = "terminal_id")
 	private Terminal terminal; // can be null unless DeliveryType for Terminals
 
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "customer_id", nullable = false)
 	private Customer customer;
 
@@ -63,14 +65,21 @@ public class Order extends AuditableEntity {
 	@Column(nullable = false)
 	private BigDecimal total;
 
+	@Column(length = 500)
 	private String additionalDetails;
 
-	@Column(name = "deleted")
+	@Enumerated(EnumType.STRING)
+	private LocaleCode locale = LocaleCode.LV;
+
+	@Column(name = "deleted", nullable = false)
 	private boolean deleted = false;
+
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<OrderItem> orderItems = new ArrayList<>();
 
 	@Builder
 	public Order(
-			OrderStatus status,
+			String paymentIntentId,
 			DeliveryPrice deliveryVariation,
 			Customer customer,
 			Terminal terminal,
@@ -78,15 +87,16 @@ public class Order extends AuditableEntity {
 			String additionalDetails,
 			Coupon appliedCoupon,
 			BigDecimal discountAtOrderTime,
-			BigDecimal deliveryPriceAtOrderTime) {
-		this.status = status;
+			LocaleCode locale) {
+		this.paymentIntentId = paymentIntentId;
 		this.deliveryVariation = deliveryVariation;
+		this.deliveryPriceAtOrderTime = deliveryVariation.getPrice();
 		this.customer = customer;
 		this.terminal = terminal;
 		this.total = total;
-		this.additionalDetails = additionalDetails;
 		this.appliedCoupon = appliedCoupon;
 		this.discountAtOrderTime = discountAtOrderTime;
-		this.deliveryPriceAtOrderTime = deliveryPriceAtOrderTime;
+		this.additionalDetails = additionalDetails;
+		this.locale = locale;
 	}
 }

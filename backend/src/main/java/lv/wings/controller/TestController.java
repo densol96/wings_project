@@ -1,15 +1,16 @@
 package lv.wings.controller;
 
-import java.util.Locale;
+import java.math.BigDecimal;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import lv.wings.repo.TestRepository;
+import lv.wings.dto.request.payment.OrderDto;
+import lv.wings.service.OrderService;
+import lv.wings.service.PaymentService;
 
 @Getter
 class TestClass {
@@ -23,11 +24,13 @@ class TestClass {
 @RequiredArgsConstructor
 public class TestController {
 
-    private final TestRepository testRepo;
+    private final OrderService orderService;
+    private final PaymentService paymentService;
 
-    @GetMapping("/test")
-    public String test() {
-        throw new RuntimeException("HELLO");
-        // return "IN TEST";
+    @PostMapping("/test")
+    public String test(@RequestBody @Valid OrderDto dto) {
+        // orderService.saveNewOrder(dto, "test_payment_indenыыt", BigDecimal.valueOf(10), BigDecimal.valueOf(30));
+        return paymentService.initPayment(dto).getClientSecret();
+
     }
 }

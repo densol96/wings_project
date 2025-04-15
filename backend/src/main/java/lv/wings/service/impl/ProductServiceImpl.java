@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
+import lombok.NonNull;
 import lv.wings.dto.response.ImageDto;
 import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
@@ -143,11 +143,15 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	}
 
 	@Override
-	public List<ProductTitleDto> getProductsByIds(List<Integer> ids) {
+	public List<ProductTitleDto> getProductDtosByIds(List<Integer> ids) {
+		return getProductsByIds(ids).stream().map(this::mapToProductTitleDto).toList();
+	}
+
+	@Override
+	public List<Product> getProductsByIds(@NonNull List<Integer> ids) {
 		if (ids.size() == 0)
 			return List.of();
-		List<Product> products = productRepository.findAllById(ids);
-		return products.stream().map(this::mapToProductTitleDto).toList();
+		return productRepository.findAllById(ids);
 	}
 
 	private ProductTitleDto mapToProductTitleDto(Product product) {

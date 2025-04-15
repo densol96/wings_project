@@ -57,7 +57,10 @@ public class OrderItem extends AuditableEntity {
 	private boolean deleted = false;
 
 	@Builder
-	public OrderItem(Order purchase, Product product, Integer amount) {
-
+	public OrderItem(Order order, Product product, Integer amount, BigDecimal priceAtOrderTime) {
+		this.order = order;
+		this.product = product;
+		this.amount = amount;
+		this.priceAtOrderTime = priceAtOrderTime;
 	}
 }
