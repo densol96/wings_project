@@ -7,14 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import lv.wings.dto.request.NewsletterRequestDto;
 import lv.wings.dto.response.BasicMessageDto;
-import lv.wings.model.Test;
-import lv.wings.model.entity.NewsletterSubscriber;
-import lv.wings.repo.TestRepository;
 import lv.wings.service.impl.NewsletterServiceImpl;
 
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController

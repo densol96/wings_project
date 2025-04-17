@@ -17,3 +17,4 @@ export { default as Sidebar } from "./Sidebar";
 export { default as NavSidebar } from "./NavSidebar";
 export { default as AmountSelector } from "./AmountSelector";
 export { default as ServiceUnavailable } from "./ServiceUnavailable";
+export { default as OrderReview } from "./OrderReview";

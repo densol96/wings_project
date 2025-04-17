@@ -4,6 +4,11 @@ import { i18n } from "@/i18n-config";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith(`/${defaultLocale}/`) || pathname === `/${defaultLocale}`) {
     // The incoming request is for /lv/whatever, so we'll reDIRECT to /whatever
     const newUrl = new URL(pathname.replace(`/${defaultLocale}`, pathname === `/${defaultLocale}` ? "/" : ""), request.url);

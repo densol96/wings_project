@@ -39,6 +39,8 @@ public class AddressDto {
 
     @AssertTrue(message = "{postalCode.must-match}")
     public boolean isPostalAndCountryMatch() {
+        if (country == null || postalCode == null)
+            return false;
         return postalCode.toUpperCase().startsWith(country.name());
     }
 }

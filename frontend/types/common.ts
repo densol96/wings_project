@@ -68,3 +68,12 @@ export type Country = {
   name: string;
   code: CountryCode;
 };
+
+// {name: string ,address : {street: string}} -> {address?: string}
+export type ErrorData<T> = {
+  [K in keyof T]?: T[K] extends object ? ErrorData<T[K]> : string;
+};
+
+export type BasicErrorDto = {
+  message: string;
+};

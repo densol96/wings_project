@@ -5,7 +5,6 @@ import java.util.List;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,7 +32,4 @@ public class OrderDto {
     @NotNull(message = "{total.required}")
     @Positive(message = "{total.positive}")
     private BigDecimal total; // products + delivery - discount
-
-    @Size(max = 500, message = "{additionDetails.size}")
-    private String additionDetails;
 }

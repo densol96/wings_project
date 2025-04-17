@@ -1,9 +1,10 @@
 package lv.wings.exception;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
@@ -21,11 +22,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import lv.wings.dto.response.BasicErrorDto;
+import lv.wings.dto.response.payment.CheckoutErrorDto;
+import lv.wings.enums.CheckoutStep;
 import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.exception.other.AlreadySubscribedException;
-import lv.wings.exception.payment.FailedIntentException;
+import lv.wings.exception.payment.CheckoutException;
+import lv.wings.exception.payment.WebhookException;
 import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.model.security.MyUser;
 import lv.wings.service.LocaleService;
@@ -44,9 +48,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<BasicErrorDto> handleConversionError(MethodArgumentTypeMismatchException e) {
         log.error("*** Conversion error as MethodArgumentTypeMismatchException: {}.", e.getMessage());
+
         return handleInvalidQueryParameterException(
                 new InvalidParameterException(e.getName(), e.getValue().toString(), false));
     }
+
+
 
     @ExceptionHandler(InvalidParameterException.class)
     public ResponseEntity<BasicErrorDto> handleInvalidQueryParameterException(InvalidParameterException e) {
@@ -158,6 +165,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidCouponException.class)
     public ResponseEntity<BasicErrorDto> handleInvalidCoupon(InvalidCouponException e) {
         /**
+         * withPrefixRemoved
          * Various scenarios available for this type of Exception => aproch to handle slightly differs.
          * 
          * Pass in an appropriate code and minimum amount required to spend.
@@ -169,19 +177,37 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(new BasicErrorDto(localizedMessage));
     }
 
-    @ExceptionHandler(FailedIntentException.class)
-    public ResponseEntity<BasicErrorDto> handleFailedIntentException(FailedIntentException e) {
+    @ExceptionHandler(CheckoutException.class)
+    public ResponseEntity<CheckoutErrorDto> handleCheckoutException(CheckoutException e) {
         String localizedMessage = localeService.getMessage(
-                e.getNameKey(),
+                "payment-intent.invalid." + e.getErrorCode(),
                 new Object[] {e.getMaxAmount()});
         log.error("*** FailedIntentException: {}", localizedMessage);
-        return ResponseEntity.badRequest().body(new BasicErrorDto(localizedMessage));
+        CheckoutErrorDto errorResponse = CheckoutErrorDto.builder()
+                .message(localizedMessage)
+                .step(e.getStep())
+                .errorCode(e.getErrorCode())
+                .invalidIds(e.getInvalidIds())
+                .maxAmount(e.getMaxAmount())
+                .fieldErrors(e.getFieldErrors())
+                .build();
+        if (e.getStep() == CheckoutStep.SERVER)
+            return ResponseEntity.internalServerError().body(errorResponse);
+        return ResponseEntity.badRequest().body(errorResponse);
+    }
+
+
+
+    @ExceptionHandler(WebhookException.class)
+    public ResponseEntity<String> handleWebhookException(Exception e) {
+        log.error("*** WebhookException: {}", e.getMessage());
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BasicErrorDto> handleUnexpectedException(Exception e) {
         log.error("*** Unexpected exception of type {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        e.printStackTrace();
+        // e.printStackTrace();
         return handleProceduralException(e);
     }
 
