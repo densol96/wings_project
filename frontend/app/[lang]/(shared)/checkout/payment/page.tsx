@@ -1,18 +1,11 @@
-import { Heading } from "@/components";
+import { PageProps, PaymentSectionDictionary } from "@/types";
+import StripeElement from "./StripeElement";
 import { getDictionary } from "@/dictionaries/dictionaries";
-import { PageProps } from "@/types";
-import React from "react";
 
 const Page = async ({ params: { lang } }: PageProps) => {
   const dict = await getDictionary(lang);
-  return (
-    <>
-      <Heading size="xl" className="">
-        {"MAKE A PAYMENT"}
-      </Heading>
-      <p>{"ENter personal details and make a payment! "}</p>
-    </>
-  );
+  const sectionDict: PaymentSectionDictionary = { ...dict.checkout.payment, orderSummary: dict.checkout.orderSummary };
+  return <StripeElement dict={sectionDict} />;
 };
 
 export default Page;

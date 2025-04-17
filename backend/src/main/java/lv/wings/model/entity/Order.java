@@ -37,7 +37,7 @@ public class Order extends AuditableEntity {
 	private String paymentIntentId;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
+	@Column(nullable = false, length = 50)
 	private OrderStatus status = OrderStatus.IN_PROGRESS;
 
 	@ManyToOne
@@ -64,9 +64,6 @@ public class Order extends AuditableEntity {
 
 	@Column(nullable = false)
 	private BigDecimal total;
-
-	@Column(length = 500)
-	private String additionalDetails;
 
 	@Enumerated(EnumType.STRING)
 	private LocaleCode locale = LocaleCode.LV;
@@ -96,7 +93,6 @@ public class Order extends AuditableEntity {
 		this.total = total;
 		this.appliedCoupon = appliedCoupon;
 		this.discountAtOrderTime = discountAtOrderTime;
-		this.additionalDetails = additionalDetails;
 		this.locale = locale;
 	}
 }

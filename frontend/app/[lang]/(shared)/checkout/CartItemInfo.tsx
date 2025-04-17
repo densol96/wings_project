@@ -32,7 +32,7 @@ const CartItemInfo = ({ product, translations }: Props) => {
   const href = `/${lang}/shop/products/${product.id}`;
 
   return (
-    <li className="grid grid-cols-[100px_1fr_auto_auto_auto_auto] gap-x-10 border-2 items-center pr-6">
+    <li className="flex justify-center gap-y-6 flex-wrap sm:grid grid-cols-[100px_1fr_auto_auto_auto_auto] gap-x-10 border-2 items-center pr-6 sm:border-gray-200 border-gray-300 sm:py-0 py-4">
       <Link href={href} className="w-[100px] h-[100px] relative">
         <MyImage withEffect={false} image={product.image} />
       </Link>

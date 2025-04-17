@@ -1,18 +1,25 @@
 import { useLangContext } from "@/context";
 import { useEffect, useState } from "react";
 
-type Props<R> = {
+type Props<R, E> = {
   endpoint: string;
   body?: Record<string, any>;
   headers?: Record<string, any>;
   queryParams?: Record<string, string>;
   onSuccess?: (response: R) => void;
-  onError?: (e: Error) => void;
+  onError?: (e: E) => void;
+  onFallbackError?: (e: Error) => void;
 };
-const useRequestAction = <R>({ endpoint, headers, body, queryParams, onSuccess, onError }: Props<R>) => {
+
+const errorFallback = {
+  lv: "Šis pakalpojums pašlaik nav pieejams.",
+  en: "This service is currently unavailable.",
+};
+
+const useRequestAction = <R, E>({ endpoint, headers, body, queryParams, onSuccess, onError, onFallbackError }: Props<R, E>) => {
   const [response, setResponse] = useState<R>();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<Error>();
+  const [error, setError] = useState<E | Error>();
 
   const { lang } = useLangContext();
 
@@ -37,25 +44,25 @@ const useRequestAction = <R>({ endpoint, headers, body, queryParams, onSuccess, 
         });
       const response = await fetch(url, options);
       const data = await response.json();
+
       if (response.ok) {
         const result = data as R;
         setResponse(result);
         onSuccess?.(result);
       } else {
-        throw new Error(Object.values(data)?.[0] || data);
+        throw data as E;
       }
     } catch (e: unknown) {
-      const errorMessage = `Bad response from ${endpoint} service: `;
       if (e instanceof Error) {
-        console.error(errorMessage + e.message);
-        setError(e);
-        onError?.(e);
-      } else {
-        console.error(errorMessage, error);
-        const ex = new Error(errorMessage);
-        setError(ex);
-        onError?.(ex);
+        console.error(`Unexpected error in useRequestAction for ${endpoint}`, e);
+        const fallbackError = new Error(errorFallback[lang]);
+        setError(fallbackError);
+        onFallbackError?.(fallbackError);
+        return;
       }
+      const err = e as E;
+      setError(err);
+      onError?.(err);
       setResponse(undefined);
     } finally {
       setIsLoading(false);

@@ -275,12 +275,36 @@
       "explanation": "Kupons piešķir fiksētu vai procentuālu atlaidi no kopējās preču cenas."
     },
     "personalInfo": {
-      "title": "Personīgā informācija",
-      "description": "Ievadiet savu kontaktinformāciju un piegādes datus."
+      "title": "Ievadiet savus datus un turpiniet uz maksājumu",
+      "description": "Lūdzu, ievadiet savus personas datus un veiciet maksājumu. Ja vēlaties mainīt piegādes veidu, groza saturu vai valsti, atgriezieties iepriekšējā solī.",
+      "form": {
+        "firstName": "Vārds",
+        "lastName": "Uzvārds",
+        "email": "E‑pasts",
+        "phoneNumber": "Telefona numurs",
+        "street": "Iela",
+        "houseNumber": "Mājas Nr.",
+        "apartment": "Dzīvoklis",
+        "city": "Pilsēta",
+        "postalCode": "Pasta indekss",
+        "country": "Valsts",
+        "additionalDetails": "Papildu informācija"
+      }
+    },
+    "orderSummary": {
+      "yourOrder": "Jūsu pasūtījums",
+      "total": "Kopā",
+      "proceedToPayment": "Pāriet uz maksājumu",
+      "backToCart": "Atpakaļ uz grozu",
+      "discount": "Atlaide",
+      "delivery": "Piegāde"
     },
     "payment": {
-      "title": "Maksājums",
-      "description": "Ievadiet maksājuma datus un pabeidziet pasūtījumu."
+      "errorTitle": "Lai turpinātu uz maksājumu, vispirms ir jāizveido pasūtījums!",
+      "title": "Izvēlieties maksājuma veidu un pabeidziet pasūtījumu!",
+      "description": "Tagad ir pienācis laiks izvēlēties maksājuma veidu un ievadīt maksājuma informāciju. Kad maksājums būs veiksmīgi apstiprināts, jūs tiksiet novirzīts uz apstiprinājuma lapu, un mēs nosūtīsim uz jūsu e‑pastu visu informāciju par pasūtījumu. Ja izvēlējāties piegādi ar kurjeru vai saņemšanu Omniva pakomātā, mēs nosūtīsim arī ziņojumu brīdī, kad sūtījums tiks nodots piegādei.",
+      "payNow": "Samaksāt tagad",
+      "imageDescription": "Maksājuma logotips"
     }
   }
 }

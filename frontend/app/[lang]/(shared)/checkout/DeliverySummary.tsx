@@ -69,7 +69,7 @@ const DeliverySummary = ({ translations }: Props) => {
       </div>
       {readyToProceed && (
         <div>
-          <Button color="green" onClick={() => router.push(`/${lang}/checkout/payment`)} className="w-full mt-4">
+          <Button color="green" onClick={() => router.push(`/${lang}/checkout/form`)} className="w-full mt-4">
             {translations.proceedWithOrder}
           </Button>
         </div>

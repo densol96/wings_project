@@ -169,6 +169,54 @@ const nextConfig = {
         destination: "/atgriesana",
         permanent: true,
       },
+      // PAYMENT RELATED
+      {
+        source: "/en/pasutijums",
+        destination: "/en/checkout",
+        permanent: true,
+      },
+      {
+        source: "/checkout",
+        destination: "/en/checkout",
+        permanent: true,
+      },
+      {
+        source: "/lv/checkout",
+        destination: "/pasutijums",
+        permanent: true,
+      },
+      // PAYMENT FOORM FOR PERSONAL INFO
+      {
+        source: "/en/pasutijums/informacija",
+        destination: "/en/checkout/form",
+        permanent: true,
+      },
+      {
+        source: "/checkout/form",
+        destination: "/en/checkout/form",
+        permanent: true,
+      },
+      {
+        source: "/lv/checkout/form",
+        destination: "/pasutijums/informacija",
+        permanent: true,
+      },
+      // PAYMENT WITH CARD
+      {
+        source: "/en/pasutijums/maksajums",
+        destination: "/en/checkout/payment",
+        permanent: true,
+      },
+      {
+        source: "/checkout/payment",
+        destination: "/en/checkout/payment",
+        permanent: true,
+      },
+      {
+        source: "/lv/checkout/payment",
+        destination: "/pasutijums/maksajums",
+        permanent: true,
+      },
     ];
   },
 
@@ -218,6 +266,26 @@ const nextConfig = {
       {
         source: "/lv/atgriesana",
         destination: "/lv/returns",
+      },
+      {
+        source: "/lv/pasutijums",
+        destination: "/lv/checkout",
+      },
+      {
+        source: "/lv/pasutijums/informacija",
+        destination: "/lv/checkout/form",
+      },
+      {
+        source: "/lv/pasutijums/maksajums",
+        destination: "/lv/checkout/payment",
+      },
+      {
+        source: "/lv/pasutijums/maksajums/veiksme",
+        destination: "/lv/checkout/payment/success",
+      },
+      {
+        source: "/lv/pasutijums/maksajums/neveiksme",
+        destination: "/lv/checkout/payment/failure",
       },
     ];
   },

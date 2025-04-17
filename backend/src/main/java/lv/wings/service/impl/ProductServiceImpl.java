@@ -2,7 +2,7 @@ package lv.wings.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -152,6 +152,21 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		if (ids.size() == 0)
 			return List.of();
 		return productRepository.findAllById(ids);
+	}
+
+	// MUST be used in methods that are using a transaction or the lock is not going to work
+	@Override
+	public List<Product> getProductsByIdsWithLock(@NonNull List<Integer> ids) {
+		if (ids.size() == 0)
+			return List.of();
+		return productRepository.getProductsByIdsWithLock(ids);
+	}
+
+	@Override
+	public Optional<Product> getProductByIdWithLock(@NonNull Integer id) {
+		if (id < 1)
+			return Optional.empty();
+		return productRepository.getProductByIdWithLock(id);
 	}
 
 	private ProductTitleDto mapToProductTitleDto(Product product) {

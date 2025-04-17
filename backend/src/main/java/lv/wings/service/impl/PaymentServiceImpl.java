@@ -2,38 +2,54 @@ package lv.wings.service.impl;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
+import java.time.Duration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
+import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Event;
 import com.stripe.model.PaymentIntent;
+import com.stripe.net.Webhook;
 import com.stripe.param.PaymentIntentCreateParams;
+
 import jakarta.transaction.Transactional;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lv.wings.dto.request.payment.AddressDto;
 import lv.wings.dto.request.payment.OrderDto;
 import lv.wings.dto.response.payment.OrderItemDto;
 import lv.wings.dto.response.payment.PaymentIntentDto;
+import lv.wings.enums.CheckoutStep;
 import lv.wings.enums.DeliveryMethod;
+import lv.wings.enums.OrderStatus;
 import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.exception.entity.EntityNotFoundException;
-import lv.wings.exception.payment.FailedIntentException;
+import lv.wings.exception.payment.CheckoutException;
+import lv.wings.exception.payment.WebhookException;
 import lv.wings.model.entity.DeliveryPrice;
 import lv.wings.model.entity.Product;
 import lv.wings.service.CouponService;
 import lv.wings.service.DeliveryPriceService;
+import lv.wings.service.FrontendCacheInvalidator;
 import lv.wings.service.OmnivaService;
 import lv.wings.service.OrderService;
 import lv.wings.service.PaymentService;
 import lv.wings.service.ProductService;
+import lv.wings.service.scheduler.OrderTimeoutScheduler;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
     private final ProductService productService;
@@ -41,38 +57,45 @@ public class PaymentServiceImpl implements PaymentService {
     private final OmnivaService terminalService;
     private final CouponService couponService;
     private final OrderService orderService;
+    private final OrderTimeoutScheduler orderTimeoutScheduler;
+
+
+    @Value("${stripe.webhook.secret}")
+    private String endpointSecret;
 
 
     private BigDecimal validateOrderItemsInput(List<OrderItemDto> orderItemDtos) {
 
         List<Integer> productIds = orderItemDtos.stream().map(item -> item.getProductId()).toList();
-        Map<Integer, Product> productMap = productService.getProductsByIds(productIds).stream()
+        Map<Integer, Product> productMap = productService.getProductsByIdsWithLock(productIds).stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
 
         // (X) Mismatch between provided ids and found products => less products found than ids provided
         if (productIds.size() != productMap.values().size()) {
-            List<Integer> invalidItemIds = productIds.stream().filter(id -> !productMap.containsKey(id)).toList();
+            List<Integer> invalidIds = productIds.stream().filter(id -> !productMap.containsKey(id)).toList();
 
-            throw FailedIntentException.builder()
-                    .message("Payment intent creation failed due to unrecognized order items.")
-                    .invalidItemIds(invalidItemIds)
-                    .nameKey("payment-intent.invalid.unknown-items")
+            throw CheckoutException.builder()
+                    .logMessage("Payment intent creation failed due to unrecognized order items.")
+                    .step(CheckoutStep.CART)
+                    .errorCode("unknown-items")
+                    .invalidIds(invalidIds)
                     .build();
         }
 
         return orderItemDtos.stream()
                 .map(item -> {
-                    Product product = productMap.values().stream()
-                            .filter(p -> p.getId() == item.getProductId())
-                            .findFirst().get(); // this is safe to do cause we did the list validation at the very beginning
+                    Product product = productMap.get(item.getProductId());
                     if (product.getAmount() < item.getAmount()) {
-                        throw FailedIntentException.builder()
-                                .message("Payment intent creation failed due to requested quantity exceeding available stock.")
-                                .invalidItemIds(List.of(item.getProductId()))
+                        throw CheckoutException.builder()
+                                .logMessage("Payment intent creation failed due to requested quantity exceeding available stock.")
+                                .step(CheckoutStep.CART)
+                                .errorCode("product-amount-exceeded")
+                                .invalidIds(List.of(item.getProductId()))
                                 .maxAmount(product.getAmount())
-                                .nameKey("payment-intent.invalid.product-amount-exceeded")
                                 .build();
                     }
+                    product.setAmount(product.getAmount() - item.getAmount());
+                    productService.create(product);
                     return product.getPrice().multiply(BigDecimal.valueOf(item.getAmount()));
                 })
                 // same as (a, b) -> a.add(b) according to docs: API Note:
@@ -86,9 +109,10 @@ public class PaymentServiceImpl implements PaymentService {
         try {
             deliveryMethodVariation = deliveryPriceService.findById(deliveryPriceId);
         } catch (EntityNotFoundException e) {
-            throw FailedIntentException.builder()
-                    .message("Payment intent creation failed due to unrecognized delivery variation (deliveryPrice)")
-                    .nameKey("payment-intent.invalid.unknown-delivery-price")
+            throw CheckoutException.builder()
+                    .logMessage("Payment intent creation failed due to unrecognized delivery variation (deliveryPrice)")
+                    .step(CheckoutStep.DELIVERY)
+                    .errorCode("unknown-delivery-price")
                     .build();
         }
 
@@ -97,23 +121,26 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (deliveryMethod == DeliveryMethod.PARCEL_MACHINE && terminalId == null
                 || deliveryMethod == DeliveryMethod.PARCEL_MACHINE && !terminalService.existsById(terminalId)) {
-            throw FailedIntentException.builder()
-                    .message("Payment intent creation failed due to unrecognized terminal")
-                    .nameKey("payment-intent.invalid.unknown-terminal")
+            throw CheckoutException.builder()
+                    .logMessage("Payment intent creation failed due to unrecognized terminal")
+                    .step(CheckoutStep.DELIVERY)
+                    .errorCode("unknown-terminal")
                     .build();
         }
 
         if (deliveryMethod == DeliveryMethod.COURIER && address == null) {
-            throw FailedIntentException.builder()
-                    .message("Payment intent creation failed due to missing addresss required for a courier delivery")
-                    .nameKey("payment-intent.invalid.missing-address")
+            throw CheckoutException.builder()
+                    .logMessage("Payment intent creation failed due to missing addresss required for a courier delivery")
+                    .step(CheckoutStep.DELIVERY)
+                    .errorCode("missing-address")
                     .build();
         }
 
         if (deliveryMethod == DeliveryMethod.COURIER && deliveryMethodVariation.getCountry() != address.getCountry()) {
-            throw FailedIntentException.builder()
-                    .message("Payment intent creation failed due to country in the addresss and in the delivery variation (delivery Price) not matching")
-                    .nameKey("payment-intent.invalid.address-missmatch")
+            throw CheckoutException.builder()
+                    .logMessage("Payment intent creation failed due to country in the addresss and in the delivery variation (delivery Price) not matching")
+                    .step(CheckoutStep.DELIVERY)
+                    .errorCode("address-missmatch")
                     .build();
         }
 
@@ -131,13 +158,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private Long validateTotalCostsAndReturnInCents(BigDecimal totalCosts, BigDecimal orderTotalDto) {
-        FailedIntentException totalCostsProblem = FailedIntentException.builder()
-                .message("Payment intent creation failed due to final costs not matching")
-                .nameKey("payment-intent.invalid.total-costs")
+        CheckoutException totalCostsProblem = CheckoutException.builder()
+                .logMessage("Payment intent creation failed due to final costs not matching")
+                .step(CheckoutStep.CART)
+                .errorCode("total-costs")
                 .build();
-
-        System.out.println(totalCosts);
-        System.out.println(orderTotalDto);
 
         if (totalCosts.compareTo(orderTotalDto) != 0) {
             throw totalCostsProblem;
@@ -157,17 +182,71 @@ public class PaymentServiceImpl implements PaymentService {
             PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
                     .setAmount(cents)
                     .setCurrency("eur")
-                    .setAutomaticPaymentMethods(
-                            PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build())
+                    .addPaymentMethodType("card")
+                    .addPaymentMethodType("sepa_debit")
+                    .addPaymentMethodType("paypal")
+                    // .setAutomaticPaymentMethods(
+                    // PaymentIntentCreateParams.AutomaticPaymentMethods.builder().setEnabled(true).build())
                     .build();
 
             return PaymentIntent.create(params);
 
 
         } catch (StripeException e) {
-            throw FailedIntentException.builder()
-                    .message("Payment intent creation failed due to StripeException")
-                    .nameKey("payment-intent.invalid.stipe-service")
+            throw CheckoutException.builder()
+                    .logMessage("Payment intent creation failed due to StripeException")
+                    .step(CheckoutStep.SERVER)
+                    .errorCode("stripe-service")
+                    .build();
+        }
+    }
+
+    @Override
+    public void parseDtoValidationProblems(BindingResult bindingResult) {
+        Map<String, String> formFieldErrors = new HashMap<>();
+
+        String generalErrorMessage = null;
+        CheckoutStep generalErrorStep = null;
+        String generalErrorCode = null;
+
+        for (FieldError error : bindingResult.getFieldErrors()) {
+            String field = error.getField();
+            if (field.startsWith("customerInfo")) {
+                if (field.startsWith("customerInfo.address.postalAndCountryMatch")) {
+                    formFieldErrors.put("address.postalCode", error.getDefaultMessage());
+                } else if (field.startsWith("customerInfo.phoneAndCountryMatch")) {
+                    formFieldErrors.put("phoneNumber", error.getDefaultMessage());
+                } else {
+                    formFieldErrors.put(field.replace("customerInfo.", ""), error.getDefaultMessage());
+                }
+            } else if (field.startsWith("orderItems") || "total".equals(field)) {
+                System.out.println(error.getDefaultMessage());
+                generalErrorStep = CheckoutStep.CART;
+                generalErrorCode = "cart-problem";
+                generalErrorMessage = "There is an issue with your order items or total.";
+            } else if (field.startsWith("deliveryMethodVariationId") || field.startsWith("terminalId")) {
+                generalErrorStep = CheckoutStep.DELIVERY;
+                generalErrorCode = "delivery-problem";
+                generalErrorMessage = "Delivery method is not properly selected.";
+            } else {
+                generalErrorStep = CheckoutStep.SERVER;
+                generalErrorCode = "internal-problem";
+                generalErrorMessage = "There is an issue with they way server handles the dto validation logic?";
+            }
+        }
+
+        if (!formFieldErrors.isEmpty()) {
+            throw CheckoutException.builder()
+                    .logMessage("Customer info form validation failed")
+                    .step(CheckoutStep.FORM)
+                    .errorCode("form-field")
+                    .fieldErrors(formFieldErrors)
+                    .build();
+        } else {
+            throw CheckoutException.builder()
+                    .logMessage(generalErrorMessage)
+                    .step(generalErrorStep)
+                    .errorCode(generalErrorCode)
                     .build();
         }
     }
@@ -185,17 +264,46 @@ public class PaymentServiceImpl implements PaymentService {
 
         BigDecimal totalCosts = productsTotalCost.add(deliveryPrice).subtract(discount);
 
-        System.out.println(productsTotalCost);
-        System.out.println(deliveryPrice);
-        System.out.println(discount);
-        System.out.println(totalCosts);
-
         Long cents = validateTotalCostsAndReturnInCents(totalCosts, orderDto.getTotal());
 
         PaymentIntent paymentIntent = createPaymentIntent(cents);
 
         orderService.saveNewOrder(orderDto, paymentIntent.getId(), discount, totalCosts);
 
+        orderTimeoutScheduler.scheduleOrderTimeoutCheck(paymentIntent.getId(), Duration.ofMinutes(1));
+
         return new PaymentIntentDto(paymentIntent.getClientSecret());
+    }
+
+    @Override
+    public String handleStripeWebhook(String payload, String sigHeader) {
+        Event event;
+
+        try {
+            event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
+        } catch (SignatureVerificationException e) {
+            // Подпись неверна — не доверяем
+            throw new WebhookException("Invalid signature");
+        }
+
+        PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().getObject()
+                .orElseThrow(() -> new WebhookException("paymentIntent is Null! Unable to proccess the webhook call from Stripe."));
+        switch (event.getType()) {
+            case "payment_intent.succeeded" -> {
+                log.info("Received payment_intent.succeeded on the Stripe WebHook");
+                orderService.updateOrderStatusOnWebhookEvent(paymentIntent.getId(), OrderStatus.PAID);
+            }
+            case "payment_intent.canceled" -> {
+                log.info("Received payment_intent.canceled on the Stripe WebHook");
+                orderService.updateOrderStatusOnWebhookEvent(paymentIntent.getId(), OrderStatus.CANCELLED);
+            }
+            case "payment_intent.payment_failed" -> {
+                log.info("Received payment_intent.payment_failed on the Stripe WebHook");
+                orderService.updateOrderStatusOnWebhookEvent(paymentIntent.getId(), OrderStatus.FAILED);
+            }
+            default -> log.info("Unhandled WebHook event type: " + event.getType());
+        }
+
+        return "Webhook received";
     }
 }

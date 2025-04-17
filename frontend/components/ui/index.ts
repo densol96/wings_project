@@ -8,3 +8,5 @@ export { default as MyImage } from "./MyImage";
 export { default as CloseBtn } from "./CloseBtn";
 export { default as RadioGroup } from "./RadioGroup";
 export { default as SimpleSelect } from "./SimpleSelect";
+export { default as Form } from "./Form";
+export { default as FormField } from "./FormField";

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "../ui";
 import { FooterSubscribeSection } from "@/types/sections/footer";
-import { Locale } from "@/types";
+import { BasicErrorDto, Locale } from "@/types";
 import toast from "react-hot-toast";
 import { useLangContext } from "@/context/LangContext";
 import { useRequestAction } from "@/hooks";
@@ -15,18 +15,21 @@ type Props = {
 const SubscribeForm = ({ subscribeSection }: Props) => {
   const [email, setEmail] = useState("");
 
-  const {
-    response,
-    isLoading,
-    error,
-    request: makeRequest,
-  } = useRequestAction<{ message: string }>({
+  const { isLoading, request: makeRequest } = useRequestAction<{ message: string }, BasicErrorDto>({
     endpoint: "newsletter/subscribe?",
     body: {
       email,
     },
     onSuccess: (result: { message: string }) => toast.success(result.message),
-    onError: (e: Error) => toast.error(e.message),
+    onError: (e: BasicErrorDto | { email: string }) => {
+      if ("message" in e) {
+        toast.error(e.message);
+      } else if ("email" in e) {
+        toast.error(e.email);
+      } else {
+        toast.error("Unknown error");
+      }
+    },
   });
 
   return (

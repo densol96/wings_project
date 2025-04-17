@@ -1,8 +1,10 @@
 package lv.wings.service;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import lombok.NonNull;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ProductTitleDto;
 import lv.wings.dto.response.product.RandomProductDto;
@@ -22,4 +24,8 @@ public interface ProductService extends CRUDService<Product, Integer> {
     List<ProductTitleDto> getProductDtosByIds(List<Integer> ids);
 
     List<Product> getProductsByIds(List<Integer> ids);
+
+    List<Product> getProductsByIdsWithLock(@NonNull List<Integer> ids);
+
+    Optional<Product> getProductByIdWithLock(Integer id);
 }

@@ -43,6 +43,9 @@ public class Customer extends AuditableEntity {
 	@JoinColumn(name = "address_id")
 	private Address address;
 
+	@Column(length = 500)
+	private String additionalDetails;
+
 	@OneToOne(mappedBy = "customer")
 	private Order order;
 

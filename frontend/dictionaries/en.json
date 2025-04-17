@@ -275,12 +275,36 @@
       "explanation": "The coupon gives a fixed or percentage discount on the total product price."
     },
     "personalInfo": {
-      "title": "Personal Info and Payment Method",
-      "description": "Enter your contact details and ccomplete the payment"
+      "title": "Enter your details and proceed to payment",
+      "description": "Please enter your personal information and complete the payment. If you wish to change your delivery method, cart contents, or country, return to the previous step.",
+      "form": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "phoneNumber": "Phone Number",
+        "street": "Street",
+        "houseNumber": "House No.",
+        "apartment": "Apartment",
+        "city": "City",
+        "postalCode": "Postal Code",
+        "country": "Country",
+        "additionalDetails": "Additional Details"
+      }
+    },
+    "orderSummary": {
+      "yourOrder": "Your Order",
+      "total": "Total",
+      "proceedToPayment": "Proceed to Payment",
+      "backToCart": "Back to Cart",
+      "discount": "Discount",
+      "delivery": "Delivery"
     },
     "payment": {
-      "title": "Payment",
-      "description": "Provide payment details and complete your order."
+      "errorTitle": "In order to proceed to payment - you need to create an order first!",
+      "title": "Choose a payment method and complete the order!",
+      "description": "Now it’s time to choose your payment method and enter your payment details. Once your payment is successful, you’ll be redirected to a confirmation page and we’ll email you all your order information. If you selected courier delivery or Omniva pickup, we’ll also send you an email notification as soon as your items are handed over for shipment.",
+      "payNow": "Pay Now",
+      "imageDescription": "Payment logo"
     }
   }
 }
