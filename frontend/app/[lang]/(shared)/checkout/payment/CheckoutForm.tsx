@@ -26,7 +26,7 @@ const CheckoutForm = ({ dict }: Props) => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: `${window.location.origin}/${lang}/checkout/payment/success`,
+        return_url: `${window.location.origin}/${lang}/checkout/payment/result`,
       },
       redirect: "always",
     });

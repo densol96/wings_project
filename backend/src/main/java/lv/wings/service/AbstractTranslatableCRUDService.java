@@ -2,7 +2,7 @@ package lv.wings.service;
 
 import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.jpa.repository.JpaRepository;
-
+import lv.wings.enums.LocaleCode;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.model.base.LocalableEntity;
 import lv.wings.model.interfaces.Translatable;
@@ -25,5 +25,17 @@ public abstract class AbstractTranslatableCRUDService<T extends Translatable, L 
                         entityNameKey,
                         entityName,
                         entity.getId()));
+    }
+
+    protected L getRightTranslationForSelectedLocale(T entity, Class<L> translationClass, LocaleCode localCode) {
+        return localeService.getTranslationPerSelectedLocale(
+                entity,
+                translationClass,
+                () -> new MissingTranslationException(
+                        entityNameKey,
+                        entityName,
+                        entity.getId()),
+
+                localCode);
     }
 }

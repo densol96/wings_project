@@ -194,16 +194,16 @@
     "description": "At the Amatu Maja online store, you can place your order and choose from three payment methods: online card payment, bank transfer or pre-order with on-site payment.",
     "sections": [
       {
-        "name": "Online card payment",
-        "description": "The fastest and recommended by us method of payment. After clicking 'Place Order', enter your card details to complete the payment. This is our recommended method."
+        "name": "Online Card Payment",
+        "description": "This is the fastest and our recommended payment method. Click 'Proceed to Payment' and enter your card details to complete the purchase quickly and securely."
       },
       {
-        "name": "Bank transfer",
-        "description": "Once your order is confirmed, the payment details will be sent to your email. Please include your order number when making the transfer."
+        "name": "Bank Transfer",
+        "description": "You can also pay via bank transfer. Please note that it might take additional time for the payment to be processed and confirmed."
       },
       {
-        "name": "Pre-Order and Pay On Site",
-        "description": "Place your order online, and then pay for your purchase at the Amatu Maja store. Please wait for an email confirmation before visiting the store"
+        "name": "PayPal",
+        "description": "Pay easily and securely using your PayPal account. A convenient option for many international customers."
       }
     ]
   },
@@ -305,6 +305,29 @@
       "description": "Now it’s time to choose your payment method and enter your payment details. Once your payment is successful, you’ll be redirected to a confirmation page and we’ll email you all your order information. If you selected courier delivery or Omniva pickup, we’ll also send you an email notification as soon as your items are handed over for shipment.",
       "payNow": "Pay Now",
       "imageDescription": "Payment logo"
+    },
+    "paymentResult": {
+      "success": {
+        "title": "Payment Successful",
+        "description": "Thank you! Your payment has been processed successfully. Your order details are shown below.",
+        "image": "Good payment logo"
+      },
+      "failure": {
+        "title": "Payment Failed",
+        "description": "Unfortunately, your payment could not be completed. Please try again or use a different method.",
+        "image": "Bad payment logo"
+      },
+      "summary": {
+        "orderId": "Order ID",
+        "customer": "Customer",
+        "delivery": "Delivery",
+        "product": "Product",
+        "quantity": "Qty",
+        "price": "Price",
+        "total": "Total",
+        "totalPrice": "Total price",
+        "discount": "Discount"
+      }
     }
   }
 }

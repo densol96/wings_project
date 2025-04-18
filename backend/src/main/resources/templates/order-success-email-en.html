@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Order Confirmation</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #fbe9d0;
+        padding: 20px;
+      }
+      .email-container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 8px;
+      }
+      h2 {
+        color: #333;
+      }
+      .info {
+        margin-bottom: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+      .total {
+        text-align: right;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <h2>Thank you for your order!</h2>
+      <div class="info">
+        <p><strong>Order ID:</strong> {{orderId}}</p>
+        <p><strong>Delivery:</strong> {{deliveryName}}</p>
+        {{discount}}
+        <p>{{message}}</p>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price (€)</th>
+            <th>Line Total (€)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{items}}
+        </tbody>
+      </table>
+
+      <p class="total">Total: <strong>{{total}} €</strong></p>
+    </div>
+  </body>
+</html>

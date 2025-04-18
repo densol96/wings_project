@@ -51,6 +51,7 @@ const ProductCard = ({ className, product, lang, dict, viewBtn }: Props) => {
           {!viewBtn &&
             dict &&
             cartIsLoaded &&
+            product.amount > 0 &&
             (!isInCart ? (
               <button className="flex items-center gap-1" onClick={() => addProduct(createCartItem(product))}>
                 <BsCartPlusFill size={24} />

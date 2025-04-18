@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Event;
@@ -27,7 +28,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.dto.request.payment.AddressDto;
 import lv.wings.dto.request.payment.OrderDto;
-import lv.wings.dto.response.payment.OrderItemDto;
+import lv.wings.dto.request.payment.OrderItemDto;
 import lv.wings.dto.response.payment.PaymentIntentDto;
 import lv.wings.enums.CheckoutStep;
 import lv.wings.enums.DeliveryMethod;
@@ -40,7 +41,6 @@ import lv.wings.model.entity.DeliveryPrice;
 import lv.wings.model.entity.Product;
 import lv.wings.service.CouponService;
 import lv.wings.service.DeliveryPriceService;
-import lv.wings.service.FrontendCacheInvalidator;
 import lv.wings.service.OmnivaService;
 import lv.wings.service.OrderService;
 import lv.wings.service.PaymentService;
@@ -58,7 +58,6 @@ public class PaymentServiceImpl implements PaymentService {
     private final CouponService couponService;
     private final OrderService orderService;
     private final OrderTimeoutScheduler orderTimeoutScheduler;
-
 
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
@@ -286,20 +285,28 @@ public class PaymentServiceImpl implements PaymentService {
             throw new WebhookException("Invalid signature");
         }
 
-        PaymentIntent paymentIntent = (PaymentIntent) event.getDataObjectDeserializer().getObject()
-                .orElseThrow(() -> new WebhookException("paymentIntent is Null! Unable to proccess the webhook call from Stripe."));
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode;
+        try {
+            rootNode = objectMapper.readTree(event.getDataObjectDeserializer().getRawJson());
+        } catch (Exception e) {
+            throw new WebhookException("Unable to deserialise the event.getObject");
+        }
+
+        String paymentIntentId = rootNode.get("id").asText();
+
         switch (event.getType()) {
             case "payment_intent.succeeded" -> {
                 log.info("Received payment_intent.succeeded on the Stripe WebHook");
-                orderService.updateOrderStatusOnWebhookEvent(paymentIntent.getId(), OrderStatus.PAID);
+                orderService.updateOrderStatusOnWebhookEvent(paymentIntentId, OrderStatus.PAID); // also sends email
             }
             case "payment_intent.canceled" -> {
                 log.info("Received payment_intent.canceled on the Stripe WebHook");
-                orderService.updateOrderStatusOnWebhookEvent(paymentIntent.getId(), OrderStatus.CANCELLED);
+                orderService.updateOrderStatusOnWebhookEvent(paymentIntentId, OrderStatus.CANCELLED);
             }
             case "payment_intent.payment_failed" -> {
                 log.info("Received payment_intent.payment_failed on the Stripe WebHook");
-                orderService.updateOrderStatusOnWebhookEvent(paymentIntent.getId(), OrderStatus.FAILED);
+                orderService.updateOrderStatusOnWebhookEvent(paymentIntentId, OrderStatus.FAILED);
             }
             default -> log.info("Unhandled WebHook event type: " + event.getType());
         }

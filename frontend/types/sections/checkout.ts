@@ -177,3 +177,15 @@ export type PaymentSectionDictionary = {
   imageDescription: string;
   orderSummary: OrderSummaryDictionary;
 };
+
+export type SummaryLabels = {
+  orderId: string;
+  customer: string;
+  delivery: string;
+  product: string;
+  quantity: string;
+  price: string;
+  total: string;
+  totalPrice: string;
+  discount: string;
+};

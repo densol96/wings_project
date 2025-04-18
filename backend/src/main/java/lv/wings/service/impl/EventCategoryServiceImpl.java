@@ -2,7 +2,6 @@ package lv.wings.service.impl;
 
 import org.springframework.stereotype.Service;
 
-import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.mapper.EventMapper;
 import lv.wings.model.entity.Event;
 import lv.wings.model.entity.EventCategory;
@@ -13,7 +12,9 @@ import lv.wings.service.EventCategoryService;
 import lv.wings.service.LocaleService;
 
 @Service
-public class EventCategoryServiceImpl extends AbstractTranslatableCRUDService<EventCategory, EventCategoryTranslation, Integer> implements EventCategoryService {
+public class EventCategoryServiceImpl extends AbstractTranslatableCRUDService<EventCategory, EventCategoryTranslation, Integer>
+		implements EventCategoryService {
+
 	private final EventCategoryRepository eventCategoryRepo;
 	private final EventMapper eventMapper;
 

@@ -46,12 +46,18 @@ public class LocaleServiceImpl implements LocaleService {
     @Override
     public <L extends Localable> L getRightTranslation(Translatable entity, Class<L> translationClass,
             Supplier<MissingTranslationException> exceptionSupplier) {
+        return getTranslationPerSelectedLocale(entity, translationClass, exceptionSupplier, getCurrentLocaleCode());
+    }
+
+    @Override
+    public <T extends Localable> T getTranslationPerSelectedLocale(Translatable entity, Class<T> translationClass,
+            Supplier<MissingTranslationException> exceptionSupplier, LocaleCode locale) {
         List<Localable> translations = entity.getTranslations();
         if (translations == null)
             throw exceptionSupplier.get();
         return translations
                 .stream()
-                .filter(translation -> translation.getLocale() == getCurrentLocaleCode()) // fine for enums since ther are singletones
+                .filter(translation -> translation.getLocale() == locale)
                 .findFirst()
                 .or(() -> translations
                         .stream()
@@ -75,5 +81,15 @@ public class LocaleServiceImpl implements LocaleService {
     @Override
     public String getMessage(String messageCode, Object[] args) {
         return messageSource.getMessage(messageCode, args, getCurrentLocale());
+    }
+
+    @Override
+    public String getMessageForSpecificLocale(String messageCode, LocaleCode localeCode) {
+        return getMessageForSpecificLocale(messageCode, null, localeCode);
+    }
+
+    @Override
+    public String getMessageForSpecificLocale(String messageCode, Object[] args, LocaleCode localeCode) {
+        return messageSource.getMessage(messageCode, args, new Locale(localeCode.getCode()));
     }
 }
