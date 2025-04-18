@@ -193,16 +193,16 @@
     "description": "Veicot pasūtījumu Amatu Maja interneta veikalā, jūs varat izvēlēties vienu no trim apmaksas veidiem: tiešsaistes maksājums ar bankas karti, bankas pārskaitījums vai priekšpasūtījums ar apmaksu uz vietas.",
     "sections": [
       {
-        "name": "Tiešsaistes maksājums ar bankas karti",
-        "description": "Ātrākais un mūsu ieteiktais apmaksas veids. Pēc pogas 'Veikt pasūtījumu' nospiešanas ievadiet savas kartes datus, lai pabeigtu maksājumu."
+        "name": "Apmaksa ar bankas karti",
+        "description": "Ātrākā un mūsu ieteiktā apmaksas metode. Noklikšķiniet uz 'Veikt apmaksu' un ievadiet savas kartes datus, lai ātri un droši pabeigtu pirkumu."
       },
       {
         "name": "Bankas pārskaitījums",
-        "description": "Kad jūsu pasūtījums būs apstiprināts, maksājuma rekvizīti tiks nosūtīti uz jūsu e-pastu. Lūdzu, norādiet pasūtījuma numuru, veicot maksājumu."
+        "description": "Varat arī norēķināties ar bankas pārskaitījumu. Lūdzu, ņemiet vērā, ka maksājuma apstrāde var aizņemt ilgāku laiku."
       },
       {
-        "name": "Priekšpasūtījums ar apmaksu uz vietas",
-        "description": "Veiciet pasūtījumu tiešsaistē un apmaksājiet to Amatu Maja veikalā. Pirms ierodaties, lūdzu, sagaidiet apstiprinājuma e-pastu, ka pasūtījums ir gatavs saņemšanai."
+        "name": "PayPal",
+        "description": "Vienkārša un droša apmaksa ar PayPal kontu. Ērta iespēja daudziem starptautiskajiem klientiem."
       }
     ]
   },
@@ -305,6 +305,27 @@
       "description": "Tagad ir pienācis laiks izvēlēties maksājuma veidu un ievadīt maksājuma informāciju. Kad maksājums būs veiksmīgi apstiprināts, jūs tiksiet novirzīts uz apstiprinājuma lapu, un mēs nosūtīsim uz jūsu e‑pastu visu informāciju par pasūtījumu. Ja izvēlējāties piegādi ar kurjeru vai saņemšanu Omniva pakomātā, mēs nosūtīsim arī ziņojumu brīdī, kad sūtījums tiks nodots piegādei.",
       "payNow": "Samaksāt tagad",
       "imageDescription": "Maksājuma logotips"
+    },
+    "paymentResult": {
+      "success": {
+        "title": "Maksājums veiksmīgs",
+        "description": "Paldies! Jūsu maksājums ir veiksmīgi apstrādāts. Jūsu pasūtījuma informācija ir norādīta zemāk."
+      },
+      "failure": {
+        "title": "Maksājums neizdevās",
+        "description": "Diemžēl jūsu maksājumu neizdevās pabeigt. Lūdzu, mēģiniet vēlreiz vai izmantojiet citu maksājuma veidu."
+      },
+      "summary": {
+        "orderId": "Pasūtījuma numurs",
+        "customer": "Klients",
+        "delivery": "Piegāde",
+        "product": "Produkts",
+        "quantity": "Daudzums",
+        "price": "Cena",
+        "total": "Summa",
+        "totalPrice": "Kopējā cena",
+        "discount": "Atlaide"
+      }
     }
   }
 }

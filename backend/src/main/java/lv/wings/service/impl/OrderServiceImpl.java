@@ -1,21 +1,23 @@
 package lv.wings.service.impl;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lv.wings.dto.request.payment.OrderDto;
+import lv.wings.dto.response.payment.OrderSingleProductDto;
+import lv.wings.dto.response.payment.OrderSummaryDto;
 import lv.wings.enums.OrderStatus;
+import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.payment.WebhookException;
 import lv.wings.mapper.CustomerMapper;
+import lv.wings.mapper.OrderMapper;
+import lv.wings.model.entity.Customer;
+import lv.wings.model.entity.DeliveryPrice;
+import lv.wings.model.entity.DeliveryType;
 import lv.wings.model.entity.Order;
 import lv.wings.model.entity.OrderItem;
 import lv.wings.model.entity.Product;
@@ -25,6 +27,8 @@ import lv.wings.repo.ProductRepository;
 import lv.wings.service.AbstractCRUDService;
 import lv.wings.service.CouponService;
 import lv.wings.service.DeliveryPriceService;
+import lv.wings.service.DeliveryTypeService;
+import lv.wings.service.EmailSenderService;
 import lv.wings.service.FrontendCacheInvalidator;
 import lv.wings.service.LocaleService;
 import lv.wings.service.OmnivaService;
@@ -37,6 +41,7 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
     private final OrderRepository orderRepository;
     private final LocaleService localService;
     private final DeliveryPriceService deliveryPriceService;
+    private final DeliveryTypeService deliveryTypeService;
     private final OmnivaService omnivaService;
     private final CouponService couponService;
     private final CustomerMapper customerMapper;
@@ -44,19 +49,22 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
     private final FrontendCacheInvalidator nextJsInvalidator;
+    private final EmailSenderService emailSenderService;
+    private final OrderMapper orderMapper;
 
 
     public static final int CONSIDER_CANCELLED_AFTER_MINS = 1;
 
 
     public OrderServiceImpl(OrderRepository orderRepository, OrderItemRepository orderItemRepository, LocaleService localService,
-            DeliveryPriceService deliveryPriceService,
+            DeliveryPriceService deliveryPriceService, DeliveryTypeService deliveryTypeService, OrderMapper orderMapper,
             OmnivaService omnivaService, CouponService couponService, CustomerMapper customerMapper, ProductService productService,
-            ProductRepository productRepository, FrontendCacheInvalidator nextJsInvalidator) {
+            ProductRepository productRepository, FrontendCacheInvalidator nextJsInvalidator, EmailSenderService emailSenderService) {
         super(orderRepository, "Order", "entity.order");
         this.orderRepository = orderRepository;
         this.localService = localService;
         this.deliveryPriceService = deliveryPriceService;
+        this.deliveryTypeService = deliveryTypeService;
         this.omnivaService = omnivaService;
         this.couponService = couponService;
         this.customerMapper = customerMapper;
@@ -64,6 +72,8 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
         this.orderItemRepository = orderItemRepository;
         this.productRepository = productRepository;
         this.nextJsInvalidator = nextJsInvalidator;
+        this.emailSenderService = emailSenderService;
+        this.orderMapper = orderMapper;
     }
 
     /**
@@ -123,6 +133,8 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
                 }));
             });
             nextJsInvalidator.invalidateProducts();
+        } else {
+            emailSenderService.sendOrderSuccessEmail(order);
         }
 
         order.setStatus(newStatus);
@@ -153,6 +165,17 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
         } catch (StripeException exception) {
             throw new RuntimeException("THIS SHOULD ROLLBACK THE TRANSACTION IN CASE OF THE EXCEPTION");
         }
+    }
+
+    @Override
+    public OrderSummaryDto getOrderSummary(String paymentIntentId) {
+        Order order = orderRepository.findByPaymentIntentIdWithItems(paymentIntentId)
+                .orElseThrow(() -> new EntityNotFoundException(entityNameKey, entityName, paymentIntentId));
+        List<OrderSingleProductDto> items =
+                order.getOrderItems().stream()
+                        .map((i) -> orderMapper.orderItemToDto(i, productService.getRightTranslation(i.getProduct()).getTitle())).toList();
+        return orderMapper.toOrderSummaryDto(order, order.getCustomer(), deliveryTypeService.proccessDeliveryMethod(order, localService.getCurrentLocaleCode()),
+                items);
     }
 
 }

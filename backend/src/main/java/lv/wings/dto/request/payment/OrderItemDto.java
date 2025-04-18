@@ -1,4 +1,4 @@
-package lv.wings.dto.response.payment;
+package lv.wings.dto.request.payment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;

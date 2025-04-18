@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lv.wings.dto.response.payment.OrderItemDto;
 
 @Getter
 @Setter

@@ -6,8 +6,6 @@ import React from "react";
 import ProductDisplay from "./ProductDisplay";
 import ProductInfo from "./ProductInfo";
 
-type Props = {};
-
 const Page = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
   const productId = extractIdFromSlug(slug);
   const [dictResult, product] = await Promise.all([
@@ -29,6 +27,7 @@ const Page = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
           {`${fullDict.relatedProducts}:`}
         </Heading>
         <RandomProducts
+          idToExclude={product.id}
           categoryId={product.categoryDto.id}
           amount={12}
           cardOption="related"

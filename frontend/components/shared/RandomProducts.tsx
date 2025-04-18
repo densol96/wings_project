@@ -10,13 +10,15 @@ type Props = {
   cardOption: SliderCardOption;
   sliderSettings?: SliderSettings;
   dotsClassname?: string;
+  idToExclude?: number;
 };
 
-const RandomProducts = async ({ lang, className, cardOption, categoryId = 0, amount = 5, sliderSettings, dotsClassname }: Props) => {
+const RandomProducts = async ({ lang, className, cardOption, categoryId = 0, amount = 5, sliderSettings, dotsClassname, idToExclude }: Props) => {
   const data = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/products/random?categoryId=${categoryId}&amount=${amount}&lang=${lang}`, {
     next: { revalidate: 0 },
   });
   const randomProducts = (await data.json()) as ProductDto[];
+  const filteredProducts = randomProducts.filter((product) => product.id !== idToExclude);
   return (
     randomProducts.length && (
       <RandomProductsSlider
@@ -24,7 +26,7 @@ const RandomProducts = async ({ lang, className, cardOption, categoryId = 0, amo
         cardOption={cardOption}
         lang={lang}
         className={className}
-        randomProducts={randomProducts}
+        randomProducts={filteredProducts}
         dotsClassname={dotsClassname}
       />
     )

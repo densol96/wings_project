@@ -169,6 +169,16 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		return productRepository.getProductByIdWithLock(id);
 	}
 
+	@Override
+	public ProductTranslation getRightTranslation(Product product) {
+		return getRightTranslation(product, ProductTranslation.class);
+	}
+
+	@Override
+	public ProductTranslation getSelectedTranslation(Product product, LocaleCode localeCode) {
+		return getRightTranslationForSelectedLocale(product, ProductTranslation.class, localeCode);
+	}
+
 	private ProductTitleDto mapToProductTitleDto(Product product) {
 		return productMapper.toProductTitleDto(product, getRightTranslation(product, ProductTranslation.class));
 	}

@@ -1,0 +1,84 @@
+package lv.wings.service.impl;
+
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+
+import org.springframework.stereotype.Service;
+import org.springframework.util.StreamUtils;
+
+import lombok.RequiredArgsConstructor;
+import lv.wings.enums.LocaleCode;
+import lv.wings.model.entity.Order;
+import lv.wings.model.entity.OrderItem;
+import lv.wings.service.DeliveryTypeService;
+import lv.wings.service.EmailTemplateService;
+import lv.wings.service.LocaleService;
+import lv.wings.service.ProductService;
+
+@Service
+@RequiredArgsConstructor
+public class EmailTemplateServiceImpl implements EmailTemplateService {
+
+    private final LocaleService localeService;
+    private final ProductService productService;
+    private final DeliveryTypeService deliveryTypeService;
+
+    public String generateSuccessfulPaymentEmailHtml(Order order) {
+        try {
+            String template = loadTemplate("/templates/order-success-email-" + order.getLocale().getCode() + ".html");
+            LocaleCode orderLocale = order.getLocale();
+
+            String tableRows = generateTableRows(order);
+            String total = order.getTotal().toPlainString();
+
+            return template
+                    .replace("{{orderId}}", String.valueOf(order.getId()))
+                    .replace("{{deliveryName}}", deliveryTypeService.proccessDeliveryMethod(order, orderLocale))
+                    .replace("{{discount}}", processDiscount(order))
+                    .replace("{{message}}", localeService.getMessageForSpecificLocale("email.success.message", orderLocale))
+                    .replace("{{items}}", tableRows)
+                    .replace("{{total}}", total);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate email HTML", e);
+        }
+    }
+
+    private String loadTemplate(String path) throws Exception {
+        InputStream stream = getClass().getResourceAsStream(path);
+        if (stream == null) {
+            throw new IllegalArgumentException("Template not found at: " + path);
+        }
+        return StreamUtils.copyToString(stream, StandardCharsets.UTF_8);
+    }
+
+    private String generateTableRows(Order order) {
+        StringBuilder builder = new StringBuilder();
+        for (OrderItem item : order.getOrderItems()) {
+
+            String productTitle = productService.getSelectedTranslation(item.getProduct(), order.getLocale()).getTitle();
+            builder.append("<tr>")
+                    .append("<td>").append(productTitle).append("</td>")
+                    .append("<td>").append(item.getAmount()).append("</td>")
+                    .append("<td>").append(item.getProduct().getPrice()).append("</td>")
+                    .append("<td>").append(item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getAmount()))).append("</td>")
+                    .append("</tr>");
+        }
+        return builder.toString();
+    }
+
+    private String processDiscount(Order order) {
+        try {
+            String discountTemplate = loadTemplate("/templates/discount-line-" + order.getLocale().getCode() + ".html");
+            BigDecimal discount = order.getDiscountAtOrderTime();
+            String discountHtmlLine = "";
+
+            if (discount.compareTo(BigDecimal.ZERO) > 0) {
+                discountHtmlLine = discountTemplate.replace("{{discountAmount}}", discount.toPlainString());
+            }
+            return discountHtmlLine;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generate email HTML", e);
+        }
+    }
+}

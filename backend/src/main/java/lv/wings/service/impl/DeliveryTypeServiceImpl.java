@@ -4,9 +4,13 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import lv.wings.dto.response.delivery.DeliveryDto;
 import lv.wings.enums.Country;
+import lv.wings.enums.DeliveryMethod;
+import lv.wings.enums.LocaleCode;
 import lv.wings.mapper.DeliveryTypeMapper;
 import lv.wings.model.entity.DeliveryPrice;
 import lv.wings.model.entity.DeliveryType;
+import lv.wings.model.entity.Order;
+import lv.wings.model.entity.Terminal;
 import lv.wings.model.translation.DeliveryTypeTranslation;
 import lv.wings.repo.DeliveryPriceRepository;
 import lv.wings.repo.DeliveryTypeRepository;
@@ -39,5 +43,27 @@ public class DeliveryTypeServiceImpl extends AbstractTranslatableCRUDService<Del
                             getRightTranslation(type, DeliveryTypeTranslation.class));
                 })
                 .toList();
+    }
+
+    @Override
+    public DeliveryTypeTranslation getRightTranslation(DeliveryType deliveryType) {
+        return getRightTranslation(deliveryType, DeliveryTypeTranslation.class);
+    }
+
+    public DeliveryTypeTranslation getRightTranslationForSelectedLocale(DeliveryType deliveryType, LocaleCode localCode) {
+        return getRightTranslationForSelectedLocale(deliveryType, DeliveryTypeTranslation.class, localCode);
+    }
+
+    @Override
+    public String proccessDeliveryMethod(Order order, LocaleCode localCode) {
+        DeliveryPrice deliveryPrice = order.getDeliveryVariation();
+        DeliveryType deliveryType = deliveryPrice.getDeliveryType();
+        String name = order.getDeliveryPriceAtOrderTime().toPlainString() + " € - "
+                + getRightTranslationForSelectedLocale(deliveryPrice.getDeliveryType(), localCode).getTitle();
+        if (deliveryType.getMethod() == DeliveryMethod.PARCEL_MACHINE) {
+            Terminal omniva = order.getTerminal();
+            name += " - " + omniva.getName() + " - " + omniva.getAddress();
+        }
+        return name;
     }
 }
