@@ -361,7 +361,7 @@ public class SparniProjectApplication {
 
 				// PRECES
 				// CATEGORY - HATS - 4
-				Product hat1 = Product.builder().price(10.5).amount(3).category(categoryOne).build();
+				Product hat1 = Product.builder().price(BigDecimal.valueOf(10.5)).amount(3).category(categoryOne).build();
 				hat1.setCreatedBy(u1);
 				ProductTranslation hat1Lv = ProductTranslation.builder()
 						.title("Adītas cepures")
@@ -385,7 +385,7 @@ public class SparniProjectApplication {
 				pm2.setCreatedBy(u1);
 				productMaterialRepo.saveAll(Arrays.asList(pm1, pm2));
 
-				Product hat2 = Product.builder().price(12.0).amount(5).category(categoryOne).build();
+				Product hat2 = Product.builder().price(BigDecimal.valueOf(12.0)).amount(5).category(categoryOne).build();
 				hat2.setCreatedBy(u1);
 				ProductTranslation hat2Lv = ProductTranslation.builder()
 						.title("Modernās cepures")
@@ -409,7 +409,7 @@ public class SparniProjectApplication {
 				pm4.setCreatedBy(u1);
 				productMaterialRepo.saveAll(Arrays.asList(pm3, pm4));
 
-				Product hat3 = Product.builder().price(11.0).amount(0).category(categoryOne).build();
+				Product hat3 = Product.builder().price(BigDecimal.valueOf(11.0)).amount(0).category(categoryOne).build();
 				hat3.setCreatedBy(u1);
 				ProductTranslation hat3Lv = ProductTranslation.builder()
 						.title("Klasiskas cepures")
@@ -433,7 +433,7 @@ public class SparniProjectApplication {
 				productMaterialRepo.save(pm5);
 
 
-				Product hat4 = Product.builder().price(13.0).amount(4).category(categoryOne).build();
+				Product hat4 = Product.builder().price(BigDecimal.valueOf(13.0)).amount(4).category(categoryOne).build();
 				hat4.setCreatedBy(u1);
 				ProductTranslation hat4Lv = ProductTranslation.builder()
 						.title("Eleganti cepures")
@@ -454,7 +454,7 @@ public class SparniProjectApplication {
 
 
 				// (Category Two) – 7 PRODUCTS
-				Product glove1 = Product.builder().price(8.5).amount(6).category(categoryTwo).build();
+				Product glove1 = Product.builder().price(BigDecimal.valueOf(8.5)).amount(6).category(categoryTwo).build();
 				glove1.setCreatedBy(u1);
 				ProductTranslation glove1Lv = ProductTranslation.builder()
 						.title("Adītas cimdi")
@@ -472,7 +472,7 @@ public class SparniProjectApplication {
 				glove1.setTranslations(List.of(glove1Lv, glove1En));
 				productRepo.save(glove1);
 
-				Product glove2 = Product.builder().price(9.0).amount(4).category(categoryTwo).build();
+				Product glove2 = Product.builder().price(BigDecimal.valueOf(9.0)).amount(4).category(categoryTwo).build();
 				glove2.setCreatedBy(u1);
 				ProductTranslation glove2Lv = ProductTranslation.builder()
 						.title("Stilīgi cimdi")
@@ -489,7 +489,7 @@ public class SparniProjectApplication {
 				glove2.setTranslations(List.of(glove2Lv, glove2En));
 				productRepo.save(glove2);
 
-				Product glove3 = Product.builder().price(8.0).amount(5).category(categoryTwo).build();
+				Product glove3 = Product.builder().price(BigDecimal.valueOf(8.0)).amount(5).category(categoryTwo).build();
 				glove3.setCreatedBy(u1);
 				ProductTranslation glove3Lv = ProductTranslation.builder()
 						.title("Klasiski cimdi")
@@ -506,7 +506,7 @@ public class SparniProjectApplication {
 				glove3.setTranslations(List.of(glove3Lv, glove3En));
 				productRepo.save(glove3);
 
-				Product glove4 = Product.builder().price(10.0).amount(3).category(categoryTwo).build();
+				Product glove4 = Product.builder().price(BigDecimal.valueOf(10.0)).amount(3).category(categoryTwo).build();
 				glove4.setCreatedBy(u1);
 				ProductTranslation glove4Lv = ProductTranslation.builder()
 						.title("Mūsdienīgi cimdi")
@@ -525,7 +525,7 @@ public class SparniProjectApplication {
 
 
 
-				Product glove5 = Product.builder().price(7.5).amount(7).category(categoryTwo).build();
+				Product glove5 = Product.builder().price(BigDecimal.valueOf(7.5)).amount(7).category(categoryTwo).build();
 				glove5.setCreatedBy(u1);
 				ProductTranslation glove5Lv = ProductTranslation.builder()
 						.title("Radoši cimdi")
@@ -542,7 +542,7 @@ public class SparniProjectApplication {
 				glove5.setTranslations(List.of(glove5Lv, glove5En));
 				productRepo.save(glove5);
 
-				Product glove6 = Product.builder().price(8.75).amount(5).category(categoryTwo).build();
+				Product glove6 = Product.builder().price(BigDecimal.valueOf(8.75)).amount(5).category(categoryTwo).build();
 				glove6.setCreatedBy(u1);
 				ProductTranslation glove6Lv = ProductTranslation.builder()
 						.title("Praktiski cimdi")
@@ -559,7 +559,7 @@ public class SparniProjectApplication {
 				glove6.setTranslations(List.of(glove6Lv, glove6En));
 				productRepo.save(glove6);
 
-				Product glove7 = Product.builder().price(9.5).amount(2).category(categoryTwo).build();
+				Product glove7 = Product.builder().price(BigDecimal.valueOf(9.5)).amount(2).category(categoryTwo).build();
 				glove7.setCreatedBy(u1);
 				ProductTranslation glove7Lv = ProductTranslation.builder()
 						.title("Eleganti cimdi")

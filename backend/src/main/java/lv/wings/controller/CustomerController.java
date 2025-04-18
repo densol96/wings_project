@@ -17,33 +17,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import jakarta.validation.Valid;
 import lv.wings.model.entity.Customer;
-import lv.wings.poi.PoiController;
+// import lv.wings.poi.PoiController;
 import lv.wings.service.CRUDService;
 import lv.wings.service.ICRUDService;
 
-@Controller
-@RequestMapping("/customer")
-public class CustomerController {
+// @Controller
+// @RequestMapping("/customer")
+// public class CustomerController {
 
-    @Autowired
-    private CRUDService<Customer, Integer> customerService;
+// @Autowired
+// private CRUDService<Customer, Integer> customerService;
 
-    @GetMapping("/download/all") // localhost:8080/pircejs/download/all
-    public ResponseEntity<byte[]> downloadCustomers() {
-        try {
-            // List<Customer> allCustomers = customerService.retrieveAll();
-            List<Customer> allCustomers = null;
-            byte[] fileBytes = PoiController.buildMultiple("pirceji", (ArrayList<Customer>) allCustomers,
-                    new String[] {});
+// @GetMapping("/download/all") // localhost:8080/pircejs/download/all
+// public ResponseEntity<byte[]> downloadCustomers() {
+// try {
+// // List<Customer> allCustomers = customerService.retrieveAll();
+// List<Customer> allCustomers = null;
+// byte[] fileBytes = PoiController.buildMultiple("pirceji", (ArrayList<Customer>) allCustomers,
+// new String[] {});
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            headers.setContentDispositionFormData("attachment", "query_results.xlsx");
+// HttpHeaders headers = new HttpHeaders();
+// headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+// headers.setContentDispositionFormData("attachment", "query_results.xlsx");
 
-            return ResponseEntity.ok().headers(headers).body(fileBytes);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+// return ResponseEntity.ok().headers(headers).body(fileBytes);
+// } catch (Exception e) {
+// return ResponseEntity.notFound().build();
+// }
+// }
 
-}
+// }

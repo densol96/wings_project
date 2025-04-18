@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lv.wings.model.entity.Product;
-import lv.wings.poi.PoiController;
+// import lv.wings.poi.PoiController;
 import lv.wings.service.CRUDService;
 
 @Controller
@@ -47,40 +47,40 @@ public class ProductControllerOld {
 	// }
 	// }
 
-	@GetMapping("/download/all") // localhost:8080/prece/download/all
-	public ResponseEntity<byte[]> downloadProducts() {
-		try {
-			List<Product> allProducts = productService.findAll();
-			// iegūt faila baitus no preces ar visiem pieejamiem laukiem
-			byte[] fileBytes = PoiController.buildMultiple("preces", allProducts, new String[] {});
+	// @GetMapping("/download/all") // localhost:8080/prece/download/all
+	// public ResponseEntity<byte[]> downloadProducts() {
+	// try {
+	// List<Product> allProducts = productService.findAll();
+	// // iegūt faila baitus no preces ar visiem pieejamiem laukiem
+	// byte[] fileBytes = PoiController.buildMultiple("preces", allProducts, new String[] {});
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			headers.setContentDispositionFormData("attachment", "query_results.xlsx");
+	// HttpHeaders headers = new HttpHeaders();
+	// headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	// headers.setContentDispositionFormData("attachment", "query_results.xlsx");
 
-			return ResponseEntity.ok().headers(headers).body(fileBytes);
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
+	// return ResponseEntity.ok().headers(headers).body(fileBytes);
+	// } catch (Exception e) {
+	// return ResponseEntity.notFound().build();
+	// }
+	// }
 
-	@GetMapping("/download/all/{id}") // localhost:8080/prece/download/all/{id}
-	public ResponseEntity<byte[]> downloadProductsById(@PathVariable("id") int id) {
-		try {
-			Product selectedProduct = productService.findById(id);
-			// iegūt faila baitus no preces ar definētiem laukiem
-			byte[] fileBytes = PoiController.buildSingle("prece-" + id, selectedProduct,
-					new String[] {"prece_id", "nosaukums", "cena", "daudzums"});
+	// @GetMapping("/download/all/{id}") // localhost:8080/prece/download/all/{id}
+	// public ResponseEntity<byte[]> downloadProductsById(@PathVariable("id") int id) {
+	// try {
+	// Product selectedProduct = productService.findById(id);
+	// // iegūt faila baitus no preces ar definētiem laukiem
+	// byte[] fileBytes = PoiController.buildSingle("prece-" + id, selectedProduct,
+	// new String[] {"prece_id", "nosaukums", "cena", "daudzums"});
 
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			headers.setContentDispositionFormData("attachment", "query_results.xlsx");
+	// HttpHeaders headers = new HttpHeaders();
+	// headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+	// headers.setContentDispositionFormData("attachment", "query_results.xlsx");
 
-			return ResponseEntity.ok().headers(headers).body(fileBytes);
-		} catch (Exception e) {
-			return ResponseEntity.notFound().build();
-		}
-	}
+	// return ResponseEntity.ok().headers(headers).body(fileBytes);
+	// } catch (Exception e) {
+	// return ResponseEntity.notFound().build();
+	// }
+	// }
 
 
 	// @GetMapping(value = "/show/all")
