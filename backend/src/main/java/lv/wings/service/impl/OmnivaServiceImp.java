@@ -141,9 +141,10 @@ public class OmnivaServiceImp extends AbstractCRUDService<Terminal, Integer> imp
                 dto.getA7Name(),
                 dto.getA8Name());
 
-        return parts.stream()
+        String fullAddress = parts.stream()
                 .filter(part -> part != null && !part.isBlank())
                 .collect(Collectors.joining(", "));
+        return fullAddress;
     }
 
     private Terminal mapApiLocationToTerminal(TerminalLocationDto t) {

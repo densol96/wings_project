@@ -48,7 +48,7 @@ public class Terminal {
     @Enumerated(EnumType.STRING)
     private Country country;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String address;
 
     @Column(nullable = false)

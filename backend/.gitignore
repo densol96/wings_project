@@ -46,4 +46,4 @@ build/
 # uploaded images
 /uploads
 
-/src/main/resources/application.properties
+/src/main/resources/application-*.properties

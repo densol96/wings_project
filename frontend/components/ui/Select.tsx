@@ -10,6 +10,7 @@ type Props = {
   optionClassName?: string;
   selectDict: SelectOptions;
   activeValue: string;
+  temp: number;
 };
 
 const Select = ({ className, optionClassName, selectDict, activeValue }: Props) => {

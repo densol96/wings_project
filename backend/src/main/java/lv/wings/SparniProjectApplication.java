@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import jakarta.annotation.PostConstruct;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.enums.Country;
@@ -78,14 +79,30 @@ public class SparniProjectApplication {
 		this.productImageRepository = productImageRepository;
 	}
 
+	@PostConstruct
+	public void logEnv() {
+		System.out.println("🚀 Environment variables:");
+		System.out.println("DB_HOST = " + System.getenv("DB_HOST"));
+		System.out.println("DB_PORT = " + System.getenv("DB_PORT"));
+		System.out.println("DB_NAME = " + System.getenv("DB_NAME"));
+		System.out.println("DB_USER = " + System.getenv("DB_USER"));
+		System.out.println("DB_PASSWORD = " + System.getenv("DB_PASSWORD"));
+		System.out.println("JWT_SECRET = " + System.getenv("JWT_SECRET"));
+	}
+
 	public static void main(String[] args) {
-		SpringApplication.run(SparniProjectApplication.class, args);
-		log.info("Server is running...");
+		try {
+			SpringApplication.run(SparniProjectApplication.class, args);
+			System.out.println("Server is up and running...");
+		} catch (Exception e) {
+			System.err.println("❌ Unable to start the server..");
+			e.printStackTrace();
+		}
 	}
 
 	// @Bean
 	// @Profile("seed")
-	// @Transactional
+	@Transactional
 	public CommandLineRunner sparniDB(
 			ColorRepository colorRepo,
 			ProductMaterialRepository productMaterialRepo,
@@ -361,7 +378,7 @@ public class SparniProjectApplication {
 
 				// PRECES
 				// CATEGORY - HATS - 4
-				Product hat1 = Product.builder().price(10.5).amount(3).category(categoryOne).build();
+				Product hat1 = Product.builder().price(BigDecimal.valueOf(10.5)).amount(3).category(categoryOne).build();
 				hat1.setCreatedBy(u1);
 				ProductTranslation hat1Lv = ProductTranslation.builder()
 						.title("Adītas cepures")
@@ -385,7 +402,7 @@ public class SparniProjectApplication {
 				pm2.setCreatedBy(u1);
 				productMaterialRepo.saveAll(Arrays.asList(pm1, pm2));
 
-				Product hat2 = Product.builder().price(12.0).amount(5).category(categoryOne).build();
+				Product hat2 = Product.builder().price(BigDecimal.valueOf(12.0)).amount(5).category(categoryOne).build();
 				hat2.setCreatedBy(u1);
 				ProductTranslation hat2Lv = ProductTranslation.builder()
 						.title("Modernās cepures")
@@ -409,7 +426,7 @@ public class SparniProjectApplication {
 				pm4.setCreatedBy(u1);
 				productMaterialRepo.saveAll(Arrays.asList(pm3, pm4));
 
-				Product hat3 = Product.builder().price(11.0).amount(0).category(categoryOne).build();
+				Product hat3 = Product.builder().price(BigDecimal.valueOf(11.0)).amount(0).category(categoryOne).build();
 				hat3.setCreatedBy(u1);
 				ProductTranslation hat3Lv = ProductTranslation.builder()
 						.title("Klasiskas cepures")
@@ -433,7 +450,7 @@ public class SparniProjectApplication {
 				productMaterialRepo.save(pm5);
 
 
-				Product hat4 = Product.builder().price(13.0).amount(4).category(categoryOne).build();
+				Product hat4 = Product.builder().price(BigDecimal.valueOf(13.0)).amount(4).category(categoryOne).build();
 				hat4.setCreatedBy(u1);
 				ProductTranslation hat4Lv = ProductTranslation.builder()
 						.title("Eleganti cepures")
@@ -454,7 +471,7 @@ public class SparniProjectApplication {
 
 
 				// (Category Two) – 7 PRODUCTS
-				Product glove1 = Product.builder().price(8.5).amount(6).category(categoryTwo).build();
+				Product glove1 = Product.builder().price(BigDecimal.valueOf(8.5)).amount(6).category(categoryTwo).build();
 				glove1.setCreatedBy(u1);
 				ProductTranslation glove1Lv = ProductTranslation.builder()
 						.title("Adītas cimdi")
@@ -472,7 +489,7 @@ public class SparniProjectApplication {
 				glove1.setTranslations(List.of(glove1Lv, glove1En));
 				productRepo.save(glove1);
 
-				Product glove2 = Product.builder().price(9.0).amount(4).category(categoryTwo).build();
+				Product glove2 = Product.builder().price(BigDecimal.valueOf(9.0)).amount(4).category(categoryTwo).build();
 				glove2.setCreatedBy(u1);
 				ProductTranslation glove2Lv = ProductTranslation.builder()
 						.title("Stilīgi cimdi")
@@ -489,7 +506,7 @@ public class SparniProjectApplication {
 				glove2.setTranslations(List.of(glove2Lv, glove2En));
 				productRepo.save(glove2);
 
-				Product glove3 = Product.builder().price(8.0).amount(5).category(categoryTwo).build();
+				Product glove3 = Product.builder().price(BigDecimal.valueOf(8.0)).amount(5).category(categoryTwo).build();
 				glove3.setCreatedBy(u1);
 				ProductTranslation glove3Lv = ProductTranslation.builder()
 						.title("Klasiski cimdi")
@@ -506,7 +523,7 @@ public class SparniProjectApplication {
 				glove3.setTranslations(List.of(glove3Lv, glove3En));
 				productRepo.save(glove3);
 
-				Product glove4 = Product.builder().price(10.0).amount(3).category(categoryTwo).build();
+				Product glove4 = Product.builder().price(BigDecimal.valueOf(10.0)).amount(3).category(categoryTwo).build();
 				glove4.setCreatedBy(u1);
 				ProductTranslation glove4Lv = ProductTranslation.builder()
 						.title("Mūsdienīgi cimdi")
@@ -525,7 +542,7 @@ public class SparniProjectApplication {
 
 
 
-				Product glove5 = Product.builder().price(7.5).amount(7).category(categoryTwo).build();
+				Product glove5 = Product.builder().price(BigDecimal.valueOf(7.5)).amount(7).category(categoryTwo).build();
 				glove5.setCreatedBy(u1);
 				ProductTranslation glove5Lv = ProductTranslation.builder()
 						.title("Radoši cimdi")
@@ -542,7 +559,7 @@ public class SparniProjectApplication {
 				glove5.setTranslations(List.of(glove5Lv, glove5En));
 				productRepo.save(glove5);
 
-				Product glove6 = Product.builder().price(8.75).amount(5).category(categoryTwo).build();
+				Product glove6 = Product.builder().price(BigDecimal.valueOf(8.75)).amount(5).category(categoryTwo).build();
 				glove6.setCreatedBy(u1);
 				ProductTranslation glove6Lv = ProductTranslation.builder()
 						.title("Praktiski cimdi")
@@ -559,7 +576,7 @@ public class SparniProjectApplication {
 				glove6.setTranslations(List.of(glove6Lv, glove6En));
 				productRepo.save(glove6);
 
-				Product glove7 = Product.builder().price(9.5).amount(2).category(categoryTwo).build();
+				Product glove7 = Product.builder().price(BigDecimal.valueOf(9.5)).amount(2).category(categoryTwo).build();
 				glove7.setCreatedBy(u1);
 				ProductTranslation glove7Lv = ProductTranslation.builder()
 						.title("Eleganti cimdi")
@@ -683,6 +700,98 @@ public class SparniProjectApplication {
 				// Files.createDirectories(path2);
 				// }
 				log.info("Data has been successfully seeded.");
+
+
+				System.out.println("=== createDeliveryTypesAndPrices ===");
+				List<DeliveryType> deliveryTypes = new ArrayList<>();
+
+				// ---------- 1. PICKUP ----------
+				DeliveryType pickup = new DeliveryType(DeliveryMethod.PICKUP);
+				pickup.setCreatedBy(u1);
+
+				DeliveryTypeTranslation pickup_lv = DeliveryTypeTranslation.builder()
+						.title("Saņemšana veikalā")
+						.description("Bezmaksas pasūtījuma saņemšana mūsu veikalā Ventspilī")
+						.locale(LocaleCode.LV)
+						.deliveryType(pickup)
+						.build();
+
+				DeliveryTypeTranslation pickup_en = DeliveryTypeTranslation.builder()
+						.title("Store pickup")
+						.description("Free pickup from our store in Ventspils")
+						.locale(LocaleCode.EN)
+						.deliveryType(pickup)
+						.build();
+
+				pickup.setTranslations(List.of(pickup_lv, pickup_en));
+				pickup.setPrices(List.of(
+						DeliveryPrice.builder()
+								.country(Country.LV)
+								.price(BigDecimal.ZERO)
+								.deliveryType(pickup)
+								.build()));
+
+				deliveryTypes.add(pickup);
+
+				// ---------- 2. OMNIVA ----------
+				DeliveryType omniva = new DeliveryType(DeliveryMethod.PARCEL_MACHINE);
+				omniva.setCreatedBy(u1);
+
+				DeliveryTypeTranslation omniva_lv = DeliveryTypeTranslation.builder()
+						.title("Omniva pakomāts")
+						.description("Piegāde uz Omniva pakomātu. 5 EUR Latvijā, 10 EUR uz Lietuvu un Igauniju.")
+						.locale(LocaleCode.LV)
+						.deliveryType(omniva)
+						.build();
+
+				DeliveryTypeTranslation omniva_en = DeliveryTypeTranslation.builder()
+						.title("Omniva parcel locker")
+						.description("Delivery to Omniva parcel locker. €5 in Latvia, €10 to LT and EE.")
+						.locale(LocaleCode.EN)
+						.deliveryType(omniva)
+						.build();
+
+				omniva.setTranslations(List.of(omniva_lv, omniva_en));
+				omniva.setPrices(List.of(
+						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("5.00")).deliveryType(omniva).build(),
+						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("10.00")).deliveryType(omniva).build(),
+						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("10.00")).deliveryType(omniva).build()));
+
+				deliveryTypes.add(omniva);
+
+
+				// ---------- 3. COURIER ----------
+				DeliveryType courier = new DeliveryType(DeliveryMethod.COURIER);
+				courier.setCreatedBy(u1);
+
+				DeliveryTypeTranslation courier_lv = DeliveryTypeTranslation.builder()
+						.title("Kurjers")
+						.description("Kurjera piegāde līdz durvīm. 10 EUR Latvijā, 20 EUR uz Lietuvu un Igauniju.")
+						.locale(LocaleCode.LV)
+						.deliveryType(courier)
+						.build();
+
+				DeliveryTypeTranslation courier_en = DeliveryTypeTranslation.builder()
+						.title("Courier")
+						.description("Courier delivery to your door. €10 in Latvia, €20 to Lithuania and Estonia")
+						.locale(LocaleCode.EN)
+						.deliveryType(courier)
+						.build();
+
+				courier.setTranslations(List.of(courier_lv, courier_en));
+				courier.setPrices(List.of(
+						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("10.00")).deliveryType(courier).build(),
+						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("20.00")).deliveryType(courier).build(),
+						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("20.00")).deliveryType(courier).build()));
+
+				deliveryTypes.add(courier);
+
+
+				// ---------- Save all ----------
+				deliveryTypeRepo.saveAll(deliveryTypes);
+
+				System.out.println("=== createDeliveryTypesAndPrices SEEDED ===");
+
 			}
 		};
 	}

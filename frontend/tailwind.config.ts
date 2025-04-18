@@ -42,6 +42,9 @@ const config: Config = {
       screens: {
         xs: "550px",
       },
+      transitionDuration: {
+        250: "250ms",
+      },
     },
   },
   plugins: [],

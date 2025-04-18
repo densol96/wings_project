@@ -7,7 +7,11 @@ import { useLangContext } from "@/context/LangContext";
 
 type Locales = "lv" | "en";
 
-const LangSelectMenu = () => {
+type Props = {
+  temp: number;
+};
+
+const LangSelectMenu = ({}: Props) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
