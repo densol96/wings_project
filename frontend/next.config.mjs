@@ -9,6 +9,12 @@ const nextConfig = {
         port: "8080",
         pathname: "/images/**",
       },
+      {
+        protocol: "http",
+        hostname: "13.53.146.236",
+        port: "8080",
+        pathname: "/images/**",
+      },
     ],
   },
   eslint: {
