@@ -54,7 +54,7 @@ const RandomProductsSlider: React.FC<Props> = ({ randomProducts, className, card
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: false,
+    autoplay: true,
     autoplaySpeed: 4000,
     arrows: true,
     nextArrow: <CustomArrow arrowsClassname={arrowsClassname} direction="right" />,

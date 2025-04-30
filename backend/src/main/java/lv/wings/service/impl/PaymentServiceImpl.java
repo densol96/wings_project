@@ -62,14 +62,14 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${stripe.webhook.secret}")
     private String endpointSecret;
 
-
     private BigDecimal validateOrderItemsInput(List<OrderItemDto> orderItemDtos) {
 
         List<Integer> productIds = orderItemDtos.stream().map(item -> item.getProductId()).toList();
         Map<Integer, Product> productMap = productService.getProductsByIdsWithLock(productIds).stream()
                 .collect(Collectors.toMap(Product::getId, Function.identity()));
 
-        // (X) Mismatch between provided ids and found products => less products found than ids provided
+        // (X) Mismatch between provided ids and found products => less products found
+        // than ids provided
         if (productIds.size() != productMap.values().size()) {
             List<Integer> invalidIds = productIds.stream().filter(id -> !productMap.containsKey(id)).toList();
 
@@ -86,7 +86,8 @@ public class PaymentServiceImpl implements PaymentService {
                     Product product = productMap.get(item.getProductId());
                     if (product.getAmount() < item.getAmount()) {
                         throw CheckoutException.builder()
-                                .logMessage("Payment intent creation failed due to requested quantity exceeding available stock.")
+                                .logMessage(
+                                        "Payment intent creation failed due to requested quantity exceeding available stock.")
                                 .step(CheckoutStep.CART)
                                 .errorCode("product-amount-exceeded")
                                 .invalidIds(List.of(item.getProductId()))
@@ -98,7 +99,8 @@ public class PaymentServiceImpl implements PaymentService {
                     return product.getPrice().multiply(BigDecimal.valueOf(item.getAmount()));
                 })
                 // same as (a, b) -> a.add(b) according to docs: API Note:
-                // Sum, min, max, average, and string concatenation are all special cases of reduction. Summing a stream of numbers can be expressed as:
+                // Sum, min, max, average, and string concatenation are all special cases of
+                // reduction. Summing a stream of numbers can be expressed as:
                 // Integer sum = integers.reduce(0, Integer::sum);
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
@@ -115,7 +117,6 @@ public class PaymentServiceImpl implements PaymentService {
                     .build();
         }
 
-
         DeliveryMethod deliveryMethod = deliveryMethodVariation.getDeliveryType().getMethod();
 
         if (deliveryMethod == DeliveryMethod.PARCEL_MACHINE && terminalId == null
@@ -129,7 +130,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (deliveryMethod == DeliveryMethod.COURIER && address == null) {
             throw CheckoutException.builder()
-                    .logMessage("Payment intent creation failed due to missing addresss required for a courier delivery")
+                    .logMessage(
+                            "Payment intent creation failed due to missing addresss required for a courier delivery")
                     .step(CheckoutStep.DELIVERY)
                     .errorCode("missing-address")
                     .build();
@@ -137,7 +139,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         if (deliveryMethod == DeliveryMethod.COURIER && deliveryMethodVariation.getCountry() != address.getCountry()) {
             throw CheckoutException.builder()
-                    .logMessage("Payment intent creation failed due to country in the addresss and in the delivery variation (delivery Price) not matching")
+                    .logMessage(
+                            "Payment intent creation failed due to country in the addresss and in the delivery variation (delivery Price) not matching")
                     .step(CheckoutStep.DELIVERY)
                     .errorCode("address-missmatch")
                     .build();
@@ -189,7 +192,6 @@ public class PaymentServiceImpl implements PaymentService {
                     .build();
 
             return PaymentIntent.create(params);
-
 
         } catch (StripeException e) {
             throw CheckoutException.builder()
@@ -256,8 +258,8 @@ public class PaymentServiceImpl implements PaymentService {
 
         BigDecimal productsTotalCost = validateOrderItemsInput(orderDto.getOrderItems());
 
-        BigDecimal deliveryPrice =
-                validateDeliveryTypeInput(orderDto.getDeliveryMethodVariationId(), orderDto.getTerminalId(), orderDto.getCustomerInfo().getAddress());
+        BigDecimal deliveryPrice = validateDeliveryTypeInput(orderDto.getDeliveryMethodVariationId(),
+                orderDto.getTerminalId(), orderDto.getCustomerInfo().getAddress());
 
         BigDecimal discount = validateDiscount(orderDto.getCouponCode(), productsTotalCost);
 
@@ -269,7 +271,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         orderService.saveNewOrder(orderDto, paymentIntent.getId(), discount, totalCosts);
 
-        orderTimeoutScheduler.scheduleOrderTimeoutCheck(paymentIntent.getId(), Duration.ofMinutes(1));
+        orderTimeoutScheduler.scheduleOrderTimeoutCheck(paymentIntent.getId(), Duration.ofSeconds(30));
 
         return new PaymentIntentDto(paymentIntent.getClientSecret());
     }

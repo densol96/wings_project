@@ -18,7 +18,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${roboto.className} min-h-screen flex flex-col`}>
-        <Suspense fallback={<Spinner />}>{children}</Suspense>
+        {/* <Suspense fallback={<Spinner />}>{children}</Suspense> */}
+        {children}
       </body>
     </html>
   );
