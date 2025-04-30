@@ -1,29 +1,30 @@
 package lv.wings.service;
 
-import java.net.Authenticator;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
 
-import lv.wings.config.security.MyUserDetailsMenager;
-import lv.wings.model.security.MyAuthority;
-import lv.wings.model.security.MyUser;
+import lv.wings.config.security.MyUserDetails;
+import lv.wings.dto.request.users.LoginDto;
+import lv.wings.dto.request.users.NewUserDto;
+import lv.wings.dto.response.users.AuthResponseDto;
+import lv.wings.model.security.User;
+import lv.wings.repo.UserRepository;
 import lv.wings.repo.security.IMyAuthorityRepo;
-import lv.wings.repo.security.IMyUserRepo;
-// import lv.wings.responses.AuthResponse;
 
 @Service
 public class AuthService {
 
-   private final IMyUserRepo userRepo;
+   private final UserRepository userRepo;
    private final IMyAuthorityRepo authorityRepo;
    private final JwtService jwtService;
    private final PasswordEncoder passwordEncoder;
    private final AuthenticationManager authManager;
 
-   public AuthService(IMyUserRepo userRepo, IMyAuthorityRepo authorityRepo,
+   public AuthService(UserRepository userRepo, IMyAuthorityRepo authorityRepo,
          JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authManager) {
       this.userRepo = userRepo;
       this.authorityRepo = authorityRepo;
@@ -32,28 +33,23 @@ public class AuthService {
       this.authManager = authManager;
    }
 
-   // public AuthResponse resgister(MyUser request) {
-   // MyUser user = new MyUser();
-   // MyAuthority authority = authorityRepo.findById(1).orElseThrow(); // ADMIN
-   // authority
+   public AuthResponseDto resgister(NewUserDto dto) {
+      User user = User.builder()
+            .email(dto.getEmail())
+            .username(dto.getUsername())
+            .password(passwordEncoder.encode(dto.getPassword())).build();
+      userRepo.save(user);
+      return new AuthResponseDto(jwtService.generateToken(user));
+   }
 
-   // user.setUsername(request.getUsername());
-   // user.setPassword(passwordEncoder.encode(request.getPassword()));
-   // user.setAuthority(authority);
+   public AuthResponseDto authenticate(LoginDto request) {
+      Authentication authentication = authManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                  request.getUsername(),
+                  request.getPassword()));
 
-   // userRepo.save(user);
-
-   // String token = jwtService.generateToken(user);
-   // return new AuthResponse(token);
-   // }
-
-   // public AuthResponse authenticate(MyUser request) {
-   // authManager.authenticate(
-   // new UsernamePasswordAuthenticationToken(request.getUsername(),
-   // request.getPassword()));
-   // MyUser user = userRepo.findByUsername(request.getUsername());
-   // String token = jwtService.generateToken(user);
-   // return new AuthResponse(token);
-   // }
+      MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
+      return new AuthResponseDto(jwtService.generateToken(userDetails.getUser()));
+   }
 
 }

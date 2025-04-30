@@ -25,32 +25,28 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lv.wings.auditing.ApplicationAuditAware;
 import lv.wings.filter.JwtAuthFilter;
-import lv.wings.model.security.MyUser;
+import lv.wings.model.security.User;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-	private final MyUserDetailsMenager userDetailManager;
+	private final MyUserDetailsService userDetailsService;
 	private final JwtAuthFilter jwtAuthFilter;
 
-	public SecurityConfig(MyUserDetailsMenager userDetailsMenager, JwtAuthFilter jwtAuthFilter) {
-		this.userDetailManager = userDetailsMenager;
+	public SecurityConfig(MyUserDetailsService userDetailsService, JwtAuthFilter jwtAuthFilter) {
+		this.userDetailsService = userDetailsService;
 		this.jwtAuthFilter = jwtAuthFilter;
-	}
-
-	public MyUserDetailsMenager getDetailsService() {
-		return new MyUserDetailsMenager();
 	}
 
 	@Bean
 	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
 		return http.csrf(csrf -> csrf.disable())
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/admin/**").hasAuthority("ADMIN")
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/admin/**").hasRole("BOSS")
 						.anyRequest().permitAll())
-				.userDetailsService(userDetailManager)
+				.userDetailsService(userDetailsService)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
@@ -80,7 +76,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public AuditorAware<MyUser> auditorAware() {
+	public AuditorAware<User> auditorAware() {
 		return new ApplicationAuditAware();
 	}
 

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -31,7 +32,7 @@ import lv.wings.exception.other.AlreadySubscribedException;
 import lv.wings.exception.payment.CheckoutException;
 import lv.wings.exception.payment.WebhookException;
 import lv.wings.exception.validation.InvalidParameterException;
-import lv.wings.model.security.MyUser;
+import lv.wings.model.security.User;
 import lv.wings.service.LocaleService;
 
 @Slf4j
@@ -40,7 +41,7 @@ import lv.wings.service.LocaleService;
 public class GlobalExceptionHandler {
 
     private final LocaleService localeService;
-    private final AuditorAware<MyUser> auditorService;
+    private final AuditorAware<User> auditorService;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -53,7 +54,13 @@ public class GlobalExceptionHandler {
                 new InvalidParameterException(e.getName(), e.getValue().toString(), false));
     }
 
-
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<BasicErrorDto> handleBadCredentialsException(BadCredentialsException e) {
+        log.error("*** BadCredentialsException: {}.", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new BasicErrorDto(localeService.getMessage("error.bad_credentials")));
+    }
 
     @ExceptionHandler(InvalidParameterException.class)
     public ResponseEntity<BasicErrorDto> handleInvalidQueryParameterException(InvalidParameterException e) {
@@ -144,7 +151,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BasicErrorDto> handleMissingTranslationException(MissingTranslationException e) {
         log.error("*** MissingTranslationException: {}", e.getMessage());
 
-        Optional<MyUser> authenticatedUser = auditorService.getCurrentAuditor();
+        Optional<User> authenticatedUser = auditorService.getCurrentAuditor();
 
         // Add a check if the authenticated is not an admin / employee later (when implement it)
         if (authenticatedUser.isEmpty()) {

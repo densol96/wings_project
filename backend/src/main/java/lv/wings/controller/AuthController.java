@@ -1,9 +1,10 @@
 package lv.wings.controller;
 
 import org.springframework.web.bind.annotation.RestController;
-
-import lv.wings.model.security.MyUser;
-// import lv.wings.responses.AuthResponse;
+import jakarta.validation.Valid;
+import lv.wings.dto.request.users.LoginDto;
+import lv.wings.dto.request.users.NewUserDto;
+import lv.wings.dto.response.users.AuthResponseDto;
 import lv.wings.service.AuthService;
 
 import org.springframework.http.ResponseEntity;
@@ -19,14 +20,14 @@ public class AuthController {
         this.authService = authService;
     }
 
-    // @PostMapping("/register")
-    // public ResponseEntity<AuthResponse> register(@RequestBody MyUser request) {
-    // return ResponseEntity.ok(authService.resgister(request));
-    // }
+    @PostMapping("/register")
+    public ResponseEntity<AuthResponseDto> register(@Valid @RequestBody NewUserDto request) {
+        return ResponseEntity.ok(authService.resgister(request));
+    }
 
-    // @PostMapping("/login")
-    // public ResponseEntity<AuthResponse> login(@RequestBody MyUser request) {
-    // return ResponseEntity.ok(authService.authenticate(request));
-    // }
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponseDto> login(@Valid @RequestBody LoginDto request) {
+        return ResponseEntity.ok(authService.authenticate(request));
+    }
 
 }

@@ -1,31 +1,33 @@
 package lv.wings.config.security;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Getter;
-import lv.wings.model.security.MyUser;
+import lv.wings.model.security.User;
 
 @Getter
 public class MyUserDetails implements UserDetails {
 
-	private MyUser user;
+	private User user;
 
-	public MyUserDetails(MyUser inputUser) {
-		user = inputUser;
+	public MyUserDetails(User user) {
+		this.user = user;
 	}
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-
-		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-		authorities.add(new SimpleGrantedAuthority(user.getAuthority().getTitle()));
-
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		user.getRoles()
+				.forEach(role -> {
+					role.getPermissions().forEach(permission -> authorities.add(new SimpleGrantedAuthority(permission.getName().name())));
+					authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+				});
 		return authorities;
 	}
 
@@ -58,5 +60,4 @@ public class MyUserDetails implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
-
 }

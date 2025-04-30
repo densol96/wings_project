@@ -21,19 +21,18 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name="WingsAuthority")
+@Table(name = "WingsAuthority")
 public class MyAuthority {
-	
 	@Id
 	@Column(name = "AuthorityId")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Setter(value = AccessLevel.NONE)
 	private int authorityId;
-	
+
 	@Column(name = "Title")
 	@Pattern(regexp = "[A-Z]{4,7}")
 	private String title;
-	
+
 	@OneToMany(mappedBy = "authority")
 	@ToString.Exclude
 	private Collection<MyUser> users;
@@ -41,7 +40,4 @@ public class MyAuthority {
 	public MyAuthority(@Pattern(regexp = "[A-Z]{4,7}") String title) {
 		this.title = title;
 	}
-	
-	
-	
 }

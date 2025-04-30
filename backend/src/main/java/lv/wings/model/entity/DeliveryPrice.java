@@ -42,7 +42,7 @@ public class DeliveryPrice {
     private BigDecimal price;
 
     @OneToMany
-    List<Order> orders = new ArrayList<>();
+    private List<Order> orders = new ArrayList<>();
 
     @Builder
     public DeliveryPrice(Country country, BigDecimal price, DeliveryType deliveryType) {

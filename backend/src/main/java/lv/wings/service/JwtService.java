@@ -1,6 +1,7 @@
 package lv.wings.service;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Function;
 
 import javax.crypto.SecretKey;
@@ -12,9 +13,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lv.wings.model.security.MyUser;
+import lombok.extern.slf4j.Slf4j;
+import lv.wings.model.security.User;
 import org.springframework.beans.factory.annotation.Value;
 
+@Slf4j
 @Service
 public class JwtService {
 
@@ -31,7 +34,12 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
-        return extractClaim(token, Claims::getExpiration).before(new Date());
+        boolean isExpired = extractClaim(token, Claims::getExpiration).before(new Date());
+        /**
+         * Cannot remember right now whether parseSignedClaims checks the expiry date on its own. Wanna check this a bit later when the system is up..
+         */
+        log.info("TOKEN IS {}", isExpired ? "EXPIRED" : "VALID");
+        return isExpired;
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
@@ -41,21 +49,24 @@ public class JwtService {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .verifyWith(getSigningKey())
+                .verifyWith(getSigningKey()) // pointing to the encryption key
                 .build()
-                .parseSignedClaims(token)
+                .parseSignedClaims(token) // can throw Exceptions if the provided JWT is not valid
                 .getPayload();
-
     }
 
-    public String generateToken(MyUser user) {
-        String token = Jwts.builder()
-                .subject(user.getUsername())
+    public String generateToken(User user) {
+        return generateToken(Map.of(), user.getUsername());
+    }
+
+    public String generateToken(Map<String, Object> extraClaims, String subject) {
+        return Jwts.builder()
+                .claims(extraClaims)
+                .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * (24 * 60)))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 5)) // 5 minutes
                 .signWith(getSigningKey())
                 .compact();
-        return token;
     }
 
     public SecretKey getSigningKey() {
