@@ -2,7 +2,11 @@ package lv.wings.util;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.method.HandlerMethod;
+
 import lv.wings.annotation.AllowedSortFields;
 import lv.wings.exception.validation.InvalidIdException;
 import lv.wings.exception.validation.InvalidParameterException;
@@ -46,4 +50,9 @@ public class CustomValidator {
     public static void isValidId(Integer id) {
         isValidId("id", id);
     }
+
+    public static boolean userIsAllowedAccess(UserDetails user) {
+        return user.isEnabled() && user.isAccountNonExpired() && user.isAccountNonLocked() && user.isCredentialsNonExpired();
+    }
+
 }

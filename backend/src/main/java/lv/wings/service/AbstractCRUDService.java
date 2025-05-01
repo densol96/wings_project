@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
-import lombok.NonNull;
 import lv.wings.exception.entity.EntityNotFoundException;
 
 import java.util.List;
@@ -47,7 +46,7 @@ public abstract class AbstractCRUDService<T, ID> implements CRUDService<T, ID> {
     }
 
     @Override
-    public T create(T entity) {
+    public T persist(T entity) {
         return repository.save(entity);
     }
 

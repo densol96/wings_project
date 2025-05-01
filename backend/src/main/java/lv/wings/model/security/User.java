@@ -38,6 +38,21 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
+    private boolean isActive = true;
+
+    @Column(length = 45)
+    private String lastIpAddress;
+
+    private String lastUserAgent;
+
+    private int loginAttempts;
+
     @ManyToMany
     @JoinTable(
             name = "users_roles",

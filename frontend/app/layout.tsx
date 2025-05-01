@@ -17,7 +17,7 @@ const roboto = Roboto({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${roboto.className} min-h-screen flex flex-col`}>
+      <body className={`${roboto.className} min-h-screen flex flex-col border-2 border-green-700`}>
         {/* <Suspense fallback={<Spinner />}>{children}</Suspense> */}
         {children}
       </body>

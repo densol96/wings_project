@@ -10,6 +10,7 @@ import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -60,6 +61,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new BasicErrorDto(localeService.getMessage("error.bad_credentials")));
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<BasicErrorDto> handleDisabledException(DisabledException e) {
+        log.error("*** DisabledException: {}.", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new BasicErrorDto(localeService.getMessage("error.disabled")));
     }
 
     @ExceptionHandler(InvalidParameterException.class)

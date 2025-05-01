@@ -24,7 +24,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lv.wings.auditing.ApplicationAuditAware;
-import lv.wings.filter.JwtAuthFilter;
 import lv.wings.model.security.User;
 
 @Configuration

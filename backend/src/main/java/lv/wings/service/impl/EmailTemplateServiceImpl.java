@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lv.wings.enums.LocaleCode;
 import lv.wings.model.entity.Order;
 import lv.wings.model.entity.OrderItem;
+import lv.wings.model.security.User;
 import lv.wings.service.DeliveryTypeService;
 import lv.wings.service.EmailTemplateService;
 import lv.wings.service.LocaleService;
@@ -40,7 +41,33 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
                     .replace("{{items}}", tableRows)
                     .replace("{{total}}", total);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to generate email HTML", e);
+            throw new RuntimeException("Failed to generateSuccessfulPaymentEmailHtml", e);
+        }
+    }
+
+    @Override
+    public String generateLoginAttemptsExceededEmailHtml(User user, String requestUnlockUrl) {
+        try {
+            String template = loadTemplate("/templates/account-locked.html");
+
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{requestUnlockUrl}}", requestUnlockUrl);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateLoginAttemptsExceededEmailHtml", e);
+        }
+    }
+
+    @Override
+    public String generateUnlockAccountEmailHtml(User user, String unlockUrl) {
+        try {
+            String template = loadTemplate("/templates/unlock-account.html");
+
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{unlockUrl}}", unlockUrl);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateUnlockAccountEmailHtml", e);
         }
     }
 
@@ -81,4 +108,6 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
             throw new RuntimeException("Failed to generate email HTML", e);
         }
     }
+
+
 }

@@ -21,7 +21,7 @@ public interface CRUDService<T, ID> {
      */
     T findById(ID id);
 
-    T create(T entity);
+    T persist(T entity);
 
     void deleteById(ID id);
 }

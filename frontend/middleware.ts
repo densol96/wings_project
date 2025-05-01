@@ -5,7 +5,7 @@ import { i18n } from "@/i18n-config";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (pathname.startsWith("/api")) {
+  if (pathname.startsWith("/api") || pathname.startsWith("/admin")) {
     return NextResponse.next();
   }
 

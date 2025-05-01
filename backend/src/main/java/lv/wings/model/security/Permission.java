@@ -13,15 +13,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lv.wings.enums.PermissionName;
-import lv.wings.model.base.TranslatableEntity;
-import lv.wings.model.translation.Permissiontranslation;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @Entity
 @Table(name = "permissions")
-public class Permission extends TranslatableEntity<Permissiontranslation> {
+public class Permission {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(value = AccessLevel.NONE)

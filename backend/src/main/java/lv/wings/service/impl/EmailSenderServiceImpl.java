@@ -9,6 +9,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.model.entity.Order;
+import lv.wings.model.security.User;
 import lv.wings.service.EmailSenderService;
 import lv.wings.service.EmailTemplateService;
 import lv.wings.service.LocaleService;
@@ -48,18 +49,35 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     @Override
     public void sendOrderSuccessEmail(Order order) {
         String html = emailTemplateService.generateSuccessfulPaymentEmailHtml(order);
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-            helper.setTo(order.getCustomer().getEmail());
-            helper.setSubject(localService.getMessage("email.success.subject", new Object[] {order.getId()}));
-            helper.setText(html, true);
-            helper.setFrom("noreply@yourdomain.com");
-            mailSender.send(mimeMessage);
-            log.info("sendOrderSuccessEmail completed successfully!");
-        } catch (Exception e) {
-            log.error("MimeMessageException -> Unable to sendOrderSuccessEmail.");
-        }
-
+        String subject = localService.getMessage("email.success.subject", new Object[] {order.getId()});
+        sendHtmlEmail(order.getCustomer().getEmail(), subject, html);
     }
+
+    @Override
+    public void sendLoginAttemptsExceeded(User user, String requestUnlockUrl) {
+        String html = emailTemplateService.generateLoginAttemptsExceededEmailHtml(user, requestUnlockUrl);
+        sendHtmlEmail(user.getEmail(), "Darba konta bloķēšana – Sparni.lv", html);
+    }
+
+    @Override
+    public void sendEmailToUnlockAccount(User user, String unlockUrl) {
+        String html = emailTemplateService.generateUnlockAccountEmailHtml(user, unlockUrl);
+        sendHtmlEmail(user.getEmail(), "Darba konta atbloķēšana – Sparni.lv", html);
+    }
+
+
+    private void sendHtmlEmail(String to, String subject, String html) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(html, true);
+            helper.setFrom(fromEmail);
+            mailSender.send(message);
+        } catch (Exception e) {
+            log.error("Unable to send email to {} with subject '{}'", to, subject, e);
+        }
+    }
+
 }

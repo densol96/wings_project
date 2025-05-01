@@ -95,7 +95,7 @@ public class PaymentServiceImpl implements PaymentService {
                                 .build();
                     }
                     product.setAmount(product.getAmount() - item.getAmount());
-                    productService.create(product);
+                    productService.persist(product);
                     return product.getPrice().multiply(BigDecimal.valueOf(item.getAmount()));
                 })
                 // same as (a, b) -> a.add(b) according to docs: API Note:

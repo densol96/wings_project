@@ -102,7 +102,7 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
                 .total(total)
                 .locale(localService.getCurrentLocaleCode())
                 .build();
-        create(order);
+        this.persist(order);
 
         List<OrderItem> orderItems = orderInfo.getOrderItems().stream().map(dto -> {
             Product product = productService.findById(dto.getProductId());
