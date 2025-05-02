@@ -28,20 +28,6 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public boolean isValid(String token, UserDetails userDetails) {
-        String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
-    private boolean isTokenExpired(String token) {
-        boolean isExpired = extractClaim(token, Claims::getExpiration).before(new Date());
-        /**
-         * Cannot remember right now whether parseSignedClaims checks the expiry date on its own. Wanna check this a bit later when the system is up..
-         */
-        log.info("TOKEN IS {}", isExpired ? "EXPIRED" : "VALID");
-        return isExpired;
-    }
-
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
         Claims claims = extractAllClaims(token);
         return resolver.apply(claims);
@@ -64,7 +50,7 @@ public class JwtService {
                 .claims(extraClaims)
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 1)) // 1 minutes
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 1)) // 3 minutes
                 .signWith(getSigningKey())
                 .compact();
     }

@@ -1,5 +1,6 @@
 package lv.wings.exception;
 
+import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.transaction.TransactionSystemException;
@@ -30,8 +32,10 @@ import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.exception.other.AlreadySubscribedException;
+import lv.wings.exception.other.TokenNotFoundException;
 import lv.wings.exception.payment.CheckoutException;
 import lv.wings.exception.payment.WebhookException;
+import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.model.security.User;
 import lv.wings.service.LocaleService;
@@ -59,7 +63,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<BasicErrorDto> handleBadCredentialsException(BadCredentialsException e) {
         log.error("*** BadCredentialsException: {}.", e.getMessage());
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(new BasicErrorDto(localeService.getMessage("error.bad_credentials")));
     }
 
@@ -69,6 +73,21 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(new BasicErrorDto(localeService.getMessage("error.disabled")));
+    }
+
+    @ExceptionHandler(AuthenticationCredentialsNotFoundException.class)
+    public ResponseEntity<BasicErrorDto> handleAuthRequired(AuthenticationCredentialsNotFoundException e) {
+        log.error("*** AuthenticationCredentialsNotFoundException: {}.", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(new BasicErrorDto(localeService.getMessage("error.unauthorized")));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<BasicErrorDto> handleAccessDenied() {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new BasicErrorDto(localeService.getMessage("error.forbidden")));
     }
 
     @ExceptionHandler(InvalidParameterException.class)
@@ -109,6 +128,21 @@ public class GlobalExceptionHandler {
                 .body(errors);
     }
 
+    @ExceptionHandler(InvalidFieldsException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidFieldsException(InvalidFieldsException e) {
+        log.error("*** InvalidFieldsException: {}", e.getMessage());
+
+        Map<String, String> localisedErrors = new HashMap<>();
+
+        e.getFieldErrors().forEach((key, value) -> {
+            localisedErrors.put(key, localeService.getMessage(value));
+        });
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(localisedErrors);
+    }
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<BasicErrorDto> handleMissingParams(MissingServletRequestParameterException e) {
         String name = e.getParameterName();
@@ -125,9 +159,20 @@ public class GlobalExceptionHandler {
         log.error("*** AlreadySubscribedException: {}", e.getMessage());
 
         return ResponseEntity
-                .badRequest()
+                .status(HttpStatus.CONFLICT)
                 .body(BasicErrorDto.builder().message(localeService.getMessage("newslettersubscriber.already-subscribed")).build());
     }
+
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<BasicErrorDto> handleTokenNotFoundException(TokenNotFoundException e) {
+        log.error("*** TokenNotFoundException: {}", e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(BasicErrorDto.builder().message(localeService.getMessage("token.not-found")).build());
+    }
+
+
 
     /**
      * Hibernate actually checks Bean Validation annotations during .save but wraps ConstraintViolationException inside TransactionSystemException class.
@@ -211,8 +256,6 @@ public class GlobalExceptionHandler {
             return ResponseEntity.internalServerError().body(errorResponse);
         return ResponseEntity.badRequest().body(errorResponse);
     }
-
-
 
     @ExceptionHandler(WebhookException.class)
     public ResponseEntity<String> handleWebhookException(Exception e) {

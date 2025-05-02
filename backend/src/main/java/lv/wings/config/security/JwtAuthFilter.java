@@ -14,10 +14,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import lv.wings.enums.SecurityEventType;
-import lv.wings.model.security.MyUser;
 import lv.wings.model.security.User;
 import lv.wings.service.JwtService;
 import lv.wings.service.SecurityEventService;
@@ -42,29 +43,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
-
+        User currentUser = null;
         try {
             String token = authHeader.substring(7);
-            String username = jwtService.extractUsername(token);
+            String username = jwtService.extractUsername(token); // will throw an error if not valid or expired!
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username); // will throw an error if no such a user anymore
                 if (CustomValidator.userIsAllowedAccess(userDetails)) {
-                    User currentUser = ((MyUserDetails) userDetails).getUser();
-                    if (jwtService.isValid(token, userDetails)) {
-                        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
-                                null, userDetails.getAuthorities());
-                        authToken.setDetails(
-                                new WebAuthenticationDetailsSource().buildDetails(request));
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                        securirtyEventService.doTheSessionAuditIfRequired(currentUser);
-                    } else {
-                        securirtyEventService.handleSecurityEvent(currentUser, SecurityEventType.TOKEN_INVALID, null);
-                    }
+                    currentUser = ((MyUserDetails) userDetails).getUser();
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails,
+                            null, userDetails.getAuthorities());
+                    authToken.setDetails(
+                            new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                    securirtyEventService.doTheSessionAuditIfRequired(currentUser);
                 }
-                // filterChain.doFilter(request, response);
             }
         } catch (Exception exception) {
-            log.error("Error during JWT authentication", exception);
+            log.error("Error during JWT authentication: {}", exception.getMessage());
+            if (currentUser != null) {
+                securirtyEventService.handleSecurityEvent(currentUser, SecurityEventType.TOKEN_INVALID, null);
+            }
         }
         filterChain.doFilter(request, response);
     }

@@ -7,13 +7,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.wings.config.security.UserSecurityService;
+import lv.wings.enums.RedisKeyType;
 import lv.wings.enums.SecurityEventType;
 import lv.wings.model.security.SecurityEvent;
 import lv.wings.model.security.User;
 import lv.wings.repo.SecurityEventRepository;
 import lv.wings.service.EmailSenderService;
 import lv.wings.service.SecurityEventService;
+import lv.wings.service.TokenStoreService;
 import lv.wings.service.UserService;
+import lv.wings.util.HashUtils;
 import lv.wings.util.RequestUtils;
 import lv.wings.util.UrlAssembler;
 
@@ -25,6 +29,8 @@ public class SecurityEventServiceImpl implements SecurityEventService {
     private final SecurityEventRepository securityEventRepository;
     private final UserService userService;
     private final EmailSenderService emailSenderService;
+    private final UserSecurityService userSecurityService;
+    private final TokenStoreService tokenStoreService;
 
     private final int MAX_LOGIN_ATTEMPTS = 5;
     private final int WORK_START_TIME = 8;
@@ -39,25 +45,51 @@ public class SecurityEventServiceImpl implements SecurityEventService {
 
         doConsoleLogging(user.getUsername(), ipAddress, userAgent, requestUri, type);
 
-        createAndSaveSecurityEvent(user, type, ipAddress, userAgent, requestUri, additionalInfo);
-
-        if (type == SecurityEventType.LOGIN_SUCCESS) {
-            user.setLoginAttempts(0);
-            doIpCheck(ipAddress, user);
-            doUserAgentCheck(userAgent, user);
-            doAfterHoursAccessCheck(user);
-        } else if (type == SecurityEventType.LOGIN_FAILED) {
-            user.setLoginAttempts(user.getLoginAttempts() + 1);
-            if (user.getLoginAttempts() >= MAX_LOGIN_ATTEMPTS) {
-                user.setActive(false);
-                emailSenderService.sendLoginAttemptsExceeded(user, UrlAssembler.getFullFrontendPath("/request-account-unlock"));
+        switch (type) {
+            case NEW_USER_REGISTERED -> {
+                try {
+                    String newUserUsername = user.getUsername();
+                    User adminUser = userSecurityService.getCurrentUserDetails().getUser(); // who is adding a new user
+                    additionalInfo = String.format(
+                            "New user username is %s\nJauna lietotāja lietotājvārds ir %s",
+                            newUserUsername,
+                            newUserUsername);
+                    user = adminUser;
+                } catch (Exception e) {
+                    log.warn("Unable to detect the admin who created a new user with the username of {}", user.getUsername());
+                }
             }
-        } else if (type == SecurityEventType.ACCESS_FROM_NEW_IP) {
-            user.setLastIpAddress(ipAddress);
-        } else if (type == SecurityEventType.UNUSUAL_USER_AGENT) {
-            user.setLastUserAgent(userAgent);
+
+            case LOGIN_SUCCESS -> {
+                user.setLoginAttempts(0);
+                doIpCheck(ipAddress, user);
+                doUserAgentCheck(userAgent, user);
+                doAfterHoursAccessCheck(user);
+            }
+
+            case LOGIN_FAILED -> {
+                user.setLoginAttempts(user.getLoginAttempts() + 1);
+                if (user.getLoginAttempts() >= MAX_LOGIN_ATTEMPTS) {
+                    user.setAccountLocked(true);
+                    String token = HashUtils.createRandomToken();
+                    String hashedToken = HashUtils.createTokenHash(token);
+                    tokenStoreService.storeToken(RedisKeyType.REQUEST_UNLOCK.buildKey(hashedToken), user.getId());
+                    emailSenderService.sendLoginAttemptsExceeded(
+                            user,
+                            UrlAssembler.getFullFrontendPath("/request-account-unlock/" + token));
+                }
+            }
+
+            case ACCESS_FROM_NEW_IP -> user.setLastIpAddress(ipAddress);
+
+            case UNUSUAL_USER_AGENT -> user.setLastUserAgent(userAgent);
+
+            case AFTER_HOURS_ACCESS, PASSWORD_CHANGED, TOKEN_INVALID -> {
+                // No action required beyond logging
+            }
         }
         userService.persist(user);
+        createAndSaveSecurityEvent(user, type, ipAddress, userAgent, requestUri, additionalInfo);
         /*
          * Other possible SecurityEventType: AFTER_HOURS_ACCESS, PASSWORD_CHANGED, TOKEN_INVALID
          * Do not require anything else for now apart from the logging above..

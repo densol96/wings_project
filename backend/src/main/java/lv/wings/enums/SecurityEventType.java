@@ -1,7 +1,7 @@
 package lv.wings.enums;
 
 public enum SecurityEventType {
-
+    NEW_USER_REGISTERED("Reģistrācija veiksmīga", "User successfully registered"), //
     LOGIN_SUCCESS("Veiksmīga pieteikšanās", "Successful login"), //
     LOGIN_FAILED("Neveiksmīga pieteikšanās", "Failed login"), //
     TOKEN_INVALID("Nederīgs tokens", "Invalid token"), //

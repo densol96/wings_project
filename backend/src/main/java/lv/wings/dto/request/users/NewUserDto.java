@@ -2,6 +2,7 @@ package lv.wings.dto.request.users;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,4 +21,16 @@ public class NewUserDto {
     @NotBlank(message = "{password.required}")
     @Size(min = 6, max = 50, message = "{password.size}")
     private String password;
+
+    @NotBlank(message = "{firstName.required}")
+    @Pattern(
+            regexp = "^[A-Za-zĀ-ž\\-\\s]{2,50}$",
+            message = "{firstName.invalid}")
+    private String firstName;
+
+    @NotBlank(message = "{lastName.required}")
+    @Pattern(
+            regexp = "^[A-Za-zĀ-ž\\-\\s]{2,50}$",
+            message = "{lastName.invalid}")
+    private String lastName;
 }

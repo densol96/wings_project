@@ -29,7 +29,7 @@ public class Role {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Permission> permissions;
 
     @ManyToMany(mappedBy = "roles")

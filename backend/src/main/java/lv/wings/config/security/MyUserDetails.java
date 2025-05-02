@@ -42,12 +42,17 @@ public class MyUserDetails implements UserDetails {
 	}
 
 	@Override
-	public boolean isAccountNonExpired() {
-		return true;
+	public boolean isAccountNonLocked() {
+		return !user.isAccountLocked();
 	}
 
 	@Override
-	public boolean isAccountNonLocked() {
+	public boolean isEnabled() {
+		return !user.isAccountBanned();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
 		return true;
 	}
 
@@ -56,8 +61,4 @@ public class MyUserDetails implements UserDetails {
 		return true;
 	}
 
-	@Override
-	public boolean isEnabled() {
-		return user.isActive();
-	}
 }
