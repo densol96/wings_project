@@ -11,4 +11,6 @@ public interface EmailSenderService {
     void sendLoginAttemptsExceeded(User user, String unlockUrl);
 
     void sendEmailToUnlockAccount(User user, String unlockUrl);
+
+    void sendPasswordResetToken(User user, String resetUrl);
 }

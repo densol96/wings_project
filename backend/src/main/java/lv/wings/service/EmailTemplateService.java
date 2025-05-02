@@ -9,4 +9,6 @@ public interface EmailTemplateService {
     String generateLoginAttemptsExceededEmailHtml(User user, String unlockUrl);
 
     String generateUnlockAccountEmailHtml(User user, String unlockUrl);
+
+    String generateResetPasswordEmailHtml(User user, String resetUrl);
 }

@@ -71,6 +71,19 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
         }
     }
 
+    @Override
+    public String generateResetPasswordEmailHtml(User user, String resetUrl) {
+        try {
+            String template = loadTemplate("/templates/reset-password.html");
+
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{resetUrl}}", resetUrl);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateUnlockAccountEmailHtml", e);
+        }
+    }
+
     private String loadTemplate(String path) throws Exception {
         InputStream stream = getClass().getResourceAsStream(path);
         if (stream == null) {
@@ -108,6 +121,4 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
             throw new RuntimeException("Failed to generate email HTML", e);
         }
     }
-
-
 }

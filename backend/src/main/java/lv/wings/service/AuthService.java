@@ -2,6 +2,7 @@ package lv.wings.service;
 
 import lv.wings.dto.request.users.LoginDto;
 import lv.wings.dto.request.users.NewUserDto;
+import lv.wings.dto.request.users.ResetPasswordDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.users.AuthResponseDto;
 import lv.wings.dto.response.users.UserSessionInfoDto;
@@ -16,4 +17,8 @@ public interface AuthService {
     BasicMessageDto requestToUnlockAccount(String token);
 
     BasicMessageDto unlockAccount(String token);
+
+    BasicMessageDto requestToResetPassword(String email);
+
+    BasicMessageDto resetPassword(String resetPasswordToken, ResetPasswordDto dto);
 }

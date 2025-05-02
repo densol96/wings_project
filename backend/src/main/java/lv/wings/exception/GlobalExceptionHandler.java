@@ -37,6 +37,7 @@ import lv.wings.exception.payment.CheckoutException;
 import lv.wings.exception.payment.WebhookException;
 import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.exception.validation.InvalidParameterException;
+import lv.wings.exception.validation.PasswordsMismatchException;
 import lv.wings.model.security.User;
 import lv.wings.service.LocaleService;
 
@@ -161,6 +162,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(BasicErrorDto.builder().message(localeService.getMessage("newslettersubscriber.already-subscribed")).build());
+    }
+
+
+    @ExceptionHandler(PasswordsMismatchException.class)
+    public ResponseEntity<BasicErrorDto> handlePasswordsMismatchException(PasswordsMismatchException e) {
+        log.error("*** PasswordsMismatchException: {}", e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(BasicErrorDto.builder().message(localeService.getMessage("passwords.mismatch")).build());
     }
 
     @ExceptionHandler(TokenNotFoundException.class)

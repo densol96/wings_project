@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.dto.request.users.LoginDto;
 import lv.wings.dto.request.users.NewUserDto;
+import lv.wings.dto.request.users.ResetPasswordDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.users.AuthResponseDto;
 import lv.wings.dto.response.users.UserSessionInfoDto;
@@ -51,5 +52,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.unlockAccount(token));
     }
 
+    @GetMapping("/request-reset-password/{username}")
+    public ResponseEntity<BasicMessageDto> requestToResetPassword(@PathVariable String username) {
+        return ResponseEntity.ok(authService.requestToResetPassword(username));
+    }
 
+    @PostMapping("/reset-password/{token}")
+    public ResponseEntity<BasicMessageDto> resetPassword(@PathVariable String token, @Valid @RequestBody ResetPasswordDto dto) {
+        return ResponseEntity.ok(authService.resetPassword(token, dto));
+    }
 }

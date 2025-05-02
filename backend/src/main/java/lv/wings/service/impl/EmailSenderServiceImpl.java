@@ -65,6 +65,12 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         sendHtmlEmail(user.getEmail(), "Darba konta atbloķēšana – Sparni.lv", html);
     }
 
+    @Override
+    public void sendPasswordResetToken(User user, String resetUrl) {
+        String html = emailTemplateService.generateResetPasswordEmailHtml(user, resetUrl);
+        sendHtmlEmail(user.getEmail(), "Pieprasījums paroles maiņai – Sparni.lv", html);
+    }
+
 
     private void sendHtmlEmail(String to, String subject, String html) {
         try {
@@ -77,6 +83,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             mailSender.send(message);
         } catch (Exception e) {
             log.error("Unable to send email to {} with subject '{}'", to, subject, e);
+            throw new RuntimeException(e.getMessage()); // will be ahndled as a procedural exception
         }
     }
 
