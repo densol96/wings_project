@@ -13,4 +13,8 @@ public interface EmailSenderService {
     void sendEmailToUnlockAccount(User user, String unlockUrl);
 
     void sendPasswordResetToken(User user, String resetUrl);
+
+    void sendEmailChangeNotification(User user, String oldEmail, String newEmail);
+
+    void sendPasswordChangeNotification(User user);
 }

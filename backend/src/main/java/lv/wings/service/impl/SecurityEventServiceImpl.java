@@ -69,7 +69,7 @@ public class SecurityEventServiceImpl implements SecurityEventService {
 
             case LOGIN_FAILED -> {
                 user.setLoginAttempts(user.getLoginAttempts() + 1);
-                if (user.getLoginAttempts() >= MAX_LOGIN_ATTEMPTS) {
+                if (user.getLoginAttempts() >= MAX_LOGIN_ATTEMPTS && !user.isAccountLocked() && !user.isAccountBanned()) {
                     user.setAccountLocked(true);
                     String token = HashUtils.createRandomToken();
                     String hashedToken = HashUtils.createTokenHash(token);
@@ -77,21 +77,29 @@ public class SecurityEventServiceImpl implements SecurityEventService {
                     emailSenderService.sendLoginAttemptsExceeded(
                             user,
                             UrlAssembler.getFullFrontendPath("/request-account-unlock/" + token));
+                    handleSecurityEvent(user, SecurityEventType.ACCOUNT_LOCKED, null);
                 }
             }
 
             case ACCESS_FROM_NEW_IP -> user.setLastIpAddress(ipAddress);
 
             case UNUSUAL_USER_AGENT -> user.setLastUserAgent(userAgent);
-
-            case AFTER_HOURS_ACCESS, PASSWORD_CHANGED, TOKEN_INVALID -> {
-                // No action required beyond logging
-            }
         }
-        userService.persist(user);
+        if (type == SecurityEventType.LOGIN_SUCCESS || type == SecurityEventType.LOGIN_FAILED || type == SecurityEventType.ACCESS_FROM_NEW_IP
+                || type == SecurityEventType.UNUSUAL_USER_AGENT) {
+            userService.persist(user);
+        }
+
         createAndSaveSecurityEvent(user, type, ipAddress, userAgent, requestUri, additionalInfo);
         /*
-         * Other possible SecurityEventType: AFTER_HOURS_ACCESS, PASSWORD_CHANGED, TOKEN_INVALID
+         * Other possible SecurityEventType:
+         * PASSWORD_CHANGED,
+         * AFTER_HOURS_ACCESS,
+         * PASSWORD_CHANGED,
+         * ACCOUNT_LOCKED,
+         * ACCOUNT_UNLOCKED,
+         * ACCOUNT_BANNED,
+         * ACCOUNT_UNBANNED
          * Do not require anything else for now apart from the logging above..
          */
     }

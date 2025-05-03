@@ -3,7 +3,6 @@ package lv.wings.util;
 import java.util.Arrays;
 import java.util.List;
 
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.method.HandlerMethod;
 

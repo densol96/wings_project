@@ -61,9 +61,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         } catch (Exception exception) {
             log.error("Error during JWT authentication: {}", exception.getMessage());
-            if (currentUser != null) {
-                securirtyEventService.handleSecurityEvent(currentUser, SecurityEventType.TOKEN_INVALID, null);
-            }
         }
         filterChain.doFilter(request, response);
     }

@@ -120,7 +120,7 @@ public class SparniProjectApplication {
 		return new CommandLineRunner() {
 			@Override
 			public void run(String... args) throws Exception {
-				log.info("CommandLineRunner is initiated...");
+				log.info("CommandLineRunner is initiated..");
 				// DeliveryType deliveryType1 = new DeliveryType("Piegades Veids1",
 				// "Apraksts1");
 				// DeliveryType deliveryType2 = new DeliveryType("Piegades Veids2",

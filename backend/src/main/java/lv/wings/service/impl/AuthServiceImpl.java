@@ -5,10 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.data.domain.AuditorAware;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,9 +15,12 @@ import org.springframework.security.core.AuthenticationException;
 
 import lv.wings.config.security.MyUserDetails;
 import lv.wings.config.security.UserSecurityService;
+import lv.wings.dto.request.users.EmailDto;
 import lv.wings.dto.request.users.LoginDto;
 import lv.wings.dto.request.users.NewUserDto;
+import lv.wings.dto.request.users.PasswordDto;
 import lv.wings.dto.request.users.ResetPasswordDto;
+import lv.wings.dto.request.users.UsernameDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.users.AuthResponseDto;
 import lv.wings.dto.response.users.UserSessionInfoDto;
@@ -121,13 +121,15 @@ public class AuthServiceImpl implements AuthService {
    public BasicMessageDto unlockAccount(String token) {
       User user = parseTokenAndExtractUser(token, RedisKeyType.ACCOUNT_UNLOCK);
       user.setAccountLocked(false);
+      user.setLoginAttempts(0);
       userRepo.save(user);
+      securirtyEventService.handleSecurityEvent(user, SecurityEventType.ACCOUNT_UNLOCKED, null);
       return new BasicMessageDto(localeService.getMessage("user.unlocked"));
    }
 
    @Override
-   public BasicMessageDto requestToResetPassword(String username) {
-      userRepo.findByUsername(username).ifPresent(user -> {
+   public BasicMessageDto requestToResetPassword(UsernameDto usernameDto) {
+      userRepo.findByUsername(usernameDto.getUsername()).ifPresent(user -> {
          String randomToken = HashUtils.createRandomToken();
          String hashedRandomToken = HashUtils.createTokenHash(randomToken);
          tokenStoreService.storeToken(RedisKeyType.PASSWORD_RESET.buildKey(hashedRandomToken), user.getId(), Duration.ofMinutes(5));
@@ -144,7 +146,30 @@ public class AuthServiceImpl implements AuthService {
       User user = parseTokenAndExtractUser(resetPasswordToken, RedisKeyType.PASSWORD_RESET);
       user.setPassword(passwordEncoder.encode(dto.getPassword()));
       userRepo.save(user);
+      securirtyEventService.handleSecurityEvent(user, SecurityEventType.PASSWORD_CHANGED, null);
       return new BasicMessageDto(localeService.getMessage("password-reset.successfull"));
+   }
+
+   @Override
+   public BasicMessageDto changeEmail(EmailDto emailDto) {
+      User user = userSecurityService.getCurrentUserDetails().getUser();
+      String oldEmail = user.getEmail();
+      user.setEmail(emailDto.getEmail());
+      userRepo.save(user);
+      emailSenderService.sendEmailChangeNotification(user, oldEmail, user.getEmail());
+      securirtyEventService.handleSecurityEvent(user, SecurityEventType.EMAIL_CHANGED, null);
+      return new BasicMessageDto(localeService.getMessage("email-change.successfull"));
+   }
+
+   @Override
+   public BasicMessageDto changePassword(PasswordDto dto) {
+      User user = userSecurityService.getCurrentUserDetails().getUser();
+      validateChangePasswordInput(dto, user);
+      user.setPassword(passwordEncoder.encode(dto.getPassword()));
+      userRepo.save(user);
+      emailSenderService.sendPasswordChangeNotification(user);
+      securirtyEventService.handleSecurityEvent(user, SecurityEventType.PASSWORD_CHANGED, null);
+      return new BasicMessageDto(localeService.getMessage("password-change.successfull"));
    }
 
    private User parseTokenAndExtractUser(String token, RedisKeyType redisKeyType) {
@@ -159,6 +184,18 @@ public class AuthServiceImpl implements AuthService {
       return user;
    }
 
+   private void validateChangePasswordInput(PasswordDto dto, User user) {
+      Map<String, String> takenFields = new HashMap<>();
+      if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+         takenFields.put("password", "error.password");
+      }
+      if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+         takenFields.put("passwordConfirm", "passwords.mismatch");
+      }
+      if (!takenFields.isEmpty())
+         throw new InvalidFieldsException(takenFields);
+   }
+
    private void validateRegisterInput(NewUserDto dto) {
       Map<String, String> takenFields = new HashMap<>();
 
@@ -168,6 +205,10 @@ public class AuthServiceImpl implements AuthService {
 
       if (userRepo.existsByUsername(dto.getUsername())) {
          takenFields.put("username", "username.taken");
+      }
+
+      if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+         takenFields.put("passwordConfirm", "passwords.mismatch");
       }
 
       if (!takenFields.isEmpty()) {

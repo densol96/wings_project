@@ -1,17 +1,14 @@
-package lv.wings.dto.request;
+package lv.wings.dto.request.users;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 @Getter
 @Setter
-@NoArgsConstructor
-public class NewsletterRequestDto {
-    @NotBlank(message = "{email.required}")
+public class EmailDto {
     @Email(message = "{email.invalid}")
+    @NotBlank(message = "{email.required}")
     private String email;
 }

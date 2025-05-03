@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -71,6 +72,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<BasicErrorDto> handleDisabledException(DisabledException e) {
         log.error("*** DisabledException: {}.", e.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(new BasicErrorDto(localeService.getMessage("error.disabled")));
+    }
+
+    @ExceptionHandler(LockedException.class)
+    public ResponseEntity<BasicErrorDto> handleLockedException(LockedException e) {
+        log.error("*** LockedException: {}.", e.getMessage());
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
                 .body(new BasicErrorDto(localeService.getMessage("error.disabled")));

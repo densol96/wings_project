@@ -56,21 +56,33 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     @Override
     public void sendLoginAttemptsExceeded(User user, String requestUnlockUrl) {
         String html = emailTemplateService.generateLoginAttemptsExceededEmailHtml(user, requestUnlockUrl);
-        sendHtmlEmail(user.getEmail(), "Darba konta bloķēšana – Sparni.lv", html);
+        sendHtmlEmail(user.getEmail(), "Darba konta bloķēšana", html);
     }
 
     @Override
     public void sendEmailToUnlockAccount(User user, String unlockUrl) {
         String html = emailTemplateService.generateUnlockAccountEmailHtml(user, unlockUrl);
-        sendHtmlEmail(user.getEmail(), "Darba konta atbloķēšana – Sparni.lv", html);
+        sendHtmlEmail(user.getEmail(), "Darba konta atbloķēšana", html);
     }
 
     @Override
     public void sendPasswordResetToken(User user, String resetUrl) {
         String html = emailTemplateService.generateResetPasswordEmailHtml(user, resetUrl);
-        sendHtmlEmail(user.getEmail(), "Pieprasījums paroles maiņai – Sparni.lv", html);
+        sendHtmlEmail(user.getEmail(), "Pieprasījums paroles maiņai", html);
     }
 
+    @Override
+    public void sendEmailChangeNotification(User user, String oldEmail, String newEmail) {
+        String html = emailTemplateService.generateEmailWasChangedHtml(user, oldEmail, newEmail);
+        sendHtmlEmail(oldEmail, "E-pasta adreses maiņa", html);
+        sendHtmlEmail(newEmail, "E-pasta adreses maiņa", html);
+    }
+
+    @Override
+    public void sendPasswordChangeNotification(User user) {
+        String html = emailTemplateService.generatePasswordWasChangedHtml(user);
+        sendHtmlEmail(user.getEmail(), "Parole tika nomainīta", html);
+    }
 
     private void sendHtmlEmail(String to, String subject, String html) {
         try {
@@ -86,5 +98,6 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             throw new RuntimeException(e.getMessage()); // will be ahndled as a procedural exception
         }
     }
+
 
 }

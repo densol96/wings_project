@@ -84,6 +84,31 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
         }
     }
 
+    @Override
+    public String generateEmailWasChangedHtml(User user, String oldEmail, String newEmail) {
+        try {
+            String template = loadTemplate("/templates/email-changed.html");
+
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{oldEmail}}", oldEmail)
+                    .replace("{{newEmail}}", newEmail);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateUnlockAccountEmailHtml", e);
+        }
+    }
+
+    @Override
+    public String generatePasswordWasChangedHtml(User user) {
+        try {
+            String template = loadTemplate("/templates/password-changed.html");
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateUnlockAccountEmailHtml", e);
+        }
+    }
+
     private String loadTemplate(String path) throws Exception {
         InputStream stream = getClass().getResourceAsStream(path);
         if (stream == null) {
@@ -121,4 +146,6 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
             throw new RuntimeException("Failed to generate email HTML", e);
         }
     }
+
+
 }

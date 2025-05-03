@@ -11,4 +11,8 @@ public interface EmailTemplateService {
     String generateUnlockAccountEmailHtml(User user, String unlockUrl);
 
     String generateResetPasswordEmailHtml(User user, String resetUrl);
+
+    String generateEmailWasChangedHtml(User user, String oldEmail, String newEmail);
+
+    String generatePasswordWasChangedHtml(User user);
 }
