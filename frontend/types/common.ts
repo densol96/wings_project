@@ -77,3 +77,13 @@ export type ErrorData<T> = {
 export type BasicErrorDto = {
   message: string;
 };
+
+export type ButtonProps = {
+  children: React.ReactNode;
+  className?: string;
+  size?: "sm" | "md" | "lg";
+  color?: "primary" | "transparent" | "green";
+  onClick?: () => Promise<any> | void;
+  disabled?: boolean;
+  type?: "button" | "submit" | "reset";
+};

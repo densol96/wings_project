@@ -1,9 +1,9 @@
-import React from "react";
+type Props = {
+  children: React.ReactNode;
+};
 
-type Props = {};
-
-const Layout = ({}: Props) => {
-  return <div>DASHBOARD LAYOUT!</div>;
+const Layout = ({ children }: Props) => {
+  return <div>{children}</div>;
 };
 
 export default Layout;

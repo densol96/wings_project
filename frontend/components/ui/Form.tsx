@@ -5,11 +5,16 @@ type Props = {
   children: ReactNode;
   cols?: number;
   className?: string;
-  onSubmit?: (args: any) => void;
+  action?: (payload: FormData) => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
-const Form = ({ children, cols = 1, className }: Props) => {
-  return <form className={cn(`grid md:grid-cols-${cols} gap-6`, className)}>{children}</form>;
+const Form = ({ children, cols = 1, className, action, onSubmit }: Props) => {
+  return (
+    <form {...(action ? { action } : { onSubmit })} className={cn(`grid md:grid-cols-${cols} gap-6`, className)}>
+      {children}
+    </form>
+  );
 };
 
 export default Form;

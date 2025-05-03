@@ -10,7 +10,7 @@ import { Header, Footer, NavSidebar } from "@/components/shared";
 import TestBtn from "./TestBtn";
 
 import dynamic from "next/dynamic";
-import { Toaster, ToastOptions } from "react-hot-toast";
+// import { Toaster, ToastOptions } from "react-hot-toast";
 import Scroll from "@/components/shared/Scroll";
 import { LangProvider } from "@/context/LangContext";
 import { SidebarProvider } from "@/context/SidebarContext";
@@ -63,20 +63,20 @@ type Props = PageProps & {
   children: React.ReactNode;
 };
 
-const toasterSettings: ToastOptions = {
-  success: {
-    duration: 5000,
-  },
-  error: {
-    duration: 5000,
-  },
-  style: {
-    fontSize: "16px",
-    maxWidth: "400px",
-    padding: "16px 24px",
-    textAlign: "center",
-  },
-};
+// const toasterSettings: ToastOptions = {
+//   success: {
+//     duration: 5000,
+//   },
+//   error: {
+//     duration: 5000,
+//   },
+//   style: {
+//     fontSize: "16px",
+//     maxWidth: "400px",
+//     padding: "16px 24px",
+//     textAlign: "center",
+//   },
+// };
 
 const RootLayout = async ({ children, params: { lang } }: Props) => {
   const dict = await getDictionary(lang);
@@ -96,7 +96,7 @@ const RootLayout = async ({ children, params: { lang } }: Props) => {
         </CartProvider>
         <Footer footerDictionary={dict.footer} />
         <CookiesPopup dict={dict.cookiesPopup} />
-        <Toaster position="top-center" gutter={12} containerStyle={{ margin: "8px" }} toastOptions={toasterSettings} />
+        {/* <Toaster position="top-center" gutter={12} containerStyle={{ margin: "8px" }} toastOptions={toasterSettings} /> */}
       </ReactQueryProvider>
       {/* </body> */}
       {/* </html> */}

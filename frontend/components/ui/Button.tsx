@@ -1,15 +1,7 @@
 "use client";
 
+import { ButtonProps } from "@/types";
 import { cn } from "@/utils";
-
-type Props = {
-  children: React.ReactNode;
-  className?: string;
-  size?: "sm" | "md" | "lg"; // add more as neeeded
-  color?: "primary" | "transparent" | "green";
-  onClick?: () => Promise<any> | void;
-  disabled?: boolean;
-};
 
 const sizes = {
   sm: "px-2",
@@ -23,7 +15,7 @@ const colors = {
   green: "bg-green-500 text-gray-50 hover:bg-green-700 font-medium",
 } as const;
 
-const Button = ({ children, size = "md", color = "primary", className, onClick, disabled = false }: Props) => {
+const Button = ({ children, size = "md", color = "primary", className, onClick, disabled = false, type = "submit" }: ButtonProps) => {
   return (
     <button disabled={disabled} onClick={onClick} className={cn("transition duration-250 disabled:cursor-not-allowed", colors[color], sizes[size], className)}>
       {children}

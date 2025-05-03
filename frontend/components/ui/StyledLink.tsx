@@ -7,16 +7,20 @@ type Props = {
   className?: string;
   children?: React.ReactNode;
   href: string;
+  showIcon?: boolean;
 };
 
-const StyledLink = ({ className, children, href }: Props) => {
+const StyledLink = ({ className, children, href, showIcon = true }: Props) => {
   return (
     <Link
-      className={cn("border-b border-primary-bright text-primary-bright hover:border-transparent transition-border duration-200 flex items-center gap-2", className)}
+      className={cn(
+        "border-b border-primary-bright text-primary-bright hover:border-transparent transition-border duration-200 flex items-center gap-2",
+        className
+      )}
       href={href}
     >
-      <span>{children}</span>
-      <FaHandPointRight />
+      <span className="flex items-center gap-2">{children}</span>
+      {showIcon && <FaHandPointRight />}
     </Link>
   );
 };

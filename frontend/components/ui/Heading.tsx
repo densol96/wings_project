@@ -24,7 +24,7 @@ const Heading = ({ className, children, size = "xl", as = "h1" }: Props) => {
     xs: "text-lg",
     sm: "text-xl",
     md: "text-2xl",
-    lg: "text-3xl",
+    lg: "text-2xl sm:text-3xl",
     xl: "text-4xl font-bold leading-normal mb-5",
     "2xl": "text-5xl sm:text-7xl font-bold tracking-tight",
   } as const;

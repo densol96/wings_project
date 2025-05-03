@@ -44,3 +44,8 @@ export const pickLabels = <T extends object, K extends keyof T>(dict: T, keys: K
     return acc;
   }, {} as Pick<T, K>);
 };
+
+export const normalizeError = <T>(error?: string | string[]): string | undefined => {
+  if (!error) return undefined;
+  return Array.isArray(error) ? error[0] : error;
+};
