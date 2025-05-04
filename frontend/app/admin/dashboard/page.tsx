@@ -7,7 +7,7 @@ const Page = async () => {
   return (
     <div>
       <div>
-        HELLO {user.firstName} {user.lastName}!{" "}
+        HELLO {user.firstName} {user.lastName}!
       </div>
       <LogoutButton />
     </div>

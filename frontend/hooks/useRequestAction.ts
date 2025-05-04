@@ -1,3 +1,4 @@
+// for public part of the portal since is using LangContext
 import { useLangContext } from "@/context";
 import { useEffect, useState } from "react";
 

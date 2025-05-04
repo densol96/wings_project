@@ -1,4 +1,4 @@
-import { PageableResponse, PageableReturn, ShortProductDto } from "@/types";
+import { Locale, PageableResponse, PageableReturn, ShortProductDto } from "@/types";
 import clsx from "clsx";
 import { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -45,7 +45,28 @@ export const pickLabels = <T extends object, K extends keyof T>(dict: T, keys: K
   }, {} as Pick<T, K>);
 };
 
-export const normalizeError = <T>(error?: string | string[]): string | undefined => {
+export const basicErrorText = (lang: Locale = "lv") =>
+  lang === "lv" ? "Radās neparedzēta iekšēja kļūda. Lūdzu, mēģiniet vēlreiz vēlāk." : "An unexpected internal error occurred. Please try again later.";
+
+export const normalizeError = (error: unknown, lang: Locale = "lv"): string | undefined => {
   if (!error) return undefined;
-  return Array.isArray(error) ? error[0] : error;
+
+  if (Array.isArray(error) && error.length > 0) {
+    return normalizeError(error[0]);
+  }
+
+  if (typeof error === "object" && error !== null) {
+    const values = Object.values(error);
+    if (values.length > 0) {
+      return normalizeError(values[0]);
+    }
+  }
+
+  if (typeof error === "string") {
+    return error;
+  }
+
+  return basicErrorText(lang);
 };
+
+export const displayError = (error: string, lang: Locale = "lv") => error || basicErrorText(lang);

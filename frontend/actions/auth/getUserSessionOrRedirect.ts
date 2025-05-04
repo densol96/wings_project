@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers";
 import { UserSessionInfoDto } from "@/types";
-import { logout } from "./logout";
 import { getUserSession } from "@/utils";
 import { redirect } from "next/navigation";
 

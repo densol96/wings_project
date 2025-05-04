@@ -7,17 +7,19 @@ import { FaHome } from "react-icons/fa";
 
 type Props = {
   title: string;
-  link: {
+  link?: {
     href: string;
     label: string;
     icon: React.ReactNode;
   };
   children: React.ReactNode;
   btnText?: string;
-  action: (payload: FormData) => void;
+  action?: (payload: FormData) => void;
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  isPending?: boolean;
 };
 
-const AuthForm = ({ title, link, btnText, children, action }: Props) => {
+const AuthForm = ({ title, link, btnText, children, action, onSubmit, isPending = false }: Props) => {
   return (
     <div className="min-w-[400px] sm:min-w-[400px] flex flex-col justify-center">
       <div className="w-[80%] mx-auto relative" style={{ aspectRatio: "16 / 9" }}>
@@ -26,9 +28,11 @@ const AuthForm = ({ title, link, btnText, children, action }: Props) => {
       <Heading size="lg" className="text-center mb-10">
         {title}
       </Heading>
-      <Form action={action} className="md:gap-6 grid-cols-[1fr] gap-2">
+      <Form {...(action ? { action } : { onSubmit })} className="md:gap-6 grid-cols-[1fr] gap-2">
         {children}
-        <SubmitButton className="w-full">{btnText || "Apstiprināt"}</SubmitButton>
+        <SubmitButton className="w-full" isPending={isPending}>
+          {btnText || "Apstiprināt"}
+        </SubmitButton>
         {link && (
           <StyledLink className="justify-self-center flex items-center gap-2" showIcon={false} href={link.href}>
             {link.icon} {link.label} {link.icon}

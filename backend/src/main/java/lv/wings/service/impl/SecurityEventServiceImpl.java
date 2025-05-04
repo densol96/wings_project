@@ -73,10 +73,10 @@ public class SecurityEventServiceImpl implements SecurityEventService {
                     user.setAccountLocked(true);
                     String token = HashUtils.createRandomToken();
                     String hashedToken = HashUtils.createTokenHash(token);
-                    tokenStoreService.storeToken(RedisKeyType.REQUEST_UNLOCK.buildKey(hashedToken), user.getId());
+                    tokenStoreService.storeToken(RedisKeyType.REQUEST_UNLOCK, hashedToken, user.getId());
                     emailSenderService.sendLoginAttemptsExceeded(
                             user,
-                            UrlAssembler.getFullFrontendPath("/request-account-unlock/" + token));
+                            UrlAssembler.getFullFrontendPath("/admin/request-account-unlock/" + token));
                     handleSecurityEvent(user, SecurityEventType.ACCOUNT_LOCKED, null);
                 }
             }

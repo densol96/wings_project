@@ -112,8 +112,8 @@ public class AuthServiceImpl implements AuthService {
       User user = parseTokenAndExtractUser(token, RedisKeyType.REQUEST_UNLOCK);
       String randomToken = HashUtils.createRandomToken();
       String hashedRandomToken = HashUtils.createTokenHash(randomToken);
-      tokenStoreService.storeToken(RedisKeyType.ACCOUNT_UNLOCK.buildKey(hashedRandomToken), user.getId(), Duration.ofMinutes(5));
-      emailSenderService.sendEmailToUnlockAccount(user, UrlAssembler.getFullFrontendPath("/unlock-account/" + randomToken));
+      tokenStoreService.storeToken(RedisKeyType.ACCOUNT_UNLOCK, hashedRandomToken, user.getId(), Duration.ofMinutes(5));
+      emailSenderService.sendEmailToUnlockAccount(user, UrlAssembler.getFullFrontendPath("/admin/unlock-account/" + randomToken));
       return new BasicMessageDto(localeService.getMessage("unlock-email.sent"));
    }
 
@@ -130,10 +130,13 @@ public class AuthServiceImpl implements AuthService {
    @Override
    public BasicMessageDto requestToResetPassword(UsernameDto usernameDto) {
       userRepo.findByUsername(usernameDto.getUsername()).ifPresent(user -> {
-         String randomToken = HashUtils.createRandomToken();
-         String hashedRandomToken = HashUtils.createTokenHash(randomToken);
-         tokenStoreService.storeToken(RedisKeyType.PASSWORD_RESET.buildKey(hashedRandomToken), user.getId(), Duration.ofMinutes(5));
-         emailSenderService.sendPasswordResetToken(user, UrlAssembler.getFullFrontendPath("/reset-password/" + randomToken));
+         // to prevent spamming
+         if (!tokenStoreService.hasActiveTokenOfThisType(RedisKeyType.PASSWORD_RESET, user.getId())) {
+            String randomToken = HashUtils.createRandomToken();
+            String hashedRandomToken = HashUtils.createTokenHash(randomToken);
+            tokenStoreService.storeToken(RedisKeyType.PASSWORD_RESET, hashedRandomToken, user.getId(), Duration.ofMinutes(5));
+            emailSenderService.sendPasswordResetToken(user, UrlAssembler.getFullFrontendPath("/admin/reset-password/" + randomToken));
+         }
       });
       return new BasicMessageDto(localeService.getMessage("password-reset.instruction-sent"));
    }
@@ -174,13 +177,13 @@ public class AuthServiceImpl implements AuthService {
 
    private User parseTokenAndExtractUser(String token, RedisKeyType redisKeyType) {
       String hashedToken = HashUtils.createTokenHash(token);
-      String keyWithPrefix = redisKeyType.buildKey(hashedToken);
-      Integer userId = tokenStoreService.getUserIdByToken(keyWithPrefix);
+      Integer userId = tokenStoreService.getUserIdByToken(redisKeyType, hashedToken);
       if (userId == null)
-         throw new TokenNotFoundException("Unable to find the token - " + keyWithPrefix);
-      tokenStoreService.deleteToken(keyWithPrefix);
+         throw new TokenNotFoundException("Unable to find the token - " + redisKeyType.buildKey(hashedToken));
+      tokenStoreService.deleteToken(redisKeyType, hashedToken);
       User user = userRepo.findById(userId)
-            .orElseThrow(() -> new TokenNotFoundException("Unable to find the requested user with the id of {} from token - " + keyWithPrefix));
+            .orElseThrow(
+                  () -> new TokenNotFoundException("Unable to find the requested user with the id of {} from token - " + redisKeyType.buildKey(hashedToken)));
       return user;
    }
 

@@ -25,7 +25,7 @@ const Page = () => {
       action={formAction}
       link={{
         label: "Atjaunot paroli",
-        href: "/forgot-password",
+        href: "/admin/forgot-password",
         icon: <TbPasswordUser />,
       }}
     >

@@ -175,12 +175,17 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(PasswordsMismatchException.class)
-    public ResponseEntity<BasicErrorDto> handlePasswordsMismatchException(PasswordsMismatchException e) {
+    public ResponseEntity<Map<String, String>> handlePasswordsMismatchException(PasswordsMismatchException e) {
         log.error("*** PasswordsMismatchException: {}", e.getMessage());
-
+        Map<String, String> asFieldErrors = new HashMap<>();
+        asFieldErrors.put("confirmPassword", localeService.getMessage("passwords.mismatch"));
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(BasicErrorDto.builder().message(localeService.getMessage("passwords.mismatch")).build());
+                .body(asFieldErrors);
+
+        // return ResponseEntity
+        // .status(HttpStatus.BAD_REQUEST)
+        // .body(BasicErrorDto.builder().message(localeService.getMessage("passwords.mismatch")).build());
     }
 
     @ExceptionHandler(TokenNotFoundException.class)
@@ -188,7 +193,7 @@ public class GlobalExceptionHandler {
         log.error("*** TokenNotFoundException: {}", e.getMessage());
 
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.GONE)
                 .body(BasicErrorDto.builder().message(localeService.getMessage("token.not-found")).build());
     }
 

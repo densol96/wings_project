@@ -34,27 +34,31 @@ export const login = async (prevState: FormState, formData: FormData): Promise<F
     };
   }
   const { username, password } = parsed.data;
-
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ username, password }),
-  });
-  const data = await response.json();
-  if (response.ok) {
-    cookies().set("authToken", data.jwt, {
-      httpOnly: true,
-      secure: process.env.MODE === "prod",
-      sameSite: "strict",
-      path: "/",
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username, password }),
     });
-    redirect("/admin/dashboard");
-  }
-  if (response.status === 400) {
-    return { errors: data };
-  } else {
-    return { error: data };
+    const data = await response.json();
+    if (response.ok) {
+      cookies().set("authToken", data.jwt, {
+        httpOnly: true,
+        secure: process.env.MODE === "prod",
+        sameSite: "strict",
+        path: "/",
+      });
+      redirect("/admin/dashboard");
+    }
+    if (response.status === 400) {
+      return { errors: data };
+    } else {
+      return { error: data };
+    }
+  } catch (e) {
+    // network error
+    return { error: { message: "Radās neparedzēta iekšēja kļūda. Lūdzu, mēģiniet vēlreiz vēlāk." } };
   }
 };

@@ -18,7 +18,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import lv.wings.enums.SecurityEventType;
 import lv.wings.model.security.User;
 import lv.wings.service.JwtService;
 import lv.wings.service.SecurityEventService;

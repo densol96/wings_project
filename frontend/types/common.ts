@@ -86,4 +86,13 @@ export type ButtonProps = {
   onClick?: () => Promise<any> | void;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";
+  isPending?: boolean;
+};
+
+export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+
+export type TokenProps = {
+  params: {
+    token: string;
+  };
 };

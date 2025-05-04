@@ -8,7 +8,7 @@ import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedicConfig {
+public class RedisConfig {
     @Bean
     public RedisTemplate<String, Integer> intRedisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Integer> template = new RedisTemplate<>();
@@ -18,4 +18,13 @@ public class RedicConfig {
         template.afterPropertiesSet();
         return template;
     }
+
+    // @Bean
+    // public RedisTemplate<String, String> redisStringTemplate(RedisConnectionFactory connectionFactory) {
+    // RedisTemplate<String, String> template = new RedisTemplate<>();
+    // template.setConnectionFactory(connectionFactory);
+    // template.setKeySerializer(new StringRedisSerializer());
+    // template.setValueSerializer(new StringRedisSerializer());
+    // return template;
+    // }
 }
