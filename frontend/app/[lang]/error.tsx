@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui";
 
 import { getLocale } from "@/utils";
+import { useLangContext } from "@/context";
 
 type Props = {
   error: Error;
@@ -27,10 +28,7 @@ const btnText = {
 };
 
 const Error = ({ error, reset }: Props) => {
-  console.error("GLOBAL ERROR BOUNDARY ===> ", error);
-
-  const lang = getLocale();
-
+  const { lang } = useLangContext();
   const router = useRouter();
 
   return (

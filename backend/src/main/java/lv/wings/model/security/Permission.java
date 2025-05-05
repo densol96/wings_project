@@ -28,4 +28,8 @@ public class Permission {
     @Enumerated(EnumType.STRING)
     @Column(unique = true, nullable = false, updatable = false)
     private PermissionName name;
+
+    public Permission(PermissionName name) {
+        this.name = name;
+    }
 }

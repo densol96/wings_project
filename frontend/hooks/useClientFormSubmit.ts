@@ -1,6 +1,6 @@
 import { HttpMethod } from "@/types";
 import { handleFormSubmission } from "@/utils";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 
 const useClientFormSubmit = (
   endpoint: string,

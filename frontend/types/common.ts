@@ -82,7 +82,7 @@ export type ButtonProps = {
   children: React.ReactNode;
   className?: string;
   size?: "sm" | "md" | "lg";
-  color?: "primary" | "transparent" | "green";
+  color?: "primary" | "transparent" | "green" | "neutral";
   onClick?: () => Promise<any> | void;
   disabled?: boolean;
   type?: "button" | "submit" | "reset";

@@ -1,7 +1,7 @@
 import { HttpMethod, Locale, UserSessionInfoDto } from "@/types";
 import { notFound } from "next/navigation";
 import toast from "react-hot-toast";
-import { basicErrorText, displayError, normalizeError } from "./parse";
+import { basicErrorText, displayError, getFullUrl, normalizeError } from "./parse";
 
 // for SC => error boundary will ahndle the network error
 export const fetcher = async function <T>(url: string, showNotFoundFor: number[] = [404]): Promise<T> {
@@ -76,7 +76,7 @@ export const handleFormSubmission = async (
   onNetworkError?: (error: any) => void
 ) => {
   try {
-    const response = await fetchWithSetup(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/${endpoint}`, {
+    const response = await fetchWithSetup(getFullUrl(endpoint), {
       body,
       additionalOptions: {
         cache: "no-store",

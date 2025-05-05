@@ -1,6 +1,7 @@
 package lv.wings;
 
 import java.math.BigDecimal;
+
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -27,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.wings.enums.Country;
 import lv.wings.enums.DeliveryMethod;
 import lv.wings.enums.LocaleCode;
+import lv.wings.enums.PermissionName;
 import lv.wings.model.entity.Color;
 import lv.wings.model.entity.DeliveryPrice;
 import lv.wings.model.entity.DeliveryType;
@@ -41,6 +44,9 @@ import lv.wings.model.entity.ProductImage;
 import lv.wings.model.entity.ProductMaterial;
 import lv.wings.model.security.MyAuthority;
 import lv.wings.model.security.MyUser;
+import lv.wings.model.security.Permission;
+import lv.wings.model.security.Role;
+import lv.wings.model.security.User;
 import lv.wings.model.translation.ColorTranslation;
 import lv.wings.model.translation.DeliveryTypeTranslation;
 import lv.wings.model.translation.EventCategoryTranslation;
@@ -53,6 +59,7 @@ import lv.wings.model.translation.ProductTranslation;
 import lv.wings.repo.EventRepository;
 import lv.wings.repo.GlobalParamsRepository;
 import lv.wings.repo.MaterialRepository;
+import lv.wings.repo.PermissionRepository;
 import lv.wings.repo.ColorRepository;
 import lv.wings.repo.CustomerRepository;
 import lv.wings.repo.DeliveryTypeRepository;
@@ -62,6 +69,8 @@ import lv.wings.repo.ProductCategoryRepository;
 import lv.wings.repo.ProductImageRepository;
 import lv.wings.repo.ProductMaterialRepository;
 import lv.wings.repo.ProductRepository;
+import lv.wings.repo.RoleRepository;
+import lv.wings.repo.UserRepository;
 import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.repo.security.IMyUserRepo;
 
@@ -102,7 +111,6 @@ public class SparniProjectApplication {
 
 	// @Bean
 	// @Profile("seed")
-	@Transactional
 	public CommandLineRunner sparniDB(
 			ColorRepository colorRepo,
 			ProductMaterialRepository productMaterialRepo,
@@ -895,4 +903,83 @@ public class SparniProjectApplication {
 			}
 		};
 	}
+
+	// @Bean
+	public CommandLineRunner setUpPermissionsAndRoles(UserRepository userRepo, RoleRepository roleRepository, PermissionRepository permissionRepo,
+			PasswordEncoder passwordEncoder) {
+		return new CommandLineRunner() {
+			@Override
+			public void run(String... args) throws RuntimeException {
+				System.out.println("=== setUpPermissionsAndRoles ===");
+				Permission toManageProducts = new Permission(PermissionName.MANAGE_PRODUCTS);
+				Permission toManageOrders = new Permission(PermissionName.MANAGE_ORDERS);
+				Permission toManageNews = new Permission(PermissionName.MANAGE_NEWS);
+				Permission toManageSecurity = new Permission(PermissionName.MANAGE_SECURITY);
+
+				permissionRepo.saveAll(List.of(toManageProducts, toManageOrders, toManageNews, toManageSecurity));
+
+				Role boss = new Role("Galvenais administrators");
+				Role productManager = new Role("Produktu pārvaldnieks");
+				Role orderManager = new Role("Pasūtījumu pārvaldnieks");
+				Role newsManager = new Role("Ziņu redaktors");
+				Role securityManager = new Role("Drošības pārvaldnieks");
+
+				boss.setPermissions(Set.of(toManageProducts, toManageOrders, toManageNews, toManageSecurity));
+				productManager.setPermissions(Set.of(toManageProducts));
+				orderManager.setPermissions(Set.of(toManageOrders));
+				newsManager.setPermissions(Set.of(toManageNews));
+				securityManager.setPermissions(Set.of(toManageSecurity));
+				roleRepository.saveAll(List.of(boss, productManager, orderManager, newsManager, securityManager));
+
+				User admin = User.builder()
+						.email("products@mail.com")
+						.username("admin")
+						.firstName("Deniss")
+						.lastName("Adminov")
+						.password(passwordEncoder.encode("password"))
+						.build();
+				admin.setRoles(Set.of(boss));
+
+				User productManagerUser = User.builder()
+						.email("admin@mail.com")
+						.username("products")
+						.firstName("Deniss")
+						.lastName("Prouctov")
+						.password(passwordEncoder.encode("password"))
+						.build();
+				productManagerUser.setRoles(Set.of(productManager));
+
+				User orderManagerUser = User.builder()
+						.email("orders@mail.com")
+						.username("orders")
+						.firstName("Deniss")
+						.lastName("Orderov")
+						.password(passwordEncoder.encode("password"))
+						.build();
+				orderManagerUser.setRoles(Set.of(orderManager));
+
+				User newsManagerUser = User.builder()
+						.email("news@mail.com")
+						.username("news")
+						.firstName("Deniss")
+						.lastName("Newsow")
+						.password(passwordEncoder.encode("password"))
+						.build();
+				newsManagerUser.setRoles(Set.of(newsManager));
+
+				User securityManagerUser = User.builder()
+						.email("security@mail.com")
+						.username("security")
+						.firstName("Deniss")
+						.lastName("Securov")
+						.password(passwordEncoder.encode("password"))
+						.build();
+				securityManagerUser.setRoles(Set.of(securityManager));
+
+				userRepo.saveAll(List.of(admin, productManagerUser, orderManagerUser, newsManagerUser, securityManagerUser));
+				System.out.println("=== SEEDED ===");
+			}
+		};
+	}
+
 }

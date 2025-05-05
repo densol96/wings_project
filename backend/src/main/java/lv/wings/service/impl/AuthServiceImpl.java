@@ -190,10 +190,10 @@ public class AuthServiceImpl implements AuthService {
    private void validateChangePasswordInput(PasswordDto dto, User user) {
       Map<String, String> takenFields = new HashMap<>();
       if (!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
-         takenFields.put("password", "error.password");
+         takenFields.put("oldPassword", "error.password");
       }
       if (!dto.getPassword().equals(dto.getConfirmPassword())) {
-         takenFields.put("passwordConfirm", "passwords.mismatch");
+         takenFields.put("confirmPassword", "passwords.mismatch");
       }
       if (!takenFields.isEmpty())
          throw new InvalidFieldsException(takenFields);

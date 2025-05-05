@@ -1,15 +1,12 @@
 import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
 import React from "react";
-import LogoutButton from "../(auth)/LogoutButton";
+import LogoutButton from "../../(auth)/LogoutButton";
 
 const Page = async () => {
   const user = await getUserSessionOrRedirect();
   return (
     <div>
-      <div>
-        HELLO {user.firstName} {user.lastName}!
-      </div>
-      <LogoutButton />
+      <h1>DASHBOARD</h1>
     </div>
   );
 };

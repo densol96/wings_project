@@ -13,6 +13,7 @@ const colors = {
   primary: "bg-primary-bright text-gray-50 hover:bg-primary-bright-light disabled:bg-primary-bright",
   transparent: "",
   green: "bg-green-500 text-gray-50 hover:bg-green-700 font-medium",
+  neutral: "hover:bg-gray-300",
 } as const;
 
 const Button = ({ children, size = "md", color = "primary", className, onClick, disabled = false, type = "submit" }: ButtonProps) => {

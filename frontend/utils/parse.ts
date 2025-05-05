@@ -70,3 +70,5 @@ export const normalizeError = (error: unknown, lang: Locale = "lv"): string | un
 };
 
 export const displayError = (error: string, lang: Locale = "lv") => error || basicErrorText(lang);
+
+export const getFullUrl = (endpoint: string) => (endpoint.startsWith("http") ? endpoint : `${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/${endpoint}`);
