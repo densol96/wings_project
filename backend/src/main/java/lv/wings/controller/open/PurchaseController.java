@@ -1,4 +1,4 @@
-package lv.wings.controller;
+package lv.wings.controller.open;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

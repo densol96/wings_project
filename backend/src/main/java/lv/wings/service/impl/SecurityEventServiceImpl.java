@@ -35,6 +35,7 @@ public class SecurityEventServiceImpl implements SecurityEventService {
     private final int MAX_LOGIN_ATTEMPTS = 5;
     private final int WORK_START_TIME = 8;
     private final int WORK_FINISH_TIME = 18;
+    private final int ACTIVTY_TIMEOUT_MINUTES = 30; // no point updating the DB on every request. 15 minute interval is better
 
     @Override
     public void handleSecurityEvent(@NonNull User user, @NonNull SecurityEventType type, String additionalInfo) {
@@ -112,6 +113,15 @@ public class SecurityEventServiceImpl implements SecurityEventService {
         doIpCheck(ipAddress, user);
         doUserAgentCheck(userAgent, user);
         doAfterHoursAccessCheck(user);
+        doActivityRecordCheck(user);
+    }
+
+    private void doActivityRecordCheck(User user) {
+        LocalDateTime lastTimeActive = user.getLastActivityDateTime();
+        LocalDateTime now = LocalDateTime.now();
+        if (lastTimeActive == null || now.minusMinutes(ACTIVTY_TIMEOUT_MINUTES).isAfter(lastTimeActive)) {
+            userService.updateLastActivity(user.getId());
+        }
     }
 
     private void doIpCheck(String ipAddress, User user) {

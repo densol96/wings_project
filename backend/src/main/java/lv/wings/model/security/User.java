@@ -1,5 +1,6 @@
 package lv.wings.model.security;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -61,6 +62,11 @@ public class User {
     private String lastUserAgent;
 
     private int loginAttempts = 0;
+
+    private LocalDateTime lastActivityDateTime;
+
+    @Column(updatable = false, nullable = false)
+    private LocalDateTime joinDateTime = LocalDateTime.now();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

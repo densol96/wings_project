@@ -43,7 +43,7 @@ public class SecurityConfig {
 	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
 		return http.csrf(csrf -> csrf.disable())
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/admin/**").hasRole("BOSS")
+				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/admin/users/**").hasAuthority("MANAGE_SECURITY")
 						.anyRequest().permitAll())
 				.userDetailsService(userDetailsService)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

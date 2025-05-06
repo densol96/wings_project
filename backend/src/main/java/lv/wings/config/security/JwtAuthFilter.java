@@ -59,7 +59,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception exception) {
-            log.error("Error during JWT authentication: {}", exception.getMessage());
+            log.error("Error during JWT authentication: {} - {}", exception.getClass().getSimpleName(), exception.getMessage());
         }
         filterChain.doFilter(request, response);
     }

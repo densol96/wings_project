@@ -1,4 +1,4 @@
-package lv.wings.controller;
+package lv.wings.controller.open;
 
 import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;

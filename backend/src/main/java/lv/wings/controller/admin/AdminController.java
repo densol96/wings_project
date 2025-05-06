@@ -1,4 +1,4 @@
-package lv.wings.controller;
+package lv.wings.controller.admin;
 
 import java.lang.reflect.Array;
 import java.nio.file.Files;

@@ -1,7 +1,5 @@
 import Link from "next/link";
-import { Suspense, useState } from "react";
-import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import SidebarSection from "./SidebarSection";
+import { Suspense } from "react";
 import { Spinner } from "@/components";
 import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
 import { Permission } from "@/types";

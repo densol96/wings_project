@@ -1,4 +1,4 @@
-package lv.wings.controller;
+package lv.wings.controller.open;
 
 import java.io.File;
 import java.net.URLConnection;

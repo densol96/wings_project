@@ -1,4 +1,4 @@
-package lv.wings.controller;
+package lv.wings.controller.open;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
