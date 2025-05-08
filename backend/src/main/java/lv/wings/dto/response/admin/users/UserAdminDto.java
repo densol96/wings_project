@@ -1,7 +1,7 @@
 package lv.wings.dto.response.admin.users;
 
 import java.time.LocalDateTime;
-import jakarta.persistence.Column;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,10 +13,9 @@ public class UserAdminDto {
     private String email;
     private String firstName;
     private String lastName;
-    private boolean accountLocked;
-    private boolean accountBanned;
-    private String lastIpAddress;
-    private String lastUserAgent;
+    private Set<String> roles;
+    private String status;
     private int loginAttempts;
-    LocalDateTime lastActivityDateTime;
+    private LocalDateTime lastActivityDateTime;
+    private LocalDateTime joinDateTime;
 }

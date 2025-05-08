@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="lv">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Jauna lietotāja konts – Sparni.lv</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #fbe9d0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .password-box {
+        font-weight: bold;
+        background-color: #f1f1f1;
+        padding: 10px;
+        border-radius: 5px;
+        margin: 15px 0;
+        font-family: monospace;
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Jūsu konts ir izveidots</h2>
+
+      <p>Sveicināti, {{name}}!</p>
+
+      <p>
+        Sistēmas administrators ir izveidojis jums lietotāja kontu Sparni.lv
+        sistēmā.
+      </p>
+
+      <p>Lai pieslēgtos sistēmai, lūdzu, izmantojiet šādu pagaidu paroli:</p>
+
+      <div class="password-box">{{newPassword}}</div>
+
+      <p>
+        <strong>
+          Pēc pirmās pieslēgšanās iesakām doties uz profila iestatījumiem un
+          nomainīt šo paroli uz jums ērtu un drošu paroli.
+        </strong>
+      </p>
+
+      <div class="footer">
+        Šī ir automātiski nosūtīta vēstule – lūdzu, neatbildiet uz to.<br />
+        Jautājumu gadījumā sazinieties ar sistēmas administratoru.
+      </div>
+
+      <div class="footer">
+        Ar cieņu,<br />
+        Sparni.lv komanda
+      </div>
+    </div>
+  </body>
+</html>

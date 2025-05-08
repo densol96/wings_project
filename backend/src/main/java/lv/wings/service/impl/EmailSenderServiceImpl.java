@@ -84,6 +84,32 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         sendHtmlEmail(user.getEmail(), "Parole tika nomainīta", html);
     }
 
+    @Override
+    public void sendNewPasswordNotification(User user, String newPassword) {
+        String html = emailTemplateService.generateNewPasswordHtml(user, newPassword);
+        sendHtmlEmail(user.getEmail(), "Parole tika nomainīta", html);
+    }
+
+    @Override
+    public void sendNewUsernameNotification(User user) {
+        String html = emailTemplateService.generateNewUsernameHtml(user);
+        sendHtmlEmail(user.getEmail(), "Lietotājvārds tika nomainīts", html);
+    }
+
+    @Override
+    public void sendNewEmployeeNotification(User user, String newPassword) {
+        String html = emailTemplateService.generateNewEmployeeHtml(user, newPassword);
+        sendHtmlEmail(user.getEmail(), "Jauna lietotāja konts", html);
+    }
+
+
+    @Override
+    public void sendAdminChangedPasswordNotification(User user, String newPassword) {
+        String html = emailTemplateService.generateAdminChangedPasswordHtml(user, newPassword);
+        sendHtmlEmail(user.getEmail(), "Paroles maiņa", html);
+    }
+
+
     private void sendHtmlEmail(String to, String subject, String html) {
         try {
             MimeMessage message = mailSender.createMimeMessage();

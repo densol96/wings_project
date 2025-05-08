@@ -1,6 +1,5 @@
 import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
-import ChangeEmailForm from "../../ChangeEmailForm";
-import { Modal } from "@/components/shared/Modal";
+import { Modal } from "@/components/shared";
 import ChangePasswordForm from "../../ChangePasswordForm";
 
 const Page = async () => {

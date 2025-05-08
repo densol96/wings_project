@@ -80,7 +80,7 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
                     .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
                     .replace("{{resetUrl}}", resetUrl);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to generateUnlockAccountEmailHtml", e);
+            throw new RuntimeException("Failed to generateResetPasswordEmailHtml", e);
         }
     }
 
@@ -94,7 +94,7 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
                     .replace("{{oldEmail}}", oldEmail)
                     .replace("{{newEmail}}", newEmail);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to generateUnlockAccountEmailHtml", e);
+            throw new RuntimeException("Failed to generateEmailWasChangedHtml", e);
         }
     }
 
@@ -105,7 +105,56 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
             return template
                     .replace("{{name}}", user.getFirstName() + " " + user.getLastName());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to generateUnlockAccountEmailHtml", e);
+            throw new RuntimeException("Failed to generatePasswordWasChangedHtml", e);
+        }
+    }
+
+    @Override
+    public String generateNewPasswordHtml(User user, String newPassword) {
+        // Unlike generatePasswordWasChangedHtml, this method is used when the admin changes the user password.
+        try {
+            String template = loadTemplate("/templates/new-password.html");
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{newPassword}}", newPassword);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateNewPasswordHtml", e);
+        }
+    }
+
+    @Override
+    public String generateNewUsernameHtml(User user) {
+        try {
+            String template = loadTemplate("/templates/new-username.html");
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{newUsername}}", user.getUsername());
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateNewUsernameHtml", e);
+        }
+    }
+
+    @Override
+    public String generateNewEmployeeHtml(User user, String newPassword) {
+        try {
+            String template = loadTemplate("/templates/new-username.html");
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{newPassword}}", newPassword);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateNewUsernameHtml", e);
+        }
+    }
+
+    @Override
+    public String generateAdminChangedPasswordHtml(User user, String newPassword) {
+        try {
+            String template = loadTemplate("/templates/admin-changed-password.html");
+            return template
+                    .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{newPassword}}", newPassword);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateNewUsernameHtml", e);
         }
     }
 

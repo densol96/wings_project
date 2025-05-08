@@ -25,8 +25,10 @@ const SidebarSection = ({ title, items }: Props) => {
       {open && (
         <ul className="pl-6 mt-2 space-y-1">
           {items.map(({ name, href }, i) => (
-            <li key={href + name + i} className="cursor-pointer">
-              <Link href={href}>{name}</Link>
+            <li key={href + name + i} className="cursor-pointer group hover:bg-gray-300 duration-200 p-1">
+              <Link className="group-hover:underline" href={href}>
+                {name}
+              </Link>
             </li>
           ))}
         </ul>

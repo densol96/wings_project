@@ -50,7 +50,7 @@ public class JwtService {
                 .claims(extraClaims)
                 .subject(subject)
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 10)) // 3 minutes
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 60 minutes
                 .signWith(getSigningKey())
                 .compact();
     }

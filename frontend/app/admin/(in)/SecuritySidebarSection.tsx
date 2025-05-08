@@ -6,11 +6,11 @@ type Props = {};
 const SecuritySidebarSection = ({}: Props) => {
   return (
     <SidebarSection
-      title="Lietotāji un drošība"
+      title="Darbinieki un drošība"
       items={[
-        { name: "Lietotāju saraksts", href: "/users" },
-        { name: "Lomas un tiesības", href: "/security/roles" },
-        { name: "Piekļuves iestatījumi", href: "/security/settings" },
+        { name: "Darbinieku saraksts", href: "/admin/security/users" },
+        { name: "Lomas un tiesības", href: "/admin/security/roles" },
+        { name: "Drošības žurnāls", href: "/admin/security/events" },
       ]}
     />
   );

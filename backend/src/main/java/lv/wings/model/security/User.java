@@ -2,6 +2,7 @@ package lv.wings.model.security;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

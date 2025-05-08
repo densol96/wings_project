@@ -4,22 +4,25 @@ import { cn } from "@/utils";
 import React from "react";
 import { useFormStatus } from "react-dom";
 
-type Props = {
+type Props<T extends string | number> = {
   label: string;
   name: string;
   type?: string;
   placeholder?: string;
-  value?: string;
+  value?: T;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   error?: string;
   required?: boolean;
   textarea?: boolean;
   className?: string;
   disabled?: boolean;
-  defaultValue?: string;
+  defaultValue?: T;
+  inputClassName?: string;
+  checked?: boolean;
+  defaultChecked?: boolean;
 };
 
-const FormField: React.FC<Props> = ({
+const FormField = <T extends string | number>({
   label,
   name,
   type = "text",
@@ -32,7 +35,10 @@ const FormField: React.FC<Props> = ({
   className,
   disabled = false,
   defaultValue,
-}) => {
+  inputClassName,
+  checked,
+  defaultChecked,
+}: Props<T>) => {
   const { pending } = useFormStatus();
   return (
     <div className={cn("mb-4", className)}>
@@ -45,8 +51,18 @@ const FormField: React.FC<Props> = ({
           id={name}
           name={name}
           placeholder={placeholder}
-          {...(value !== undefined ? { value, onChange } : { defaultValue })}
-          className="w-full p-2 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-primary-bright"
+          {...(value !== undefined ? { value: value as string, onChange } : { defaultValue })}
+          className={cn("w-full p-2 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-primary-bright", inputClassName)}
+          disabled={disabled || pending}
+        />
+      ) : type === "checkbox" ? (
+        <input
+          id={name}
+          name={name}
+          type="checkbox"
+          {...(checked !== undefined ? { checked, onChange } : { defaultChecked })}
+          onChange={onChange}
+          className={cn("accent-primary-bright", (disabled || pending) && "cursor-not-allowed bg-gray-400/30", inputClassName)}
           disabled={disabled || pending}
         />
       ) : (
@@ -55,11 +71,12 @@ const FormField: React.FC<Props> = ({
           name={name}
           type={type}
           placeholder={placeholder}
-          {...(value !== undefined ? { value, onChange } : { defaultValue })}
-          onChange={onChange}
+          {...(value !== undefined ? { value: value as string | number, onChange } : { defaultValue })}
           className={cn(
-            "w-full p-2 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-primary-bright",
-            (disabled || pending) && "cursor-not-allowed bg-gray-400/30"
+            "p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-bright accent-primary-bright",
+            (disabled || pending) && "cursor-not-allowed bg-gray-400/30",
+            "w-full shadow-md",
+            inputClassName
           )}
           disabled={disabled || pending}
         />

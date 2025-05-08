@@ -15,4 +15,12 @@ public interface EmailTemplateService {
     String generateEmailWasChangedHtml(User user, String oldEmail, String newEmail);
 
     String generatePasswordWasChangedHtml(User user);
+
+    String generateNewPasswordHtml(User user, String newPassword);
+
+    String generateNewUsernameHtml(User user);
+
+    String generateNewEmployeeHtml(User user, String newPassword);
+
+    String generateAdminChangedPasswordHtml(User user, String newPassword);
 }

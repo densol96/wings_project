@@ -2,7 +2,7 @@ import { getDictionary } from "@/dictionaries/dictionaries";
 import { PageProps, PagePropsWithSlug } from "@/types";
 import { ProductSearchParams } from "@/types/sections/shop";
 import ProductGrid from "./ProductGrid";
-import { extractIdFromSlug, validateSearchParams } from "@/utils";
+import { extractIdFromSlug, validateProductSearchParams } from "@/utils";
 import { Suspense } from "react";
 import { Spinner } from "@/components";
 
@@ -18,7 +18,7 @@ export const generateMetadata = async ({ params }: PageProps) => {
 };
 
 const Products = async function ({ params: { lang, slug }, searchParams }: Props) {
-  const { page, sort, direction } = validateSearchParams(searchParams);
+  const { page, sort, direction } = validateProductSearchParams(searchParams);
   let categoryId = extractIdFromSlug(slug);
   categoryId = categoryId >= 0 ? categoryId : 0; // 0 for all products
 

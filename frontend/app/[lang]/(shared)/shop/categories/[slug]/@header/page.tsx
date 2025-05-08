@@ -1,7 +1,7 @@
 import Select from "@/components/ui/Select";
 import { getDictionary } from "@/dictionaries/dictionaries";
 import { ProductsPageProps, ShopDict } from "@/types/sections/shop";
-import { extractIdFromSlug, fetcher, syncSlug, validateSearchParams } from "@/utils";
+import { extractIdFromSlug, fetcher, syncSlug, validateProductSearchParams } from "@/utils";
 import Link from "next/link";
 import React from "react";
 import ToggleCategoriesSidebar from "../ToggleCategoriesSidebar";
@@ -18,7 +18,7 @@ const Header = async ({ params: { lang, slug }, searchParams }: ProductsPageProp
     categoryId !== 0
       ? await fetcher(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/product-categories/${categoryId}?lang=${lang}`, [404, 400])
       : { title: dict.title, description: dict.description };
-  const { page, sort, direction } = validateSearchParams(searchParams);
+  const { page, sort, direction } = validateProductSearchParams(searchParams);
   syncSlug(categoryId, activeCategory.title, slug, `sort=${sort}&direction=${direction}&page=${page}`);
 
   return (

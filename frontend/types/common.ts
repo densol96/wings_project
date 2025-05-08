@@ -4,10 +4,14 @@ export type Lang = { lang: Locale };
 
 export type PageProps = { params: Lang };
 
+export type IdProps = { id: number };
+
+export type IdParams = {
+  params: IdProps;
+};
+
 export type PagePropsWithId = {
-  params: Lang & {
-    id: number;
-  };
+  params: Lang & IdProps;
 };
 
 export type PagePropsWithSlug = {

@@ -17,4 +17,12 @@ public interface EmailSenderService {
     void sendEmailChangeNotification(User user, String oldEmail, String newEmail);
 
     void sendPasswordChangeNotification(User user);
+
+    void sendNewPasswordNotification(User user, String newPassword);
+
+    void sendNewUsernameNotification(User user);
+
+    void sendNewEmployeeNotification(User user, String newPassword);
+
+    void sendAdminChangedPasswordNotification(User user, String newPassword);
 }

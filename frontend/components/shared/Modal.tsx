@@ -5,7 +5,7 @@ import { IoCloseSharp } from "react-icons/io5";
 
 type Props = {};
 
-export function Modal({ children }: { children: React.ReactNode }) {
+const Modal = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   return (
@@ -21,4 +21,6 @@ export function Modal({ children }: { children: React.ReactNode }) {
       <div>{children}</div>
     </div>
   );
-}
+};
+
+export default Modal;

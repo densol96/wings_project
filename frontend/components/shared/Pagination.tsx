@@ -12,7 +12,6 @@ type Props = {
   currentPage: number;
   totalPages: number;
   maxVisible?: number;
-  temp: number;
 };
 
 const Pagination = ({ className, children, currentPage, totalPages, maxVisible = 5 }: Props) => {

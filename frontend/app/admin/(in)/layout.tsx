@@ -24,8 +24,8 @@ const Layout = async ({ children, changeEmail, changePassword }: Props) => {
 
   return (
     <>
-      <div className="flex min-h-screen bg-gray-50">
-        <aside className="w-64 bg-gray-200 border-l shadow-sm p-4 space-y-4 border-r-2 border-r-gray-300/75">
+      <div className="flex min-h-screen bg-gray-50 ">
+        <aside className="w-64 bg-gray-200 border-l shadow-sm p-4 space-y-4 border-r-2 border-r-gray-300/75 h-[100vh] overflow-y-auto sticky top-0">
           <Link href="/admin/dashboard" className="w-[80%] mx-auto relative my-10 block" style={{ aspectRatio: "16 / 9" }}>
             <Image fill className={cn("object-contain")} src="/biedribas_logo.png" alt="Biedribas Logo" />
           </Link>
@@ -35,12 +35,12 @@ const Layout = async ({ children, changeEmail, changePassword }: Props) => {
           {user.authorities.includes(Permission.MANAGE_SECURITY) && <SecuritySidebarSection />}
         </aside>
         <main className="flex-1 flex flex-col">
-          <header className="h-auto flex justify-end items-center gap-4 px-10 py-4 border-b-2 border-b-gray-300/75 bg-gray-200">
+          <header className="h-auto flex justify-end items-center gap-4 px-10 py-4 border-b-2 border-b-gray-300/75 bg-gray-200 sticky top-0 z-20">
             <Greeting user={user} />
             <AccountButton />
             <LogoutButton />
           </header>
-          <div className="flex-1 py-20 pr-20 pl-40">
+          <div className="flex-1 py-20 px-40 relative">
             <Suspense fallback={<Spinner />}>{children}</Suspense>
           </div>
         </main>

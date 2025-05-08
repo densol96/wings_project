@@ -13,6 +13,7 @@ import lv.wings.enums.SecurityEventType;
 import lv.wings.model.security.SecurityEvent;
 import lv.wings.model.security.User;
 import lv.wings.repo.SecurityEventRepository;
+import lv.wings.repo.UserRepository;
 import lv.wings.service.EmailSenderService;
 import lv.wings.service.SecurityEventService;
 import lv.wings.service.TokenStoreService;
@@ -27,7 +28,7 @@ import lv.wings.util.UrlAssembler;
 public class SecurityEventServiceImpl implements SecurityEventService {
 
     private final SecurityEventRepository securityEventRepository;
-    private final UserService userService;
+    private final UserRepository userRepo;
     private final EmailSenderService emailSenderService;
     private final UserSecurityService userSecurityService;
     private final TokenStoreService tokenStoreService;
@@ -88,7 +89,7 @@ public class SecurityEventServiceImpl implements SecurityEventService {
         }
         if (type == SecurityEventType.LOGIN_SUCCESS || type == SecurityEventType.LOGIN_FAILED || type == SecurityEventType.ACCESS_FROM_NEW_IP
                 || type == SecurityEventType.UNUSUAL_USER_AGENT) {
-            userService.persist(user);
+            userRepo.save(user);
         }
 
         createAndSaveSecurityEvent(user, type, ipAddress, userAgent, requestUri, additionalInfo);
@@ -120,7 +121,7 @@ public class SecurityEventServiceImpl implements SecurityEventService {
         LocalDateTime lastTimeActive = user.getLastActivityDateTime();
         LocalDateTime now = LocalDateTime.now();
         if (lastTimeActive == null || now.minusMinutes(ACTIVTY_TIMEOUT_MINUTES).isAfter(lastTimeActive)) {
-            userService.updateLastActivity(user.getId());
+            userRepo.updateLastActivity(user.getId(), LocalDateTime.now());
         }
     }
 

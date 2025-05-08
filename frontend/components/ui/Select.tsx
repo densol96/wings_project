@@ -10,10 +10,10 @@ type Props = {
   optionClassName?: string;
   selectDict: SelectOptions;
   activeValue: string;
-  temp: number;
+  id?: string;
 };
 
-const Select = ({ className, optionClassName, selectDict, activeValue }: Props) => {
+const Select = ({ className, optionClassName, selectDict, activeValue, id = "sortProductBy" }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -29,10 +29,10 @@ const Select = ({ className, optionClassName, selectDict, activeValue }: Props) 
 
   return (
     <div className="flex items-center gap-2">
-      <label className="normal-case" htmlFor="sortProductBy">
+      <label className="normal-case" htmlFor={id}>
         {selectDict.label}
       </label>
-      <select value={activeValue} onChange={onChange} id="sortProductBy" className={cn("border-1 border-gray-300 py-1", className)}>
+      <select value={activeValue} onChange={onChange} id={id} className={cn("border-1 border-gray-300 py-1", className)}>
         {selectDict.options.map((opt) => (
           <option key={opt.label + "_" + opt.value} className={cn("text-center", optionClassName)} value={opt.value}>
             {opt.label}
