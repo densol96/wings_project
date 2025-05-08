@@ -1,14 +1,14 @@
 import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
 import { Heading } from "@/components";
 import Table from "@/components/shared/Table";
-import { basicErrorText, formatDate, validateUsersSearchParams } from "@/utils";
+import { basicErrorText, validateUsersSearchParams } from "@/utils";
 import { cookies } from "next/headers";
 import UserRow from "./UserRow";
-import { SelectOptions, UserAdminDto, UsersSearchParams } from "@/types";
+import { DetailedRoleDto, SelectOptions, UserAdminDto, UsersSearchParams } from "@/types";
 import Select from "@/components/ui/Select";
 import FilterSelect from "@/components/ui/FilterSelect";
+import AddRoleBtn from "../roles/AddRoleBtn";
 import NoData from "@/components/ui/NoData";
-import AddUserBtn from "./AddUserBtn";
 
 type Props = {
   searchParams: UsersSearchParams;
@@ -67,33 +67,33 @@ const Page = async ({ searchParams }: Props) => {
 
   if (!response.ok) throw new Error(basicErrorText());
 
-  const users: UserAdminDto[] = await response.json();
+  const roles: DetailedRoleDto[] = await response.json();
 
   return (
     <div className="">
-      <Heading size="xl">Darbinieku saraksts</Heading>
+      <Heading size="xl">Lomu saraksts</Heading>
       <p className="mb-5">
-        Izmantojiet filtrus, lai atlasītu lietotājus pēc statusa (Aktīvs, Bloķēts, Aizliegts) un kārtošanas iespējas, lai sakārtotu sarakstu pēc pēdējās
-        aktivitātes datuma (Pēdējā aktivitāte) vai pievienošanās datuma (Reģistrēts) augošā vai dilstošā secībā.
+        Šajā skatā redzamas sistēmā definētās lomas. Katra loma sastāv no vienas vai vairākām atļaujām, kas nosaka lietotāja piekļuves tiesības konkrētām
+        funkcionalitātēm vai darbībām sistēmā.
       </p>
-      <p className="mb-5">Lietotāja aktivitāte tiek reģistrēta ne biežāk kā reizi 15 minūtēs, lai samazinātu sistēmas noslodzi.</p>
-      <p className="mb-10">
-        Laukā “Pieteikšanās mēģinājumi” tiek parādīts neveiksmīgo pieslēgšanās mēģinājumu skaits. Ja šis skaits sasniedz 5, lietotāja konts tiek automātiski
-        bloķēts drošības apsvērumu dēļ.
+      <p className="mb-5">
+        Sistēmā ir definēti četri atļauju tipi, no kuriem dinamiskā veidā iespējams veidot jaunas lomas, pielāgojot tās atbilstoši lietotāja pienākumiem vai
+        atbildībai.
       </p>
+      <p className="mb-10">Zemāk esošajā tabulā redzamas visas pieejamās lomas, to nosaukumi, pievienotās atļaujas un to kopējā pieejas struktūra.</p>
       <div className="flex justify-between flex-row items-center sm:mt-0 mb-4">
-        <AddUserBtn />
+        <AddRoleBtn />
         <div className="flex gap-10">
           <FilterSelect id="filterUsersBy" activeValue={status} selectDict={filterSelect} filterLabel="status" />
           <Select id="sortUsersBy" activeValue={`${sort}-${direction}`} selectDict={sortSelect} />
         </div>
       </div>
-      {users.length ? (
+      {roles.length ? (
         <Table
           className="text-center"
           columnNames={["Lietotājvārds", "Vārds", "E-pasts", "Loma", "Statuss", "Pieteikšanās mēģinājumi", "Pēdējā aktivitāte", "Reģistrēts", "Darbības"]}
-          data={users}
-          render={(user: UserAdminDto) => <UserRow user={user} />}
+          data={roles}
+          render={(role: DetailedRoleDto) => <UserRow user={user} />}
         />
       ) : (
         <NoData />
