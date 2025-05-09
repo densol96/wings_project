@@ -22,7 +22,7 @@ const Pagination = ({ className, children, currentPage, totalPages, maxVisible =
       start = Math.max(1, end - maxVisible + 1);
     }
     return Array.from({ length: end - start + 1 }, (_, i) => start + i);
-  }, [currentPage, maxVisible]);
+  }, [currentPage, maxVisible, totalPages]);
 
   currentPage = currentPage > 1 ? currentPage : 1;
 
@@ -36,7 +36,7 @@ const Pagination = ({ className, children, currentPage, totalPages, maxVisible =
       params.set("page", `${newPage}`);
       router.replace(`${pathname}?${params.toString()}`);
     },
-    [searchParams, pathname]
+    [searchParams, pathname, totalPages]
   );
 
   return (

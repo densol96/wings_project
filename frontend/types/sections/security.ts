@@ -53,3 +53,35 @@ export type DetailedRoleDto = {
 export type PermissionSearchParams = {
   permissions: string | string[];
 };
+
+export enum SecurityEventType {
+  NEW_USER_REGISTERED = "NEW_USER_REGISTERED",
+  LOGIN_SUCCESS = "LOGIN_SUCCESS",
+  LOGIN_FAILED = "LOGIN_FAILED",
+  PASSWORD_CHANGED = "PASSWORD_CHANGED",
+  AFTER_HOURS_ACCESS = "AFTER_HOURS_ACCESS",
+  ACCESS_FROM_NEW_IP = "ACCESS_FROM_NEW_IP",
+  UNUSUAL_USER_AGENT = "UNUSUAL_USER_AGENT",
+  ACCOUNT_LOCKED = "ACCOUNT_LOCKED",
+  ACCOUNT_UNLOCKED = "ACCOUNT_UNLOCKED",
+  ACCOUNT_BANNED = "ACCOUNT_BANNED",
+  ACCOUNT_UNBANNED = "ACCOUNT_UNBANNED",
+  EMAIL_CHANGED = "EMAIL_CHANGED",
+}
+
+export type SecurityEventDto = {
+  id: number;
+  username: string;
+  eventType: string;
+  dateTime: string;
+  ipAddress: string;
+  userAgent: string;
+  requestUri: string;
+  additionalInfo: string;
+};
+
+export type EventsSearchParams = {
+  q?: string;
+  page?: string;
+  type?: SecurityEventType;
+};

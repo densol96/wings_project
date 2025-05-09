@@ -1,10 +1,20 @@
-import { PermissionSearchParams, ProductSearchParams, ProductSort, SortDirection, UserSort, UsersSearchParams, UserStatus } from "@/types";
+import {
+  EventsSearchParams,
+  PermissionSearchParams,
+  ProductSearchParams,
+  ProductSort,
+  SecurityEventType,
+  SortDirection,
+  UserSort,
+  UsersSearchParams,
+  UserStatus,
+} from "@/types";
 
-export const validateValues = <T>(value: T | null, allowedValues: T[], defaultValue: T): T => {
+export const validateValues = <T>(value: T | null | undefined, allowedValues: T[], defaultValue: T): T => {
   return value && allowedValues.includes(value) ? value : defaultValue;
 };
 
-export const validatePage = (page: string | number) => {
+export const validatePage = (page?: string | number) => {
   const pageNum = Number(page);
   return pageNum && pageNum > 0 ? pageNum : 1;
 };
@@ -28,4 +38,10 @@ export const validatePermissionSearchParams = (searchParams: PermissionSearchPar
   const options = Array.isArray(raw) ? raw : raw ? [raw] : [];
   const permissionIds = options.map(Number).filter((n) => Number.isInteger(n) && n > 0);
   return { permissionIds };
+};
+
+export const validateEventsSearchParams = (searchParams: EventsSearchParams) => {
+  const page = validatePage(searchParams.page);
+  const type = validateValues<SecurityEventType | "">(searchParams.type, Object.values(SecurityEventType), "");
+  return { page: page + "", type: type as string, q: searchParams.q || "" };
 };

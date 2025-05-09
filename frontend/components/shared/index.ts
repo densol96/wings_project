@@ -22,3 +22,4 @@ export { default as Modal } from "./Modal";
 export { default as ModalWithWrapper } from "./ModalWithWrapper";
 export { default as MultiSelect } from "./MultiSelect";
 export { default as CheckboxGroup } from "./CheckboxGroup";
+export { default as SearchFilter } from "./SearchFilter";

@@ -10,5 +10,5 @@ public interface SecurityEventService {
 
     void doTheSessionAuditIfRequired(User user);
 
-    Page<SecurityEventDto> getSecurityEvents();
+    Page<SecurityEventDto> getSecurityEvents(Integer page, Integer size, String q, String securityEventType);
 }
