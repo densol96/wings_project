@@ -9,7 +9,7 @@ type Props = {
 
 const AddBtn = ({ children, href, label }: Props) => {
   return (
-    <Link href={href} className="flex gap-2 hover:bg-gray-300">
+    <Link href={href} className="flex gap-2 hover:bg-gray-300 p-2 rounded-md">
       {children}
       <p>{label}</p>
     </Link>

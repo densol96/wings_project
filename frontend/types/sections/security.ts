@@ -39,6 +39,7 @@ export type RoleDto = {
 };
 
 export type PermissionDto = {
+  id: number;
   name: string;
   label: string;
 };
@@ -47,4 +48,8 @@ export type DetailedRoleDto = {
   id: number;
   name: string;
   permissions: PermissionDto[];
+};
+
+export type PermissionSearchParams = {
+  permissions: string | string[];
 };

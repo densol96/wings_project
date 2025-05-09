@@ -21,3 +21,4 @@ export { default as OrderReview } from "./OrderReview";
 export { default as Modal } from "./Modal";
 export { default as ModalWithWrapper } from "./ModalWithWrapper";
 export { default as MultiSelect } from "./MultiSelect";
+export { default as CheckboxGroup } from "./CheckboxGroup";

@@ -40,7 +40,7 @@ const UserRow = ({ user }: Props) => {
         <Link href={`/admin/security/users/${user.id}/edit`}>
           <FaUserEdit size={30} />
         </Link>
-        <Link href={`/admin/security/users/${user.id}/edit`}>
+        <Link href={`/admin/security/users/${user.id}/update-password`}>
           <TbPasswordUser size={30} />
         </Link>
       </div>

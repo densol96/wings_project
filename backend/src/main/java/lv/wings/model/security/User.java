@@ -1,6 +1,7 @@
 package lv.wings.model.security;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.persistence.Column;
@@ -74,7 +75,7 @@ public class User {
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles;
+    private List<Role> roles;
 
     @Builder
     public User(String username, String email, String password, String firstName, String lastName) {

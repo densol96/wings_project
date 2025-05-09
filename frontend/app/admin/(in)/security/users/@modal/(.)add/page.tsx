@@ -8,7 +8,7 @@ const Page = async ({}: Props) => {
   await getUserSessionOrRedirect();
   return (
     <ModalWithWrapper>
-      <NewUser className="p-20" />
+      <NewUser className="" />
     </ModalWithWrapper>
   );
 };

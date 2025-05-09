@@ -6,7 +6,7 @@ const Page = async () => {
   const user = await getUserSessionOrRedirect();
   return (
     <ModalWithWrapper>
-      <ChangeEmailForm className="max-w-[700px] p-12 shadow-custom-med" currentEmail={user.email} />
+      <ChangeEmailForm className="max-w-[500px]" currentEmail={user.email} />
     </ModalWithWrapper>
   );
 };

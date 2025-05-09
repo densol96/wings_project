@@ -924,11 +924,11 @@ public class SparniProjectApplication {
 				Role newsManager = new Role("Ziņu redaktors");
 				Role securityManager = new Role("Drošības pārvaldnieks");
 
-				boss.setPermissions(Set.of(toManageProducts, toManageOrders, toManageNews, toManageSecurity));
-				productManager.setPermissions(Set.of(toManageProducts));
-				orderManager.setPermissions(Set.of(toManageOrders));
-				newsManager.setPermissions(Set.of(toManageNews));
-				securityManager.setPermissions(Set.of(toManageSecurity));
+				boss.setPermissions(List.of(toManageProducts, toManageOrders, toManageNews, toManageSecurity));
+				productManager.setPermissions(List.of(toManageProducts));
+				orderManager.setPermissions(List.of(toManageOrders));
+				newsManager.setPermissions(List.of(toManageNews));
+				securityManager.setPermissions(List.of(toManageSecurity));
 				roleRepository.saveAll(List.of(boss, productManager, orderManager, newsManager, securityManager));
 
 				User admin = User.builder()
@@ -938,7 +938,7 @@ public class SparniProjectApplication {
 						.lastName("Adminov")
 						.password(passwordEncoder.encode("password"))
 						.build();
-				admin.setRoles(Set.of(boss));
+				admin.setRoles(List.of(boss));
 
 				User productManagerUser = User.builder()
 						.email("admin@mail.com")
@@ -947,7 +947,7 @@ public class SparniProjectApplication {
 						.lastName("Prouctov")
 						.password(passwordEncoder.encode("password"))
 						.build();
-				productManagerUser.setRoles(Set.of(productManager));
+				productManagerUser.setRoles(List.of(productManager));
 
 				User orderManagerUser = User.builder()
 						.email("orders@mail.com")
@@ -956,7 +956,7 @@ public class SparniProjectApplication {
 						.lastName("Orderov")
 						.password(passwordEncoder.encode("password"))
 						.build();
-				orderManagerUser.setRoles(Set.of(orderManager));
+				orderManagerUser.setRoles(List.of(orderManager));
 
 				User newsManagerUser = User.builder()
 						.email("news@mail.com")
@@ -965,7 +965,7 @@ public class SparniProjectApplication {
 						.lastName("Newsow")
 						.password(passwordEncoder.encode("password"))
 						.build();
-				newsManagerUser.setRoles(Set.of(newsManager));
+				newsManagerUser.setRoles(List.of(newsManager));
 
 				User securityManagerUser = User.builder()
 						.email("security@mail.com")
@@ -974,7 +974,7 @@ public class SparniProjectApplication {
 						.lastName("Securov")
 						.password(passwordEncoder.encode("password"))
 						.build();
-				securityManagerUser.setRoles(Set.of(securityManager));
+				securityManagerUser.setRoles(List.of(securityManager));
 
 				userRepo.saveAll(List.of(admin, productManagerUser, orderManagerUser, newsManagerUser, securityManagerUser));
 				System.out.println("=== SEEDED ===");

@@ -9,7 +9,7 @@ const Modal = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
 
   return (
-    <div className="relative z-40">
+    <div className="relative z-40 bg-gray-50 p-20 shadow-custom-med">
       <button
         className="absolute right-4 top-4 hover:scale-110"
         onClick={() => {

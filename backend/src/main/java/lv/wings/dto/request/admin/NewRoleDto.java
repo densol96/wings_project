@@ -2,6 +2,7 @@ package lv.wings.dto.request.admin;
 
 import java.util.List;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +14,6 @@ public class NewRoleDto {
     @Size(max = 100, message = "{role.name.size}")
     private String name;
 
-    @NotBlank(message = "{permissions.required}")
-    private List<String> permissionCodes;
+    @NotNull(message = "{permissions.required}")
+    private List<Integer> permissionIds;
 }

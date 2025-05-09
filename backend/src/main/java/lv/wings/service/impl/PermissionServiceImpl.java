@@ -5,40 +5,44 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.springframework.stereotype.Service;
 import lombok.NonNull;
+import lv.wings.dto.response.admin.roles.PermissionDto;
 import lv.wings.enums.PermissionName;
 import lv.wings.exception.validation.InvalidFieldsException;
+import lv.wings.mapper.PermissionMapper;
 import lv.wings.model.security.Permission;
 import lv.wings.repo.PermissionRepository;
 import lv.wings.service.AbstractCRUDService;
 import lv.wings.service.PermissionService;
 
+@Service
 public class PermissionServiceImpl extends AbstractCRUDService<Permission, Integer> implements PermissionService {
 
     private final PermissionRepository permissionRepo;
+    private final PermissionMapper permissionMapper;
 
-    public PermissionServiceImpl(PermissionRepository repository) {
+    public PermissionServiceImpl(PermissionRepository repository, PermissionMapper permissionMapper) {
         super(repository, "Permission", "entity.permission");
         this.permissionRepo = repository;
+        this.permissionMapper = permissionMapper;
     }
 
-    public Set<Permission> validatePermissionInputAndReturnEntities(@NonNull List<String> permissionCodes) {
-        Map<String, String> invalidFields = new HashMap<>();
-        invalidFields.put("permissionCodes", "permissions.invalid");
+    @Override
+    public List<PermissionDto> getAll() {
+        return permissionRepo.findAll().stream().map(permissionMapper::toDto).toList();
+    }
 
-        Set<Permission> permissions = new HashSet<>();
-
-        for (String code : permissionCodes) {
-            try {
-                PermissionName permissionEnum = PermissionName.valueOf(code.toUpperCase());
-                Permission permission = permissionRepo.findByName(permissionEnum).orElseThrow(() -> new InvalidFieldsException(invalidFields));
-                permissions.add(permission);
-            } catch (IllegalArgumentException e) {
-                throw new InvalidFieldsException(invalidFields);
-            }
+    @Override
+    public List<Permission> validatePermissionInputAndReturnEntities(List<Integer> permissionIds) {
+        if (permissionIds == null || permissionIds.isEmpty())
+            return List.of();
+        List<Permission> permissions = repository.findAllById(permissionIds);
+        if (permissions.size() != permissionIds.size()) {
+            Map<String, String> invalidFields = new HashMap<>();
+            invalidFields.put("permissionCodes", "permissions.invalid");
+            throw new InvalidFieldsException(invalidFields);
         }
         return permissions;
     }
-
-
 }

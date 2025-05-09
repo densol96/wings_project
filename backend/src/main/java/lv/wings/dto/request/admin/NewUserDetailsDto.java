@@ -1,5 +1,6 @@
 package lv.wings.dto.request.admin;
 
+import java.util.List;
 import java.util.Set;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,5 +29,5 @@ public class NewUserDetailsDto {
     @Size(max = 50, message = "{lastName.size}")
     private String lastName;
 
-    private Set<Integer> roles;
+    private List<Integer> roles;
 }

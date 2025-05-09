@@ -15,10 +15,10 @@ type Props<T> = {
   options: SelectOption<T>[];
   label: string;
   className?: string;
-  setSelectedRolesIds: (newValues: T[]) => void;
+  setSelected: (newValues: T[]) => void;
 };
 
-const MultiSelect = <T,>({ selectedValues, options, name, placeholder, label, className, setSelectedRolesIds }: Props<T>) => {
+const MultiSelect = <T,>({ selectedValues, options, name, placeholder, label, className, setSelected }: Props<T>) => {
   const selectedOptions = options.filter((opt) => selectedValues.includes(opt.value));
 
   return (
@@ -32,7 +32,7 @@ const MultiSelect = <T,>({ selectedValues, options, name, placeholder, label, cl
         className="basic-multi-select"
         classNamePrefix="select"
         placeholder={placeholder}
-        onChange={(selected) => setSelectedRolesIds(selected.map((s) => s.value))}
+        onChange={(selected) => setSelected(selected.map((s) => s.value))}
       />
     </div>
   );

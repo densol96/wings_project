@@ -1,8 +1,7 @@
 "use server";
 
 import { FormState } from "@/types";
-import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { serverFetchAction } from "../serverFetchAction";
 
 export const updateUser = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   const formDataSerialised = Object.fromEntries(formData.entries());
@@ -13,30 +12,9 @@ export const updateUser = async (prevState: FormState, formData: FormData): Prom
     accountBanned: formDataSerialised.accountBanned === "on",
     accountLocked: formDataSerialised.accountLocked === "on",
   };
-
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/users/${formDataSerialised.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-      },
-      body: JSON.stringify(body),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      revalidatePath("/admin", "layout");
-      return { success: data };
-    }
-    if (response.status === 400) {
-      return { errors: data };
-    } else {
-      return { error: data };
-    }
-  } catch (e) {
-    // network error
-    console.log(e);
-    return { error: { message: "Radās neparedzēta iekšēja kļūda. Lūdzu, mēģiniet vēlreiz vēlāk." } };
-  }
+  return await serverFetchAction({
+    endpoint: `admin/users/${formDataSerialised.id}`,
+    method: "PUT",
+    body: body,
+  });
 };

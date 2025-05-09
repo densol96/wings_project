@@ -5,7 +5,7 @@ import { Button, Form, FormField, Heading } from "@/components";
 import SubmitButton from "@/components/ui/SubmitButton";
 import { FormState, IdParams } from "@/types";
 import { cn, normalizeError } from "@/utils";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
 import toast from "react-hot-toast";

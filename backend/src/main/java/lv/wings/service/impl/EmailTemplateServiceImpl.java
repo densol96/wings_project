@@ -137,9 +137,10 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
     @Override
     public String generateNewEmployeeHtml(User user, String newPassword) {
         try {
-            String template = loadTemplate("/templates/new-username.html");
+            String template = loadTemplate("/templates/new-user.html");
             return template
                     .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
+                    .replace("{{newUsername}}", user.getUsername())
                     .replace("{{newPassword}}", newPassword);
         } catch (Exception e) {
             throw new RuntimeException("Failed to generateNewUsernameHtml", e);

@@ -1,7 +1,9 @@
-import { HttpMethod, Locale, UserSessionInfoDto } from "@/types";
+import { FormState, HttpMethod, Locale, UserSessionInfoDto } from "@/types";
 import { notFound } from "next/navigation";
 import toast from "react-hot-toast";
 import { basicErrorText, displayError, getFullUrl, normalizeError } from "./parse";
+import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
 
 // for SC => error boundary will ahndle the network error
 export const fetcher = async function <T>(url: string, showNotFoundFor: number[] = [404]): Promise<T> {
@@ -45,7 +47,7 @@ export const fetchWithSetup = async (
   lang: Locale = "lv"
 ): Promise<Response> => {
   const options = {
-    method: body ? method || "POST" : "GET",
+    method: method || "GET",
     headers: {
       "Content-Type": "application/json",
       ...headers,
@@ -57,6 +59,7 @@ export const fetchWithSetup = async (
   return await fetch(fullUrl, options);
 };
 
+// For trying to communicate from the CC
 export const handleFormSubmission = async (
   endpoint: string,
   {

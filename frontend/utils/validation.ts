@@ -1,4 +1,4 @@
-import { ProductSearchParams, ProductSort, SortDirection, UserSort, UsersSearchParams, UserStatus } from "@/types";
+import { PermissionSearchParams, ProductSearchParams, ProductSort, SortDirection, UserSort, UsersSearchParams, UserStatus } from "@/types";
 
 export const validateValues = <T>(value: T | null, allowedValues: T[], defaultValue: T): T => {
   return value && allowedValues.includes(value) ? value : defaultValue;
@@ -21,4 +21,11 @@ export const validateUsersSearchParams = (searchParams: UsersSearchParams) => {
   const direction = validateValues<SortDirection>(searchParams.direction, ["asc", "desc"], "desc");
   const status = validateValues<UserStatus>(searchParams.status, ["all", "active", "inactive"], "all");
   return { sort, direction, status };
+};
+
+export const validatePermissionSearchParams = (searchParams: PermissionSearchParams) => {
+  const raw = searchParams.permissions;
+  const options = Array.isArray(raw) ? raw : raw ? [raw] : [];
+  const permissionIds = options.map(Number).filter((n) => Number.isInteger(n) && n > 0);
+  return { permissionIds };
 };

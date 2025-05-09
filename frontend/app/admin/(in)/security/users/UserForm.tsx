@@ -74,7 +74,7 @@ const UserForm = ({ id, user, roles, className }: Props) => {
         label="Lomas"
         placeholder="Izvēlieties lomas"
         options={roleOptions}
-        setSelectedRolesIds={setSelectedRolesIds}
+        setSelected={setSelectedRolesIds}
       />
       {selectedRolesIds.map((id) => (
         <input key={id} type="hidden" name="roles" value={id} />

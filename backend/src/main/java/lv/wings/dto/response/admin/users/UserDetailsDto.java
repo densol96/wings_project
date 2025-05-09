@@ -1,5 +1,6 @@
 package lv.wings.dto.response.admin.users;
 
+import java.util.List;
 import java.util.Set;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -34,5 +35,5 @@ public class UserDetailsDto {
     @NotNull(message = "{accountBanned.required}")
     private Boolean accountBanned;
 
-    private Set<Integer> roles;
+    private List<Integer> roles;
 }

@@ -120,7 +120,7 @@ public class UserServiceImpl extends AbstractCRUDService<User, Integer> implemen
         user.setAccountLocked(dto.getAccountLocked());
         user.setAccountBanned(dto.getAccountBanned());
 
-        Set<Role> roles = roleService.findByIds(dto.getRoles());
+        List<Role> roles = roleService.findByIds(dto.getRoles());
         user.setRoles(roles);
 
         repository.save(user);
@@ -144,6 +144,9 @@ public class UserServiceImpl extends AbstractCRUDService<User, Integer> implemen
         user.setEmail(dto.getEmail());
         user.setFirstName(dto.getFirstName());
         user.setLastName(dto.getLastName());
+
+        List<Role> roles = roleService.findByIds(dto.getRoles());
+        user.setRoles(roles);
 
         // Will create a random password that will be sent to the user email. Then, user can change the password if required.
         String password = HashUtils.createRandomToken().substring(0, 10);

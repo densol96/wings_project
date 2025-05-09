@@ -1,6 +1,7 @@
 package lv.wings.model.security;
 
 
+import java.util.List;
 import java.util.Set;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,10 +31,10 @@ public class Role {
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Permission> permissions;
+    private List<Permission> permissions;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private List<User> users;
 
     public Role(String name) {
         this.name = name;

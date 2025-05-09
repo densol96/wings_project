@@ -1,6 +1,7 @@
 import { DetailedRoleDto } from "@/types";
 import Link from "next/link";
 import { FaUserEdit } from "react-icons/fa";
+import DeleteRoleBtn from "./DeleteRoleBtn";
 
 type Props = {
   role: DetailedRoleDto;
@@ -8,7 +9,7 @@ type Props = {
 
 const RoleRow = ({ role }: Props) => {
   return (
-    <div className="grid grid-cols-5 items-center text-sm text-gray-800 px-4 py-3 hover:bg-gray-50 transition text-center">
+    <div className="grid grid-cols-4 items-center text-sm text-gray-800 px-4 py-3 hover:bg-gray-50 transition text-center">
       <div className="font-medium">{role.name}</div>
 
       <div>
@@ -17,11 +18,11 @@ const RoleRow = ({ role }: Props) => {
 
       <div className="text-xs text-gray-600 line-clamp-2">{role.permissions.map((perm) => perm.label).join(", ")}</div>
 
-      <div className="flex justify-center">
+      <div className="flex justify-center items-center gap-4">
         <Link href={`/admin/security/roles/${role.id}/edit`}>
-          <FaUserEdit size={24} className="text-blue-600 hover:text-blue-800 transition" />
+          <FaUserEdit size={24} />
         </Link>
-        <button></button>
+        <DeleteRoleBtn id={role.id} />
       </div>
     </div>
   );
