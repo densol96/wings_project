@@ -1,7 +1,7 @@
 package lv.wings.model.interfaces;
 
 import java.time.LocalDateTime;
-import lv.wings.model.security.MyUser;
+import lv.wings.model.security.User;
 
 public interface Auditable {
     Integer getId();
@@ -10,5 +10,5 @@ public interface Auditable {
 
     LocalDateTime getLastModifiedAt();
 
-    MyUser getLastModifiedBy();
+    User getLastModifiedBy();
 }

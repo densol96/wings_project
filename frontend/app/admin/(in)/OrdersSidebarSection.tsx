@@ -4,16 +4,7 @@ import SidebarSection from "./SidebarSection";
 type Props = {};
 
 const OrdersSidebarSection = ({}: Props) => {
-  return (
-    <SidebarSection
-      title="Pasūtījumi"
-      items={[
-        { name: "Visi pasūtījumi", href: "/orders" },
-        { name: "Atvērti pasūtījumi", href: "/orders/open" },
-        { name: "Vēsture", href: "/orders/history" },
-      ]}
-    />
-  );
+  return <SidebarSection title="Pasūtījumi" items={[{ name: "Visi pasūtījumi", href: "/admin/orders" }]} />;
 };
 
 export default OrdersSidebarSection;

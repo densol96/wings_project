@@ -50,6 +50,7 @@ public class DeliveryTypeServiceImpl extends AbstractTranslatableCRUDService<Del
         return getRightTranslation(deliveryType, DeliveryTypeTranslation.class);
     }
 
+    @Override
     public DeliveryTypeTranslation getRightTranslationForSelectedLocale(DeliveryType deliveryType, LocaleCode localCode) {
         return getRightTranslationForSelectedLocale(deliveryType, DeliveryTypeTranslation.class, localCode);
     }

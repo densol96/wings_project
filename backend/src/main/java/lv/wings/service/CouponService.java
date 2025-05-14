@@ -1,11 +1,14 @@
 package lv.wings.service;
 
 import java.math.BigDecimal;
+import lombok.NonNull;
 import lv.wings.dto.request.payment.NewCouponDto;
+import lv.wings.dto.response.admin.orders.CouponAdminDto;
 import lv.wings.dto.response.payment.CouponCodeDto;
 import lv.wings.dto.response.payment.CouponDiscountDto;
 import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.model.entity.Coupon;
+import lv.wings.model.entity.Order;
 
 public interface CouponService extends CRUDService<Coupon, Integer> {
     CouponCodeDto createNewCoupon(NewCouponDto newCouponeDto);
@@ -21,4 +24,6 @@ public interface CouponService extends CRUDService<Coupon, Integer> {
     CouponDiscountDto applyCouponToCalculation(String code, BigDecimal orderTotal);
 
     Coupon findByCode(String code);
+
+    CouponAdminDto orderToCouponAdminDto(@NonNull Order order);
 }

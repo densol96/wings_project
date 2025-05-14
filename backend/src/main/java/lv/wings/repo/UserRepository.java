@@ -28,4 +28,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findByAccountLockedFalseAndAccountBannedFalse(Sort sort);
 
     List<User> findByAccountLockedTrueOrAccountBannedTrue(Sort sort);
+
+    @Query(value = "SELECT * FROM users WHERE username = 'system'", nativeQuery = true)
+    User findSystemUserNative();
 }

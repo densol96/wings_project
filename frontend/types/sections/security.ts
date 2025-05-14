@@ -1,4 +1,5 @@
 import { SortDirection } from "../common";
+import { DeliveryMethod } from "./checkout";
 
 export type UserAdminDto = {
   id: number;

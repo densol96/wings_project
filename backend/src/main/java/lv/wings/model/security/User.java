@@ -3,6 +3,7 @@ package lv.wings.model.security;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
+import org.hibernate.annotations.Where;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -84,5 +85,9 @@ public class User {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public boolean isSystemUser() {
+        return "system".equalsIgnoreCase(this.username);
     }
 }

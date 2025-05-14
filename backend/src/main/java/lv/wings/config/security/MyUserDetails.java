@@ -48,6 +48,9 @@ public class MyUserDetails implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
+		if (user.isSystemUser()) {
+			return false;
+		}
 		return !user.isAccountBanned();
 	}
 

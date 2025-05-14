@@ -4,16 +4,16 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import org.springframework.context.annotation.Lazy;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import jakarta.transaction.Transactional;
+
 import lv.wings.config.security.UserSecurityService;
 import lv.wings.dto.request.admin.AdminPasswordDto;
 import lv.wings.dto.request.admin.NewUserDetailsDto;
-import lv.wings.dto.request.users.PasswordDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.admin.users.UserAdminDto;
 import lv.wings.dto.response.admin.users.UserDetailsDto;
@@ -80,6 +80,7 @@ public class UserServiceImpl extends AbstractCRUDService<User, Integer> implemen
         }
 
         return users.stream()
+                .filter(user -> !user.isSystemUser())
                 .map(user -> userMapper.userToAdminDto(user, mapToAccountStatus(user)))
                 .toList();
     }

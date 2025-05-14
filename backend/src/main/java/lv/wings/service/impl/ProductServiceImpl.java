@@ -73,6 +73,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		if (categoryId < 0)
 			throw new InvalidParameterException("category.id", categoryId + "", false);
 		// categoryId == 0 means "All products"
+		System.out.println("I RUN HERE");
 		Page<Product> products = categoryId == 0 ? findAll(pageable) : productRepository.findAllByCategoryId(categoryId, pageable);
 		return products.map(this::mapToShortProductDto);
 	}

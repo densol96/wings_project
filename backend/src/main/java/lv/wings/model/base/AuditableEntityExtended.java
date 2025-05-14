@@ -11,7 +11,7 @@ import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 
 import lv.wings.model.interfaces.ExtendedAuditable;
-import lv.wings.model.security.MyUser;
+import lv.wings.model.security.User;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -20,6 +20,6 @@ public abstract class AuditableEntityExtended extends AuditableEntity implements
     @CreatedBy
     @ManyToOne
     @JoinColumn(nullable = false, updatable = false)
-    private MyUser createdBy;
+    private User createdBy;
 
 }

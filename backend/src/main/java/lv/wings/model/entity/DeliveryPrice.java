@@ -29,7 +29,7 @@ import lv.wings.enums.Country;
 public class DeliveryPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "delivery_type_id", nullable = false)

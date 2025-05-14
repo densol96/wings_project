@@ -57,4 +57,29 @@ public class Address extends AuditableEntity {
         this.postalCode = postalCode;
         this.country = country;
     }
+
+    public String getFullAddress() {
+        StringBuilder sb = new StringBuilder();
+
+        if (street != null) {
+            sb.append(street).append(" ");
+        }
+        if (houseNumber != null) {
+            sb.append(houseNumber);
+        }
+        if (apartment != null && !apartment.isBlank()) {
+            sb.append("-").append(apartment);
+        }
+        if (city != null) {
+            sb.append(", ").append(city);
+        }
+        if (postalCode != null) {
+            sb.append(", ").append(postalCode);
+        }
+        if (country != null) {
+            sb.append(", ").append(country.name());
+        }
+
+        return sb.toString().trim();
+    }
 }

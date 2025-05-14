@@ -21,7 +21,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lv.wings.model.interfaces.Auditable;
-import lv.wings.model.security.MyUser;
+import lv.wings.model.security.User;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
@@ -44,5 +44,5 @@ public abstract class AuditableEntity implements Auditable {
     @LastModifiedBy
     @ManyToOne
     @JoinColumn(insertable = false)
-    private MyUser lastModifiedBy;
+    private User lastModifiedBy;
 }

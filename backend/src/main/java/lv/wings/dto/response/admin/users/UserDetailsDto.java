@@ -1,7 +1,6 @@
 package lv.wings.dto.response.admin.users;
 
 import java.util.List;
-import java.util.Set;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

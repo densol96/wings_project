@@ -100,3 +100,5 @@ export type TokenProps = {
     token: string;
   };
 };
+
+export type SimleSort = "createdAt" | "lastModifiedAt";

@@ -33,6 +33,7 @@ import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.exception.other.AlreadySubscribedException;
+import lv.wings.exception.other.ConflictException;
 import lv.wings.exception.other.TokenNotFoundException;
 import lv.wings.exception.payment.CheckoutException;
 import lv.wings.exception.payment.WebhookException;
@@ -111,6 +112,18 @@ public class GlobalExceptionHandler {
         String localisedParameterName = localeService.getMessage(e.getQueryNameCode());
         String message = localeService.getMessage("error.invalid-query-param", new Object[] {e.getQueryParamValue(), localisedParameterName});
         return ResponseEntity.badRequest().body(new BasicErrorDto(message));
+    }
+
+
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<BasicErrorDto> handleConflictException(ConflictException e) {
+        String message = e.getMessage();
+        log.error("*** ConflictException: {}", message);
+        String repsonseMessage = message == null ? localeService.getMessage("error.conflict") : message;
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new BasicErrorDto(repsonseMessage));
     }
 
     @ExceptionHandler(EntityNotFoundException.class)

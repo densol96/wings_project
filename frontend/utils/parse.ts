@@ -1,4 +1,4 @@
-import { Locale, PageableResponse, PageableReturn, ShortProductDto } from "@/types";
+import { Locale, OrderStatus, PageableResponse, PageableReturn, ShortProductDto } from "@/types";
 import clsx from "clsx";
 import { ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
@@ -72,3 +72,14 @@ export const normalizeError = (error: unknown, lang: Locale = "lv"): string | un
 export const displayError = (error: string, lang: Locale = "lv") => error || basicErrorText(lang);
 
 export const getFullUrl = (endpoint: string) => (endpoint.startsWith("http") ? endpoint : `${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/${endpoint}`);
+
+export const getOrderStatusColor = (status: OrderStatus): string => {
+  switch (status) {
+    case OrderStatus.PAID:
+      return "text-green-600";
+    case OrderStatus.SHIPPED:
+      return "text-orange-500";
+    default:
+      return "text-red-500";
+  }
+};

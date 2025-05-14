@@ -14,4 +14,6 @@ public interface DeliveryTypeService {
     DeliveryTypeTranslation getRightTranslation(DeliveryType product);
 
     String proccessDeliveryMethod(Order order, LocaleCode localeCode);
+
+    DeliveryTypeTranslation getRightTranslationForSelectedLocale(DeliveryType deliveryType, LocaleCode localCode);
 }

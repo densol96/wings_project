@@ -20,8 +20,11 @@ const FilterSelect = ({ className, optionClassName, selectDict, activeValue, id,
   const pathname = usePathname();
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { value } = e.target;
     const params = new URLSearchParams(searchParams);
-    params.set(filterLabel, e.target.value);
+    params.set("page", "1");
+    if (value) params.set(filterLabel, e.target.value); // f.e, label: "All" => value: "" => no filter will be applied on the backend
+    else params.delete(filterLabel);
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 

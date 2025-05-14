@@ -1,14 +1,18 @@
 import {
+  CountryCode,
+  DeliveryMethod,
   EventsSearchParams,
   PermissionSearchParams,
   ProductSearchParams,
   ProductSort,
   SecurityEventType,
+  SimleSort,
   SortDirection,
   UserSort,
   UsersSearchParams,
   UserStatus,
 } from "@/types";
+import { OrdersSearchParams, OrderStatus } from "@/types/sections/admin";
 
 export const validateValues = <T>(value: T | null | undefined, allowedValues: T[], defaultValue: T): T => {
   return value && allowedValues.includes(value) ? value : defaultValue;
@@ -44,4 +48,14 @@ export const validateEventsSearchParams = (searchParams: EventsSearchParams) => 
   const page = validatePage(searchParams.page);
   const type = validateValues<SecurityEventType | "">(searchParams.type, Object.values(SecurityEventType), "");
   return { page: page + "", type: type as string, q: searchParams.q || "" };
+};
+
+export const validateOrdersSearchParams = (searchParams: OrdersSearchParams) => {
+  const page = validatePage(searchParams.page);
+  const sort = validateValues<SimleSort>(searchParams.sort, ["createdAt", "lastModifiedAt"], "createdAt");
+  const direction = validateValues<SortDirection>(searchParams.direction, ["asc", "desc"], "desc");
+  const status = validateValues<OrderStatus | "">(searchParams.status, Object.values(OrderStatus), "");
+  const country = validateValues<CountryCode | "">(searchParams.country, ["EE", "LT", "LV"], "");
+  const deliveryMethod = validateValues<DeliveryMethod | "">(searchParams.deliveryMethod, Object.values(DeliveryMethod), "");
+  return { page, sort, direction, status, country, deliveryMethod, q: searchParams.q };
 };

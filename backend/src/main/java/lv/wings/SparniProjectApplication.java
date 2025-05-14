@@ -20,6 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -77,7 +78,7 @@ import lv.wings.repo.security.IMyUserRepo;
 import net.datafaker.Faker;
 
 @SpringBootApplication
-@EnableJpaAuditing(auditorAwareRef = "auditorAware")
+@EnableJpaAuditing(auditorAwareRef = "applicationAuditAware")
 @EnableCaching
 @Slf4j
 public class SparniProjectApplication {
@@ -110,6 +111,7 @@ public class SparniProjectApplication {
 	}
 
 	// @Bean
+	// @Order(1)
 	// @Profile("seed")
 	public CommandLineRunner sparniDB(
 			ColorRepository colorRepo,
@@ -120,77 +122,29 @@ public class SparniProjectApplication {
 			EventRepository eventRepo,
 			EventImageRepository eventImageRepo,
 			EventCategoryRepository eventCategoryRepo,
+			PasswordEncoder passwordEncoder,
 			ProductCategoryRepository productCategoryRepo,
 			ProductRepository productRepo,
 			ProductImageRepository productImageRepo,
-			IMyAuthorityRepo authRepo,
-			IMyUserRepo userRepo) {
+			UserRepository userRepo,
+			GlobalParamsRepository globalParamsRepo) {
 		return new CommandLineRunner() {
 			@Override
 			public void run(String... args) throws Exception {
 				log.info("CommandLineRunner is initiated..");
-				// DeliveryType deliveryType1 = new DeliveryType("Piegades Veids1",
-				// "Apraksts1");
-				// DeliveryType deliveryType2 = new DeliveryType("Piegades Veids2",
-				// "Apraksts2");
-				// deliveryTypeRepo.save(deliveryType1);
-				// deliveryTypeRepo.save(deliveryType2);
 
-				// PaymentType paymentType1 = new PaymentType("Samaksas Veids 1", "Piezimes1");
-				// PaymentType paymentType2 = new PaymentType("Samaksas Veids 2", "Piezimes2");
-				// paymentTypeRepo.save(paymentType1);
-				// paymentTypeRepo.save(paymentType2);
-
-				Faker faker = new Faker();
-				// for (int i = 0; i < 50; i++) {
-				// String dfName = faker.name().firstName();
-				// String dfSurname = faker.name().lastName();
-				// String dfEmail = faker.expression("#{regexify '[A-Za-z0-9]{6,10}'}") +
-				// "@gmail.com";
-				// String dfAdress = faker.address().cityName() + ", " +
-				// faker.address().buildingNumber();
-
-				// Customer dfCustomer = new Customer(dfName, dfSurname, dfEmail, dfAdress);
-
-				// customerRepo.save(dfCustomer);
-
-				// String d = faker.date().future(300, TimeUnit.HOURS, "YYYY-MM-dd hh:mm");
-				// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd
-				// HH:mm");
-				// LocalDateTime dateTime = LocalDateTime.parse(d, formatter);
-
-				// Purchase newPurchase;
-				// if (Integer.parseInt(faker.expression("#{numerify '#'}")) > 5) {
-				// newPurchase = new Purchase(deliveryType1, paymentType2, dfCustomer, dateTime,
-				// "Nav detalas");
-				// } else {
-				// newPurchase = new Purchase(deliveryType2, paymentType1, dfCustomer, dateTime,
-				// "Lielas detalas");
-				// }
-				// purchaseRepo.save(newPurchase);
-				// }
-
-				// Customer customer1 = new Customer("Markuss", "Blumbergs",
-				// "random1@gmail.com", "Talsi, Street 1");
-				// Customer customer2 = new Customer("Lauris", "Kairo", "random2@gmail.com",
-				// "Liepaja, Street 4");
-				// customerRepo.save(customer1);
-				// customerRepo.save(customer2);
-
-				// Purchase purchase1 = new Purchase(deliveryType1, paymentType1, customer1,
-				// LocalDateTime.now(),
-				// "Nav detalas");
-				// Purchase purchase2 = new Purchase(deliveryType2, paymentType2, customer1,
-				// LocalDateTime.now(),
-				// "Nav detalas");
-				// purchaseRepo.save(purchase1);
-				// purchaseRepo.save(purchase2);
-
-				MyAuthority a2 = new MyAuthority("USER");
-				authRepo.save(a2);
-				PasswordEncoder encoder = new BCryptPasswordEncoder();
-				MyUser u1 = new MyUser("annija.user", encoder.encode("123"), a2);
+				User u1 = User.builder()
+						.username("system")
+						.email("system@internal.wings")
+						.firstName("System")
+						.lastName("System")
+						.password(passwordEncoder.encode(("some_system_password")))
+						.build();
 				userRepo.save(u1);
+
+				GlobalParam gbp = GlobalParam.builder().title("omniva_api_link").value("https://www.omniva.lv/locations.json").build();
+				gbp.setCreatedBy(u1);
+				globalParamsRepo.save(gbp);
 
 				EventCategory eventCategory1 = new EventCategory();
 				EventCategoryTranslation eventCategory1Lv = EventCategoryTranslation.builder()
@@ -644,173 +598,19 @@ public class SparniProjectApplication {
 				bilde6.setTranslations(List.of(bilde6_lv, bilde6_en));
 				productImageRepo.save(bilde6);
 
-
-				// PIRKUMA ELEMENTS
-				// PurchaseElement purchaseElement1 = new PurchaseElement(purchase1, product1,
-				// 2);
-				// PurchaseElement purchaseElement2 = new PurchaseElement(purchase2, product2,
-				// 1);
-				// PurchaseElement purchaseElement3 = new PurchaseElement(purchase2, product1,
-				// 1);
-				// purchaseElementRepo.save(purchaseElement1);
-				// purchaseElementRepo.save(purchaseElement2);
-				// purchaseElementRepo.save(purchaseElement3);
-
-				// USER & AUTHORITY
-				// productImageRepo.save(bilde44);
-				// productImageRepo.save(bilde55);
-				// productImageRepo.save(bilde66);
-				// productImageRepo.save(bilde77);
-				// productImageRepo.save(bilde88);
-				// productImageRepo.save(bilde99);
-				// productImageRepo.save(bilde100);
-				// productImageRepo.save(bilde111);
-				// productImageRepo.save(bilde122);
-				// productImageRepo.save(bilde133);
-				// productImageRepo.save(bilde144);
-				// productImageRepo.save(bilde155);
-				// productImageRepo.save(bilde166);
-				// productImageRepo.save(bilde177);
-				// productImageRepo.save(bilde188);
-
-				// productImageRepo.save(bilde190);
-				// productImageRepo.save(bilde200);
-				// productImageRepo.save(bilde210);
-
-				// USER & AUTHORITY
-				// MyAuthority a1 = new MyAuthority("ADMIN");
-				// authRepo.save(a1);
-
-				// MyAuthority a2 = new MyAuthority("USER"); //
-				// authRepo.save(a2);
-
-				// PasswordEncoder encoder = new BCryptPasswordEncoder();
-
-				// MyUser u1 = new MyUser("annija.user", encoder.encode("123"), a2);
-				// userRepo.save(u1);
-
-				// MyUser u2 = new MyUser("annija.admin", encoder.encode("456"), a1);
-				// userRepo.save(u2);
-
-				// MyUser u3 = new MyUser("admin", encoder.encode("123"), a1);
-				// userRepo.save(u3);
-
-				//// create upload Image directories
-				/// (Wrong but fast version)
-				// Path path1 = Paths.get("uploads/images/events");
-				// Path path2 = Paths.get("uploads/images/products");
-
-				// if (!Files.exists(path1)) {
-				// Files.createDirectories(path1);
-				// }
-
-				// if (!Files.exists(path2)) {
-				// Files.createDirectories(path2);
-				// }
 				log.info("Data has been successfully seeded.");
-
-
-				System.out.println("=== createDeliveryTypesAndPrices ===");
-				List<DeliveryType> deliveryTypes = new ArrayList<>();
-
-				// ---------- 1. PICKUP ----------
-				DeliveryType pickup = new DeliveryType(DeliveryMethod.PICKUP);
-				pickup.setCreatedBy(u1);
-
-				DeliveryTypeTranslation pickup_lv = DeliveryTypeTranslation.builder()
-						.title("Saņemšana veikalā")
-						.description("Bezmaksas pasūtījuma saņemšana mūsu veikalā Ventspilī")
-						.locale(LocaleCode.LV)
-						.deliveryType(pickup)
-						.build();
-
-				DeliveryTypeTranslation pickup_en = DeliveryTypeTranslation.builder()
-						.title("Store pickup")
-						.description("Free pickup from our store in Ventspils")
-						.locale(LocaleCode.EN)
-						.deliveryType(pickup)
-						.build();
-
-				pickup.setTranslations(List.of(pickup_lv, pickup_en));
-				pickup.setPrices(List.of(
-						DeliveryPrice.builder()
-								.country(Country.LV)
-								.price(BigDecimal.ZERO)
-								.deliveryType(pickup)
-								.build()));
-
-				deliveryTypes.add(pickup);
-
-				// ---------- 2. OMNIVA ----------
-				DeliveryType omniva = new DeliveryType(DeliveryMethod.PARCEL_MACHINE);
-				omniva.setCreatedBy(u1);
-
-				DeliveryTypeTranslation omniva_lv = DeliveryTypeTranslation.builder()
-						.title("Omniva pakomāts")
-						.description("Piegāde uz Omniva pakomātu. 5 EUR Latvijā, 10 EUR uz Lietuvu un Igauniju.")
-						.locale(LocaleCode.LV)
-						.deliveryType(omniva)
-						.build();
-
-				DeliveryTypeTranslation omniva_en = DeliveryTypeTranslation.builder()
-						.title("Omniva parcel locker")
-						.description("Delivery to Omniva parcel locker. €5 in Latvia, €10 to LT and EE.")
-						.locale(LocaleCode.EN)
-						.deliveryType(omniva)
-						.build();
-
-				omniva.setTranslations(List.of(omniva_lv, omniva_en));
-				omniva.setPrices(List.of(
-						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("5.00")).deliveryType(omniva).build(),
-						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("10.00")).deliveryType(omniva).build(),
-						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("10.00")).deliveryType(omniva).build()));
-
-				deliveryTypes.add(omniva);
-
-
-				// ---------- 3. COURIER ----------
-				DeliveryType courier = new DeliveryType(DeliveryMethod.COURIER);
-				courier.setCreatedBy(u1);
-
-				DeliveryTypeTranslation courier_lv = DeliveryTypeTranslation.builder()
-						.title("Kurjers")
-						.description("Kurjera piegāde līdz durvīm. 10 EUR Latvijā, 20 EUR uz Lietuvu un Igauniju.")
-						.locale(LocaleCode.LV)
-						.deliveryType(courier)
-						.build();
-
-				DeliveryTypeTranslation courier_en = DeliveryTypeTranslation.builder()
-						.title("Courier")
-						.description("Courier delivery to your door. €10 in Latvia, €20 to Lithuania and Estonia")
-						.locale(LocaleCode.EN)
-						.deliveryType(courier)
-						.build();
-
-				courier.setTranslations(List.of(courier_lv, courier_en));
-				courier.setPrices(List.of(
-						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("10.00")).deliveryType(courier).build(),
-						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("20.00")).deliveryType(courier).build(),
-						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("20.00")).deliveryType(courier).build()));
-
-				deliveryTypes.add(courier);
-
-
-				// ---------- Save all ----------
-				deliveryTypeRepo.saveAll(deliveryTypes);
-
-				System.out.println("=== createDeliveryTypesAndPrices SEEDED ===");
-
 			}
 		};
 	}
 
+	// @Order(2)
 	// @Bean
-	public CommandLineRunner createDeliveryTypesAndPrices(DeliveryTypeRepository deliveryTypeRepo, IMyUserRepo userRepo) {
+	public CommandLineRunner createDeliveryTypesAndPrices(DeliveryTypeRepository deliveryTypeRepo, UserRepository userRepo) {
 		return new CommandLineRunner() {
 			@Override
 			public void run(String... args) throws Exception {
 				System.out.println("=== createDeliveryTypesAndPrices ===");
-				MyUser u1 = userRepo.findById(1).get();
+				User u1 = userRepo.findSystemUserNative();
 
 				List<DeliveryType> deliveryTypes = new ArrayList<>();
 
@@ -905,6 +705,7 @@ public class SparniProjectApplication {
 	}
 
 	// @Bean
+	// @Order(3)
 	public CommandLineRunner setUpPermissionsAndRoles(UserRepository userRepo, RoleRepository roleRepository, PermissionRepository permissionRepo,
 			PasswordEncoder passwordEncoder) {
 		return new CommandLineRunner() {

@@ -3,17 +3,16 @@ package lv.wings.service.impl;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
-import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import lombok.NonNull;
 import lv.wings.dto.request.payment.NewCouponDto;
+import lv.wings.dto.response.admin.orders.CouponAdminDto;
 import lv.wings.dto.response.payment.CouponCodeDto;
 import lv.wings.dto.response.payment.CouponDiscountDto;
 import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.mapper.CouponMapper;
 import lv.wings.model.entity.Coupon;
+import lv.wings.model.entity.Order;
 import lv.wings.repo.CouponRepository;
 import lv.wings.service.AbstractCRUDService;
 import lv.wings.service.CouponService;
@@ -49,6 +48,15 @@ public class CouponServiceImpl extends AbstractCRUDService<Coupon, Integer> impl
     public Coupon findByCode(String code) {
         return couponRepository.findByCodeIgnoreCase(code).orElse(null);
     }
+
+    @Override
+    public CouponAdminDto orderToCouponAdminDto(@NonNull Order order) {
+        Coupon coupon = order.getAppliedCoupon();
+        if (coupon == null)
+            return null;
+        return couponMapper.toAdminDto(coupon, order.getDiscountAtOrderTime());
+    }
+
 
     private String generateCouponCode(int length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
