@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Order Shipped – Sparni.lv</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #fbe9d0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Your order has been shipped!</h2>
+      <p>Hello, {{name}}!</p>
+
+      <p>
+        Your order <strong>has been shipped</strong> and will be delivered soon.
+      </p>
+
+      <p>{{comment}}</p>
+
+      <p>Thank you for choosing Sparni.lv!</p>
+
+      <div class="footer">
+        This is an automatically generated email – please do not reply.<br />
+        If you have any questions, contact our customer support.
+      </div>
+      <div class="footer">
+        With regards,<br />
+        Sparni.lv team
+      </div>
+    </div>
+  </body>
+</html>

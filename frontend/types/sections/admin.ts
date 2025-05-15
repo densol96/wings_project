@@ -38,6 +38,11 @@ export type StatusDto = {
   name: string;
 };
 
+export type UserMinDto = {
+  id: number;
+  username: string;
+};
+
 export type OrderAdminDto = {
   id: number;
   status: StatusDto;
@@ -45,6 +50,8 @@ export type OrderAdminDto = {
   customer: CustomerInfoDto;
   delivery: DeliveryMethodDto;
   createdAt: string;
+  lastModifiedAt: string | null;
+  lastModifiedBy: UserMinDto | null;
 };
 
 export type FullDeliveryInfoDto = {
@@ -94,5 +101,5 @@ export type OrderFullAdminDto = {
   items: OrderSingleProductDto[];
   createdAt: string;
   lastModifiedAt: string | null;
-  lastModifiedBy: string | null;
+  lastModifiedBy: UserMinDto | null;
 };

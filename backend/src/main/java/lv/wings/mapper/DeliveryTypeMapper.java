@@ -15,6 +15,6 @@ public interface DeliveryTypeMapper {
     @Mapping(target = "id", source = "variation.id")
     DeliveryDto toDeliveryDto(DeliveryType type, DeliveryPrice variation, DeliveryTypeTranslation dtTranslation);
 
-    @Mapping(target = "methodCode", expression = "java(cariation.getDeliveryType().getMethod())")
+    @Mapping(target = "methodCode", expression = "java(variation.getDeliveryType().getMethod())")
     FullDeliveryInfoDto toAdminDeliveryInfo(DeliveryPrice variation, BigDecimal deliveryPriceAtOrderTime, String methodName);
 }

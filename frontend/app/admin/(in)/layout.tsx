@@ -40,9 +40,7 @@ const Layout = async ({ children, changeEmail, changePassword }: Props) => {
             <AccountButton />
             <LogoutButton />
           </header>
-          <div className="flex-1 py-20 px-40 relative">
-            <Suspense fallback={<Spinner />}>{children}</Suspense>
-          </div>
+          <div className="flex-1 py-20 px-40 relative">{children}</div>
         </main>
       </div>
       {changeEmail}

@@ -25,4 +25,8 @@ public interface EmailSenderService {
     void sendNewEmployeeNotification(User user, String newPassword);
 
     void sendAdminChangedPasswordNotification(User user, String newPassword);
+
+    void sendOrderWasShippedEmail(Order order, String additionalComment);
+
+    void sendOrderClosedEmail(Order order);
 }

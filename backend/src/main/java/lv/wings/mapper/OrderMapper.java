@@ -14,7 +14,7 @@ import lv.wings.model.entity.Customer;
 import lv.wings.model.entity.Order;
 import lv.wings.model.entity.OrderItem;
 
-@Mapper(componentModel = "spring", uses = {CustomerMapper.class})
+@Mapper(componentModel = "spring", uses = {CustomerMapper.class, UserMapper.class})
 public interface OrderMapper {
 
     @Mapping(target = "productId", expression = "java(item.getProduct().getId())")

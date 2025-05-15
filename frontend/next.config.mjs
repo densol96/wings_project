@@ -2,7 +2,7 @@
 
 const nextConfig = {
   experimental: {
-    turbo: true,
+    turbo: {},
   },
   images: {
     remotePatterns: [

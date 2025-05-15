@@ -13,3 +13,11 @@ export const getGreeting = (): string => {
     return "Ar labunakti";
   }
 };
+
+export const wait = async (seconds: number) => new Promise((res) => setTimeout(res, 1000 * seconds));
+
+export const isBefore = (date: Date, thresholdDays: number) => {
+  const now = new Date();
+  const thresholdDate = new Date(now.getTime() - thresholdDays * 24 * 60 * 60 * 1000);
+  return !date || new Date(date).getTime() < thresholdDate.getTime();
+};

@@ -9,6 +9,7 @@ import org.springframework.util.StreamUtils;
 
 import lombok.RequiredArgsConstructor;
 import lv.wings.enums.LocaleCode;
+import lv.wings.model.entity.Customer;
 import lv.wings.model.entity.Order;
 import lv.wings.model.entity.OrderItem;
 import lv.wings.model.security.User;
@@ -154,6 +155,31 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
             return template
                     .replace("{{name}}", user.getFirstName() + " " + user.getLastName())
                     .replace("{{newPassword}}", newPassword);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateNewUsernameHtml", e);
+        }
+    }
+
+    @Override
+    public String generateOrderClosedHtml(Order order) {
+        Customer customer = order.getCustomer();
+        try {
+            String template = loadTemplate("/templates/order-closed-" + order.getLocale().getCode() + ".html");
+            return template
+                    .replace("{{name}}", customer.getFirstName() + " " + customer.getLastName())
+                    .replace("{{orderId}}", order.getId() + "");
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to generateNewUsernameHtml", e);
+        }
+    }
+
+    @Override
+    public String generateOrderWasSentHtml(Customer customer, String additionalComment, LocaleCode locale) {
+        try {
+            String template = loadTemplate("/templates/order-was-sent-" + locale.getCode() + ".html");
+            return template
+                    .replace("{{name}}", customer.getFirstName() + " " + customer.getLastName())
+                    .replace("{{comment}}", additionalComment == null ? "" : additionalComment);
         } catch (Exception e) {
             throw new RuntimeException("Failed to generateNewUsernameHtml", e);
         }

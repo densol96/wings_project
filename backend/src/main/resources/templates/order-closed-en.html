@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Order Closed – Sparni.lv</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #fbe9d0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Your order has been closed</h2>
+      <p>Hello, {{name}}!</p>
+
+      <p>
+        We would like to inform you that your order
+        <strong>No. {{orderId}}</strong> has been marked as closed in our
+        system.
+      </p>
+
+      <p>
+        If you believe this is a mistake or if you have not yet received your
+        order, please contact us at
+        <a href="mailto:info@sparni.lv">info@sparni.lv</a>.
+      </p>
+
+      <div class="footer">
+        This is an automatically sent message – please do not reply to it.
+      </div>
+    </div>
+  </body>
+</html>

@@ -63,6 +63,10 @@ const statusFilterOptions = {
       label: "Nosūtīts",
       value: "SHIPPED",
     },
+    {
+      label: "Izpildīts",
+      value: "COMPLETED",
+    },
   ],
 };
 
@@ -149,7 +153,18 @@ const Page = async ({ searchParams }: Props) => {
         <>
           <Table
             className="text-center"
-            columnNames={["Datums", "Statuss", "Klients", "E-pasts", "Kopējā summa", "Piegādes veids", "Piegādes adrese", "Skatīt"]}
+            columnNames={[
+              "Statuss",
+              "Izveidots",
+              "Pēdējās izmaiņas",
+              "Izmainīja",
+              "Klients",
+              "E-pasts",
+              "Kopējā summa",
+              "Piegādes veids",
+              "Piegādes adrese",
+              "Darbības",
+            ]}
             data={orders}
             render={(order: OrderAdminDto) => <OrderRow order={order} q={q} />}
           />

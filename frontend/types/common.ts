@@ -83,7 +83,7 @@ export type BasicErrorDto = {
 };
 
 export type ButtonProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   size?: "sm" | "md" | "lg";
   color?: "primary" | "transparent" | "green" | "neutral";
@@ -102,3 +102,9 @@ export type TokenProps = {
 };
 
 export type SimleSort = "createdAt" | "lastModifiedAt";
+
+export enum TranslationMethod {
+  AUTO = "AUTO",
+  MANUAL = "MANUAL",
+  DEFAULT = "DEFAULT",
+}

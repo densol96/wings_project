@@ -12,6 +12,7 @@ import com.stripe.model.PaymentIntent;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import lv.wings.dto.request.admin.orders.UpgradeOrderDto;
 import lv.wings.dto.request.payment.OrderDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.admin.orders.CouponAdminDto;
@@ -27,14 +28,15 @@ import lv.wings.enums.Country;
 import lv.wings.enums.DeliveryMethod;
 import lv.wings.enums.LocaleCode;
 import lv.wings.enums.OrderStatus;
+import lv.wings.enums.TranslationMethod;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.other.ConflictException;
 import lv.wings.exception.payment.WebhookException;
 import lv.wings.mapper.CustomerMapper;
 import lv.wings.mapper.DeliveryTypeMapper;
 import lv.wings.mapper.OrderMapper;
+import lv.wings.mapper.UserMapper;
 import lv.wings.model.entity.Address;
-import lv.wings.model.entity.Coupon;
 import lv.wings.model.entity.DeliveryPrice;
 import lv.wings.model.entity.DeliveryType;
 import lv.wings.model.entity.Order;
@@ -54,6 +56,7 @@ import lv.wings.service.LocaleService;
 import lv.wings.service.OmnivaService;
 import lv.wings.service.OrderService;
 import lv.wings.service.ProductService;
+import lv.wings.service.TranslationService;
 
 @Service
 @Slf4j
@@ -62,6 +65,7 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
     private final OrderMapper orderMapper;
+    private final UserMapper userMapper;
 
     private final LocaleService localeService;
     private final DeliveryPriceService deliveryPriceService;
@@ -70,6 +74,7 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
     private final CouponService couponService;
     private final ProductService productService;
     private final EmailSenderService emailSenderService;
+    private final TranslationService translationService;
 
     private final FrontendCacheInvalidator nextJsInvalidator;
 
@@ -82,11 +87,22 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
     public static final int DAYS_AFTER_SHIPPING = 3;
 
 
-    public OrderServiceImpl(OrderRepository orderRepository, OrderItemRepository orderItemRepository, LocaleService localeService,
-            DeliveryPriceService deliveryPriceService, DeliveryTypeService deliveryTypeService, OrderMapper orderMapper,
-            OmnivaService omnivaService, CouponService couponService, CustomerMapper customerMapper, ProductService productService,
-            FrontendCacheInvalidator nextJsInvalidator, EmailSenderService emailSenderService,
-            DeliveryTypeMapper deliveryTypeMapper) {
+    public OrderServiceImpl(
+            OrderRepository orderRepository,
+            OrderItemRepository orderItemRepository,
+            LocaleService localeService,
+            DeliveryPriceService deliveryPriceService,
+            DeliveryTypeService deliveryTypeService,
+            OrderMapper orderMapper,
+            OmnivaService omnivaService,
+            CouponService couponService,
+            CustomerMapper customerMapper,
+            ProductService productService,
+            FrontendCacheInvalidator nextJsInvalidator,
+            EmailSenderService emailSenderService,
+            DeliveryTypeMapper deliveryTypeMapper,
+            TranslationService translationService,
+            UserMapper userMapper) {
         super(orderRepository, "Order", "entity.order");
         this.orderRepository = orderRepository;
         this.localeService = localeService;
@@ -101,6 +117,8 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
         this.emailSenderService = emailSenderService;
         this.orderMapper = orderMapper;
         this.deliveryTypeMapper = deliveryTypeMapper;
+        this.translationService = translationService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -208,11 +226,6 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
 
     @Override
     public Page<OrderAdminDto> searchOrders(Pageable pageable, String q, OrderStatus orderStatus, Country toCountry, DeliveryMethod deliveryMethod) {
-        System.out.println("DELIVERY METHOD: " + deliveryMethod);
-        // return orderRepository.findFilteredOrders(orderStatus, toCountry, deliveryMethod, q, pageable).map(this::mapOrderToDto);
-
-        System.out.println("SIZE OF ALL: " + findAll().size());
-
         return orderRepository.findFilteredOrders(pageable, orderStatus, toCountry, deliveryMethod, q).map(this::mapOrderToDto);
     }
 
@@ -237,7 +250,7 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
                 .items(items)
                 .createdAt(order.getCreatedAt())
                 .lastModifiedAt(order.getLastModifiedAt())
-                .lastModifiedBy("Placholder employee") // TODO [] switch from MyUser to User
+                .lastModifiedBy(userMapper.toMinUserDto(order.getLastModifiedBy()))
                 .build();
     }
 
@@ -268,18 +281,35 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
     }
 
     @Override
-    public BasicMessageDto upgradeOrder(Integer id) {
+    public BasicMessageDto upgradeOrder(Integer id, UpgradeOrderDto dto) {
         Order order = findById(id);
-        if (order.getStatus() != OrderStatus.PAID)
-            throw new ConflictException("Pasūtījumu var nosūtīt tikai tad, ja tas ir apmaksāts.");
+        if (order.getStatus() != OrderStatus.PAID || order.getDeliveryVariation().getDeliveryType().getMethod() == DeliveryMethod.PICKUP)
+            throw new ConflictException("Pasūtījumu var nosūtīt tikai tad, ja tas ir apmaksāts un piegādes metode nav 'Saņemšana veikalā' (Pickup).");
+
+        String additionalComment = dto.getAdditionalComment();
+        String localisedComment = null;
+
+        if (additionalComment != null && !additionalComment.isBlank()) {
+            if (order.getLocale() != LocaleCode.LV) {
+                if (dto.getTranslateMethod() == TranslationMethod.MANUAL) {
+                    localisedComment = additionalComment;
+                } else {
+                    localisedComment = translationService.translateToEnglish(additionalComment);
+                }
+            } else {
+                localisedComment = additionalComment;
+            }
+        }
         order.setStatus(OrderStatus.SHIPPED);
         orderRepository.save(order);
+        emailSenderService.sendOrderWasShippedEmail(order, localisedComment);
         return new BasicMessageDto("Pasūtījuma statuss ir mainīts, un klients ir informēts, ka pasūtījums ir nosūtīts.");
     }
 
     @Override
     public BasicMessageDto closeOrder(Integer id) {
         Order order = findById(id);
+
         LocalDateTime lastModifiedAt = order.getLastModifiedAt();
 
         boolean isShippedAndCanBeClosed =
@@ -291,6 +321,7 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
         if (isShippedAndCanBeClosed || orderIsPaidInStore) {
             order.setStatus(OrderStatus.COMPLETED);
             orderRepository.save(order);
+            emailSenderService.sendOrderClosedEmail(order);
         } else {
             if (order.getStatus() == OrderStatus.SHIPPED) {
                 throw new ConflictException("Pasūtījumu nevar pabeigt, jo tas tika nosūtīts pārāk nesen.");
@@ -304,12 +335,12 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
     }
 
     @Override
-    @Scheduled(cron = "0 41 20 * * *") // 4am everyday
+    @Scheduled(cron = "0 0 4 * * *") // 4am everyday
     public void completePaidOrders() {
-        log.info("*** I RUUUUN!");
         List<Order> paidOrders = orderRepository.findOrdersThatCanBeCompleted(LocalDateTime.now().minusDays(DAYS_AFTER_SHIPPING));
         for (Order order : paidOrders) {
             order.setStatus(OrderStatus.COMPLETED);
+            emailSenderService.sendOrderClosedEmail(order);
         }
         orderRepository.saveAll(paidOrders);
         log.info("*** {} paid orders have been automatically upgraded by the system!");

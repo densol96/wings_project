@@ -3,6 +3,7 @@ package lv.wings.service;
 import java.math.BigDecimal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import lv.wings.dto.request.admin.orders.UpgradeOrderDto;
 import lv.wings.dto.request.payment.OrderDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.admin.orders.OrderAdminDto;
@@ -26,7 +27,7 @@ public interface OrderService extends CRUDService<Order, Integer> {
 
     OrderFullAdminDto getOrder(Integer id);
 
-    BasicMessageDto upgradeOrder(Integer id);
+    BasicMessageDto upgradeOrder(Integer id, UpgradeOrderDto dto);
 
     BasicMessageDto closeOrder(Integer id);
 

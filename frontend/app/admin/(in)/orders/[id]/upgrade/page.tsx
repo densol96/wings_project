@@ -1,10 +1,7 @@
-import { IdParams } from "@/types";
-import OrderDetailsPage from "./OrderDetailsPage";
 import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
+import { IdParams } from "@/types";
 import { cookies } from "next/headers";
-import { wait } from "@/utils";
-
-type Props = {};
+import UpgradeOrderForm from "../../UpgradeOrderForm";
 
 const Page = async ({ params: { id } }: IdParams) => {
   await getUserSessionOrRedirect();
@@ -16,7 +13,8 @@ const Page = async ({ params: { id } }: IdParams) => {
   });
   const data = await response.json();
   if (!response.ok) throw new Error(data.message);
-  return <OrderDetailsPage order={data} />;
+
+  return <UpgradeOrderForm order={data} />;
 };
 
 export default Page;

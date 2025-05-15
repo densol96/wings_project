@@ -1,8 +1,9 @@
 import { OrderSingleProductDto } from "@/app/[lang]/(shared)/checkout/payment/result/PaymentInfo";
-import { Button } from "@/components";
+import { Button, Heading } from "@/components";
 import { AddressAdminDto, CouponAdminDto, CustomerFullAdminDto, FullDeliveryInfoDto, OrderFullAdminDto, OrderStatus } from "@/types";
 import { cn, formatPrice, getOrderStatusColor } from "@/utils";
 import Link from "next/link";
+import CloseOrder from "../CloseOrder";
 
 type Props = {
   order: OrderFullAdminDto;
@@ -11,7 +12,7 @@ type Props = {
 const OrderDetailsPage = ({ order }: Props) => {
   return (
     <div className="p-6 max-w-[70%]">
-      <h1 className="text-2xl font-bold mb-4">Informācija par pasūtījumu</h1>
+      <Heading size="xl">Informācija par pasūtījumu</Heading>
       <OrderStatusSection order={order} />
       <DeliveryInfo delivery={order.deliveryInfo} />
       <Customer customer={order.customerInfo} />
@@ -41,7 +42,7 @@ const OrderStatusSection = ({ order }: Props) => {
       )}
       {order.lastModifiedBy && (
         <p>
-          <strong>Rediģēja:</strong> {order.lastModifiedBy}
+          <strong>Rediģēja:</strong> {order.lastModifiedBy.username}
         </p>
       )}
       {order.status.code === OrderStatus.PAID && (
@@ -49,6 +50,7 @@ const OrderStatusSection = ({ order }: Props) => {
           <Button color="green">Atzīmēt kā nosūtītu</Button>
         </Link>
       )}
+      <CloseOrder className="mt-4 mb-6 block" order={order} />
     </section>
   );
 };

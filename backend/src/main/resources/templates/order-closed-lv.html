@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="lv">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Pasūtījums slēgts – Sparni.lv</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #fbe9d0;
+        padding: 20px;
+      }
+      .container {
+        max-width: 600px;
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        margin: auto;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .footer {
+        margin-top: 30px;
+        font-size: 12px;
+        color: #888;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Jūsu pasūtījums ir noslēgts</h2>
+      <p>Sveicināti, {{name}}!</p>
+
+      <p>
+        Mēs informējam, ka jūsu pasūtījums <strong>Nr. {{orderId}}</strong> ir
+        ticis slēgts mūsu sistēmā.
+      </p>
+
+      <p>
+        Ja jūs vēl neesat saņēmis savu pasūtījumu vai uzskatāt, ka šī darbība ir
+        notikusi kļūdas dēļ, lūdzu, sazinieties ar mums pa e-pastu:
+        <a href="mailto:info@sparni.lv">info@sparni.lv</a>.
+      </p>
+
+      <div class="footer">
+        Šī ir automātiski nosūtīta vēstule – lūdzu, neatbildiet uz to.
+      </div>
+    </div>
+  </body>
+</html>

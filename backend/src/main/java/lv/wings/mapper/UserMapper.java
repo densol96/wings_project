@@ -3,6 +3,7 @@ package lv.wings.mapper;
 import java.util.Set;
 import org.mapstruct.Mapper;
 import lv.wings.dto.request.users.NewUserDto;
+import lv.wings.dto.response.admin.orders.UserMinDto;
 import lv.wings.dto.response.admin.users.UserAdminDto;
 import lv.wings.dto.response.admin.users.UserDetailsDto;
 import lv.wings.dto.response.users.UserSessionInfoDto;
@@ -19,6 +20,8 @@ public interface UserMapper {
     UserAdminDto userToAdminDto(User user, String status);
 
     UserDetailsDto usetToDetails(User user);
+
+    UserMinDto toMinUserDto(User user);
 
     default String role(Role role) {
         return role != null ? role.getName() : null;

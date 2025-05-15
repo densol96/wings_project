@@ -38,13 +38,13 @@ const Input = ({
       className={cn("w-full p-2 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-primary-bright", className)}
       disabled={disabled || pending}
     />
-  ) : type === "checkbox" ? (
+  ) : type === "checkbox" || type === "radio" ? (
     <input
       id={id || name}
       name={name}
-      type="checkbox"
-      {...(checked !== undefined ? { checked, onChange } : { defaultChecked })}
-      {...(value !== undefined ? { value: value as string | number, onChange } : { defaultValue })}
+      type={type}
+      {...(checked !== undefined ? { checked } : { defaultChecked })}
+      {...(value !== undefined ? { value: value as string | number } : {})}
       onChange={onChange}
       className={cn("accent-primary-bright", (disabled || pending) && "cursor-not-allowed bg-gray-400/30", className)}
       disabled={disabled || pending}

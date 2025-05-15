@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.wings.enums.LocaleCode;
+import lv.wings.model.entity.Customer;
 import lv.wings.model.entity.Order;
 import lv.wings.model.security.User;
 import lv.wings.service.EmailSenderService;
@@ -109,6 +111,22 @@ public class EmailSenderServiceImpl implements EmailSenderService {
         sendHtmlEmail(user.getEmail(), "Paroles maiņa", html);
     }
 
+    @Override
+    public void sendOrderWasShippedEmail(Order order, String additionalComment) {
+        Customer customer = order.getCustomer();
+        LocaleCode locale = order.getLocale();
+        String html = emailTemplateService.generateOrderWasSentHtml(customer, additionalComment, locale);
+        String subject = localService.getMessageForSpecificLocale("email.order-sent", new Object[] {order.getId()}, locale);
+        sendHtmlEmail(customer.getEmail(), subject, html);
+    }
+
+    @Override
+    public void sendOrderClosedEmail(Order order) {
+        String html = emailTemplateService.generateOrderClosedHtml(order);
+        String subject = localService.getMessageForSpecificLocale("email.order-closed", new Object[] {order.getId()}, order.getLocale());
+        sendHtmlEmail(order.getCustomer().getEmail(), subject, html);
+    }
+
 
     private void sendHtmlEmail(String to, String subject, String html) {
         try {
@@ -124,6 +142,4 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             throw new RuntimeException(e.getMessage()); // will be ahndled as a procedural exception
         }
     }
-
-
 }

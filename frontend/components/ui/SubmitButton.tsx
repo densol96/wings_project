@@ -10,7 +10,7 @@ const SubmitButton = ({ children, size = "md", color = "primary", className, onC
   const { pending } = useFormStatus();
   return (
     <Button size={size} color={color} className={className} onClick={onClick} disabled={disabled || pending || isPending} type={type}>
-      {pending || isPending ? <Spinner color="white" /> : children}
+      {pending || isPending ? <Spinner color={color === "primary" ? "white" : "primary"} /> : children || "Nosūtīt"}
     </Button>
   );
 };

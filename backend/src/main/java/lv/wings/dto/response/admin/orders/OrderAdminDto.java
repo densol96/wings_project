@@ -16,4 +16,6 @@ public class OrderAdminDto {
     private CustomerInfoDto customer;
     private DeliveryMethodDto delivery;
     private LocalDateTime createdAt;
+    private LocalDateTime lastModifiedAt;
+    private UserMinDto lastModifiedBy;
 }

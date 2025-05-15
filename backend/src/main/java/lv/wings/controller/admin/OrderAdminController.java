@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.annotation.AllowedSortFields;
+import lv.wings.dto.request.admin.orders.UpgradeOrderDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.admin.orders.OrderAdminDto;
 import lv.wings.dto.response.admin.orders.OrderFullAdminDto;
@@ -51,10 +53,14 @@ public class OrderAdminController {
     }
 
     @PatchMapping("/{id}/upgrade")
-    public ResponseEntity<BasicMessageDto> promoteOrder(@PathVariable Integer id) {
+    public ResponseEntity<BasicMessageDto> promoteOrder(@PathVariable Integer id, @RequestBody UpgradeOrderDto dto) {
         log.info("Received PATCH request on /api/v1/admin/orders/{}/upgrade", id);
-        return ResponseEntity.ok(orderService.upgradeOrder(id));
+        return ResponseEntity.ok(orderService.upgradeOrder(id, dto));
     }
 
-
+    @PatchMapping("/{id}/close")
+    public ResponseEntity<BasicMessageDto> closeOrder(@PathVariable Integer id) {
+        log.info("Received PATCH request on /api/v1/admin/orders/{}/close", id);
+        return ResponseEntity.ok(orderService.closeOrder(id));
+    }
 }

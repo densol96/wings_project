@@ -23,5 +23,5 @@ public class OrderFullAdminDto {
     private List<OrderSingleProductDto> items;
     private LocalDateTime createdAt;
     private LocalDateTime lastModifiedAt;
-    private String lastModifiedBy;
+    private UserMinDto lastModifiedBy;
 }
