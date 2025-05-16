@@ -27,7 +27,7 @@ export default async function Page({ params: { id, lang } }: PagePropsWithId) {
   return (
     <div className="md:block flex md:flex-row flex-col">
       <div className="min-h-[400px] relative overflow-hidden rounded-md shadow-lg lg:w-[50%] lg:float-right lg:ml-16 my-10 w-full">
-        {event.imageDtos.length <= 0 ? <MyImage lang={lang} /> : <Gallery images={event.imageDtos} />}
+        {event.imageDtos.length <= 0 ? <MyImage /> : <Gallery images={event.imageDtos} />}
         {event.imageDtos.length > 1 && (
           <span className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 bg-slate-100 rounded-lg opacity-60 font-bold text-xl group-hover:opacity-90 transition-opacity">
             {`1/${event.imageDtos.length}`}

@@ -1,4 +1,3 @@
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
 import { Heading, Spinner } from "@/components";
 import { DetailedRoleDto, PermissionSearchParams } from "@/types";
 import { basicErrorText, validatePermissionSearchParams } from "@/utils";
@@ -9,29 +8,16 @@ import { Suspense } from "react";
 import Table from "@/components/shared/Table";
 import NoData from "@/components/ui/NoData";
 import RoleRow from "./RoleRow";
+import { adminFetch } from "@/actions/adminFetch";
 
 type Props = {
   searchParams: PermissionSearchParams;
 };
 
 const Page = async ({ searchParams }: Props) => {
-  await getUserSessionOrRedirect();
-
-  console.log(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/roles/details?permissions=${validatePermissionSearchParams(searchParams).permissionIds.join(",")}`
+  const roles = await adminFetch<DetailedRoleDto[]>(
+    `security/roles/details?permissions=${validatePermissionSearchParams(searchParams).permissionIds.join(",")}`
   );
-  const response = await fetch(
-    `${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/roles/details?permissions=${validatePermissionSearchParams(searchParams).permissionIds.join(",")}`,
-    {
-      headers: {
-        Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-      },
-    }
-  );
-
-  if (!response.ok) throw new Error(basicErrorText());
-
-  const roles: DetailedRoleDto[] = await response.json();
 
   return (
     <div>

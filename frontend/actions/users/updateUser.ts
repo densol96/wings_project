@@ -13,7 +13,7 @@ export const updateUser = async (prevState: FormState, formData: FormData): Prom
     accountLocked: formDataSerialised.accountLocked === "on",
   };
   return await serverFetchAction({
-    endpoint: `admin/users/${formDataSerialised.id}`,
+    endpoint: `admin/security/users/${formDataSerialised.id}`,
     method: "PUT",
     body: body,
   });

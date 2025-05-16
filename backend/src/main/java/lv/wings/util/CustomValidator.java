@@ -36,7 +36,8 @@ public class CustomValidator {
     }
 
     public static void validateAgainstAllowedValues(String paramName, String paramValue, List<String> allowedValues) {
-        if (paramValue != null && allowedValues.stream().noneMatch(value -> value.equalsIgnoreCase(paramValue))) {
+        if (paramValue != null && allowedValues != null && allowedValues.size() > 0
+                && allowedValues.stream().noneMatch(value -> value.equalsIgnoreCase(paramValue))) {
             throw new InvalidParameterException(paramName, paramValue, true);
         }
     }

@@ -24,7 +24,7 @@ import lv.wings.service.UserService;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/v1/admin/users")
+@RequestMapping(value = "/api/v1/admin/security/users")
 @RequiredArgsConstructor
 public class UserAdminController {
     private final UserService userService;

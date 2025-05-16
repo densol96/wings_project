@@ -15,7 +15,7 @@ import lv.wings.service.SecurityEventService;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/v1/admin/security-events")
+@RequestMapping(value = "/api/v1/admin/security/events")
 @RequiredArgsConstructor
 public class SecuityEventAdminController {
 

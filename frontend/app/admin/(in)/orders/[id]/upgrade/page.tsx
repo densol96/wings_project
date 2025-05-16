@@ -1,20 +1,10 @@
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
-import { IdParams } from "@/types";
-import { cookies } from "next/headers";
+import { IdParams, OrderFullAdminDto } from "@/types";
 import UpgradeOrderForm from "../../UpgradeOrderForm";
+import { adminFetch } from "@/actions/adminFetch";
 
 const Page = async ({ params: { id } }: IdParams) => {
-  await getUserSessionOrRedirect();
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/orders/${id}`, {
-    headers: {
-      Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-    },
-    cache: "no-store",
-  });
-  const data = await response.json();
-  if (!response.ok) throw new Error(data.message);
-
-  return <UpgradeOrderForm order={data} />;
+  const order = await adminFetch<OrderFullAdminDto>(`orders/${id}`);
+  return <UpgradeOrderForm order={order} />;
 };
 
 export default Page;

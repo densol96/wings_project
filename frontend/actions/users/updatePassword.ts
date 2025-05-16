@@ -8,7 +8,7 @@ import { cookies } from "next/headers";
 export const updatePassword = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   const formDataSerialised = Object.fromEntries(formData.entries());
   return await serverFetchAction({
-    endpoint: `admin/users/${formDataSerialised.id}/update-password`,
+    endpoint: `admin/security/users/${formDataSerialised.id}/update-password`,
     method: "PATCH",
     body: formDataSerialised,
   });

@@ -1,8 +1,8 @@
 import { FormState, HttpMethod, Locale, UserSessionInfoDto } from "@/types";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import toast from "react-hot-toast";
 import { basicErrorText, displayError, getFullUrl, normalizeError } from "./parse";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 
 // for SC => error boundary will ahndle the network error
@@ -14,21 +14,6 @@ export const fetcher = async function <T>(url: string, showNotFoundFor: number[]
     throw new Error(data.message || "Error while fetching from: " + url); // could be used for logging, dict-translation can happen in an error boundary
   }
   return data as T;
-};
-
-export const getUserSession = async (token: string): Promise<UserSessionInfoDto | null> => {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/auth/user-data`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      cache: "no-store",
-    });
-    if (!response.ok) throw Error();
-    return (await response.json()) as UserSessionInfoDto;
-  } catch (e) {
-    return null;
-  }
 };
 
 export const fetchWithSetup = async (
@@ -53,9 +38,12 @@ export const fetchWithSetup = async (
       ...headers,
     },
     ...(body && { body: JSON.stringify(body) }),
+    ...(method && method !== "GET" && { cache: "no-store" as RequestCache }),
     ...additionalOptions,
   };
   const fullUrl = url.startsWith("http") ? url : `${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/${url}`;
+  console.log("FULL URL => ", fullUrl);
+  console.log(options);
   return await fetch(fullUrl, options);
 };
 
@@ -110,4 +98,14 @@ export const handleFormSubmission = async (
     toast.error(basicErrorText());
     onNetworkError?.(e);
   }
+};
+
+export const encryptUser = (baseUrl: string, user: UserSessionInfoDto): Promise<string> => {
+  return fetch(`${baseUrl}/api/encrypt-user`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user }),
+  })
+    .then((res) => res.json())
+    .then((data) => data.encryptedUser);
 };

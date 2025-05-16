@@ -7,7 +7,7 @@ type Props = {
 };
 
 const NewUser = async ({ className }: Props) => {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/roles`, {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/security/roles`, {
     headers: {
       Authorization: `Bearer ${cookies().get("authToken")?.value}`,
     },

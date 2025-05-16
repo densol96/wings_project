@@ -70,6 +70,10 @@
   .slideUp {
     animation: fadeUp 0.4s ease-out forwards;
   }
+
+  .slideDown {
+    animation: fadeDown 0.4s ease-out forwards;
+  }
 }
 
 @layer utilities {
@@ -124,5 +128,22 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -100%);
+  }
+
+  80% {
+    opacity: 1;
+    transform: translate(-50%, 15%);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0%);
   }
 }

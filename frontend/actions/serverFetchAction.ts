@@ -3,7 +3,7 @@
 import { FormState, HttpMethod } from "@/types";
 import { fetchWithSetup } from "@/utils";
 import { revalidatePath } from "next/cache";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 
 // Template for SEVRER ACTIONS
 export const serverFetchAction = async ({
@@ -23,6 +23,8 @@ export const serverFetchAction = async ({
       body,
       headers: {
         Authorization: `Bearer ${cookies().get("authToken")?.value}`,
+        "User-Agent": headers().get("user-agent") ?? "",
+        "X-Forwarded-For": headers().get("x-forwarded-for") ?? "",
       },
     });
 

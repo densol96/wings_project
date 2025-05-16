@@ -1,7 +1,6 @@
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
-import { RoleDto, UserAdminDto, UserDetailsDto } from "@/types";
+import { RoleDto, UserDetailsDto } from "@/types";
 import { basicErrorText } from "@/utils";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import UserForm from "./UserForm";
 
 type Props = {
@@ -10,23 +9,15 @@ type Props = {
 };
 
 const UserInfo = async ({ id, className }: Props) => {
-  await getUserSessionOrRedirect();
-
-  const authToken = cookies().get("authToken")?.value;
   const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED;
-
-  const [userRes, rolesRes] = await Promise.all([
-    fetch(`${baseUrl}/admin/users/${id}`, {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    }),
-    fetch(`${baseUrl}/admin/roles`, {
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-    }),
-  ]);
+  const options = {
+    headers: {
+      Authorization: `Bearer ${cookies().get("authToken")?.value}`,
+      "User-Agent": headers().get("user-agent") ?? "",
+      "X-Forwarded-For": headers().get("x-forwarded-for") ?? "",
+    },
+  };
+  const [userRes, rolesRes] = await Promise.all([fetch(`${baseUrl}/admin/security/users/${id}`, options), fetch(`${baseUrl}/admin/security/roles`, options)]);
 
   if (!userRes.ok || !rolesRes.ok) throw new Error(basicErrorText());
 

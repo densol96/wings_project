@@ -5,7 +5,7 @@ import { serverFetchAction } from "../serverFetchAction";
 
 export const deleteRole = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   return await serverFetchAction({
-    endpoint: `admin/roles/${formData.get("id")}`,
+    endpoint: `admin/security/roles/${formData.get("id")}`,
     method: "DELETE",
   });
 };

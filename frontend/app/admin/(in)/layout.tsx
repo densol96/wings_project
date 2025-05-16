@@ -1,7 +1,4 @@
 import Link from "next/link";
-import { Suspense } from "react";
-import { Spinner } from "@/components";
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
 import { Permission } from "@/types";
 import Image from "next/image";
 import { cn } from "@/utils";
@@ -12,6 +9,8 @@ import SecuritySidebarSection from "./SecuritySidebarSection";
 import LogoutButton from "../(auth)/LogoutButton";
 import Greeting from "./Greeting";
 import AccountButton from "./AccountButton";
+import { headers } from "next/headers";
+import { getCurrentUser } from "@/actions/helpers/getUser";
 
 type Props = {
   children: React.ReactNode;
@@ -20,7 +19,12 @@ type Props = {
 };
 
 const Layout = async ({ children, changeEmail, changePassword }: Props) => {
-  const user = await getUserSessionOrRedirect();
+  // const user = getCurrentUser();
+  const user = {
+    firstName: "Deniss",
+    lastName: "Solovjovs",
+    authorities: ["MANAGE_NEWS", "MANAGE_PRODUCTS", "MANAGE_ORDERS", "MANAGE_SECURITY"],
+  };
 
   return (
     <>

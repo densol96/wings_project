@@ -1,15 +1,14 @@
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
 import { Heading } from "@/components";
 import Table from "@/components/shared/Table";
-import { basicErrorText, parsePageableResponse, validateEventsSearchParams, validateUsersSearchParams } from "@/utils";
+import { basicErrorText, parsePageableResponse, validateEventsSearchParams } from "@/utils";
 import { cookies } from "next/headers";
-import { EventsSearchParams, SecurityEventDto, SelectOptions, UserAdminDto, UsersSearchParams } from "@/types";
-import Select from "@/components/ui/Select";
+import { EventsSearchParams, PageableResponse, SecurityEventDto, SelectOptions } from "@/types";
 import FilterSelect from "@/components/ui/FilterSelect";
 import NoData from "@/components/ui/NoData";
 import SecurityRow from "./SecurityRow";
 import Pagination from "@/components/shared/Pagination";
 import SearchFilter from "@/components/shared/SearchFilter";
+import { adminFetch } from "@/actions/adminFetch";
 
 type Props = {
   searchParams: EventsSearchParams;
@@ -35,17 +34,10 @@ export const eventTypeSelect: SelectOptions = {
 };
 
 const Page = async ({ searchParams }: Props) => {
-  await getUserSessionOrRedirect();
   const { page, type, q } = validateEventsSearchParams(searchParams);
   const queryParams = new URLSearchParams({ page, type, q }).toString();
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/security-events?${queryParams}`, {
-    headers: {
-      Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-    },
-    cache: "no-store",
-  });
-  if (!response.ok) throw new Error(basicErrorText());
-  const { content: events, size, totalPages, totalElements } = parsePageableResponse<SecurityEventDto>(await response.json());
+  const order = await adminFetch<PageableResponse>(`security/events?${queryParams}`);
+  const { content: events, totalPages } = parsePageableResponse<SecurityEventDto>(order);
 
   return (
     <div className="">

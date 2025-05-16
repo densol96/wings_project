@@ -1,9 +1,8 @@
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
+import { getCurrentUser } from "@/actions/helpers/getUser";
 import ChangeEmailForm from "../ChangeEmailForm";
 
 const Page = async () => {
-  const user = await getUserSessionOrRedirect();
-  return <ChangeEmailForm className="max-w-[700px]" currentEmail={user.email} />;
+  return <ChangeEmailForm className="max-w-[700px]" currentEmail={getCurrentUser().email} />;
 };
 
 export default Page;

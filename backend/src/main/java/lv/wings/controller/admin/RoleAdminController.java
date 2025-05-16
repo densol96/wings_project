@@ -23,7 +23,7 @@ import lv.wings.service.RoleService;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/v1/admin/roles")
+@RequestMapping(value = "/api/v1/admin/security/roles")
 @RequiredArgsConstructor
 public class RoleAdminController {
 

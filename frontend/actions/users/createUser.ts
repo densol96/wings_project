@@ -13,7 +13,7 @@ export const createUser = async (prevState: FormState, formData: FormData): Prom
     accountLocked: formDataSerialised.accountLocked === "on",
   };
   return await serverFetchAction({
-    endpoint: "admin/users",
+    endpoint: "admin/security/users",
     method: "POST",
     body,
   });

@@ -10,7 +10,7 @@ export const createRole = async (prevState: FormState, formData: FormData): Prom
     permissionIds: numericPermissionIds,
   };
   return await serverFetchAction({
-    endpoint: "admin/roles",
+    endpoint: "admin/security/roles",
     method: "POST",
     body,
   });

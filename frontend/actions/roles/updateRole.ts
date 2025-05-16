@@ -10,7 +10,7 @@ export const updateRole = async (prevState: FormState, formData: FormData): Prom
     permissionIds: numericRoleIds,
   };
   return await serverFetchAction({
-    endpoint: `admin/roles/${formDataSerialised.id}`,
+    endpoint: `admin/security/roles/${formDataSerialised.id}`,
     method: "PUT",
     body: body,
   });

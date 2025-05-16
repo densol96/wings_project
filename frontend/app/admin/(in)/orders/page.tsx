@@ -1,4 +1,3 @@
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
 import { Heading, SearchFilter } from "@/components";
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
@@ -6,9 +5,11 @@ import FilterSelect from "@/components/ui/FilterSelect";
 import NoData from "@/components/ui/NoData";
 import Select from "@/components/ui/Select";
 import { OrderAdminDto, OrdersSearchParams } from "@/types/sections/admin";
-import { basicErrorText, parsePageableResponse, validateEventsSearchParams, validateOrdersSearchParams } from "@/utils";
+import { basicErrorText, parsePageableResponse, validateOrdersSearchParams } from "@/utils";
 import { cookies } from "next/headers";
 import OrderRow from "./OrderRow";
+import { adminFetch } from "@/actions/adminFetch";
+import { PageableResponse } from "@/types";
 
 type Props = {
   searchParams: OrdersSearchParams;
@@ -115,18 +116,10 @@ const deliveryMethodOptions = {
 };
 
 const Page = async ({ searchParams }: Props) => {
-  await getUserSessionOrRedirect();
   const validatedSearchParams = validateOrdersSearchParams(searchParams) as unknown as { [key: string]: string };
   const { page, sort, direction, status, country, deliveryMethod, q } = validatedSearchParams;
-
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/orders?${new URLSearchParams(validatedSearchParams).toString()}`, {
-    headers: {
-      Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-    },
-    cache: "no-store",
-  });
-  if (!response.ok) throw new Error(basicErrorText());
-  const { content: orders, totalPages } = parsePageableResponse<OrderAdminDto>(await response.json());
+  const roles = await adminFetch<PageableResponse>(`orders?${new URLSearchParams(validatedSearchParams).toString()}`);
+  const { content: orders, totalPages } = parsePageableResponse<OrderAdminDto>(roles);
 
   return (
     <div className="">

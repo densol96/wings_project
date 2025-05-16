@@ -1,18 +1,22 @@
 package lv.wings.controller.admin;
 
 import java.util.List;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import lv.wings.dto.response.admin.roles.PermissionDto;
 import lv.wings.service.PermissionService;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/api/v1/admin/permissions")
+@RequestMapping(value = "/api/v1/admin/security/permissions")
 @RequiredArgsConstructor
 public class PermissionAdminController {
 

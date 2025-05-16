@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import org.springframework.data.domain.AuditorAware;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import org.springframework.web.cors.CorsConfiguration;
@@ -41,12 +42,19 @@ public class SecurityConfig {
 	@Bean
 	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
 		return http.csrf(csrf -> csrf.disable())
+				.anonymous(anonymous -> anonymous.disable())
+				.exceptionHandling(ex -> ex
+						.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-				.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/admin/users/**").hasAuthority("MANAGE_SECURITY")
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers("/api/v1/admin/security/**").hasAuthority("MANAGE_SECURITY")
+						.requestMatchers("/api/v1/admin/orders/**").hasAuthority("MANAGE_ORDERS")
+						.requestMatchers("/api/v1/admin/events/**").hasAuthority("MANAGE_NEWS")
+						.requestMatchers("/api/v1/admin/products/**").hasAuthority("MANAGE_PRODUCTS")
 						.anyRequest().permitAll())
 				.userDetailsService(userDetailsService)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+				.securityMatcher("/api/v1/admin/**").addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
 

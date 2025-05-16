@@ -2,8 +2,9 @@
 
 import React, { ChangeEvent, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { defaultLangIsSelected } from "@/services/helpers";
+
 import { useLangContext } from "@/context/LangContext";
+import { defaultLangIsSelected } from "@/utils/lang";
 
 type Locales = "lv" | "en";
 

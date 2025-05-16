@@ -26,7 +26,7 @@ const ProductGrid = async ({ page, sort, direction, categoryId, lang }: Props) =
     getDictionary(lang),
     fetcher<PageableResponse>(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/products?${queryParams}`),
   ]);
-  const { content: products, size, totalPages, totalElements } = parsePageableResponse<ShortProductDto>(productsResult);
+  const { content: products, totalPages } = parsePageableResponse<ShortProductDto>(productsResult);
   const dict: ShopDict = dictResult.shop;
 
   return !products.length ? (

@@ -9,8 +9,15 @@ import { FormState } from "@/types";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { normalizeError } from "@/utils";
+import SessionIsExpired from "./SessionIsExpired";
 
-const Page = () => {
+type Props = {
+  searchParams: {
+    expired: string;
+  };
+};
+
+const Page = ({ searchParams }: Props) => {
   const [state, formAction] = useFormState<FormState, FormData>(login, null);
 
   useEffect(() => {
@@ -20,18 +27,21 @@ const Page = () => {
   }, [state?.error]);
 
   return (
-    <AuthForm
-      title="Ielogoties sistēmā"
-      action={formAction}
-      link={{
-        label: "Atjaunot paroli",
-        href: "/admin/forgot-password",
-        icon: <TbPasswordUser />,
-      }}
-    >
-      <FormField label="Lietotājvārds" name="username" error={normalizeError(state?.errors?.username)} required />
-      <FormField label="Parole" name="password" type="password" error={normalizeError(state?.errors?.password)} required />
-    </AuthForm>
+    <>
+      {searchParams.expired && <SessionIsExpired />}
+      <AuthForm
+        title="Ielogoties sistēmā"
+        action={formAction}
+        link={{
+          label: "Atjaunot paroli",
+          href: "/admin/forgot-password",
+          icon: <TbPasswordUser />,
+        }}
+      >
+        <FormField label="Lietotājvārds" name="username" error={normalizeError(state?.errors?.username)} required />
+        <FormField label="Parole" name="password" type="password" error={normalizeError(state?.errors?.password)} required />
+      </AuthForm>
+    </>
   );
 };
 

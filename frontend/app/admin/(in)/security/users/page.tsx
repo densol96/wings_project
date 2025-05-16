@@ -1,14 +1,14 @@
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
 import { Heading } from "@/components";
 import Table from "@/components/shared/Table";
-import { basicErrorText, validateUsersSearchParams } from "@/utils";
-import { cookies } from "next/headers";
+import { validateUsersSearchParams } from "@/utils";
 import UserRow from "./UserRow";
 import { SelectOptions, UserAdminDto, UsersSearchParams } from "@/types";
 import Select from "@/components/ui/Select";
 import FilterSelect from "@/components/ui/FilterSelect";
 import NoData from "@/components/ui/NoData";
 import AddUserBtn from "./AddUserBtn";
+import { adminFetch } from "@/actions/adminFetch";
+import { headers } from "next/headers";
 
 type Props = {
   searchParams: UsersSearchParams;
@@ -55,18 +55,10 @@ const filterSelect: SelectOptions = {
 };
 
 const Page = async ({ searchParams }: Props) => {
-  await getUserSessionOrRedirect();
   const { sort, direction, status } = validateUsersSearchParams(searchParams);
   const queryParams = new URLSearchParams({ sort, direction, status }).toString();
-  const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/admin/users?${queryParams}`, {
-    headers: {
-      Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-    },
-    cache: "no-store",
-  });
-  if (!response.ok) throw new Error(basicErrorText());
+  const users = await adminFetch<UserAdminDto[]>(`security/users?${queryParams}`);
 
-  const users: UserAdminDto[] = await response.json();
   return (
     <div className="">
       <Heading size="xl">Darbinieku saraksts</Heading>

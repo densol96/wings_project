@@ -1,12 +1,11 @@
-import { getUserSessionOrRedirect } from "@/actions/auth/getUserSessionOrRedirect";
+import { getCurrentUser } from "@/actions/helpers/getUser";
 import ChangeEmailForm from "../../ChangeEmailForm";
-import { Modal, ModalWithWrapper } from "@/components/";
+import { ModalWithWrapper } from "@/components/";
 
 const Page = async () => {
-  const user = await getUserSessionOrRedirect();
   return (
     <ModalWithWrapper>
-      <ChangeEmailForm className="max-w-[500px]" currentEmail={user.email} />
+      <ChangeEmailForm className="max-w-[500px]" currentEmail={getCurrentUser().email} />
     </ModalWithWrapper>
   );
 };
