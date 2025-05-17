@@ -22,7 +22,7 @@ const UserRow = ({ user }: Props) => {
       <div>
         {user.firstName} {user.lastName}
       </div>
-      <div>{user.email}</div>
+      <div className="truncate">{user.email}</div>
       <div className="uppercase text-xs text-gray-500">{user.roles.join(", ")}</div>
       <div>
         <span className={cn("inline-block px-2 py-0.5 rounded-full text-xs font-medium", isActive ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700")}>

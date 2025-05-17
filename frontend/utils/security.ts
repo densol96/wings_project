@@ -5,7 +5,9 @@ export const isProtectedRoute = (pathname: string) => {
     pathname.startsWith("/admin/products") ||
     pathname.startsWith("/admin/news") ||
     pathname.startsWith("/admin/dashboard") ||
-    pathname.startsWith("/admin/unauthorised")
+    pathname.startsWith("/admin/unauthorised") ||
+    pathname.startsWith("/admin/change-email") ||
+    pathname.startsWith("/admin/change-password")
   );
 };
 

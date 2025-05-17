@@ -8,7 +8,7 @@ import { Suspense } from "react";
 import Table from "@/components/shared/Table";
 import NoData from "@/components/ui/NoData";
 import RoleRow from "./RoleRow";
-import { adminFetch } from "@/actions/adminFetch";
+import { adminFetch } from "@/actions/helpers/adminFetch";
 
 type Props = {
   searchParams: PermissionSearchParams;

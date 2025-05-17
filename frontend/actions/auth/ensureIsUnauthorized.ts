@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { getUserSession } from "../getUserSession";
+import { getUserSession } from "../helpers/getUserSession";
 
 export const ensureIsUnauthorized = async () => {
   const token = cookies().get("authToken")?.value;

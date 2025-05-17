@@ -32,11 +32,8 @@ const CheckboxGroup = ({ name, options }: Props) => {
     } else {
       current.delete(value);
     }
-
     params.delete(name);
-    console.log(current);
     current.forEach((val) => params.append(name, val));
-
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 

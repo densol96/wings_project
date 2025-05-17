@@ -6,7 +6,7 @@ import { ModalWithWrapper } from "@/components";
 const Page = ({ params: { id } }: IdParams) => {
   return (
     <ModalWithWrapper>
-      <UserInfo className="max-w-[700px]" id={id} />
+      <UserInfo className="w-[800px]" id={id} />
     </ModalWithWrapper>
   );
 };

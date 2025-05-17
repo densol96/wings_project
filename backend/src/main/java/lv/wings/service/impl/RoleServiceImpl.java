@@ -1,15 +1,18 @@
 package lv.wings.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-
+import io.micrometer.common.lang.Nullable;
 import lv.wings.dto.request.admin.NewRoleDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.admin.roles.DetailedRoleDto;
 import lv.wings.dto.response.admin.roles.RoleDto;
+import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.mapper.RoleMapper;
 import lv.wings.model.security.Permission;
 import lv.wings.model.security.Role;
@@ -26,12 +29,14 @@ public class RoleServiceImpl extends AbstractCRUDService<Role, Integer> implemen
     private final RoleMapper roleMapper;
     private final PermissionService permissionService;
     private final UserService userService;
+    private final RoleRepository roleRepo;
 
     public RoleServiceImpl(RoleRepository repository, RoleMapper roleMapper, PermissionService permissionService, @Lazy UserService userService) {
         super(repository, "Role", "entity.role");
         this.roleMapper = roleMapper;
         this.permissionService = permissionService;
         this.userService = userService;
+        this.roleRepo = repository;
     }
 
     @Override
@@ -77,7 +82,11 @@ public class RoleServiceImpl extends AbstractCRUDService<Role, Integer> implemen
     @Override
     public BasicMessageDto updateRole(Integer id, NewRoleDto dto) {
         Role role = findById(id);
-        role.setName(dto.getName());
+
+        String roleName = dto.getName();
+        validateRoleNameUnique(dto.getName(), role);
+
+        role.setName(roleName);
         role.setPermissions(permissionService.validatePermissionInputAndReturnEntities(dto.getPermissionIds()));
         repository.save(role);
         return new BasicMessageDto("Loma veiksmīgi atjaunināta.");
@@ -86,7 +95,11 @@ public class RoleServiceImpl extends AbstractCRUDService<Role, Integer> implemen
     @Override
     public BasicMessageDto createRole(NewRoleDto dto) {
         Role role = new Role();
-        role.setName(dto.getName());
+        String roleName = dto.getName();
+
+        validateRoleNameUnique(dto.getName(), null);
+
+        role.setName(roleName);
         role.setPermissions(permissionService.validatePermissionInputAndReturnEntities(dto.getPermissionIds()));
         repository.save(role);
         return new BasicMessageDto("Loma veiksmīgi izveidota.");
@@ -101,5 +114,19 @@ public class RoleServiceImpl extends AbstractCRUDService<Role, Integer> implemen
         }
         repository.delete(role);
         return new BasicMessageDto("Loma veiksmīgi dzēsta.");
+    }
+
+    private void validateRoleNameUnique(String newName, @Nullable Role currentRole) {
+        Map<String, String> takenFields = new HashMap<>();
+
+        boolean isCreating = currentRole == null;
+
+        if ((isCreating || !newName.equals(currentRole.getName())) && roleRepo.existsByName(newName)) {
+            takenFields.put("name", "role.name.taken");
+        }
+
+        if (!takenFields.isEmpty()) {
+            throw new InvalidFieldsException(takenFields);
+        }
     }
 }

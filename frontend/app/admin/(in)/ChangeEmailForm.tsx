@@ -16,6 +16,7 @@ type Props = {
 const ChangeEmailForm = ({ currentEmail, className }: Props) => {
   const [email, setEmail] = useState(currentEmail);
   const router = useRouter();
+
   const { formFieldErrors, isSubmitting, submit } = useClientFormSubmit(
     `${process.env.NEXT_PUBLIC_FRONTEND_URL}/api/change-email`,
     {
@@ -25,23 +26,12 @@ const ChangeEmailForm = ({ currentEmail, className }: Props) => {
     {
       onSuccess: () => {
         setTimeout(() => {
-          toast.promise(
-            new Promise((res) => {
-              setTimeout(res, 2000);
-            }),
-            {
-              loading: "Pāradresācija uz pieteikšanos..",
-              success: "Lūdzu, piesakieties savam kontam vēlreiz",
-            }
-          );
-        }, 0);
-
-        setTimeout(() => {
-          router.push("/admin/login");
+          router.back();
         }, 1000);
       },
     }
   );
+
   return (
     <div className={cn(className)}>
       <Heading size="xl">Mainīt e-pastu</Heading>

@@ -1,7 +1,7 @@
 import { basicErrorText } from "@/utils";
 import { cookies } from "next/headers";
 import RoleForm from "./RoleForm";
-import { adminFetch } from "@/actions/adminFetch";
+import { adminFetch } from "@/actions/helpers/adminFetch";
 import { PermissionDto } from "@/types";
 
 type Props = {

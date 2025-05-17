@@ -1,4 +1,4 @@
-"use active";
+"use server";
 
 import { UserSessionInfoDto } from "@/types";
 import { decrypt } from "@/utils";

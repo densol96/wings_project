@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
+import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -40,12 +40,15 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain configurePermissionToEndpoints(HttpSecurity http) throws Exception {
-		return http.csrf(csrf -> csrf.disable())
+	@Order(1)
+	public SecurityFilterChain adminSecurity(HttpSecurity http) throws Exception {
+		return http
+				.securityMatcher("/api/v1/admin/**", "/api/v1/auth/user-data", "/api/v1/auth/change-email", "/api/v1/auth/change-password")
 				.anonymous(anonymous -> anonymous.disable())
-				.exceptionHandling(ex -> ex
-						.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+				.csrf(csrf -> csrf.disable())
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.exceptionHandling(ex -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/api/v1/admin/security/**").hasAuthority("MANAGE_SECURITY")
 						.requestMatchers("/api/v1/admin/orders/**").hasAuthority("MANAGE_ORDERS")
@@ -53,8 +56,18 @@ public class SecurityConfig {
 						.requestMatchers("/api/v1/admin/products/**").hasAuthority("MANAGE_PRODUCTS")
 						.anyRequest().permitAll())
 				.userDetailsService(userDetailsService)
-				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.securityMatcher("/api/v1/admin/**").addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+				.build();
+	}
+
+	@Bean
+	@Order(2)
+	public SecurityFilterChain publicSecurity(HttpSecurity http) throws Exception {
+		return http
+				.anonymous(anonymous -> anonymous.disable())
+				.csrf(csrf -> csrf.disable())
+				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
 				.build();
 	}
 

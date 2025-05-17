@@ -8,7 +8,7 @@ import { OrderAdminDto, OrdersSearchParams } from "@/types/sections/admin";
 import { basicErrorText, parsePageableResponse, validateOrdersSearchParams } from "@/utils";
 import { cookies } from "next/headers";
 import OrderRow from "./OrderRow";
-import { adminFetch } from "@/actions/adminFetch";
+import { adminFetch } from "@/actions/helpers/adminFetch";
 import { PageableResponse } from "@/types";
 
 type Props = {
@@ -28,11 +28,11 @@ const sortSelectOptions = {
     },
     {
       label: "Nesenāk rediģētie",
-      value: "lastModifiedAt",
+      value: "lastModifiedAt-desc",
     },
     {
       label: "Senāk rediģētie",
-      value: "lastModifiedAt",
+      value: "lastModifiedAt-asc",
     },
   ],
 };

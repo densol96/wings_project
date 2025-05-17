@@ -16,6 +16,9 @@ public class NewUserDto {
 
         @NotBlank(message = "{username.required}")
         @Size(min = 3, max = 20, message = "{username.size}")
+        @Pattern(
+                        regexp = "^[^\\s.,!?@#\\$%\\^&*()+=\\[\\]{}:;\"'\\\\/<>|`~]+$",
+                        message = "{username.pattern}")
         private String username;
 
         @NotBlank(message = "{password.required}")

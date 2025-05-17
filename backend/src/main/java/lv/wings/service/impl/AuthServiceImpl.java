@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import io.micrometer.common.lang.Nullable;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -55,9 +56,17 @@ public class AuthServiceImpl implements AuthService {
    private final TokenStoreService tokenStoreService;
    private final LocaleService localeService;
 
-   public AuthServiceImpl(UserRepository userRepo, JwtService jwtService, PasswordEncoder passwordEncoder, AuthenticationManager authManager,
-         SecurityEventService securirtyEventService, UserMapper userMapper, UserSecurityService userSecurityService,
-         EmailSenderService emailSenderService, TokenStoreService tokenStoreService, LocaleService localeService) {
+   public AuthServiceImpl(
+         UserRepository userRepo,
+         JwtService jwtService,
+         PasswordEncoder passwordEncoder,
+         AuthenticationManager authManager,
+         SecurityEventService securirtyEventService,
+         UserMapper userMapper,
+         UserSecurityService userSecurityService,
+         EmailSenderService emailSenderService,
+         TokenStoreService tokenStoreService,
+         LocaleService localeService) {
       this.userRepo = userRepo;
       this.jwtService = jwtService;
       this.passwordEncoder = passwordEncoder;
@@ -68,17 +77,6 @@ public class AuthServiceImpl implements AuthService {
       this.emailSenderService = emailSenderService;
       this.tokenStoreService = tokenStoreService;
       this.localeService = localeService;
-   }
-
-   @Override
-   @Transactional
-   public AuthResponseDto register(NewUserDto dto) {
-      validateRegisterInput(dto);
-      User user = userMapper.dtoToNewUser(dto);
-      user.setPassword(passwordEncoder.encode(dto.getPassword()));
-      userRepo.save(user);
-      securirtyEventService.handleSecurityEvent(user, SecurityEventType.NEW_USER_REGISTERED, null);
-      return new AuthResponseDto(jwtService.generateToken(user));
    }
 
    @Override
@@ -149,18 +147,21 @@ public class AuthServiceImpl implements AuthService {
       User user = parseTokenAndExtractUser(resetPasswordToken, RedisKeyType.PASSWORD_RESET);
       user.setPassword(passwordEncoder.encode(dto.getPassword()));
       userRepo.save(user);
-      securirtyEventService.handleSecurityEvent(user, SecurityEventType.PASSWORD_CHANGED, null);
+      securirtyEventService
+            .handleSecurityEvent(user, SecurityEventType.PASSWORD_CHANGED, "Parole tika atiestatīta, izmantojot paroles atjaunošanas saiti");
       return new BasicMessageDto(localeService.getMessage("password-reset.successfull"));
    }
 
    @Override
    public BasicMessageDto changeEmail(EmailDto emailDto) {
       User user = userSecurityService.getCurrentUserDetails().getUser();
+      String newEmail = emailDto.getEmail();
+      validateEmailUnique(newEmail, user);
       String oldEmail = user.getEmail();
       user.setEmail(emailDto.getEmail());
       userRepo.save(user);
       emailSenderService.sendEmailChangeNotification(user, oldEmail, user.getEmail());
-      securirtyEventService.handleSecurityEvent(user, SecurityEventType.EMAIL_CHANGED, null);
+      securirtyEventService.handleSecurityEvent(user, SecurityEventType.EMAIL_CHANGED, "E-pasti nomainīja pats lietotājs");
       return new BasicMessageDto(localeService.getMessage("email-change.successfull"));
    }
 
@@ -171,7 +172,7 @@ public class AuthServiceImpl implements AuthService {
       user.setPassword(passwordEncoder.encode(dto.getPassword()));
       userRepo.save(user);
       emailSenderService.sendPasswordChangeNotification(user);
-      securirtyEventService.handleSecurityEvent(user, SecurityEventType.PASSWORD_CHANGED, null);
+      securirtyEventService.handleSecurityEvent(user, SecurityEventType.PASSWORD_CHANGED, "Paroli nomainīja pats lietotājs");
       return new BasicMessageDto(localeService.getMessage("password-change.successfull"));
    }
 
@@ -199,19 +200,13 @@ public class AuthServiceImpl implements AuthService {
          throw new InvalidFieldsException(takenFields);
    }
 
-   private void validateRegisterInput(NewUserDto dto) {
+   private void validateEmailUnique(String email, @Nullable User user) {
       Map<String, String> takenFields = new HashMap<>();
 
-      if (userRepo.existsByEmail(dto.getEmail())) {
+      boolean isCreating = user == null;
+
+      if ((isCreating || !email.equals(user.getEmail())) && userRepo.existsByEmail(email)) {
          takenFields.put("email", "email.taken");
-      }
-
-      if (userRepo.existsByUsername(dto.getUsername())) {
-         takenFields.put("username", "username.taken");
-      }
-
-      if (!dto.getPassword().equals(dto.getConfirmPassword())) {
-         takenFields.put("passwordConfirm", "passwords.mismatch");
       }
 
       if (!takenFields.isEmpty()) {

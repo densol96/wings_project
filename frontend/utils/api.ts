@@ -42,8 +42,6 @@ export const fetchWithSetup = async (
     ...additionalOptions,
   };
   const fullUrl = url.startsWith("http") ? url : `${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/${url}`;
-  console.log("FULL URL => ", fullUrl);
-  console.log(options);
   return await fetch(fullUrl, options);
 };
 

@@ -44,7 +44,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         User currentUser = null;
         try {
             String token = authHeader.substring(7);
+            System.out.println(token);
             String username = jwtService.extractUsername(token); // will throw an error if not valid or expired!
+            System.out.println(username);
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username); // will throw an error if no such a user anymore
                 if (CustomValidator.userIsAllowedAccess(userDetails)) {

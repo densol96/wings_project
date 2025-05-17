@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useDebounceEffect } from "@/hooks";
-import { search } from "@/actions/search";
+import { search } from "@/actions/helpers/search";
 
 import SearchedProductItem from "./SearchedProductItem";
 import SearchedNewsItem from "./SearchedNewsItem";

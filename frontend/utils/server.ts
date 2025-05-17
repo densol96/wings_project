@@ -1,4 +1,4 @@
-// Server side APIs used
+// These functions should only be used in the server environment due to "crypto" module
 
 import { createCipheriv, createDecipheriv, randomBytes } from "crypto";
 

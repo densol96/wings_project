@@ -20,7 +20,6 @@ export const SidebarProvider = ({ children }: ProviderProps) => {
   const close = useCallback(() => setIsOpen(false), []);
   const open = useCallback(() => setIsOpen(true), []);
   const toggle = useCallback(() => setIsOpen((val) => !val), []);
-  console.log("OAYOUT");
   return <SidebarContext.Provider value={{ isOpen, close, open, toggle }}>{children}</SidebarContext.Provider>;
 };
 

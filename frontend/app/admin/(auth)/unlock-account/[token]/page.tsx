@@ -21,9 +21,14 @@ const Page = async ({ params: { token } }: TokenProps) => {
           <IoLogInSharp /> Pierakstīties <IoLogInSharp />
         </StyledLink>
       ) : (
-        <StyledLink className="justify-self-center mt-10" showIcon={false} href="/lv">
-          <FaHome /> Atgriezties sākumlapā <FaHome />
-        </StyledLink>
+        <>
+          <StyledLink className="justify-self-center mt-10" showIcon={false} href="/admin/login">
+            <IoLogInSharp /> Atgriezties uz pieteikšanos <IoLogInSharp />
+          </StyledLink>
+          <StyledLink className="justify-self-center mt-5" showIcon={false} href="/lv">
+            <FaHome /> Atgriezties sākumlapā <FaHome />
+          </StyledLink>
+        </>
       )}
     </div>
   );

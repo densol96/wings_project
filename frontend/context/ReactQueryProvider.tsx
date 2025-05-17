@@ -7,7 +7,6 @@ import { useState } from "react";
 const queryClient = new QueryClient();
 
 export const ReactQueryProvider = ({ children }: { children: React.ReactNode }) => {
-  console.log(" ==> ", queryClient);
   return (
     <QueryClientProvider client={queryClient}>
       {children}

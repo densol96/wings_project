@@ -1,9 +1,8 @@
 "use server";
 
 import { FormState } from "@/types";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { z } from "zod";
+import { serverFetchAction } from "../helpers/serverFetchAction";
 
 const schema = z
   .object({
@@ -23,7 +22,15 @@ const schema = z
       .min(6, { message: "Paroles apstiprināšanai jābūt no 6 līdz 100 rakstzīmēm." })
       .max(50, { message: "Paroles apstiprināšanai jābūt no 6 līdz 100 rakstzīmēm." }),
   })
-  .required();
+  .required()
+  .refine((data) => data.password !== data.oldPassword, {
+    message: "Jaunā parole nevar būt tāda pati kā pašreizējā parole.",
+    path: ["password"],
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Jaunā parole un apstiprinājums nesakrīt.",
+    path: ["confirmPassword"],
+  });
 
 export const changePassword = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   const formDataSerialised = Object.fromEntries(formData.entries());
@@ -33,29 +40,9 @@ export const changePassword = async (prevState: FormState, formData: FormData): 
       errors: parsed.error.flatten().fieldErrors,
     };
   }
-
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/auth/change-password`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-      },
-      body: JSON.stringify(parsed.data),
-      cache: "no-store",
-    });
-    const data = await response.json();
-    if (response.ok) {
-      cookies().delete("authToken");
-      return data; //.message
-    }
-    if (response.status === 400) {
-      return { errors: data };
-    } else {
-      return { error: data };
-    }
-  } catch (e) {
-    // network error
-    return { error: { message: "Radās neparedzēta iekšēja kļūda. Lūdzu, mēģiniet vēlreiz vēlāk." } };
-  }
+  return await serverFetchAction({
+    endpoint: "auth/change-password",
+    method: "PATCH",
+    body: parsed.data,
+  });
 };

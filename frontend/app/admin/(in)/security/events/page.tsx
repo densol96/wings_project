@@ -8,7 +8,7 @@ import NoData from "@/components/ui/NoData";
 import SecurityRow from "./SecurityRow";
 import Pagination from "@/components/shared/Pagination";
 import SearchFilter from "@/components/shared/SearchFilter";
-import { adminFetch } from "@/actions/adminFetch";
+import { adminFetch } from "@/actions/helpers/adminFetch";
 
 type Props = {
   searchParams: EventsSearchParams;

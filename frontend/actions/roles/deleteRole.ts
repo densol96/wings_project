@@ -1,7 +1,7 @@
 "use server";
 
 import { FormState } from "@/types";
-import { serverFetchAction } from "../serverFetchAction";
+import { serverFetchAction } from "../helpers/serverFetchAction";
 
 export const deleteRole = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   return await serverFetchAction({

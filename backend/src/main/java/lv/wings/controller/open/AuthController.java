@@ -33,12 +33,6 @@ public class AuthController {
     private final AuthService authService;
     private final UserSecurityService securityService;
 
-    @PostMapping("/register")
-    public ResponseEntity<AuthResponseDto> register(@Valid @RequestBody NewUserDto request) {
-        log.info("Received POST request on /api/v1/auth/register for the username of {}", request.getUsername());
-        return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request));
-    }
-
     @PostMapping("/login")
     public ResponseEntity<AuthResponseDto> login(@Valid @RequestBody LoginDto request) {
         log.info("Received POST request on /api/v1/auth/login for the username of {}", request.getUsername());

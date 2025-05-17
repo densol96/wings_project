@@ -1,14 +1,18 @@
 package lv.wings.util;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.method.HandlerMethod;
 
 import lv.wings.annotation.AllowedSortFields;
+import lv.wings.dto.request.admin.AdminPasswordDto;
+import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.exception.validation.InvalidIdException;
 import lv.wings.exception.validation.InvalidParameterException;
+import lv.wings.model.security.User;
 
 public class CustomValidator {
 
@@ -54,5 +58,4 @@ public class CustomValidator {
     public static boolean userIsAllowedAccess(UserDetails user) {
         return user.isEnabled() && user.isAccountNonExpired() && user.isAccountNonLocked() && user.isCredentialsNonExpired();
     }
-
 }

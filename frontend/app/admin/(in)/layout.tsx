@@ -1,3 +1,5 @@
+"use server";
+
 import Link from "next/link";
 import { Permission } from "@/types";
 import Image from "next/image";
@@ -9,22 +11,16 @@ import SecuritySidebarSection from "./SecuritySidebarSection";
 import LogoutButton from "../(auth)/LogoutButton";
 import Greeting from "./Greeting";
 import AccountButton from "./AccountButton";
+import { getCurrentUser } from "@/actions/helpers/getCurrentUser";
 import { headers } from "next/headers";
-import { getCurrentUser } from "@/actions/helpers/getUser";
 
 type Props = {
   children: React.ReactNode;
-  changeEmail: React.ReactNode;
-  changePassword: React.ReactNode;
+  modal: React.ReactNode;
 };
 
-const Layout = async ({ children, changeEmail, changePassword }: Props) => {
-  // const user = getCurrentUser();
-  const user = {
-    firstName: "Deniss",
-    lastName: "Solovjovs",
-    authorities: ["MANAGE_NEWS", "MANAGE_PRODUCTS", "MANAGE_ORDERS", "MANAGE_SECURITY"],
-  };
+const Layout = async ({ children, modal }: Props) => {
+  const user = await getCurrentUser();
 
   return (
     <>
@@ -47,8 +43,7 @@ const Layout = async ({ children, changeEmail, changePassword }: Props) => {
           <div className="flex-1 py-20 px-40 relative">{children}</div>
         </main>
       </div>
-      {changeEmail}
-      {changePassword}
+      {modal}
     </>
   );
 };

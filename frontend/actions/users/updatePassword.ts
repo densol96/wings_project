@@ -1,7 +1,7 @@
 "use server";
 
 import { FormState } from "@/types";
-import { serverFetchAction } from "../serverFetchAction";
+import { serverFetchAction } from "../helpers/serverFetchAction";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 

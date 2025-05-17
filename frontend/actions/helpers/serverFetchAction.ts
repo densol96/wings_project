@@ -3,7 +3,9 @@
 import { FormState, HttpMethod } from "@/types";
 import { fetchWithSetup } from "@/utils";
 import { revalidatePath } from "next/cache";
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
+import { getHeaders } from "./getHeaders";
+import { redirect } from "next/navigation";
 
 // Template for SEVRER ACTIONS
 export const serverFetchAction = async ({
@@ -11,26 +13,34 @@ export const serverFetchAction = async ({
   method,
   body,
   revalidatePathUrl,
+  alternativeOk,
+  isLogin = false,
 }: {
   body?: Record<string, any>;
   endpoint: string;
   method: HttpMethod;
   revalidatePathUrl?: string;
+  alternativeOk?: (data: any) => void;
+  isLogin?: boolean;
 }): Promise<FormState> => {
   try {
     const response = await fetchWithSetup(endpoint, {
       method,
       body,
-      headers: {
-        Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-        "User-Agent": headers().get("user-agent") ?? "",
-        "X-Forwarded-For": headers().get("x-forwarded-for") ?? "",
-      },
+      headers: await getHeaders(),
     });
 
+    if (!isLogin && response.status === 401) redirect("/admin/login?expired=true");
+    if (!isLogin && response.status === 403) redirect(`/admin/unauthorised?pathname=${endpoint}`);
+
     const data = await response.json();
+
     if (response.ok) {
-      revalidatePath(revalidatePathUrl || "/admin", "layout");
+      if (alternativeOk) {
+        alternativeOk(data);
+      } else {
+        revalidatePath(revalidatePathUrl || "/admin", "layout");
+      }
       return { success: data };
     }
     if (response.status === 400) {

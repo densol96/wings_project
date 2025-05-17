@@ -2,10 +2,11 @@ import { NextResponse, type NextRequest } from "next/server";
 import { defaultLocale } from "@/constants/locales";
 import { i18n } from "@/i18n-config";
 import { encryptUser, hasAccess, isProtectedRoute } from "./utils";
-import { getUserSession } from "./actions/getUserSession";
+import { getUserSession } from "./actions/helpers/getUserSession";
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  console.log("MIDDLEWARE RUNS FOR: " + pathname);
   // AUTH
   // avoid i18n rewrite if
   if (pathname.startsWith("/api") || pathname.startsWith("/admin") || pathname.startsWith("/test")) {
@@ -33,7 +34,7 @@ export async function middleware(request: NextRequest) {
     const res = NextResponse.next();
     res.headers.set("X-User", await encryptUser(request.nextUrl.origin, user));
     res.headers.set("X-Current-Url", pathname);
-    return NextResponse.next();
+    return res;
   }
 
   // i18n
@@ -52,6 +53,6 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     // Exclude internal Next.js paths (_next) and static files (public)
-    "/((?!_next|.*\\..*).*)",
+    "/((?!_next|_actions|.*\\..*).*)",
   ],
 };

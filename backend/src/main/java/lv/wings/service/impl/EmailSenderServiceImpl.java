@@ -137,6 +137,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             helper.setText(html, true);
             helper.setFrom(fromEmail);
             mailSender.send(message);
+            log.info("Email sent to {} with subject '{}'", to, subject);
         } catch (Exception e) {
             log.error("Unable to send email to {} with subject '{}'", to, subject, e);
             throw new RuntimeException(e.getMessage()); // will be ahndled as a procedural exception

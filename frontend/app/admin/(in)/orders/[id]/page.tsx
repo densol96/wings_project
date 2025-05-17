@@ -1,6 +1,6 @@
 import { IdParams, OrderFullAdminDto } from "@/types";
 import OrderDetailsPage from "./OrderDetailsPage";
-import { adminFetch } from "@/actions/adminFetch";
+import { adminFetch } from "@/actions/helpers/adminFetch";
 
 type Props = {};
 

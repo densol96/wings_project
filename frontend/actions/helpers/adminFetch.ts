@@ -3,22 +3,11 @@
 import { basicErrorText, fetchWithSetup } from "@/utils";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { getHeaders } from "./getHeaders";
 
 export const adminFetch = async <T>(adminEndpoint: string) => {
   const response = await fetchWithSetup(`admin/${adminEndpoint}`, {
-    headers: {
-      Authorization: `Bearer ${cookies().get("authToken")?.value}`,
-      "User-Agent": headers().get("user-agent") ?? "",
-      "X-Forwarded-For": headers().get("x-forwarded-for") ?? "",
-    },
-
-    /**
-     * I am doing the authorisation related checks in th middleware => if the user hits any page - it is valid. =>
-     * Data can actually be cached and revalidated on request
-     */
-    // additionalOptions: {
-    //   cache: "no-store", // need to always be stale
-    // },
+    headers: await getHeaders(),
   });
 
   if (response.status === 401) redirect("/admin/login?expired=true");

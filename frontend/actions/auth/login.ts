@@ -4,6 +4,7 @@ import { FormState } from "@/types";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { serverFetchAction } from "../helpers/serverFetchAction";
 
 const schema = z
   .object({
@@ -33,17 +34,11 @@ export const login = async (prevState: FormState, formData: FormData): Promise<F
       errors: parsed.error.flatten().fieldErrors,
     };
   }
-  const { username, password } = parsed.data;
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-    const data = await response.json();
-    if (response.ok) {
+  return await serverFetchAction({
+    endpoint: "auth/login",
+    method: "POST",
+    body: parsed.data,
+    alternativeOk: (data) => {
       cookies().set("authToken", data.jwt, {
         httpOnly: true,
         secure: process.env.MODE === "prod",
@@ -51,14 +46,7 @@ export const login = async (prevState: FormState, formData: FormData): Promise<F
         path: "/",
       });
       redirect("/admin/dashboard");
-    }
-    if (response.status === 400) {
-      return { errors: data };
-    } else {
-      return { error: data };
-    }
-  } catch (e) {
-    // network error
-    return { error: { message: "Radās neparedzēta iekšēja kļūda. Lūdzu, mēģiniet vēlreiz vēlāk." } };
-  }
+    },
+    isLogin: true,
+  });
 };

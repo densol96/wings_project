@@ -4,16 +4,21 @@ import java.util.List;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import lv.wings.dto.interfaces.HasEmailAndUsername;
 
 @Getter
 @Setter
-public class UserDetailsDto {
+public class UserDetailsDto implements HasEmailAndUsername {
 
     @NotBlank(message = "{username.required}")
     @Size(min = 3, max = 20, message = "{username.size}")
+    @Pattern(
+            regexp = "^[^\\s.,!?@#\\$%\\^&*()+=\\[\\]{}:;\"'\\\\/<>|`~]+$",
+            message = "{username.pattern}")
     private String username;
 
     @Email(message = "{email.invalid}")

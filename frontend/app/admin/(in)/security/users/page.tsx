@@ -7,7 +7,7 @@ import Select from "@/components/ui/Select";
 import FilterSelect from "@/components/ui/FilterSelect";
 import NoData from "@/components/ui/NoData";
 import AddUserBtn from "./AddUserBtn";
-import { adminFetch } from "@/actions/adminFetch";
+import { adminFetch } from "@/actions/helpers/adminFetch";
 import { headers } from "next/headers";
 
 type Props = {

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import io.micrometer.common.lang.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class SecurityEventServiceImpl implements SecurityEventService {
     private final int ACTIVTY_TIMEOUT_MINUTES = 30; // no point updating the DB on every request. 15 minute interval is better
 
     @Override
-    public void handleSecurityEvent(@NonNull User user, @NonNull SecurityEventType type, String additionalInfo) {
+    public void handleSecurityEvent(@NonNull User user, @NonNull SecurityEventType type, @Nullable String additionalInfo) {
         HttpServletRequest request = RequestUtils.getCurrentServletRequest();
         String ipAddress = RequestUtils.getClientIp(request);
         String userAgent = request.getHeader("User-Agent");
@@ -56,17 +57,8 @@ public class SecurityEventServiceImpl implements SecurityEventService {
 
         switch (type) {
             case NEW_USER_REGISTERED -> {
-                try {
-                    String newUserUsername = user.getUsername();
-                    User adminUser = userSecurityService.getCurrentUserDetails().getUser(); // who is adding a new user
-                    additionalInfo = String.format(
-                            "New user username is %s\nJauna lietotāja lietotājvārds ir %s",
-                            newUserUsername,
-                            newUserUsername);
-                    user = adminUser;
-                } catch (Exception e) {
-                    log.warn("Unable to detect the admin who created a new user with the username of {}", user.getUsername());
-                }
+                User adminUser = userSecurityService.getCurrentUserDetails().getUser(); // who is adding a new user
+                additionalInfo = String.format("Jaunu lietotāju pievienoja %s", adminUser.getUsername());
             }
 
             case LOGIN_SUCCESS -> {
@@ -103,8 +95,8 @@ public class SecurityEventServiceImpl implements SecurityEventService {
         /*
          * Other possible SecurityEventType:
          * PASSWORD_CHANGED,
+         * PASSWORD_RESET,
          * AFTER_HOURS_ACCESS,
-         * PASSWORD_CHANGED,
          * ACCOUNT_LOCKED,
          * ACCOUNT_UNLOCKED,
          * ACCOUNT_BANNED,

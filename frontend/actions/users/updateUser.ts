@@ -1,7 +1,7 @@
 "use server";
 
 import { FormState } from "@/types";
-import { serverFetchAction } from "../serverFetchAction";
+import { serverFetchAction } from "../helpers/serverFetchAction";
 
 export const updateUser = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   const formDataSerialised = Object.fromEntries(formData.entries());

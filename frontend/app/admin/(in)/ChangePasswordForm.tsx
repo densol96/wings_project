@@ -1,8 +1,10 @@
 "use client";
 
 import { changePassword } from "@/actions/auth/changePassword";
+import { logout } from "@/actions/auth/logout";
 import { Form, FormField, Heading } from "@/components";
 import SubmitButton from "@/components/ui/SubmitButton";
+import { useFormSubmitReaction } from "@/hooks";
 import { FormState } from "@/types";
 import { cn, normalizeError } from "@/utils";
 import { useRouter } from "next/navigation";
@@ -16,17 +18,14 @@ type Props = {
 
 const ChangePasswordForm = ({ className }: Props) => {
   const [state, formAction] = useFormState<FormState, FormData>(changePassword, null);
-  const router = useRouter();
 
-  useEffect(() => {
-    if (state?.error?.message) {
-      toast.error(state.error.message);
-    } else if (state?.success?.message) {
-      toast.success(state?.success?.message);
+  useFormSubmitReaction({
+    state,
+    onSuccess: () => {
       setTimeout(() => {
         toast.promise(
           new Promise((res) => {
-            setTimeout(res, 2000);
+            setTimeout(res, 2500);
           }),
           {
             loading: "Pāradresācija uz pieteikšanos..",
@@ -34,12 +33,9 @@ const ChangePasswordForm = ({ className }: Props) => {
           }
         );
       }, 0);
-
-      setTimeout(() => {
-        router.push("/admin/login");
-      }, 1000);
-    }
-  }, [state?.error]);
+      setTimeout(logout, 2000);
+    },
+  });
 
   return (
     <div className={cn(className)}>

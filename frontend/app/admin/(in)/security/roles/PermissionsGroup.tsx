@@ -1,4 +1,4 @@
-import { adminFetch } from "@/actions/adminFetch";
+import { adminFetch } from "@/actions/helpers/adminFetch";
 import { CheckboxGroup } from "@/components";
 import { PermissionDto } from "@/types";
 import { basicErrorText } from "@/utils";

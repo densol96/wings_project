@@ -34,8 +34,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${roboto.className} min-h-screen flex flex-col`}>
-        <Suspense fallback={<Spinner />}>{children}</Suspense>
-        {/* {children} */}
+        {/* <Suspense fallback={<Spinner />}>{children}</Suspense> */}
+        {children}
         <Toaster position="top-center" gutter={12} containerStyle={{ margin: "8px" }} toastOptions={toasterSettings} />
       </body>
     </html>
