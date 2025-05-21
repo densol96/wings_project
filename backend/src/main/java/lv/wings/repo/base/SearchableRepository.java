@@ -7,7 +7,7 @@ import lv.wings.enums.LocaleCode;
 
 @NoRepositoryBean
 public interface SearchableRepository<T> extends JpaRepository<T, Integer> {
-    List<T> findByTitleContainingIgnoreCaseAndLocaleEquals(String keyword, LocaleCode locale);
+    List<T> findTop1000ByTitleContainingIgnoreCaseAndLocaleEquals(String keyword, LocaleCode locale);
 
-    List<T> findByTitleContainingIgnoreCase(String keyword);
+    List<T> findTop1000ByTitleContainingIgnoreCase(String keyword);
 }

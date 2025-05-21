@@ -11,6 +11,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.annotation.PostConstruct;
@@ -125,7 +127,8 @@ public class SparniProjectApplication {
 						.build();
 				userRepo.save(u1);
 
-				GlobalParam gbp = GlobalParam.builder().title("omniva_api_link").value("https://www.omniva.lv/locations.json").build();
+				GlobalParam gbp = GlobalParam.builder().title("omniva_api_link")
+						.value("https://www.omniva.lv/locations.json").build();
 				gbp.setCreatedBy(u1);
 				globalParamsRepo.save(gbp);
 
@@ -173,18 +176,22 @@ public class SparniProjectApplication {
 					e.setCreatedBy(u1);
 					eventRepo.save(e);
 					if (i <= 3) {
-						EventImage bilde = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
-						EventImageTranslation altEn = EventImageTranslation.builder().alt("Good Image").image(bilde).locale(LocaleCode.EN).build();
-						EventImageTranslation altLv = EventImageTranslation.builder().alt("Laba bilde").image(bilde).locale(LocaleCode.LV).build();
+						EventImage bilde = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg").event(e)
+								.build();
+						EventImageTranslation altEn = EventImageTranslation.builder().alt("Good Image").image(bilde)
+								.locale(LocaleCode.EN).build();
+						EventImageTranslation altLv = EventImageTranslation.builder().alt("Laba bilde").image(bilde)
+								.locale(LocaleCode.LV).build();
 						bilde.setTranslations(List.of(altEn, altLv));
 						bilde.setCreatedBy(u1);
 						eventImageRepo.save(bilde);
 						if (i <= 2) {
-							EventImage bilde2 = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg").event(e).build();
-							EventImageTranslation altEn2 =
-									EventImageTranslation.builder().alt("Some other good Image").image(bilde2).locale(LocaleCode.EN).build();
-							EventImageTranslation altLv2 =
-									EventImageTranslation.builder().alt("Kada cita laba bilde").image(bilde2).locale(LocaleCode.LV).build();
+							EventImage bilde2 = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg")
+									.event(e).build();
+							EventImageTranslation altEn2 = EventImageTranslation.builder().alt("Some other good Image")
+									.image(bilde2).locale(LocaleCode.EN).build();
+							EventImageTranslation altLv2 = EventImageTranslation.builder().alt("Kada cita laba bilde")
+									.image(bilde2).locale(LocaleCode.LV).build();
 							bilde2.setTranslations(List.of(altEn2, altLv2));
 							bilde2.setCreatedBy(u1);
 							eventImageRepo.save(bilde2);
@@ -242,14 +249,15 @@ public class SparniProjectApplication {
 
 				for (String[] mTranslations : materialNames) {
 					Material m = new Material();
-					MaterialTranslation m_en = MaterialTranslation.builder().material(m).locale(LocaleCode.EN).name(mTranslations[0]).build();
-					MaterialTranslation m_lv = MaterialTranslation.builder().material(m).locale(LocaleCode.LV).name(mTranslations[1]).build();
+					MaterialTranslation m_en = MaterialTranslation.builder().material(m).locale(LocaleCode.EN)
+							.name(mTranslations[0]).build();
+					MaterialTranslation m_lv = MaterialTranslation.builder().material(m).locale(LocaleCode.LV)
+							.name(mTranslations[1]).build();
 					m.setCreatedBy(u1);
 					m.setTranslations(Arrays.asList(m_en, m_lv));
 					materials.add(m);
 				}
 				materialRepo.saveAll(materials);
-
 
 				// KATEGORIJAS
 				ProductCategory categoryOne = new ProductCategory();
@@ -276,17 +284,19 @@ public class SparniProjectApplication {
 
 				ProductCategory categoryTwo = new ProductCategory();
 				categoryTwo.setCreatedBy(u1);
-				ProductCategoryTranslation categoryTwoLv = ProductCategoryTranslation.builder().title("Cimdi").description(
-						"""
-								Ar rokām adīti latviešu rakstainie dūraiņi, kas glabā katra meistara sirds siltumu. Katrs cimdu pāris ir unikāls roku darbs, tāpēc iespējamas nelielas krāsu, dizaina un izmēru atšķirības no norādītā.
-								""")
+				ProductCategoryTranslation categoryTwoLv = ProductCategoryTranslation.builder().title("Cimdi")
+						.description(
+								"""
+										Ar rokām adīti latviešu rakstainie dūraiņi, kas glabā katra meistara sirds siltumu. Katrs cimdu pāris ir unikāls roku darbs, tāpēc iespējamas nelielas krāsu, dizaina un izmēru atšķirības no norādītā.
+										""")
 						.category(categoryTwo)
 						.locale(LocaleCode.LV)
 						.build();
-				ProductCategoryTranslation categoryTwoEn = ProductCategoryTranslation.builder().title("Gloves").description(
-						"""
-								Hand-knitted Latvian patterned mittens that carry the warmth of each artisan's heart. Each pair of mittens is a unique handmade creation, so slight variations in color, design, and size from the specified ones may occur.
-								""")
+				ProductCategoryTranslation categoryTwoEn = ProductCategoryTranslation.builder().title("Gloves")
+						.description(
+								"""
+										Hand-knitted Latvian patterned mittens that carry the warmth of each artisan's heart. Each pair of mittens is a unique handmade creation, so slight variations in color, design, and size from the specified ones may occur.
+										""")
 						.category(categoryTwo)
 						.locale(LocaleCode.EN)
 						.build();
@@ -320,10 +330,10 @@ public class SparniProjectApplication {
 				categoryThree.setTranslations(List.of(categoryThreeLv, categoryThreeEn));
 				productCategoryRepo.save(categoryThree);
 
-
 				// PRECES
 				// CATEGORY - HATS - 4
-				Product hat1 = Product.builder().price(BigDecimal.valueOf(10.5)).amount(3).category(categoryOne).build();
+				Product hat1 = Product.builder().price(BigDecimal.valueOf(10.5)).amount(3).category(categoryOne)
+						.build();
 				hat1.setCreatedBy(u1);
 				ProductTranslation hat1Lv = ProductTranslation.builder()
 						.title("Adītas cepures")
@@ -341,13 +351,16 @@ public class SparniProjectApplication {
 				hat1.setColors(colors.subList(0, 3));
 				productRepo.save(hat1);
 
-				ProductMaterial pm1 = ProductMaterial.builder().product(hat1).material(materials.get(0)).percentage(50).build();
+				ProductMaterial pm1 = ProductMaterial.builder().product(hat1).material(materials.get(0)).percentage(50)
+						.build();
 				pm1.setCreatedBy(u1);
-				ProductMaterial pm2 = ProductMaterial.builder().product(hat1).material(materials.get(1)).percentage(50).build();
+				ProductMaterial pm2 = ProductMaterial.builder().product(hat1).material(materials.get(1)).percentage(50)
+						.build();
 				pm2.setCreatedBy(u1);
 				productMaterialRepo.saveAll(Arrays.asList(pm1, pm2));
 
-				Product hat2 = Product.builder().price(BigDecimal.valueOf(12.0)).amount(5).category(categoryOne).build();
+				Product hat2 = Product.builder().price(BigDecimal.valueOf(12.0)).amount(5).category(categoryOne)
+						.build();
 				hat2.setCreatedBy(u1);
 				ProductTranslation hat2Lv = ProductTranslation.builder()
 						.title("Modernās cepures")
@@ -365,13 +378,16 @@ public class SparniProjectApplication {
 				hat2.setColors(colors.subList(3, 5));
 				productRepo.save(hat2);
 
-				ProductMaterial pm3 = ProductMaterial.builder().product(hat2).material(materials.get(2)).percentage(70).build();
+				ProductMaterial pm3 = ProductMaterial.builder().product(hat2).material(materials.get(2)).percentage(70)
+						.build();
 				pm3.setCreatedBy(u1);
-				ProductMaterial pm4 = ProductMaterial.builder().product(hat2).material(materials.get(3)).percentage(30).build();
+				ProductMaterial pm4 = ProductMaterial.builder().product(hat2).material(materials.get(3)).percentage(30)
+						.build();
 				pm4.setCreatedBy(u1);
 				productMaterialRepo.saveAll(Arrays.asList(pm3, pm4));
 
-				Product hat3 = Product.builder().price(BigDecimal.valueOf(11.0)).amount(0).category(categoryOne).build();
+				Product hat3 = Product.builder().price(BigDecimal.valueOf(11.0)).amount(0).category(categoryOne)
+						.build();
 				hat3.setCreatedBy(u1);
 				ProductTranslation hat3Lv = ProductTranslation.builder()
 						.title("Klasiskas cepures")
@@ -390,12 +406,13 @@ public class SparniProjectApplication {
 				hat3.getColors().add(colors.get(6));
 				productRepo.save(hat3);
 
-				ProductMaterial pm5 = ProductMaterial.builder().product(hat2).material(materials.get(0)).percentage(100).build();
+				ProductMaterial pm5 = ProductMaterial.builder().product(hat2).material(materials.get(0)).percentage(100)
+						.build();
 				pm5.setCreatedBy(u1);
 				productMaterialRepo.save(pm5);
 
-
-				Product hat4 = Product.builder().price(BigDecimal.valueOf(13.0)).amount(4).category(categoryOne).build();
+				Product hat4 = Product.builder().price(BigDecimal.valueOf(13.0)).amount(4).category(categoryOne)
+						.build();
 				hat4.setCreatedBy(u1);
 				ProductTranslation hat4Lv = ProductTranslation.builder()
 						.title("Eleganti cepures")
@@ -410,13 +427,12 @@ public class SparniProjectApplication {
 						.product(hat4)
 						.build();
 
-
 				hat4.setTranslations(List.of(hat4Lv, hat4En));
 				productRepo.save(hat4);
 
-
 				// (Category Two) – 7 PRODUCTS
-				Product glove1 = Product.builder().price(BigDecimal.valueOf(8.5)).amount(6).category(categoryTwo).build();
+				Product glove1 = Product.builder().price(BigDecimal.valueOf(8.5)).amount(6).category(categoryTwo)
+						.build();
 				glove1.setCreatedBy(u1);
 				ProductTranslation glove1Lv = ProductTranslation.builder()
 						.title("Adītas cimdi")
@@ -434,7 +450,8 @@ public class SparniProjectApplication {
 				glove1.setTranslations(List.of(glove1Lv, glove1En));
 				productRepo.save(glove1);
 
-				Product glove2 = Product.builder().price(BigDecimal.valueOf(9.0)).amount(4).category(categoryTwo).build();
+				Product glove2 = Product.builder().price(BigDecimal.valueOf(9.0)).amount(4).category(categoryTwo)
+						.build();
 				glove2.setCreatedBy(u1);
 				ProductTranslation glove2Lv = ProductTranslation.builder()
 						.title("Stilīgi cimdi")
@@ -451,7 +468,8 @@ public class SparniProjectApplication {
 				glove2.setTranslations(List.of(glove2Lv, glove2En));
 				productRepo.save(glove2);
 
-				Product glove3 = Product.builder().price(BigDecimal.valueOf(8.0)).amount(5).category(categoryTwo).build();
+				Product glove3 = Product.builder().price(BigDecimal.valueOf(8.0)).amount(5).category(categoryTwo)
+						.build();
 				glove3.setCreatedBy(u1);
 				ProductTranslation glove3Lv = ProductTranslation.builder()
 						.title("Klasiski cimdi")
@@ -468,7 +486,8 @@ public class SparniProjectApplication {
 				glove3.setTranslations(List.of(glove3Lv, glove3En));
 				productRepo.save(glove3);
 
-				Product glove4 = Product.builder().price(BigDecimal.valueOf(10.0)).amount(3).category(categoryTwo).build();
+				Product glove4 = Product.builder().price(BigDecimal.valueOf(10.0)).amount(3).category(categoryTwo)
+						.build();
 				glove4.setCreatedBy(u1);
 				ProductTranslation glove4Lv = ProductTranslation.builder()
 						.title("Mūsdienīgi cimdi")
@@ -485,9 +504,8 @@ public class SparniProjectApplication {
 				glove4.setTranslations(List.of(glove4Lv, glove4En));
 				productRepo.save(glove4);
 
-
-
-				Product glove5 = Product.builder().price(BigDecimal.valueOf(7.5)).amount(7).category(categoryTwo).build();
+				Product glove5 = Product.builder().price(BigDecimal.valueOf(7.5)).amount(7).category(categoryTwo)
+						.build();
 				glove5.setCreatedBy(u1);
 				ProductTranslation glove5Lv = ProductTranslation.builder()
 						.title("Radoši cimdi")
@@ -504,7 +522,8 @@ public class SparniProjectApplication {
 				glove5.setTranslations(List.of(glove5Lv, glove5En));
 				productRepo.save(glove5);
 
-				Product glove6 = Product.builder().price(BigDecimal.valueOf(8.75)).amount(5).category(categoryTwo).build();
+				Product glove6 = Product.builder().price(BigDecimal.valueOf(8.75)).amount(5).category(categoryTwo)
+						.build();
 				glove6.setCreatedBy(u1);
 				ProductTranslation glove6Lv = ProductTranslation.builder()
 						.title("Praktiski cimdi")
@@ -521,7 +540,8 @@ public class SparniProjectApplication {
 				glove6.setTranslations(List.of(glove6Lv, glove6En));
 				productRepo.save(glove6);
 
-				Product glove7 = Product.builder().price(BigDecimal.valueOf(9.5)).amount(2).category(categoryTwo).build();
+				Product glove7 = Product.builder().price(BigDecimal.valueOf(9.5)).amount(2).category(categoryTwo)
+						.build();
 				glove7.setCreatedBy(u1);
 				ProductTranslation glove7Lv = ProductTranslation.builder()
 						.title("Eleganti cimdi")
@@ -539,45 +559,63 @@ public class SparniProjectApplication {
 				productRepo.save(glove7);
 
 				// BILDES
-				ProductImage bilde1 = ProductImage.builder().product(glove7).src("http://localhost:8080/images/products/cimdi1.jpg").build();
+				ProductImage bilde1 = ProductImage.builder().product(glove7)
+						.src("http://localhost:8080/images/products/cimdi1.jpg").build();
 				bilde1.setCreatedBy(u1);
-				ProductImageTranslation bilde1_lv = ProductImageTranslation.builder().alt("Labi cimdi 1").picture(bilde1).locale(LocaleCode.LV).build();
-				ProductImageTranslation bilde1_en = ProductImageTranslation.builder().alt("Good gloves 1").picture(bilde1).locale(LocaleCode.EN).build();
+				ProductImageTranslation bilde1_lv = ProductImageTranslation.builder().alt("Labi cimdi 1")
+						.picture(bilde1).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde1_en = ProductImageTranslation.builder().alt("Good gloves 1")
+						.picture(bilde1).locale(LocaleCode.EN).build();
 				bilde1.setTranslations(List.of(bilde1_lv, bilde1_en));
 				productImageRepo.save(bilde1);
 
-				ProductImage bilde2 = ProductImage.builder().product(glove7).src("http://localhost:8080/images/products/cimdi2.jpg").build();
+				ProductImage bilde2 = ProductImage.builder().product(glove7)
+						.src("http://localhost:8080/images/products/cimdi2.jpg").build();
 				bilde2.setCreatedBy(u1);
-				ProductImageTranslation bilde2_lv = ProductImageTranslation.builder().alt("Labi cimdi 2").picture(bilde2).locale(LocaleCode.LV).build();
-				ProductImageTranslation bilde2_en = ProductImageTranslation.builder().alt("Good gloves 2").picture(bilde2).locale(LocaleCode.EN).build();
+				ProductImageTranslation bilde2_lv = ProductImageTranslation.builder().alt("Labi cimdi 2")
+						.picture(bilde2).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde2_en = ProductImageTranslation.builder().alt("Good gloves 2")
+						.picture(bilde2).locale(LocaleCode.EN).build();
 				bilde2.setTranslations(List.of(bilde2_lv, bilde2_en));
 				productImageRepo.save(bilde2);
 
-				ProductImage bilde3 = ProductImage.builder().product(glove7).src("http://localhost:8080/images/products/cimdi3.jpg").build();
+				ProductImage bilde3 = ProductImage.builder().product(glove7)
+						.src("http://localhost:8080/images/products/cimdi3.jpg").build();
 				bilde3.setCreatedBy(u1);
-				ProductImageTranslation bilde3_lv = ProductImageTranslation.builder().alt("Labi cimdi 3").picture(bilde3).locale(LocaleCode.LV).build();
-				ProductImageTranslation bilde3_en = ProductImageTranslation.builder().alt("Good gloves 3").picture(bilde3).locale(LocaleCode.EN).build();
+				ProductImageTranslation bilde3_lv = ProductImageTranslation.builder().alt("Labi cimdi 3")
+						.picture(bilde3).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde3_en = ProductImageTranslation.builder().alt("Good gloves 3")
+						.picture(bilde3).locale(LocaleCode.EN).build();
 				bilde3.setTranslations(List.of(bilde3_lv, bilde3_en));
 				productImageRepo.save(bilde3);
 
-				ProductImage bilde4 = ProductImage.builder().product(glove6).src("http://localhost:8080/images/products/cimdi1.jpg").build();
+				ProductImage bilde4 = ProductImage.builder().product(glove6)
+						.src("http://localhost:8080/images/products/cimdi1.jpg").build();
 				bilde4.setCreatedBy(u1);
-				ProductImageTranslation bilde4_lv = ProductImageTranslation.builder().alt("Labi cimdi 3").picture(bilde4).locale(LocaleCode.LV).build();
-				ProductImageTranslation bilde4_en = ProductImageTranslation.builder().alt("Good gloves 3").picture(bilde4).locale(LocaleCode.EN).build();
+				ProductImageTranslation bilde4_lv = ProductImageTranslation.builder().alt("Labi cimdi 3")
+						.picture(bilde4).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde4_en = ProductImageTranslation.builder().alt("Good gloves 3")
+						.picture(bilde4).locale(LocaleCode.EN).build();
 				bilde4.setTranslations(List.of(bilde4_lv, bilde4_en));
 				productImageRepo.save(bilde4);
 
-				ProductImage bilde5 = ProductImage.builder().product(glove6).src("http://localhost:8080/images/products/cimdi2.jpg").build();
+				ProductImage bilde5 = ProductImage.builder().product(glove6)
+						.src("http://localhost:8080/images/products/cimdi2.jpg").build();
 				bilde5.setCreatedBy(u1);
-				ProductImageTranslation bilde5_lv = ProductImageTranslation.builder().alt("Labi cimdi 3").picture(bilde5).locale(LocaleCode.LV).build();
-				ProductImageTranslation bilde5_en = ProductImageTranslation.builder().alt("Good gloves 3").picture(bilde5).locale(LocaleCode.EN).build();
+				ProductImageTranslation bilde5_lv = ProductImageTranslation.builder().alt("Labi cimdi 3")
+						.picture(bilde5).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde5_en = ProductImageTranslation.builder().alt("Good gloves 3")
+						.picture(bilde5).locale(LocaleCode.EN).build();
 				bilde5.setTranslations(List.of(bilde5_lv, bilde5_en));
 				productImageRepo.save(bilde5);
 
-				ProductImage bilde6 = ProductImage.builder().product(glove5).src("http://localhost:8080/images/products/cimdi3.jpg").build();
+				ProductImage bilde6 = ProductImage.builder().product(glove5)
+						.src("http://localhost:8080/images/products/cimdi3.jpg").build();
 				bilde6.setCreatedBy(u1);
-				ProductImageTranslation bilde6_lv = ProductImageTranslation.builder().alt("Labi cimdi 3").picture(bilde6).locale(LocaleCode.LV).build();
-				ProductImageTranslation bilde6_en = ProductImageTranslation.builder().alt("Good gloves 3").picture(bilde6).locale(LocaleCode.EN).build();
+				ProductImageTranslation bilde6_lv = ProductImageTranslation.builder().alt("Labi cimdi 3")
+						.picture(bilde6).locale(LocaleCode.LV).build();
+				ProductImageTranslation bilde6_en = ProductImageTranslation.builder().alt("Good gloves 3")
+						.picture(bilde6).locale(LocaleCode.EN).build();
 				bilde6.setTranslations(List.of(bilde6_lv, bilde6_en));
 				productImageRepo.save(bilde6);
 
@@ -588,7 +626,8 @@ public class SparniProjectApplication {
 
 	// @Order(2)
 	// @Bean
-	public CommandLineRunner createDeliveryTypesAndPrices(DeliveryTypeRepository deliveryTypeRepo, UserRepository userRepo) {
+	public CommandLineRunner createDeliveryTypesAndPrices(DeliveryTypeRepository deliveryTypeRepo,
+			UserRepository userRepo) {
 		return new CommandLineRunner() {
 			@Override
 			public void run(String... args) throws Exception {
@@ -645,12 +684,14 @@ public class SparniProjectApplication {
 
 				omniva.setTranslations(List.of(omniva_lv, omniva_en));
 				omniva.setPrices(List.of(
-						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("5.00")).deliveryType(omniva).build(),
-						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("10.00")).deliveryType(omniva).build(),
-						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("10.00")).deliveryType(omniva).build()));
+						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("5.00")).deliveryType(omniva)
+								.build(),
+						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("10.00")).deliveryType(omniva)
+								.build(),
+						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("10.00")).deliveryType(omniva)
+								.build()));
 
 				deliveryTypes.add(omniva);
-
 
 				// ---------- 3. COURIER ----------
 				DeliveryType courier = new DeliveryType(DeliveryMethod.COURIER);
@@ -672,12 +713,14 @@ public class SparniProjectApplication {
 
 				courier.setTranslations(List.of(courier_lv, courier_en));
 				courier.setPrices(List.of(
-						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("10.00")).deliveryType(courier).build(),
-						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("20.00")).deliveryType(courier).build(),
-						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("20.00")).deliveryType(courier).build()));
+						DeliveryPrice.builder().country(Country.LV).price(new BigDecimal("10.00")).deliveryType(courier)
+								.build(),
+						DeliveryPrice.builder().country(Country.LT).price(new BigDecimal("20.00")).deliveryType(courier)
+								.build(),
+						DeliveryPrice.builder().country(Country.EE).price(new BigDecimal("20.00")).deliveryType(courier)
+								.build()));
 
 				deliveryTypes.add(courier);
-
 
 				// ---------- Save all ----------
 				deliveryTypeRepo.saveAll(deliveryTypes);
@@ -689,7 +732,8 @@ public class SparniProjectApplication {
 
 	// @Bean
 	// @Order(3)
-	public CommandLineRunner setUpPermissionsAndRoles(UserRepository userRepo, RoleRepository roleRepository, PermissionRepository permissionRepo,
+	public CommandLineRunner setUpPermissionsAndRoles(UserRepository userRepo, RoleRepository roleRepository,
+			PermissionRepository permissionRepo,
 			PasswordEncoder passwordEncoder) {
 		return new CommandLineRunner() {
 			@Override
@@ -760,7 +804,8 @@ public class SparniProjectApplication {
 						.build();
 				securityManagerUser.setRoles(List.of(securityManager));
 
-				userRepo.saveAll(List.of(admin, productManagerUser, orderManagerUser, newsManagerUser, securityManagerUser));
+				userRepo.saveAll(
+						List.of(admin, productManagerUser, orderManagerUser, newsManagerUser, securityManagerUser));
 				System.out.println("=== SEEDED ===");
 			}
 		};

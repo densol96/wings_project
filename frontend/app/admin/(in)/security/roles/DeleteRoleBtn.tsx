@@ -10,10 +10,11 @@ import { MdDelete } from "react-icons/md";
 
 type Props = {
   id: number;
+  action: (prevState: FormState, formData: FormData) => Promise<FormState>;
 };
 
-const DeleteRoleBtn = ({ id }: Props) => {
-  const [state, formAction] = useFormState<FormState, FormData>(deleteRole, null);
+const DeleteBtn = ({ id, action }: Props) => {
+  const [state, formAction] = useFormState<FormState, FormData>(action, null);
   useEffect(() => {
     if (state?.error?.message) {
       toast.error(state.error.message);
@@ -32,4 +33,4 @@ const DeleteRoleBtn = ({ id }: Props) => {
   );
 };
 
-export default DeleteRoleBtn;
+export default DeleteBtn;

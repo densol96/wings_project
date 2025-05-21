@@ -2,6 +2,8 @@ import { DetailedRoleDto } from "@/types";
 import Link from "next/link";
 import { FaUserEdit } from "react-icons/fa";
 import DeleteRoleBtn from "./DeleteRoleBtn";
+import deleteRole from "@/actions/roles/deleteRole";
+import DeleteBtn from "./DeleteRoleBtn";
 
 type Props = {
   role: DetailedRoleDto;
@@ -22,7 +24,7 @@ const RoleRow = ({ role }: Props) => {
         <Link href={`/admin/security/roles/${role.id}/edit`}>
           <FaUserEdit size={24} />
         </Link>
-        <DeleteRoleBtn id={role.id} />
+        <DeleteBtn action={deleteRole} id={role.id} />
       </div>
     </div>
   );

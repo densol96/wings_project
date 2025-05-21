@@ -2,7 +2,7 @@ package lv.wings.model.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -21,6 +21,6 @@ import lv.wings.model.translation.MaterialTranslation;
 @NoArgsConstructor
 public class Material extends TranslatableEntity<MaterialTranslation> {
 
-    @OneToMany(mappedBy = "material")
+    @OneToMany(mappedBy = "material", cascade = CascadeType.ALL)
     private List<ProductMaterial> madeProducts = new ArrayList<>();
 }

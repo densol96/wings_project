@@ -108,3 +108,5 @@ export enum TranslationMethod {
   MANUAL = "MANUAL",
   DEFAULT = "DEFAULT",
 }
+
+export type LocaleAndString = Partial<Record<Locale, string>>;

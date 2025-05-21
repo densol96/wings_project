@@ -1,13 +1,14 @@
 import AddBtn from "@/components/ui/AddBtn";
-import Link from "next/link";
 import { IoPersonAddSharp } from "react-icons/io5";
 
-const AddUserBtn = () => {
+type Props = {};
+
+const AddProductBtn = () => {
   return (
-    <AddBtn href="/admin/security/users/add" label="Pievienot lietotāju">
+    <AddBtn href="/admin/products/add" label="Pievienot produktu">
       <IoPersonAddSharp size={25} />
     </AddBtn>
   );
 };
 
-export default AddUserBtn;
+export default AddProductBtn;

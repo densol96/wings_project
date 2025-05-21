@@ -21,8 +21,6 @@ import lv.wings.model.base.AuditableEntity;
 @NoArgsConstructor
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE addresses SET deleted = true WHERE customer_id=?")
-@Where(clause = "deleted=false")
 public class Address extends AuditableEntity {
     @Column(nullable = false, length = 100)
     private String street;
@@ -45,8 +43,6 @@ public class Address extends AuditableEntity {
 
     @OneToOne(mappedBy = "address")
     private Customer customer;
-
-    private boolean deleted = false;
 
     @Builder
     public Address(String street, String houseNumber, String apartment, String city, String postalCode, Country country) {

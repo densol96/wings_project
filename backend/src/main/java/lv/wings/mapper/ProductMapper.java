@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import lv.wings.dto.request.admin.products.CreateProductTranslationDto;
 import lv.wings.dto.response.ImageDto;
 import lv.wings.dto.response.admin.common.TitleLocalableDto;
 import lv.wings.dto.response.admin.products.ProductAdminDto;
@@ -50,6 +51,8 @@ public interface ProductMapper {
         @Mapping(target = "translations", expression = "java(transform(product.getNarrowTranslations()))")
         @Mapping(target = "sold", expression = "java(getAmountSold(product))")
         ProductAdminDto toBaseAdmin(Product product);
+
+        ProductTranslation dtoToTranslation(CreateProductTranslationDto dto);
 
         default Integer getAmountSold(Product product) {
                 return product.getOrderItems().stream().map(orderItem -> orderItem.getAmount()).reduce(0, (a, b) -> a + b);

@@ -1,6 +1,6 @@
 "use server";
 
-import { FormState, HttpMethod } from "@/types";
+import { FormState, HttpMethod, MultiLangFormState } from "@/types";
 import { fetchWithSetup } from "@/utils";
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
@@ -8,7 +8,7 @@ import { getHeaders } from "./getHeaders";
 import { redirect } from "next/navigation";
 
 // Template for SEVRER ACTIONS
-export const serverFetchAction = async ({
+export const serverFetchAction = async <T>({
   endpoint,
   method,
   body,
@@ -22,7 +22,7 @@ export const serverFetchAction = async ({
   revalidatePathUrl?: string;
   alternativeOk?: (data: any) => void;
   isLogin?: boolean;
-}): Promise<FormState> => {
+}): Promise<T> => {
   try {
     const response = await fetchWithSetup(endpoint, {
       method,
@@ -41,16 +41,16 @@ export const serverFetchAction = async ({
       } else {
         revalidatePath(revalidatePathUrl || "/admin", "layout");
       }
-      return { success: data };
+      return { success: data } as T;
     }
     if (response.status === 400) {
-      return { errors: data };
+      return { errors: data } as T;
     } else {
-      return { error: data };
+      return { error: data } as T;
     }
   } catch (e) {
     // network error
     console.log(e);
-    return { error: { message: "Radās neparedzēta iekšēja kļūda. Lūdzu, mēģiniet vēlreiz vēlāk." } };
+    return { error: { message: "Radās neparedzēta iekšēja kļūda. Lūdzu, mēģiniet vēlreiz vēlāk." } } as T;
   }
 };

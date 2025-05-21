@@ -23,8 +23,6 @@ import lv.wings.model.base.AuditableEntity;
 @NoArgsConstructor
 @Entity
 @Table(name = "order_items")
-@SQLDelete(sql = "UPDATE order_items SET deleted = true WHERE id = ?")
-@Where(clause = "deleted=false")
 public class OrderItem extends AuditableEntity {
 
 	@ManyToOne
@@ -40,10 +38,6 @@ public class OrderItem extends AuditableEntity {
 
 	@Column(nullable = false, precision = 5, scale = 2)
 	private BigDecimal priceAtOrderTime;
-
-	// Soft delete
-	@Column(name = "deleted")
-	private boolean deleted = false;
 
 	@Builder
 	public OrderItem(Order order, Product product, Integer amount, BigDecimal priceAtOrderTime) {

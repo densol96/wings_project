@@ -67,7 +67,7 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
         if (q.isBlank())
             return new ArrayList<>();
 
-        return eventTranslationRepository.findByTitleContainingIgnoreCaseAndLocaleEquals(q, localeService.getCurrentLocaleCode()).stream()
+        return eventTranslationRepository.findTop1000ByTitleContainingIgnoreCaseAndLocaleEquals(q, localeService.getCurrentLocaleCode()).stream()
                 .map(this::translationToSearchedEventDto)
                 .toList();
     }

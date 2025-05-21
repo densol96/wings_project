@@ -1,17 +1,19 @@
-"use server";
-
 import { basicErrorText, fetchWithSetup } from "@/utils";
-import { cookies, headers } from "next/headers";
+
 import { redirect } from "next/navigation";
 import { getHeaders } from "./getHeaders";
+import { accessHeaders } from "./accessHeaders";
 
 export const adminFetch = async <T>(adminEndpoint: string) => {
   const response = await fetchWithSetup(`admin/${adminEndpoint}`, {
     headers: await getHeaders(),
+    additionalOptions: {
+      cache: "force-cache",
+    },
   });
 
   if (response.status === 401) redirect("/admin/login?expired=true");
-  if (response.status === 403) redirect(`/admin/unauthorised?pathname=${headers().get("X-Current-Url")}`);
+  if (response.status === 403) redirect(`/admin/unauthorised?pathname=${(await accessHeaders()).get("X-Current-Url")}`);
 
   let data;
   try {

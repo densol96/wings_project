@@ -4,6 +4,12 @@ package lv.wings.model.entity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+import org.hibernate.annotations.Where;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,6 +34,7 @@ import lv.wings.model.translation.ProductTranslation;
 @NoArgsConstructor
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE products SET deleted = true WHERE id=?")
 public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 
 	@Column(nullable = false, precision = 5, scale = 2)
@@ -52,6 +59,9 @@ public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 			joinColumns = @JoinColumn(name = "product_id"),
 			inverseJoinColumns = @JoinColumn(name = "color_id"))
 	private List<Color> colors = new ArrayList<>();
+
+	@Column(nullable = false, columnDefinition = "TINYINT(1)")
+	private boolean deleted = false;
 
 	@Builder
 	public Product(BigDecimal price, Integer amount, ProductCategory category) {

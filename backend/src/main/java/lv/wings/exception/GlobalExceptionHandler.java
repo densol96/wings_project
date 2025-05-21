@@ -39,6 +39,8 @@ import lv.wings.exception.payment.CheckoutException;
 import lv.wings.exception.payment.WebhookException;
 import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.exception.validation.InvalidParameterException;
+import lv.wings.exception.validation.NestedValidationException;
+import lv.wings.exception.validation.NonLocalisedException;
 import lv.wings.exception.validation.PasswordsMismatchException;
 import lv.wings.model.security.User;
 import lv.wings.service.LocaleService;
@@ -166,6 +168,15 @@ public class GlobalExceptionHandler {
                 .body(localisedErrors);
     }
 
+    @ExceptionHandler(NestedValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleNestedValidationException(NestedValidationException e) {
+        log.error("*** NestedValidationException: {}", e.getMessage());
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getErrors());
+    }
+
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<BasicErrorDto> handleMissingParams(MissingServletRequestParameterException e) {
         String name = e.getParameterName();
@@ -195,6 +206,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(asFieldErrors);
+    }
+
+
+
+    @ExceptionHandler(NonLocalisedException.class)
+    public ResponseEntity<BasicErrorDto> handleNonLocalisedException(NonLocalisedException e) {
+        log.error("*** NonLocalisedException: {}", e.getMessage());
+
+        return ResponseEntity
+                .status(e.getStatusCode())
+                .body(BasicErrorDto.builder().message(e.getMessage()).build());
     }
 
     @ExceptionHandler(TokenNotFoundException.class)

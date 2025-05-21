@@ -1,7 +1,6 @@
 package lv.wings.auditing;
 
 import java.util.Optional;
-import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,10 +18,10 @@ public class ApplicationAuditAware implements AuditorAware<User> {
 	private User systemUser;
 	private final UserRepository userRepo;
 
-	@PostConstruct
-	public void init() {
-		systemUser = userRepo.findSystemUserNative();
-	}
+	// @PostConstruct
+	// public void init() {
+	// systemUser = userRepo.findSystemUserNative();
+	// }
 
 	@Override
 	public Optional<User> getCurrentAuditor() {

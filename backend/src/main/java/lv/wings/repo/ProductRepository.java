@@ -12,13 +12,22 @@ import lv.wings.model.entity.ProductCategory;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
+	Optional<Product> findByIdAndDeletedFalse(Integer id);
+
+	Page<Product> findAllByDeletedFalse(Pageable pageable);
+
+	List<Product> findAllByIdInAndDeletedFalse(Iterable<Integer> ids);
+
 	List<Product> findByCategory(ProductCategory category);
+
+	List<Product> findByCategoryAndDeletedFalse(ProductCategory category);
 
 	@Query("""
 			    SELECT DISTINCT p
 			    FROM Product p
 			    JOIN p.translations t
-			    WHERE (:categoryId = 0 OR p.category.id = :categoryId)
+			    WHERE p.deleted = false
+				  AND (:categoryId = 0 OR p.category.id = :categoryId)
 			      AND LOWER(t.title) LIKE LOWER(CONCAT('%', :q, '%'))
 			""")
 	Page<Product> searchByCategoryAndTitle(@Param("q") String q, @Param("categoryId") Integer categoryId, Pageable pageable);
@@ -30,7 +39,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 					FROM products p
 					LEFT JOIN order_items oi ON oi.product_id = p.id
 					LEFT JOIN product_translations t ON t.translatable_id = p.id
-					WHERE (:categoryId = 0 OR p.product_category_id = :categoryId)
+					WHERE p.deleted = false
+					 AND (:categoryId = 0 OR p.product_category_id = :categoryId)
 					  AND LOWER(t.title) LIKE LOWER(CONCAT('%', :q, '%'))
 					GROUP BY p.id
 					ORDER BY
@@ -46,22 +56,26 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	Page<Product> findAllByCategoryId(Integer categoryId, Pageable pageable);
 
+	Page<Product> findAllByCategoryIdAndDeletedFalse(Integer categoryId, Pageable pageable);
+
 	// This should work in MySQL but wil need to be changed for other DBMSs
-	@Query(value = "SELECT * FROM products WHERE amount > 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
+	@Query(value = "SELECT * FROM products WHERE amount > 0 AND deleted = false ORDER BY RAND() LIMIT :amount", nativeQuery = true)
 	List<Product> findAvaialableRandomProductsFromAll(@Param("amount") Integer amount);
 
-	@Query(value = "SELECT * FROM products WHERE product_category_id = :productCategoryId and amount > 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
+	@Query(value = "SELECT * FROM products WHERE product_category_id = :productCategoryId and amount > 0 AND deleted = false ORDER BY RAND() LIMIT :amount",
+			nativeQuery = true)
 	List<Product> findAvaialableRandomProductsByCategory(@Param("productCategoryId") Integer productCategoryId, @Param("amount") Integer amount);
 
-	@Query(value = "SELECT * FROM products WHERE amount = 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
+	@Query(value = "SELECT * FROM products WHERE amount = 0 AND deleted = false ORDER BY RAND() LIMIT :amount", nativeQuery = true)
 	List<Product> findUnavaialableRandomProductsFromAll(@Param("amount") Integer amount);
 
-	@Query(value = "SELECT * FROM products WHERE product_category_id = :productCategoryId and amount = 0 ORDER BY RAND() LIMIT :amount", nativeQuery = true)
+	@Query(value = "SELECT * FROM products WHERE product_category_id = :productCategoryId and amount = 0 AND deleted = false ORDER BY RAND() LIMIT :amount",
+			nativeQuery = true)
 	List<Product> findUnavaialableRandomProductsByCategory(@Param("productCategoryId") Integer productCategoryId, @Param("amount") Integer amount);
 
-	@Query(value = "SELECT * from products WHERE id IN :ids FOR UPDATE", nativeQuery = true)
+	@Query(value = "SELECT * from products WHERE deleted = false AND id IN :ids FOR UPDATE", nativeQuery = true)
 	List<Product> getProductsByIdsWithLock(List<Integer> ids);
 
-	@Query(value = "SELECT * from products WHERE id = :id FOR UPDATE", nativeQuery = true)
+	@Query(value = "SELECT * from products WHERE deleted = false AND id = :id FOR UPDATE", nativeQuery = true)
 	Optional<Product> getProductByIdWithLock(Integer id);
 }

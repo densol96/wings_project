@@ -1,5 +1,5 @@
 import { adminFetch } from "@/actions/helpers/adminFetch";
-import { AuditableSelect, Heading, SearchFilter } from "@/components";
+import { Heading, SearchFilter } from "@/components";
 import { PageableResponse, ProductAdminDto, ProductsSearchParams } from "@/types";
 import CategoryFilter from "./CategoryFilter";
 import { parsePageableResponse } from "@/utils";
@@ -8,6 +8,7 @@ import Pagination from "@/components/shared/Pagination";
 import NoData from "@/components/ui/NoData";
 import ProductRow from "./ProductRow";
 import Select from "@/components/ui/Select";
+import AddProductBtn from "./AddProductBtn";
 
 type Props = {
   searchParams: ProductsSearchParams;
@@ -50,6 +51,7 @@ const sortSelectOptions = {
     },
   ],
 };
+
 const Page = async ({ searchParams }: Props) => {
   const queryParams = new URLSearchParams(searchParams as unknown as { [key: string]: string }).toString();
   const pageableProducts = await adminFetch<PageableResponse>(`products?${queryParams}`);
@@ -58,11 +60,15 @@ const Page = async ({ searchParams }: Props) => {
   return (
     <div className="">
       <Heading size="xl">Produktu pārvaldība</Heading>
+
       <p className="mb-5">Izmantojiet meklēšanas lauku, lai atrastu produktus pēc LV vai EN nosaukuma.</p>
-      <p className="mb-10">
+      <p className="mb-5">
         Filtri ļauj atlasīt pasūtījumus pēc kategorijas. <br />
         Pasūtījumus var kārtot pēc izveides datuma – Jaunākā vai Vecākā, kā arī pēc pēdējās rediģēšanas laika – Nesenāk vai Senāk rediģētie.
       </p>
+      <div className="mb-10">
+        <AddProductBtn />
+      </div>
       <div className="flex justify-between gap-10 flex-row items-center sm:mt-0 mb-4">
         <SearchFilter name="q" className="max-w-[400px]" />
         <div className="flex gap-10">
@@ -70,11 +76,12 @@ const Page = async ({ searchParams }: Props) => {
           <Select activeValue={`${searchParams.sort || "createdAt"}-${searchParams.direction || "desc"}`} selectDict={sortSelectOptions} />;
         </div>
       </div>
+
       {products.length ? (
         <>
           <Table
             className="text-center"
-            columnNames={["Nosaukums", "Daudzums", "Pārdots", "Izveidoja", "Izveidošanas datums", "Pēdējais rediģēja", "Pēdējās izmaiņas"]}
+            columnNames={["Nosaukums", "Daudzums", "Pārdots", "Izveidoja", "Izveidošanas datums", "Pēdējais rediģēja", "Pēdējās izmaiņas", "Darbības"]}
             data={products}
             render={(product: ProductAdminDto) => <ProductRow product={product} q={searchParams.q} />}
           />

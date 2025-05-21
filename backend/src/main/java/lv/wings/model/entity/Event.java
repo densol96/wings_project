@@ -1,7 +1,8 @@
 package lv.wings.model.entity;
 
 import java.time.LocalDate;
-
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import jakarta.persistence.Entity;
@@ -23,6 +24,8 @@ import lv.wings.model.base.OwnerableEntity;
 @NoArgsConstructor
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE events SET deleted = true WHERE id=?")
+@Where(clause = "deleted=false")
 public class Event extends OwnerableEntity<EventTranslation, EventImage> {
 
 	private LocalDate startDate;

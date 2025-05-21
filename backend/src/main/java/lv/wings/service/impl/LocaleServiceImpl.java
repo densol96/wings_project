@@ -1,5 +1,6 @@
 package lv.wings.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
@@ -20,8 +21,20 @@ public class LocaleServiceImpl implements LocaleService {
 
     private final static String DEFAULT_LOCALE = "lv";
 
+    private final List<String> allowedLocales = new ArrayList<>(List.of("lv", "en"));
+
     public LocaleServiceImpl(MessageSource messageSource) {
         this.messageSource = messageSource;
+    }
+
+    @Override
+    public LocaleCode getDefaultLocale() {
+        return LocaleCode.from(DEFAULT_LOCALE);
+    }
+
+    @Override
+    public List<LocaleCode> getAllowedLocales() {
+        return allowedLocales.stream().map(l -> LocaleCode.from(l)).toList();
     }
 
     @Override

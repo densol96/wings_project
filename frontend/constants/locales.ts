@@ -1,5 +1,9 @@
-const locales = [{ locale: "en" }, { locale: "lv" }];
+import { Locale } from "@/types";
+
+const locales = [{ locale: "en" }, { locale: "lv" }] as { locale: Locale }[];
 
 const defaultLocale = "lv";
 
-export { defaultLocale, locales };
+const localeCodes = locales.map((l) => l.locale);
+
+export { defaultLocale, locales, localeCodes };

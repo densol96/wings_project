@@ -32,8 +32,6 @@ import lv.wings.model.base.AuditableEntity;
 @Getter
 @Setter
 @Table(name = "orders")
-@SQLDelete(sql = "UPDATE orders SET deleted = true WHERE id = ?")
-@Where(clause = "deleted=false")
 public class Order extends AuditableEntity {
 
 	@Column(nullable = false, unique = true)
@@ -70,9 +68,6 @@ public class Order extends AuditableEntity {
 
 	@Enumerated(EnumType.STRING)
 	private LocaleCode locale = LocaleCode.LV;
-
-	@Column(name = "deleted", nullable = false)
-	private boolean deleted = false;
 
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<OrderItem> orderItems = new ArrayList<>();

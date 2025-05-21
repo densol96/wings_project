@@ -4,6 +4,9 @@ import { formatDateTime, highlightWithDiacritics } from "@/utils";
 import Link from "next/link";
 import { FaUserEdit } from "react-icons/fa";
 import DeleteRoleBtn from "../security/roles/DeleteRoleBtn";
+import DeleteBtn from "../security/roles/DeleteRoleBtn";
+import deleteProduct from "@/actions/products/deleteProduct";
+import { StyledLink } from "@/components";
 
 type Props = {
   product: ProductAdminDto;
@@ -11,18 +14,25 @@ type Props = {
 };
 
 const ProductRow = ({ product, q }: Props) => {
-  console.log(product);
-
   const lvTitle = product.translations.filter((tr) => tr.locale.toLowerCase() === defaultLocale).at(0)?.title as string; // must be there since it is a default locale
   const stringQ = q || "";
   return (
-    <div className="grid grid-cols-7 items-center text-sm text-gray-800 px-4 py-3 hover:bg-gray-50 transition text-center">
-      <div>
-        <p>{highlightWithDiacritics(lvTitle, stringQ)}</p>
+    <div className="grid grid-cols-8 items-center text-sm text-gray-800 px-4 py-3 hover:bg-gray-50 transition text-center">
+      <div className="flex flex-col gap-1">
+        <div className="flex justify-center">
+          <StyledLink innerClassName="gap-0 block" showIcon={false} href={`/lv/shop/products/${product.id}`}>
+            <p>{highlightWithDiacritics(lvTitle, stringQ)}</p>
+          </StyledLink>
+        </div>
+
         {product.translations
           .filter((tr) => tr.locale.toLowerCase() !== defaultLocale)
           .map((tr) => (
-            <p key={tr.title}>{highlightWithDiacritics(tr.title, stringQ)}</p>
+            <div className="flex justify-center">
+              <StyledLink innerClassName="gap-0" showIcon={false} href={`/lv/shop/products/${product.id}`}>
+                <p>{highlightWithDiacritics(tr.title, stringQ)}</p>
+              </StyledLink>
+            </div>
           ))}
       </div>
       <div>{product.amount}</div>
@@ -35,7 +45,7 @@ const ProductRow = ({ product, q }: Props) => {
         <Link href={`/admin/products/${product.id}/edit`}>
           <FaUserEdit size={24} />
         </Link>
-        <DeleteRoleBtn id={product.id} />
+        <DeleteBtn action={deleteProduct} id={product.id} />
       </div>
     </div>
   );

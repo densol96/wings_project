@@ -12,7 +12,6 @@ const Page = async ({ params: { lang, slug } }: PagePropsWithSlug) => {
     getDictionary(lang),
     fetcher<ProductDto>(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/products/${productId}?lang=${lang}`),
   ]);
-
   const fullDict: ProductDict = { ...dictResult.product, isAlreadyInCart: dictResult.shared.isAlreadyInCart };
   syncSlug(productId, product.translationDto.title, slug);
 

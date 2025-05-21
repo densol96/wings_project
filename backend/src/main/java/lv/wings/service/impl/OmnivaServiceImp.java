@@ -112,7 +112,7 @@ public class OmnivaServiceImp extends AbstractCRUDService<Terminal, Integer> imp
 
     @Override
     public List<TerminalDto> getAllTerminalsPerCountry(Country country) {
-        return terminalRepo.findAllByCountry(country).stream().map(terminalMapper::toCheckoutDto).toList();
+        return terminalRepo.findAllByCountryAndDeletedFalse(country).stream().map(terminalMapper::toCheckoutDto).toList();
     }
 
     private void logTheJob(Status status, String message) {

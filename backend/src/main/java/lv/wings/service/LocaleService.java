@@ -1,5 +1,6 @@
 package lv.wings.service;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
 import lv.wings.enums.LocaleCode;
@@ -11,6 +12,10 @@ public interface LocaleService {
     Locale getCurrentLocale();
 
     LocaleCode getCurrentLocaleCode();
+
+    LocaleCode getDefaultLocale();
+
+    List<LocaleCode> getAllowedLocales();
 
     String getCurrentLocaleString();
 

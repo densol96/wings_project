@@ -1,5 +1,7 @@
 package lv.wings.model.entity;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -16,11 +18,12 @@ import lv.wings.model.base.AuditableEntityExtended;
 
 @Entity
 @Table(
-        name = "product_materials",
+        name = "product_material",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "material_id"})})
 @NoArgsConstructor
 @Getter
 @Setter
+@SQLDelete(sql = "UPDATE product_material SET deleted = true WHERE id=?")
 public class ProductMaterial extends AuditableEntityExtended {
 
     @ManyToOne
@@ -33,6 +36,8 @@ public class ProductMaterial extends AuditableEntityExtended {
 
     @Column(nullable = false)
     private Integer percentage; // 0 - 100
+
+    private boolean deleted = false;
 
     @Builder
     public ProductMaterial(Product product, Material material, Integer percentage) {

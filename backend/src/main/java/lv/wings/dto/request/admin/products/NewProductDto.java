@@ -1,0 +1,31 @@
+package lv.wings.dto.request.admin.products;
+
+import java.math.BigDecimal;
+import java.util.List;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
+import lv.wings.enums.TranslationMethod;
+
+@Getter
+@Setter
+public class NewProductDto {
+
+    private TranslationMethod translationMethod; // not doing if present check, cause if is not will fallback to AUTO
+
+    @NotNull(message = "{price.required}")
+    @Positive(message = "{price.positive}")
+    private BigDecimal price;
+
+    @NotNull(message = "{amount.required}")
+    @Positive(message = "{amount.min}")
+    private Integer amount;
+
+    @NotEmpty(message = "{translations.empty}")
+    @Valid
+    private List<CreateProductTranslationDto> translations;
+
+}

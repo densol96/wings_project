@@ -1,5 +1,6 @@
 package lv.wings.model.translation;
 
+import org.hibernate.annotations.SQLDelete;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -19,6 +20,7 @@ import lv.wings.model.interfaces.HasTitle;
 @Table(
         name = "product_translations",
         uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
+@SQLDelete(sql = "UPDATE product_translations SET deleted = true WHERE id=?")
 public class ProductTranslation extends LocalableEntity<Product> implements HasTitle {
 
     @Column(nullable = false, unique = true, length = 50)
@@ -26,6 +28,9 @@ public class ProductTranslation extends LocalableEntity<Product> implements HasT
 
     @Column(length = 1000)
     private String description;
+
+    @Column(nullable = false, columnDefinition = "TINYINT(1)")
+    private boolean deleted = false;
 
     @Builder
     public ProductTranslation(LocaleCode locale, Product product, String title, String description) {

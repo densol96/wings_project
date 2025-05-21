@@ -21,14 +21,12 @@ import lombok.Setter;
 import lv.wings.enums.Country;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 @Entity
 @Table(name = "terminals")
 @Getter
 @Setter
 @NoArgsConstructor
-@Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE terminals SET deleted = true WHERE id = ?")
 public class Terminal {
     @Id

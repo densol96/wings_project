@@ -8,9 +8,10 @@ type Props = {
   children?: React.ReactNode;
   href: string;
   showIcon?: boolean;
+  innerClassName?: string;
 };
 
-const StyledLink = ({ className, children, href, showIcon = true }: Props) => {
+const StyledLink = ({ className, children, href, showIcon = true, innerClassName }: Props) => {
   return (
     <Link
       className={cn(
@@ -19,7 +20,7 @@ const StyledLink = ({ className, children, href, showIcon = true }: Props) => {
       )}
       href={href}
     >
-      <span className="flex items-center gap-2">{children}</span>
+      <span className={cn("flex items-center gap-2", innerClassName)}>{children}</span>
       {showIcon && <FaHandPointRight />}
     </Link>
   );

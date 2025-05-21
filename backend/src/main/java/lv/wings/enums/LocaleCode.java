@@ -1,6 +1,7 @@
 package lv.wings.enums;
 
 import java.util.Arrays;
+import com.fasterxml.jackson.annotation.JsonCreator;
 
 public enum LocaleCode {
     EN("en"), LV("lv");
@@ -15,6 +16,7 @@ public enum LocaleCode {
         return code;
     }
 
+    @JsonCreator(mode = JsonCreator.Mode.DELEGATING)
     public static LocaleCode from(String code) {
         return Arrays.stream(values())
                 .filter(locale -> locale.code.equalsIgnoreCase(code))

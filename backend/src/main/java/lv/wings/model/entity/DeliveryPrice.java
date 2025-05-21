@@ -3,6 +3,8 @@ package lv.wings.model.entity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -25,6 +27,7 @@ import lv.wings.enums.Country;
 @Getter
 @Setter
 @NoArgsConstructor
+@SQLDelete(sql = "UPDATE delivery_type_prices SET deleted = true WHERE id = ?")
 public class DeliveryPrice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

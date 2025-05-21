@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import lombok.NonNull;
+import lv.wings.dto.request.admin.products.NewProductDto;
+import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.admin.products.ProductAdminDto;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ProductTitleDto;
@@ -37,4 +39,6 @@ public interface ProductService extends CRUDService<Product, Integer> {
     ProductTranslation getRightTranslation(Product product);
 
     ProductTranslation getSelectedTranslation(Product product, LocaleCode localeCode);
+
+    BasicMessageDto createProduct(NewProductDto dto);
 }

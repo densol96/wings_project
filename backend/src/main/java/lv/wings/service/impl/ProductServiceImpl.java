@@ -1,15 +1,28 @@
 package lv.wings.service.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import org.springframework.boot.autoconfigure.web.WebProperties.LocaleResolver;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import lombok.NonNull;
+import lv.wings.config.interceptors.locale.RequestParamLocaleResolver;
+import lv.wings.dto.request.admin.products.CreateProductTranslationDto;
+import lv.wings.dto.request.admin.products.NewProductDto;
+import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.ImageDto;
 import lv.wings.dto.response.admin.products.ProductAdminDto;
 import lv.wings.dto.response.color.ColorDto;
@@ -21,7 +34,12 @@ import lv.wings.dto.response.product.SearchedProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 import lv.wings.enums.LocaleCode;
+import lv.wings.enums.TranslationMethod;
+import lv.wings.exception.entity.EntityNotFoundException;
+import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.exception.validation.InvalidParameterException;
+import lv.wings.exception.validation.NestedValidationException;
+import lv.wings.exception.validation.NonLocalisedException;
 import lv.wings.mapper.ProductMapper;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
@@ -35,6 +53,12 @@ import lv.wings.service.LocaleService;
 import lv.wings.service.ProductCategoryService;
 import lv.wings.service.ProductMaterialService;
 import lv.wings.service.ProductService;
+import lv.wings.service.TranslationService;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ValidationException;
+import jakarta.validation.Validator;
 
 @Service
 public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product, ProductTranslation, Integer> implements ProductService {
@@ -46,7 +70,8 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	private final ProductCategoryService productCategoryService;
 	private final ColorService colorService;
 	private final ProductMaterialService productMaterialService;
-
+	private final Validator validator;
+	private final TranslationService translationService;
 	// From the previous request
 	private List<Product> randomProducts;
 	private LocaleCode lastRequestedLocaleCode;
@@ -60,7 +85,9 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			LocaleService localeService,
 			ProductCategoryService productCategoryService,
 			ColorService colorService,
-			ProductMaterialService productMaterialService) {
+			ProductMaterialService productMaterialService,
+			Validator validator,
+			TranslationService translationService) {
 		super(productRepository, "Product", "entity.product", localeService);
 		this.productTranslationRepository = productTranslationRepository;
 		this.productRepository = productRepository;
@@ -69,13 +96,17 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		this.productCategoryService = productCategoryService;
 		this.colorService = colorService;
 		this.productMaterialService = productMaterialService;
+		this.validator = validator;
+		this.translationService = translationService;
 	}
 
 	@Override
 	public Page<ShortProductDto> getAllByCategory(Integer categoryId, Pageable pageable) {
 		if (categoryId < 0)
 			throw new InvalidParameterException("category.id", categoryId + "", false);
-		Page<Product> products = categoryId == 0 ? findAll(pageable) : productRepository.findAllByCategoryId(categoryId, pageable);
+		Page<Product> products = categoryId == 0
+				? productRepository.findAllByDeletedFalse(pageable)
+				: productRepository.findAllByCategoryIdAndDeletedFalse(categoryId, pageable);
 		return products.map(this::mapToShortProductDto);
 	}
 
@@ -102,8 +133,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 
 	@Override
 	public ProductDto getProductById(Integer id) {
-		Product product = findById(id);
-		return mapToProductDto(product);
+		return mapToProductDto(productRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new EntityNotFoundException(entityNameKey, entityName, id)));
 	}
 
 	@Override
@@ -160,7 +190,9 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		if (q.isBlank())
 			return new ArrayList<>();
 
-		return productTranslationRepository.findByTitleContainingIgnoreCaseAndLocaleEquals(q, localeService.getCurrentLocaleCode()).stream()
+		return productTranslationRepository.findTop1000ByTitleContainingIgnoreCaseAndLocaleEquals(q, localeService.getCurrentLocaleCode())
+				.stream()
+				.filter((pr) -> !pr.getEntity().isDeleted())
 				.map(this::mapToSearchedProductDto)
 				.toList();
 	}
@@ -174,7 +206,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	public List<Product> getProductsByIds(@NonNull List<Integer> ids) {
 		if (ids.size() == 0)
 			return List.of();
-		return productRepository.findAllById(ids);
+		return productRepository.findAllByIdInAndDeletedFalse(ids);
 	}
 
 	// MUST be used in methods that are using a transaction or the lock is not going to work
@@ -200,6 +232,113 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	@Override
 	public ProductTranslation getSelectedTranslation(Product product, LocaleCode localeCode) {
 		return getRightTranslationForSelectedLocale(product, ProductTranslation.class, localeCode);
+	}
+
+	@Override
+	@Transactional
+	public BasicMessageDto createProduct(NewProductDto dto) {
+		// use Validation Annotations to do basic format validation
+		validateProductDto(dto);
+
+		// self-explanotory error messages
+		LocaleCode defaultLocale = localeService.getDefaultLocale();
+		List<CreateProductTranslationDto> providedTranslations = dto.getTranslations();
+
+		CreateProductTranslationDto defaultTranslation = providedTranslations
+				.stream()
+				.filter(tr -> tr.getLocale() == defaultLocale)
+				.findFirst()
+				.orElseThrow(() -> new NonLocalisedException("Noklusētā valoda (" + defaultLocale + ") vienmēr ir obligāta, veidojot jaunu ierakstu.",
+						HttpStatus.UNPROCESSABLE_ENTITY));
+
+		Set<LocaleCode> providedLocales = providedTranslations.stream().map(l -> l.getLocale()).collect(Collectors.toSet());
+
+		if (providedTranslations.size() != providedLocales.size())
+			throw new NonLocalisedException("Valodu sarakstā ir dublikāti — katrai valodai jābūt tikai vienam tulkojumam.", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		TranslationMethod translationMethod = dto.getTranslationMethod();
+
+		boolean isManualTranslation = translationMethod == TranslationMethod.MANUAL;
+
+		if (isManualTranslation && (providedTranslations.size() != localeService.getAllowedLocales().size()))
+			throw new NonLocalisedException("Manuālajā režīmā jānorāda tulkojumi visās atbalstītajās valodās.", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		Product newProduct = Product.builder()
+				.amount(dto.getAmount())
+				.price(dto.getPrice())
+				.category(productCategoryService.findById(1)) // placeholder for now TODO []
+				.build();
+
+
+		List<ProductTranslation> translations;
+		if (translationMethod == TranslationMethod.MANUAL) {
+			translations = new ArrayList<>();
+			dto.getTranslations().forEach(tr -> {
+				// default
+				translations.add(ProductTranslation.builder()
+						.locale(tr.getLocale())
+						.product(newProduct)
+						.title(tr.getTitle())
+						.description(tr.getDescription())
+						.build());
+			});
+			newProduct.setTranslations(translations);
+		} else {
+			translations = new ArrayList<>();
+			translations.add(ProductTranslation.builder()
+					.locale(defaultTranslation.getLocale())
+					.product(newProduct)
+					.title(defaultTranslation.getTitle())
+					.description(defaultTranslation.getDescription())
+					.build());
+
+			// in the system at the moment the are only lv and en locales. so I am only translating to English, but this can be easily adjusted to be more
+			// dynamic if required
+			translations.add(ProductTranslation.builder()
+					.locale(LocaleCode.EN)
+					.product(newProduct)
+					.title(translationService.translateToEnglish(defaultTranslation.getTitle()))
+					.description(translationService.translateToEnglish(defaultTranslation.getDescription()))
+					.build());
+		}
+
+		newProduct.setTranslations(translations);
+		persist(newProduct);
+		return new BasicMessageDto("Jauns produkts tika pievienots.");
+	}
+
+	private void validateProductDto(NewProductDto dto) {
+		Set<ConstraintViolation<NewProductDto>> violations = validator.validate(dto);
+
+		if (!violations.isEmpty()) {
+			Map<String, Object> errors = new HashMap<>();
+
+			for (ConstraintViolation<?> violation : violations) {
+				String path = violation.getPropertyPath().toString(); // e.g., translations[0].title
+				String message = violation.getMessage();
+
+				Matcher matcher = Pattern.compile("translations\\[(\\d+)]\\.(\\w+)").matcher(path);
+				if (matcher.find()) {
+					int index = Integer.parseInt(matcher.group(1));
+					String field = matcher.group(2);
+
+					String locale = "unknown";
+					if (dto.getTranslations() != null && index < dto.getTranslations().size()) {
+						LocaleCode lc = dto.getTranslations().get(index).getLocale();
+						if (lc != null) {
+							locale = lc.getCode();
+						}
+					}
+
+					Map<String, String> subMap = (Map<String, String>) errors.computeIfAbsent(field, k -> new HashMap<>());
+					subMap.put(locale, message);
+				} else {
+					errors.put(path, message);
+				}
+			}
+
+			throw new NestedValidationException(errors);
+		}
 	}
 
 	private ProductTitleDto mapToProductTitleDto(Product product) {

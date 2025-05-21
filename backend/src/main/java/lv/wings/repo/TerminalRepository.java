@@ -6,5 +6,5 @@ import lv.wings.enums.Country;
 import lv.wings.model.entity.Terminal;
 
 public interface TerminalRepository extends JpaRepository<Terminal, Integer> {
-    List<Terminal> findAllByCountry(Country country);
+    List<Terminal> findAllByCountryAndDeletedFalse(Country country);
 }

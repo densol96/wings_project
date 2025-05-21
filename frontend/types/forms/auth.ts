@@ -1,3 +1,5 @@
+import { Locale, LocaleAndString } from "../common";
+
 export type FormState = {
   success?: { message: string };
   error?: { message: string };
@@ -19,3 +21,13 @@ export type UserSessionInfoDto = {
   lastName: string;
   authorities: Permission[];
 };
+
+export type ValidationErrors = {
+  [fieldName: string]: string | LocaleAndString;
+};
+
+export type MultiLangFormState = {
+  success?: { message: string };
+  error?: { message: string };
+  errors?: ValidationErrors;
+} | null;
