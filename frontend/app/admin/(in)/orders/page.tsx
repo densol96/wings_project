@@ -118,8 +118,8 @@ const deliveryMethodOptions = {
 const Page = async ({ searchParams }: Props) => {
   const validatedSearchParams = validateOrdersSearchParams(searchParams) as unknown as { [key: string]: string };
   const { page, sort, direction, status, country, deliveryMethod, q } = validatedSearchParams;
-  const roles = await adminFetch<PageableResponse>(`orders?${new URLSearchParams(validatedSearchParams).toString()}`);
-  const { content: orders, totalPages } = parsePageableResponse<OrderAdminDto>(roles);
+  const pageableOrders = await adminFetch<PageableResponse>(`orders?${new URLSearchParams(validatedSearchParams).toString()}`);
+  const { content: orders, totalPages } = parsePageableResponse<OrderAdminDto>(pageableOrders);
 
   return (
     <div className="">

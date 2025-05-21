@@ -195,10 +195,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(asFieldErrors);
-
-        // return ResponseEntity
-        // .status(HttpStatus.BAD_REQUEST)
-        // .body(BasicErrorDto.builder().message(localeService.getMessage("passwords.mismatch")).build());
     }
 
     @ExceptionHandler(TokenNotFoundException.class)
@@ -209,8 +205,6 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.GONE)
                 .body(BasicErrorDto.builder().message(localeService.getMessage("token.not-found")).build());
     }
-
-
 
     /**
      * Hibernate actually checks Bean Validation annotations during .save but wraps ConstraintViolationException inside TransactionSystemException class.

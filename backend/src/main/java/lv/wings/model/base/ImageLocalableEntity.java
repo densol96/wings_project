@@ -14,7 +14,7 @@ import lv.wings.model.interfaces.Translatable;
 @Data
 public abstract class ImageLocalableEntity<I extends Imageable & Translatable> extends LocalableEntity<I> implements ImageTranslation {
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String alt;
 
     protected ImageLocalableEntity(LocaleCode locale, I picture, String alt) {

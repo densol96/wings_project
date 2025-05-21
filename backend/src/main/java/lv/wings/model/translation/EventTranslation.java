@@ -3,7 +3,7 @@ package lv.wings.model.translation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-
+import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,15 +13,17 @@ import lv.wings.model.base.LocalableEntity;
 import lv.wings.model.entity.Event;
 
 @Entity
-@Table(name = "event_translations")
 @NoArgsConstructor
 @Data
+@Table(
+        name = "event_translations",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
 public class EventTranslation extends LocalableEntity<Event> {
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     private String description;
 
     private String location;

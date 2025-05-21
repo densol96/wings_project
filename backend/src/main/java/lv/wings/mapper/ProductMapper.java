@@ -5,6 +5,8 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.admin.common.TitleLocalableDto;
+import lv.wings.dto.response.admin.products.ProductAdminDto;
 import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ProductMaterialDto;
@@ -16,9 +18,10 @@ import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.dto.response.product.ShortProductTranslationDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 import lv.wings.model.entity.Product;
+import lv.wings.model.interfaces.HasTitle;
 import lv.wings.model.translation.ProductTranslation;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {CommonMapper.class, UserMapper.class})
 public interface ProductMapper {
         ProductTranslationDto toTranslationDto(ProductTranslation translated);
 
@@ -43,4 +46,16 @@ public interface ProductMapper {
 
         @Mapping(target = "id", source = "product.id")
         ProductTitleDto toProductTitleDto(Product product, ProductTranslation translationDto);
+
+        @Mapping(target = "translations", expression = "java(transform(product.getNarrowTranslations()))")
+        @Mapping(target = "sold", expression = "java(getAmountSold(product))")
+        ProductAdminDto toBaseAdmin(Product product);
+
+        default Integer getAmountSold(Product product) {
+                return product.getOrderItems().stream().map(orderItem -> orderItem.getAmount()).reduce(0, (a, b) -> a + b);
+        }
+
+        default List<TitleLocalableDto> transform(List<ProductTranslation> translations) {
+                return translations.stream().map(e -> new TitleLocalableDto(e.getLocale(), e.getTitle())).toList();
+        }
 }

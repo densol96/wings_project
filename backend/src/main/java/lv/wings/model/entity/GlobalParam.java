@@ -17,10 +17,10 @@ import lv.wings.model.base.AuditableEntityExtended;
 @NoArgsConstructor
 public class GlobalParam extends AuditableEntityExtended {
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 50)
     private String title;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 50)
     private String value;
 
     @Builder

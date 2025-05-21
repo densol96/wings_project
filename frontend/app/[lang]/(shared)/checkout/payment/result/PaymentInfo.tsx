@@ -39,6 +39,7 @@ const PaymentInfo = ({ paymentIntentId, dict }: Props) => {
   );
 
   useEffect(() => {
+    console.log("CART SHOULD BE CLEARED");
     clearCart();
   }, []);
 

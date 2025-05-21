@@ -42,13 +42,16 @@ public class SecurityEvent {
     @Column(nullable = false)
     private LocalDateTime dateTime;
 
-    @Column(length = 45)
+    @Column(length = 45, nullable = false)
     private String ipAddress;
 
+    @Column(nullable = false)
     private String userAgent;
 
+    @Column(nullable = false)
     private String requestUri;
 
+    @Column(length = 300)
     private String additionalInfo;
 
     @Builder

@@ -2,7 +2,7 @@ package lv.wings.model.translation;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-
+import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,9 +12,11 @@ import lv.wings.model.base.ImageLocalableEntity;
 import lv.wings.model.entity.EventImage;
 
 @Entity
-@Table(name = "event_picture_translations")
 @NoArgsConstructor
 @Data
+@Table(
+        name = "event_picture_translations",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
 public class EventImageTranslation extends ImageLocalableEntity<EventImage> {
 
     @Builder

@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import lombok.NonNull;
 import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.admin.products.ProductAdminDto;
 import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
 import lv.wings.dto.response.product.ProductMaterialDto;
@@ -72,10 +75,29 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	public Page<ShortProductDto> getAllByCategory(Integer categoryId, Pageable pageable) {
 		if (categoryId < 0)
 			throw new InvalidParameterException("category.id", categoryId + "", false);
-		// categoryId == 0 means "All products"
-		System.out.println("I RUN HERE");
 		Page<Product> products = categoryId == 0 ? findAll(pageable) : productRepository.findAllByCategoryId(categoryId, pageable);
 		return products.map(this::mapToShortProductDto);
+	}
+
+	@Override
+	public Page<ProductAdminDto> getAllByCategoryForAdmin(String q, Integer categoryId, Pageable pageable) {
+		if (categoryId < 0)
+			throw new InvalidParameterException("category.id", categoryId + "", false);
+
+		Optional<Sort.Order> soldOrder = pageable.getSort().stream()
+				.filter(order -> order.getProperty().equalsIgnoreCase("sold"))
+				.findFirst();
+
+		Page<Product> results;
+
+		if (soldOrder.isPresent()) {
+			Pageable newPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize());
+			results = productRepository.findWithSoldSortedNative(q, categoryId, soldOrder.get().getDirection().name().toLowerCase(), newPageable);
+		} else {
+			results = productRepository.searchByCategoryAndTitle(q, categoryId, pageable);
+		}
+
+		return results.map(productMapper::toBaseAdmin);
 	}
 
 	@Override

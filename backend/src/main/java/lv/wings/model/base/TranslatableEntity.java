@@ -23,4 +23,8 @@ public abstract class TranslatableEntity<L extends Localable> extends AuditableE
     public List<Localable> getTranslations() {
         return translations.stream().map(tr -> (Localable) tr).toList();
     }
+
+    public List<L> getNarrowTranslations() {
+        return translations;
+    }
 }

@@ -8,9 +8,9 @@ const ProductsSidebarSection = ({}: Props) => {
     <SidebarSection
       title="Produkti"
       items={[
-        { name: "Produktu saraksts", href: "/products" },
-        { name: "Jauns produkts", href: "/products/new" },
-        { name: "Produktu kategorijas", href: "/products/categories" },
+        { name: "Produktu saraksts", href: "/admin/products" },
+        { name: "Produktu kategorijas", href: "/admin/products/categories" },
+        { name: "Veco produktu arhivs", href: "/admin/products/deleted" },
       ]}
     />
   );

@@ -2,30 +2,18 @@ package lv.wings;
 
 import java.math.BigDecimal;
 
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Profile;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.annotation.PostConstruct;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.enums.Country;
 import lv.wings.enums.DeliveryMethod;
@@ -43,8 +31,6 @@ import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductCategory;
 import lv.wings.model.entity.ProductImage;
 import lv.wings.model.entity.ProductMaterial;
-import lv.wings.model.security.MyAuthority;
-import lv.wings.model.security.MyUser;
 import lv.wings.model.security.Permission;
 import lv.wings.model.security.Role;
 import lv.wings.model.security.User;
@@ -72,9 +58,6 @@ import lv.wings.repo.ProductMaterialRepository;
 import lv.wings.repo.ProductRepository;
 import lv.wings.repo.RoleRepository;
 import lv.wings.repo.UserRepository;
-import lv.wings.repo.security.IMyAuthorityRepo;
-import lv.wings.repo.security.IMyUserRepo;
-
 import net.datafaker.Faker;
 
 @SpringBootApplication

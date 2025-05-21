@@ -103,3 +103,27 @@ export type OrderFullAdminDto = {
   lastModifiedAt: string | null;
   lastModifiedBy: UserMinDto | null;
 };
+
+export type ProductsSearchParams = {
+  page?: string;
+  sort?: SimleSort;
+  direction?: SortDirection;
+  q?: string;
+  categoryId?: number;
+};
+
+export interface ProductAdminDto {
+  id: number;
+  amount: number;
+  sold: number;
+  translations: TitleLocalableDto[];
+  createdBy: UserMinDto;
+  createdAt: string;
+  lastModifiedBy?: UserMinDto;
+  lastModifiedAt?: string;
+}
+
+export interface TitleLocalableDto {
+  locale: string;
+  title: string;
+}

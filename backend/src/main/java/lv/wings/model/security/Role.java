@@ -26,7 +26,7 @@ public class Role {
     @Setter(value = AccessLevel.NONE)
     private Integer id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 50)
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)

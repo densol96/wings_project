@@ -14,6 +14,36 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 	List<Product> findByCategory(ProductCategory category);
 
+	@Query("""
+			    SELECT DISTINCT p
+			    FROM Product p
+			    JOIN p.translations t
+			    WHERE (:categoryId = 0 OR p.category.id = :categoryId)
+			      AND LOWER(t.title) LIKE LOWER(CONCAT('%', :q, '%'))
+			""")
+	Page<Product> searchByCategoryAndTitle(@Param("q") String q, @Param("categoryId") Integer categoryId, Pageable pageable);
+
+
+	@Query(
+			value = """
+					SELECT p.*, COALESCE(SUM(oi.amount), 0) AS sold
+					FROM products p
+					LEFT JOIN order_items oi ON oi.product_id = p.id
+					LEFT JOIN product_translations t ON t.translatable_id = p.id
+					WHERE (:categoryId = 0 OR p.product_category_id = :categoryId)
+					  AND LOWER(t.title) LIKE LOWER(CONCAT('%', :q, '%'))
+					GROUP BY p.id
+					ORDER BY
+					    CASE WHEN :direction = 'asc' THEN sold END ASC,
+					    CASE WHEN :direction = 'desc' THEN sold END DESC
+					""",
+			nativeQuery = true)
+	Page<Product> findWithSoldSortedNative(
+			@Param("q") String q,
+			@Param("categoryId") Integer categoryId,
+			@Param("direction") String direction,
+			Pageable pageable);
+
 	Page<Product> findAllByCategoryId(Integer categoryId, Pageable pageable);
 
 	// This should work in MySQL but wil need to be changed for other DBMSs

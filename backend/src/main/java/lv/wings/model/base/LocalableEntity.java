@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
-
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,5 +41,4 @@ public abstract class LocalableEntity<T extends Translatable> implements Localab
         this.locale = locale;
         this.entity = entity;
     }
-
 }

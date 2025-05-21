@@ -30,7 +30,7 @@ import lv.wings.model.translation.ProductTranslation;
 @Setter
 public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 5, scale = 2)
 	private BigDecimal price;
 
 	@Column(nullable = false)
@@ -59,5 +59,4 @@ public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 		this.amount = amount;
 		this.category = category;
 	}
-
 }

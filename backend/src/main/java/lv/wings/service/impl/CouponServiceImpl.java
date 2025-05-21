@@ -93,6 +93,7 @@ public class CouponServiceImpl extends AbstractCRUDService<Coupon, Integer> impl
     }
 
     private BigDecimal calculateDiscount(Coupon coupon, BigDecimal baseAmount) {
+        // fixed discount has priority but in reality it should be 1 out of 2 saved to the coupon
         if (coupon.getFixedDiscount() != null) {
             return coupon.getFixedDiscount().min(baseAmount);
         }

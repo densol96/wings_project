@@ -25,7 +25,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-
 @Setter
 @Getter
 @ToString
@@ -38,19 +37,19 @@ public class User {
     @Setter(value = AccessLevel.NONE)
     private Integer id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 20)
     private String username;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false, length = 50)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String firstName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String lastName;
 
     // can become inactive e.g. if login limits exceeded

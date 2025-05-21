@@ -12,7 +12,7 @@ import {
   UsersSearchParams,
   UserStatus,
 } from "@/types";
-import { OrdersSearchParams, OrderStatus } from "@/types/sections/admin";
+import { OrdersSearchParams, OrderStatus, ProductsSearchParams as AdminProductsSearchParams } from "@/types/sections/admin";
 
 export const validateValues = <T>(value: T | null | undefined, allowedValues: T[], defaultValue: T): T => {
   return value && allowedValues.includes(value) ? value : defaultValue;

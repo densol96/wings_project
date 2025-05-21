@@ -16,7 +16,7 @@ import lv.wings.model.base.AuditableEntityExtended;
 
 @Entity
 @Table(
-        name = "product_material",
+        name = "product_materials",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"product_id", "material_id"})})
 @NoArgsConstructor
 @Getter
@@ -32,7 +32,7 @@ public class ProductMaterial extends AuditableEntityExtended {
     private Material material;
 
     @Column(nullable = false)
-    private Integer percentage; // 0 -100
+    private Integer percentage; // 0 - 100
 
     @Builder
     public ProductMaterial(Product product, Material material, Integer percentage) {

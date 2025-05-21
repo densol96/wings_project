@@ -17,10 +17,10 @@ import lv.wings.model.interfaces.Localable;
 @NoArgsConstructor
 public abstract class ImageableEntity<L extends Localable, O extends HasImages<?>> extends TranslatableEntity<L> implements Imageable {
     @ManyToOne
-    @JoinColumn(name = "has_image_id")
+    @JoinColumn(name = "has_image_id", nullable = false)
     private O owner;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String src;
 
     protected ImageableEntity(O owner, String src) {

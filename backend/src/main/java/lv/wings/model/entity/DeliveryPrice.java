@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,9 +35,10 @@ public class DeliveryPrice {
     private DeliveryType deliveryType;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Country country;
 
-    @Column(nullable = true)
+    @Column(nullable = true, precision = 4, scale = 2)
     private BigDecimal price;
 
     @OneToMany

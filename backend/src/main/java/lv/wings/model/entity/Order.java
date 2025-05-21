@@ -3,9 +3,10 @@ package lv.wings.model.entity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
-import com.stripe.param.billingportal.SessionCreateParams.Locale;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,10 +17,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import lv.wings.enums.LocaleCode;
 import lv.wings.enums.OrderStatus;
 import lv.wings.model.base.AuditableEntity;
@@ -37,14 +40,14 @@ public class Order extends AuditableEntity {
 	private String paymentIntentId;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false, length = 50)
+	@Column(nullable = false)
 	private OrderStatus status = OrderStatus.IN_PROGRESS;
 
 	@ManyToOne
 	@JoinColumn(name = "delivery_price_id", nullable = false)
 	private DeliveryPrice deliveryVariation;
 
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 4, scale = 2)
 	private BigDecimal deliveryPriceAtOrderTime;
 
 	@ManyToOne
@@ -59,7 +62,7 @@ public class Order extends AuditableEntity {
 	@JoinColumn(name = "coupon_id")
 	private Coupon appliedCoupon;
 
-	@Column(nullable = false)
+	@Column(nullable = false, precision = 5, scale = 2)
 	private BigDecimal discountAtOrderTime = BigDecimal.ZERO;
 
 	@Column(nullable = false)

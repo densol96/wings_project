@@ -11,20 +11,16 @@ import lv.wings.enums.LocaleCode;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.model.interfaces.Localable;
 import lv.wings.model.interfaces.Translatable;
-import lv.wings.repo.security.IMyAuthorityRepo;
 import lv.wings.service.LocaleService;
 
 @Service
 public class LocaleServiceImpl implements LocaleService {
 
-    private final IMyAuthorityRepo IMyAuthorityRepo;
     private final MessageSource messageSource;
 
     private final static String DEFAULT_LOCALE = "lv";
 
-
-    public LocaleServiceImpl(IMyAuthorityRepo IMyAuthorityRepo, MessageSource messageSource) {
-        this.IMyAuthorityRepo = IMyAuthorityRepo;
+    public LocaleServiceImpl(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
