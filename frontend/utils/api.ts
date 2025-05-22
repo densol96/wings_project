@@ -23,21 +23,23 @@ export const fetchWithSetup = async (
     method,
     headers,
     additionalOptions,
+    isMultipart = false,
   }: {
     body?: Record<string, any>;
     method?: HttpMethod;
     headers?: Record<string, any>;
     additionalOptions?: Record<string, any>;
+    isMultipart?: boolean;
   },
   lang: Locale = "lv"
 ): Promise<Response> => {
   const options = {
     method: method || "GET",
     headers: {
-      "Content-Type": "application/json",
+      ...(!isMultipart && { "Content-Type": "application/json" }),
       ...headers,
     },
-    ...(body && { body: JSON.stringify(body) }),
+    ...(body && (!isMultipart ? { body: JSON.stringify(body) } : { body })),
     ...(method && method !== "GET" && { cache: "no-store" as RequestCache }),
     ...additionalOptions,
   };

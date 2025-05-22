@@ -4,9 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,8 +49,8 @@ public class ProductAdminController {
         return ResponseEntity.ok(new BasicMessageDto("Produkts veiksmīgi dzēsts"));
     }
 
-    @PostMapping
-    public ResponseEntity<BasicMessageDto> createProduct(@RequestBody NewProductDto dto) {
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BasicMessageDto> createProduct(@ModelAttribute NewProductDto dto) {
         log.info("Received POST request on /api/v1/admin/products/");
         return ResponseEntity.ok(productService.createProduct(dto));
     }

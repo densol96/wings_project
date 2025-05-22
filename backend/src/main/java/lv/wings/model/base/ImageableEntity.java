@@ -20,7 +20,7 @@ public abstract class ImageableEntity<L extends Localable, O extends HasImages<?
     @JoinColumn(name = "has_image_id", nullable = false)
     private O owner;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 200)
     private String src;
 
     protected ImageableEntity(O owner, String src) {

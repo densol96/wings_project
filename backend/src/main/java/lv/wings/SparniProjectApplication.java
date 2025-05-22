@@ -203,16 +203,16 @@ public class SparniProjectApplication {
 				List<Color> colors = new ArrayList<>();
 
 				String[][] colorNames = {
-						{"Red", "Sarkans"},
-						{"Blue", "Zils"},
-						{"Green", "Zaļš"},
-						{"Yellow", "Dzeltens"},
-						{"Black", "Melns"},
-						{"White", "Balts"},
-						{"Orange", "Oranžs"},
-						{"Purple", "Violets"},
-						{"Pink", "Rozā"},
-						{"Gray", "Pelēks"}
+						{ "Red", "Sarkans" },
+						{ "Blue", "Zils" },
+						{ "Green", "Zaļš" },
+						{ "Yellow", "Dzeltens" },
+						{ "Black", "Melns" },
+						{ "White", "Balts" },
+						{ "Orange", "Oranžs" },
+						{ "Purple", "Violets" },
+						{ "Pink", "Rozā" },
+						{ "Gray", "Pelēks" }
 				};
 
 				for (String[] pair : colorNames) {
@@ -240,10 +240,10 @@ public class SparniProjectApplication {
 
 				// Materials
 				String[][] materialNames = {
-						{"Wool", "Vilna"},
-						{"Cotton", "Kokvilna"},
-						{"Linen", "Lins"},
-						{"Silk", "Zīds"}
+						{ "Wool", "Vilna" },
+						{ "Cotton", "Kokvilna" },
+						{ "Linen", "Lins" },
+						{ "Silk", "Zīds" }
 				};
 				List<Material> materials = new ArrayList<>();
 

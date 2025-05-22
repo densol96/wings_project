@@ -2,6 +2,11 @@ import { defaultLocale, locales } from "@/constants/locales";
 import { Locale, LocaleAndString } from "@/types";
 import { cn } from "@/utils";
 
+type LocalisedValues = {
+  locale: Locale;
+  value: string;
+}[];
+
 type Props = {
   label: string;
   name: string;
@@ -19,6 +24,8 @@ type Props = {
   inputClassName?: string;
   requiresTranslationsFields?: boolean;
   rows?: number;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
+  localisedValues?: LocalisedValues;
 };
 
 const MultiLangFormField = ({
@@ -29,11 +36,12 @@ const MultiLangFormField = ({
   textarea = false,
   className,
   disabled = false,
-  defaultValue,
   inputClassName,
   requiresTranslationsFields = false,
   placeholder,
   rows,
+  onChange,
+  localisedValues,
 }: Props) => {
   return (
     <div className={cn("mb-4", className)}>
@@ -49,6 +57,8 @@ const MultiLangFormField = ({
         error={error?.[defaultLocale]}
         rows={rows}
         requiresTranslationsFields={requiresTranslationsFields}
+        onChange={onChange}
+        value={localisedValues?.find((t) => t.locale === defaultLocale)?.value}
       />
       {requiresTranslationsFields &&
         locales
@@ -64,6 +74,8 @@ const MultiLangFormField = ({
               error={error?.[requiredAdditionalLocale]}
               inputClassName={inputClassName}
               requiresTranslationsFields={requiresTranslationsFields}
+              onChange={onChange}
+              value={localisedValues?.find((t) => t.locale === requiredAdditionalLocale)?.value}
             />
           ))}
     </div>
@@ -83,6 +95,8 @@ type SingleProps = {
   inputClassName?: string;
   rows?: number;
   requiresTranslationsFields: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
+  value?: string;
 };
 
 export const SingleInput = ({
@@ -96,6 +110,8 @@ export const SingleInput = ({
   placeholder,
   rows = 5,
   requiresTranslationsFields,
+  onChange,
+  value,
 }: SingleProps) => {
   const uniqueName = name + "-" + locale;
   return (
@@ -111,6 +127,8 @@ export const SingleInput = ({
             disabled={disabled}
             placeholder={placeholder}
             rows={rows}
+            onChange={onChange}
+            {...(value && { value })}
           />
         ) : (
           <input
@@ -126,6 +144,8 @@ export const SingleInput = ({
             )}
             disabled={disabled}
             placeholder={placeholder}
+            onChange={onChange}
+            {...(value && { value })}
           />
         )}
       </div>

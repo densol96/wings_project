@@ -34,6 +34,7 @@ import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
 import lv.wings.exception.other.AlreadySubscribedException;
 import lv.wings.exception.other.ConflictException;
+import lv.wings.exception.other.ImageLeakException;
 import lv.wings.exception.other.TokenNotFoundException;
 import lv.wings.exception.payment.CheckoutException;
 import lv.wings.exception.payment.WebhookException;
@@ -311,6 +312,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(errorResponse);
     }
 
+
+
+    @ExceptionHandler(ImageLeakException.class)
+    public ResponseEntity<String> handleImageLeakException(ImageLeakException e) {
+        log.error("*** ImageLeakException: {}", e.getMessage());
+        return ResponseEntity.badRequest().body(
+                "Produkts netika augšupielādēts, un sistēmai neizdevās atcelt jau augšupielādētās izmaiņas. Lūdzu, vēlreiz pārbaudiet savu attēlu krātuvi, vai tajā nav bāreņu attēlu.");
+    }
+
+
     @ExceptionHandler(WebhookException.class)
     public ResponseEntity<String> handleWebhookException(Exception e) {
         log.error("*** WebhookException: {}", e.getMessage());
@@ -320,7 +331,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<BasicErrorDto> handleUnexpectedException(Exception e) {
         log.error("*** Unexpected exception of type {}: {}", e.getClass().getSimpleName(), e.getMessage());
-        // e.printStackTrace();
+        e.printStackTrace();
         return handleProceduralException(e);
     }
 

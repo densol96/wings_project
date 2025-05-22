@@ -2,6 +2,7 @@ package lv.wings.dto.request.admin.products;
 
 import java.math.BigDecimal;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -13,7 +14,6 @@ import lv.wings.enums.TranslationMethod;
 @Getter
 @Setter
 public class NewProductDto {
-
     private TranslationMethod translationMethod; // not doing if present check, cause if is not will fallback to AUTO
 
     @NotNull(message = "{price.required}")
@@ -27,5 +27,7 @@ public class NewProductDto {
     @NotEmpty(message = "{translations.empty}")
     @Valid
     private List<CreateProductTranslationDto> translations;
+
+    private List<MultipartFile> images;
 
 }

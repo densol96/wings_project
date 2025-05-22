@@ -1,5 +1,6 @@
 package lv.wings.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +19,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import lv.wings.config.interceptors.locale.RequestParamLocaleResolver;
 import lv.wings.dto.request.admin.products.CreateProductTranslationDto;
 import lv.wings.dto.request.admin.products.NewProductDto;
@@ -41,8 +44,10 @@ import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.exception.validation.NestedValidationException;
 import lv.wings.exception.validation.NonLocalisedException;
 import lv.wings.mapper.ProductMapper;
+import lv.wings.model.base.OwnerableEntity;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
+import lv.wings.model.translation.ProductImageTranslation;
 import lv.wings.model.translation.ProductTranslation;
 import lv.wings.repo.ProductRepository;
 import lv.wings.repo.ProductTranslationRepository;
@@ -53,6 +58,7 @@ import lv.wings.service.LocaleService;
 import lv.wings.service.ProductCategoryService;
 import lv.wings.service.ProductMaterialService;
 import lv.wings.service.ProductService;
+import lv.wings.service.S3Service;
 import lv.wings.service.TranslationService;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -61,6 +67,7 @@ import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 
 @Service
+@Slf4j
 public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product, ProductTranslation, Integer> implements ProductService {
 
 	private final ProductRepository productRepository;
@@ -72,6 +79,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	private final ProductMaterialService productMaterialService;
 	private final Validator validator;
 	private final TranslationService translationService;
+	private final S3Service imageUploader;
 	// From the previous request
 	private List<Product> randomProducts;
 	private LocaleCode lastRequestedLocaleCode;
@@ -87,7 +95,8 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			ColorService colorService,
 			ProductMaterialService productMaterialService,
 			Validator validator,
-			TranslationService translationService) {
+			TranslationService translationService,
+			S3Service imageUploader) {
 		super(productRepository, "Product", "entity.product", localeService);
 		this.productTranslationRepository = productTranslationRepository;
 		this.productRepository = productRepository;
@@ -98,6 +107,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		this.productMaterialService = productMaterialService;
 		this.validator = validator;
 		this.translationService = translationService;
+		this.imageUploader = imageUploader;
 	}
 
 	@Override
@@ -298,13 +308,77 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 					.locale(LocaleCode.EN)
 					.product(newProduct)
 					.title(translationService.translateToEnglish(defaultTranslation.getTitle()))
-					.description(translationService.translateToEnglish(defaultTranslation.getDescription()))
+					.description(
+							defaultTranslation.getDescription() != null ? translationService.translateToEnglish(defaultTranslation.getDescription()) : null)
 					.build());
 		}
 
 		newProduct.setTranslations(translations);
-		persist(newProduct);
+
+
+		List<ProductImage> images = proccessImagesAndUpload(newProduct, dto.getImages());
+		newProduct.setImages(images);
+		try {
+			persist(newProduct);
+		} catch (Exception e) {
+			clearImagesUp(images, null);
+		}
+
 		return new BasicMessageDto("Jauns produkts tika pievienots.");
+	}
+
+	private List<ProductImage> proccessImagesAndUpload(Product newProduct, List<MultipartFile> dtoImages) {
+		List<ProductImage> images = new ArrayList<>();
+
+		dtoImages.stream().forEach((image -> {
+			try {
+				String url = imageUploader.uploadFile(image, "products");
+				ProductImage productImage = new ProductImage(newProduct, url);
+				List<ProductImageTranslation> imageTranslations = new ArrayList<>();
+				imageTranslations.add(
+						new ProductImageTranslation(
+								LocaleCode.LV,
+								productImage,
+								String.format("Produkta %s attels Nr. %s",
+										getSelectedTranslation(newProduct, LocaleCode.LV).getTitle(),
+										images.size() + 1)));
+				imageTranslations.add(
+						new ProductImageTranslation(
+								LocaleCode.EN,
+								productImage,
+								String.format("Product %s image Nr. %s",
+										getSelectedTranslation(newProduct, LocaleCode.EN).getTitle(),
+										images.size() + 1)));
+				productImage.setTranslations(imageTranslations);
+				images.add(productImage);
+			} catch (Exception e) {
+				log.error(e.getMessage());
+				if (images.size() > 0) {
+					clearImagesUp(images, image);
+				}
+				throw new RuntimeException("Failed to upload image: " + image.getOriginalFilename(), e); // Will trigger a procedural exception
+			}
+		}));
+
+		return images;
+	}
+
+	private void clearImagesUp(List<ProductImage> images, MultipartFile faultyImage) {
+		try {
+			images.forEach(alreadyUploaded -> {
+				imageUploader.deleteFile(alreadyUploaded.getSrc());
+			});
+		} catch (Exception ex) {
+			log.error(ex.getMessage());
+			if (faultyImage == null) {
+				throw new RuntimeException("Failed to save to DB links to the uploaded images => required image clean up",
+						ex);
+			} else {
+				throw new RuntimeException("Failed to upload image: " + faultyImage.getOriginalFilename() + " and failed to clear already uploaded images",
+						ex);
+			}
+
+		}
 	}
 
 	private void validateProductDto(NewProductDto dto) {

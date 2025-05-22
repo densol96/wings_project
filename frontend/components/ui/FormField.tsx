@@ -20,6 +20,8 @@ type Props<T extends string | number> = {
   inputClassName?: string;
   checked?: boolean;
   defaultChecked?: boolean;
+  multiple?: boolean;
+  accept?: string;
 };
 
 const FormField = <T extends string | number>({
@@ -38,6 +40,8 @@ const FormField = <T extends string | number>({
   inputClassName,
   checked,
   defaultChecked,
+  multiple,
+  accept,
 }: Props<T>) => {
   const { pending } = useFormStatus();
   return (
@@ -79,6 +83,7 @@ const FormField = <T extends string | number>({
             inputClassName
           )}
           disabled={disabled || pending}
+          multiple={multiple}
         />
       )}
 

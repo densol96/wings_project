@@ -19,7 +19,9 @@ import lv.wings.model.interfaces.HasTitle;
 @Data
 @Table(
         name = "product_translations",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"translatable_id", "locale"})
+        })
 @SQLDelete(sql = "UPDATE product_translations SET deleted = true WHERE id=?")
 public class ProductTranslation extends LocalableEntity<Product> implements HasTitle {
 

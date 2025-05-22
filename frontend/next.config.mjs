@@ -18,6 +18,11 @@ const nextConfig = {
         port: "8080",
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "sparni-images.s3.eu-north-1.amazonaws.com",
+        pathname: "/**",
+      },
     ],
   },
   eslint: {

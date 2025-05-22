@@ -15,19 +15,22 @@ export const serverFetchAction = async <T>({
   revalidatePathUrl,
   alternativeOk,
   isLogin = false,
+  isMultipart = false,
 }: {
-  body?: Record<string, any>;
+  body?: Record<string, any> | FormData;
   endpoint: string;
   method: HttpMethod;
   revalidatePathUrl?: string;
   alternativeOk?: (data: any) => void;
   isLogin?: boolean;
+  isMultipart?: boolean;
 }): Promise<T> => {
   try {
     const response = await fetchWithSetup(endpoint, {
       method,
       body,
       headers: await getHeaders(),
+      isMultipart,
     });
 
     if (!isLogin && response.status === 401) redirect("/admin/login?expired=true");

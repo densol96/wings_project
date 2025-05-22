@@ -4,41 +4,56 @@ import { serverFetchAction } from "../helpers/serverFetchAction";
 import { defaultLocale, localeCodes } from "@/constants/locales";
 import { revalidatePath } from "next/cache";
 
-export const createProduct = async (prevState: MultiLangFormState, formData: FormData): Promise<MultiLangFormState> => {
-  const formDataSerialised = Object.fromEntries(formData.entries());
-  // const numericPermissionIds = formData.getAll("permissions").map((id) => Number(id));
+export const createProduct = async (formData: FormData): Promise<MultiLangFormState> => {
+  // const formDataFields= Object.fromEntries(formData.entries());
 
-  const translations: { locale: Locale; title: string; description?: string }[] = [];
+  const translations: { locale: Locale; title: FormDataEntryValue; description: FormDataEntryValue | null }[] = [];
+
+  // localeCodes.forEach((localeCode) => {
+  //   if (localeCode === defaultLocale || formDataSerialised.translateMethod === TranslationMethod.MANUAL) {
+  //     translations.push({
+  //       locale: localeCode,
+  //       title: formDataSerialised[`title-${localeCode}`] as string,
+  //       description: (formDataSerialised[`description-${localeCode}`] as string) || undefined,
+  //     });
+  //   }
+  // });
 
   localeCodes.forEach((localeCode) => {
-    if (localeCode === defaultLocale || formDataSerialised.translateMethod === TranslationMethod.MANUAL) {
+    if (localeCode === defaultLocale || formData.get("translateMethod") === TranslationMethod.MANUAL) {
       translations.push({
         locale: localeCode,
-        title: formDataSerialised[`title-${localeCode}`] as string,
-        description: (formDataSerialised[`description-${localeCode}`] as string) || undefined,
+        title: formData.get(`title-${localeCode}`) || "",
+        description: formData.get(`description-${localeCode}`),
       });
     }
   });
 
-  const body = {
-    translationMethod: formDataSerialised.translationMethod,
-    price: formDataSerialised.price,
-    amount: formDataSerialised.amount,
-    translations,
-  };
+  // const data = new FormData();
+  // data.append("translationMethod", formDataSerialised.translationMethod);
+  // data.append("price", formDataSerialised.price);
+  // data.append("amount", formDataSerialised.amount);
 
-  console.log(body);
-
-  const result = await serverFetchAction<MultiLangFormState>({
-    endpoint: "admin/products",
-    method: "POST",
-    body,
-    alternativeOk: () => revalidatePath("/", "layout"),
+  translations.forEach((tr, index) => {
+    formData.append(`translations[${index}].locale`, tr.locale);
+    formData.append(`translations[${index}].title`, tr.title);
+    if (tr.description) {
+      formData.append(`translations[${index}].description`, tr.description);
+    }
   });
 
-  console.log(result);
+  const images = formData.getAll("images") as File[];
+  images.forEach((image) => {
+    formData.append("images", image);
+  });
 
-  return result;
+  return await serverFetchAction<MultiLangFormState>({
+    endpoint: "admin/products",
+    method: "POST",
+    body: formData,
+    alternativeOk: () => revalidatePath("/", "layout"),
+    isMultipart: true,
+  });
 };
 
 export default createProduct;
