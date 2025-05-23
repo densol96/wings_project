@@ -1,3 +1,5 @@
+"use server";
+
 import { UserSessionInfoDto } from "@/types";
 import { headers } from "next/headers";
 

@@ -1,7 +1,8 @@
-import NewProduct from "../NewProduct";
+import ProductForm from "../ProductForm";
+import { loadProductsMeta } from "../utils";
 
-const Page = () => {
-  return <NewProduct />;
+const Page = async () => {
+  return <ProductForm requiredMeta={await loadProductsMeta()} />;
 };
 
 export default Page;

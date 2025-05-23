@@ -13,3 +13,4 @@ export { default as FormField } from "./FormField";
 export { default as Input } from "./Input";
 export { default as BackButton } from "./BackButton";
 export { default as DashboardButton } from "./DashboardButton";
+export { default as Label } from "./Label";

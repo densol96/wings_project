@@ -9,6 +9,7 @@ import NoData from "@/components/ui/NoData";
 import ProductRow from "./ProductRow";
 import Select from "@/components/ui/Select";
 import AddProductBtn from "./AddProductBtn";
+import { loadCategories } from "./utils";
 
 type Props = {
   searchParams: ProductsSearchParams;
@@ -54,7 +55,7 @@ const sortSelectOptions = {
 
 const Page = async ({ searchParams }: Props) => {
   const queryParams = new URLSearchParams(searchParams as unknown as { [key: string]: string }).toString();
-  const pageableProducts = await adminFetch<PageableResponse>(`products?${queryParams}`);
+  const [allCategories, pageableProducts] = await Promise.all([loadCategories(), adminFetch<PageableResponse>(`products?${queryParams}`)]);
   const { content: products, totalPages } = parsePageableResponse<ProductAdminDto>(pageableProducts);
 
   return (
@@ -72,7 +73,7 @@ const Page = async ({ searchParams }: Props) => {
       <div className="flex justify-between gap-10 flex-row items-center sm:mt-0 mb-4">
         <SearchFilter name="q" className="max-w-[400px]" />
         <div className="flex gap-10">
-          <CategoryFilter categoryId={searchParams.categoryId} />
+          <CategoryFilter allCategories={allCategories} categoryId={searchParams.categoryId} />
           <Select activeValue={`${searchParams.sort || "createdAt"}-${searchParams.direction || "desc"}`} selectDict={sortSelectOptions} />;
         </div>
       </div>

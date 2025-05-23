@@ -3,6 +3,7 @@
 import { cn } from "@/utils";
 import React from "react";
 import { useFormStatus } from "react-dom";
+import Label from "./Label";
 
 type Props<T extends string | number> = {
   label: string;
@@ -46,9 +47,7 @@ const FormField = <T extends string | number>({
   const { pending } = useFormStatus();
   return (
     <div className={cn("mb-4", className)}>
-      <label htmlFor={name} className="block text-md font-medium text-gray-700 mb-1">
-        {label} {required && <span className="text-red-500">*</span>}
-      </label>
+      <Label name={name} label={label} required={required} />
 
       {textarea ? (
         <textarea

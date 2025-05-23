@@ -12,9 +12,20 @@ type Props = {
   activeValue: string;
   id: string;
   filterLabel: string;
+  onChangeAlt?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  name?: string;
+  disabled?: boolean;
 };
 
-const FilterSelect = ({ className, optionClassName, selectDict, activeValue, id, filterLabel }: Props) => {
+/*
+regarding onChangeAlt 
+** 
+Want to reuse this component for my admin create-update (product) section.
+There, the new value is just required to update state.
+Otherwise, to update URL to trigger new GET request to the parent Server Component.
+*/
+
+const FilterSelect = ({ className, optionClassName, selectDict, activeValue, id, filterLabel, onChangeAlt, name, disabled = false }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -30,12 +41,21 @@ const FilterSelect = ({ className, optionClassName, selectDict, activeValue, id,
 
   return (
     <div className="flex items-center gap-2">
-      <label className="normal-case" htmlFor={id}>
-        {selectDict.label}
-      </label>
-      <select value={activeValue} onChange={onChange} id={id} className={cn("border-1 border-gray-300 py-1", className)}>
+      {!onChangeAlt && (
+        <label className="normal-case" htmlFor={id}>
+          {selectDict.label}
+        </label>
+      )}
+      <select
+        disabled={disabled}
+        name={name}
+        value={activeValue}
+        onChange={onChangeAlt || onChange}
+        id={id}
+        className={cn("border-1 border-gray-300 py-1", className)}
+      >
         {selectDict.options.map((opt) => (
-          <option key={opt.label + "_" + opt.value} className={cn("text-center", optionClassName)} value={opt.value}>
+          <option disabled={opt.disabled === true} key={opt.label + "_" + opt.value} className={cn("text-center", optionClassName)} value={opt.value}>
             {opt.label}
           </option>
         ))}

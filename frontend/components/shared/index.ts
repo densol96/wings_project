@@ -26,3 +26,4 @@ export { default as SearchFilter } from "./SearchFilter";
 export { default as AuditableSelect } from "./AuditableSelect";
 export { default as ImageUploadInput } from "./ImageUploadInput";
 export { default as ImagesPreview } from "./ImagesPreview";
+export { default as ImageUploader } from "./ImageUploader";

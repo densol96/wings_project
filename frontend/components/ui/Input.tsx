@@ -4,10 +4,10 @@ type Props = {
   name: string;
   type?: string;
   placeholder?: string;
-  value?: string;
+  value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
   disabled?: boolean;
-  defaultValue?: string;
+  defaultValue?: string | number;
   pending?: boolean;
   className?: string;
   checked?: boolean;

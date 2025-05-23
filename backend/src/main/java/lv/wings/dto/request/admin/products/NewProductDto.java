@@ -24,10 +24,17 @@ public class NewProductDto {
     @Positive(message = "{amount.min}")
     private Integer amount;
 
+    @NotNull(message = "{categoryId.required}")
+    private Integer categoryId;
+
     @NotEmpty(message = "{translations.empty}")
     @Valid
     private List<CreateProductTranslationDto> translations;
 
+    @Valid
+    private List<NewProductMaterialDto> materials;
+
     private List<MultipartFile> images;
 
+    private List<Integer> colors;
 }

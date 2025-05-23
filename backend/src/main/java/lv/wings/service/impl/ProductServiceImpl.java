@@ -1,6 +1,5 @@
 package lv.wings.service.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,23 +9,22 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.springframework.boot.autoconfigure.web.WebProperties.LocaleResolver;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import lv.wings.config.interceptors.locale.RequestParamLocaleResolver;
 import lv.wings.dto.request.admin.products.CreateProductTranslationDto;
 import lv.wings.dto.request.admin.products.NewProductDto;
+import lv.wings.dto.request.admin.products.NewProductMaterialDto;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.admin.products.ExistingProductDto;
 import lv.wings.dto.response.admin.products.ProductAdminDto;
 import lv.wings.dto.response.color.ColorDto;
 import lv.wings.dto.response.product.ProductDto;
@@ -39,14 +37,13 @@ import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 import lv.wings.enums.LocaleCode;
 import lv.wings.enums.TranslationMethod;
 import lv.wings.exception.entity.EntityNotFoundException;
-import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.exception.validation.NestedValidationException;
 import lv.wings.exception.validation.NonLocalisedException;
 import lv.wings.mapper.ProductMapper;
-import lv.wings.model.base.OwnerableEntity;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
+import lv.wings.model.entity.ProductMaterial;
 import lv.wings.model.translation.ProductImageTranslation;
 import lv.wings.model.translation.ProductTranslation;
 import lv.wings.repo.ProductRepository;
@@ -55,15 +52,14 @@ import lv.wings.service.AbstractTranslatableCRUDService;
 import lv.wings.service.ColorService;
 import lv.wings.service.ImageService;
 import lv.wings.service.LocaleService;
+import lv.wings.service.MaterialService;
 import lv.wings.service.ProductCategoryService;
 import lv.wings.service.ProductMaterialService;
 import lv.wings.service.ProductService;
 import lv.wings.service.S3Service;
 import lv.wings.service.TranslationService;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ValidationException;
 import jakarta.validation.Validator;
 
 @Service
@@ -77,6 +73,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	private final ProductCategoryService productCategoryService;
 	private final ColorService colorService;
 	private final ProductMaterialService productMaterialService;
+	private final MaterialService materialService;
 	private final Validator validator;
 	private final TranslationService translationService;
 	private final S3Service imageUploader;
@@ -96,7 +93,8 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			ProductMaterialService productMaterialService,
 			Validator validator,
 			TranslationService translationService,
-			S3Service imageUploader) {
+			S3Service imageUploader,
+			MaterialService materialService) {
 		super(productRepository, "Product", "entity.product", localeService);
 		this.productTranslationRepository = productTranslationRepository;
 		this.productRepository = productRepository;
@@ -108,6 +106,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		this.validator = validator;
 		this.translationService = translationService;
 		this.imageUploader = imageUploader;
+		this.materialService = materialService;
 	}
 
 	@Override
@@ -248,7 +247,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	@Transactional
 	public BasicMessageDto createProduct(NewProductDto dto) {
 		// use Validation Annotations to do basic format validation
-		validateProductDto(dto);
+		validateNewProductDto(dto);
 
 		// self-explanotory error messages
 		LocaleCode defaultLocale = localeService.getDefaultLocale();
@@ -273,11 +272,31 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		if (isManualTranslation && (providedTranslations.size() != localeService.getAllowedLocales().size()))
 			throw new NonLocalisedException("Manuālajā režīmā jānorāda tulkojumi visās atbalstītajās valodās.", HttpStatus.UNPROCESSABLE_ENTITY);
 
+
 		Product newProduct = Product.builder()
 				.amount(dto.getAmount())
 				.price(dto.getPrice())
-				.category(productCategoryService.findById(1)) // placeholder for now TODO []
+				.category(productCategoryService.findById(dto.getCategoryId())) // has been pre-validated
 				.build();
+
+		List<ProductMaterial> productMaterials = new ArrayList<>();
+		// has been pre-validated
+		List<NewProductMaterialDto> materialsDto = dto.getMaterials();
+		if (materialsDto != null) {
+			materialsDto.stream().forEach(pm -> {
+				Integer percentage = pm.getPercentage();
+				if (percentage > 0) {
+					productMaterials.add(ProductMaterial.builder()
+							.material(materialService.findById(pm.getId()))
+							.product(newProduct)
+							.percentage(percentage)
+							.build());
+				}
+
+
+			});
+			newProduct.setMadeOfMaterials(productMaterials);
+		}
 
 
 		List<ProductTranslation> translations;
@@ -315,16 +334,34 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 
 		newProduct.setTranslations(translations);
 
+		List<MultipartFile> imagesDto = dto.getImages();
+		List<ProductImage> images = null;
+		if (imagesDto != null) {
+			images = proccessImagesAndUpload(newProduct, dto.getImages());
+			newProduct.setImages(images);
+		}
 
-		List<ProductImage> images = proccessImagesAndUpload(newProduct, dto.getImages());
-		newProduct.setImages(images);
+		// been prevalidated
+		List<Integer> colorIds = dto.getColors();
+		if (colorIds != null) {
+			newProduct.setColors(colorService.getAllColorsByIds(colorIds));
+		}
+
 		try {
 			persist(newProduct);
 		} catch (Exception e) {
-			clearImagesUp(images, null);
+			if (images != null) {
+				clearImagesUp(images, null);
+			}
 		}
 
 		return new BasicMessageDto("Jauns produkts tika pievienots.");
+	}
+
+	@Override
+	public ExistingProductDto getExistingProductForAdmin(Integer id) {
+		Product product = findById(id);
+		return productMapper.toExistingDto(findById(id), productMaterialService.getMaterialsPerProduct(product, LocaleCode.LV));
 	}
 
 	private List<ProductImage> proccessImagesAndUpload(Product newProduct, List<MultipartFile> dtoImages) {
@@ -363,7 +400,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		return images;
 	}
 
-	private void clearImagesUp(List<ProductImage> images, MultipartFile faultyImage) {
+	private void clearImagesUp(@NonNull List<ProductImage> images, MultipartFile faultyImage) {
 		try {
 			images.forEach(alreadyUploaded -> {
 				imageUploader.deleteFile(alreadyUploaded.getSrc());
@@ -381,12 +418,11 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		}
 	}
 
-	private void validateProductDto(NewProductDto dto) {
+	private void validateNewProductDto(NewProductDto dto) {
 		Set<ConstraintViolation<NewProductDto>> violations = validator.validate(dto);
+		Map<String, Object> errors = new HashMap<>();
 
 		if (!violations.isEmpty()) {
-			Map<String, Object> errors = new HashMap<>();
-
 			for (ConstraintViolation<?> violation : violations) {
 				String path = violation.getPropertyPath().toString(); // e.g., translations[0].title
 				String message = violation.getMessage();
@@ -410,9 +446,53 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 					errors.put(path, message);
 				}
 			}
-
 			throw new NestedValidationException(errors);
 		}
+
+		dto.getTranslations().forEach(tr -> {
+			if (existsByTitle(tr.getTitle())) {
+				Map<String, String> subMap = (Map<String, String>) errors.computeIfAbsent("title", k -> new HashMap<>());
+				subMap.put(tr.getLocale().getCode(), "Norādīts nosaukums jau eksistē.");
+			}
+		});
+
+		Integer categoryId = dto.getCategoryId();
+		if (!productCategoryService.existsById(categoryId)) {
+			errors.put("categoryId", "Norādītā kategorija neeksistē.");
+		}
+
+		List<Integer> colorIds = dto.getColors();
+		if (colorIds != null) {
+			for (Integer colorId : colorIds) {
+				if (!colorService.existsById(colorId)) {
+					errors.put("colors", "Norādītā krāsa nav atrasta.");
+					break;
+				}
+			}
+		}
+
+
+		List<NewProductMaterialDto> materials = dto.getMaterials();
+		if (materials != null) {
+			int percentageTotal = 0;
+			for (NewProductMaterialDto material : materials) {
+				if (!materialService.existsById(material.getId())) {
+					errors.put("materials", "Norādītais materiāls neeksistē.");
+					break;
+				}
+				percentageTotal += material.getPercentage();
+			}
+			if (percentageTotal > 100) {
+				errors.put("materials", "Kopējais materiālu procents nedrīkst pārsniegt 100%.");
+			}
+		}
+
+		if (!errors.isEmpty())
+			throw new NestedValidationException(errors);
+	}
+
+	private boolean existsByTitle(String title) {
+		return productTranslationRepository.existsByTitleAndDeletedFalse(title);
 	}
 
 	private ProductTitleDto mapToProductTitleDto(Product product) {

@@ -4,14 +4,15 @@ import { Input } from "../ui";
 type Props = {
   onChange: (selectedMethod: TranslationMethod) => void;
   activeValue: TranslationMethod;
+  name?: string;
 };
 
-const TranslationMethodRadioGroup = ({ onChange, activeValue }: Props) => {
+const TranslationMethodRadioGroup = ({ onChange, activeValue, name }: Props) => {
   return (
     <div>
       <div className="flex items-center gap-2">
         <Input
-          name="translateMethod"
+          name={name || "translateMethod"}
           type="radio"
           value={TranslationMethod.AUTO}
           id={TranslationMethod.AUTO}
@@ -22,7 +23,7 @@ const TranslationMethodRadioGroup = ({ onChange, activeValue }: Props) => {
       </div>
       <div className="flex items-center gap-2">
         <Input
-          name="translateMethod"
+          name={name || "translateMethod"}
           type="radio"
           value={TranslationMethod.MANUAL}
           id={TranslationMethod.MANUAL}

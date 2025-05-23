@@ -25,7 +25,8 @@ import lv.wings.model.interfaces.HasTitle;
 @SQLDelete(sql = "UPDATE product_translations SET deleted = true WHERE id=?")
 public class ProductTranslation extends LocalableEntity<Product> implements HasTitle {
 
-    @Column(nullable = false, unique = true, length = 50)
+    // Unique should ne checked in service since this entity can be softly deleted
+    @Column(nullable = false, length = 50)
     private String title;
 
     @Column(length = 1000)

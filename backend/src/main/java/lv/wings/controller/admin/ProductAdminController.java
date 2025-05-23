@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import lv.wings.annotation.AllowedSortFields;
 import lv.wings.dto.request.admin.products.NewProductDto;
 import lv.wings.dto.response.BasicMessageDto;
+import lv.wings.dto.response.admin.products.ExistingProductDto;
 import lv.wings.dto.response.admin.products.ProductAdminDto;
 import lv.wings.service.ProductService;
 
@@ -41,6 +42,13 @@ public class ProductAdminController {
         log.info("Received GET request on /api/v1/admin/products");
         return ResponseEntity.ok(productService.getAllByCategoryForAdmin(q, categoryId, pageable));
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ExistingProductDto> getProduct(@PathVariable Integer id) {
+        log.info("Received GET request on /api/v1/admin/products/{}", id);
+        return ResponseEntity.ok(productService.getExistingProductForAdmin(id));
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<BasicMessageDto> deleteProduct(@PathVariable Integer id) {

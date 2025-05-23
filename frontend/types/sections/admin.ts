@@ -112,7 +112,7 @@ export type ProductsSearchParams = {
   categoryId?: number;
 };
 
-export interface ProductAdminDto {
+export type ProductAdminDto = {
   id: number;
   amount: number;
   sold: number;
@@ -121,9 +121,56 @@ export interface ProductAdminDto {
   createdAt: string;
   lastModifiedBy?: UserMinDto;
   lastModifiedAt?: string;
-}
+};
 
-export interface TitleLocalableDto {
+export type TitleLocalableDto = {
   locale: string;
   title: string;
-}
+};
+
+export type ColorDto = {
+  id: number;
+  name: string;
+};
+
+export type ProductMaterialComboDto = {
+  materialId: number;
+  materialName: string;
+  percentage: number;
+  // productId will go and come in the context of the currently viewed product
+};
+
+export type ProductUpdateDto = {
+  id: number;
+  titleLv: string;
+  titleEn: string;
+  descriptionLv: string;
+  descriptionEn: string;
+  price: number;
+  amount: number;
+  categoryId: number;
+  colorIds: number[];
+  productMaterials: ProductMaterialComboDto[];
+};
+
+export type ExistingProductTranslationDto = {
+  locale: Locale;
+  title: string;
+  description?: string;
+};
+
+export type ExistingProductMaterialDto = {
+  id: number;
+  percentage: number;
+  name: string;
+};
+
+export type ExistingProductDto = {
+  id: number;
+  price: number;
+  amount: number;
+  categoryId: number;
+  translations: ExistingProductTranslationDto[];
+  colors: number[];
+  materials: ExistingProductMaterialDto[];
+};

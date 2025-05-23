@@ -83,3 +83,13 @@ export const getOrderStatusColor = (status: OrderStatus): string => {
       return "text-red-500";
   }
 };
+
+export const cleanFormData = (formData: FormData, excludedNames: string[]) => {
+  Array.from(formData.entries()).forEach(([name, value]) => {
+    if (excludedNames.includes(name)) {
+      formData.delete(name);
+    } else if (typeof value === "string" && value.trim() === "") {
+      formData.delete(name);
+    }
+  });
+};

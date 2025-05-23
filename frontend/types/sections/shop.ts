@@ -15,6 +15,7 @@ export type ProductsPageProps = PagePropsWithSlug & {
 export type SortOption = {
   label: string;
   value: string;
+  disabled?: boolean;
 };
 
 export type SelectOptions = {

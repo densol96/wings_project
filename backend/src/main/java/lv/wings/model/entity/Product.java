@@ -10,7 +10,7 @@ import org.hibernate.annotations.Filter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.Where;
-
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -50,7 +50,7 @@ public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 	@OneToMany(mappedBy = "product")
 	private List<OrderItem> orderItems = new ArrayList<>();
 
-	@OneToMany(mappedBy = "product")
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<ProductMaterial> madeOfMaterials = new ArrayList<>();
 
 	@ManyToMany

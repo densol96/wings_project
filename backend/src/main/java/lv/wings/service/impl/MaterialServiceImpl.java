@@ -1,9 +1,11 @@
 package lv.wings.service.impl;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import io.micrometer.common.lang.NonNull;
 import lv.wings.dto.response.product.MaterialDto;
+import lv.wings.enums.LocaleCode;
 import lv.wings.mapper.MaterialMapper;
 import lv.wings.model.entity.Material;
 import lv.wings.model.translation.MaterialTranslation;
@@ -26,4 +28,13 @@ public class MaterialServiceImpl extends AbstractTranslatableCRUDService<Materia
         return materialMapper.toDto(material, getRightTranslation(material, MaterialTranslation.class));
     }
 
+    @Override
+    public List<MaterialDto> getAllMaterials() {
+        return findAll().stream().map(this::mapToDto).toList();
+    }
+
+    @Override
+    public MaterialTranslation getSelectedTranslation(Material material, LocaleCode localeCode) {
+        return getRightTranslationForSelectedLocale(material, MaterialTranslation.class, localeCode);
+    }
 }
