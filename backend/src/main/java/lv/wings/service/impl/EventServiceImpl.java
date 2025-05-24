@@ -13,7 +13,7 @@ import lv.wings.dto.response.event.SearchedEventDto;
 import lv.wings.dto.response.event.ShortEventDto;
 import lv.wings.dto.response.event.ShortEventTranslationDto;
 import lv.wings.dto.response.event.SingleEventDto;
-import lv.wings.dto.response.product.SearchedProductDto;
+import lv.wings.enums.LocaleCode;
 import lv.wings.mapper.EventMapper;
 import lv.wings.model.entity.Event;
 import lv.wings.model.entity.EventImage;
@@ -31,14 +31,14 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
 
     private final EventTranslationRepository eventTranslationRepository;
     private final EventMapper eventMapper;
-    private final ImageService<EventImage, Integer> eventImageService;
+    private final ImageService<EventImage, Event, Integer> eventImageService;
     private final EventCategoryService eventCategoryService;
 
     public EventServiceImpl(
             EventRepository eventRepository,
             EventTranslationRepository eventTranslationRepository,
             EventMapper eventMapper,
-            ImageService<EventImage, Integer> eventImageService,
+            ImageService<EventImage, Event, Integer> eventImageService,
             LocaleService localeService,
             EventCategoryService eventCategoryService) {
         super(eventRepository, "Event", "entity.event", localeService);
@@ -72,6 +72,12 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
                 .toList();
     }
 
+
+    @Override
+    public EventTranslation getSelectedTranslation(Event parentProduct, LocaleCode locale) {
+        return getRightTranslationForSelectedLocale(parentProduct, EventTranslation.class, locale);
+    }
+
     private ShortEventDto eventToShortPublicDto(Event event) {
         EventTranslation translation = getRightTranslation(event, EventTranslation.class);
         ShortEventTranslationDto translationShortDto = eventMapper.eventTranslationToShortDto(translation);
@@ -83,7 +89,4 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
         Event event = eventTranslation.getEntity();
         return eventMapper.translationToSearchedEventDto(event, eventTranslation, eventImageService.getWallpaperByOwnerId(event.getId()));
     }
-
-
-
 }

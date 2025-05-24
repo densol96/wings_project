@@ -44,4 +44,8 @@ public interface ProductService extends CRUDService<Product, Integer> {
     BasicMessageDto createProduct(NewProductDto dto);
 
     ExistingProductDto getExistingProductForAdmin(Integer id);
+
+    BasicMessageDto updateProduct(NewProductDto dto, Integer id);
+
+    BasicMessageDto deleteProduct(Integer id);
 }

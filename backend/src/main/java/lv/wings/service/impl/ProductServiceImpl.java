@@ -8,17 +8,18 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+
 import lv.wings.dto.request.admin.products.CreateProductTranslationDto;
 import lv.wings.dto.request.admin.products.NewProductDto;
 import lv.wings.dto.request.admin.products.NewProductMaterialDto;
@@ -35,11 +36,9 @@ import lv.wings.dto.response.product.SearchedProductDto;
 import lv.wings.dto.response.product.ShortProductDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 import lv.wings.enums.LocaleCode;
-import lv.wings.enums.TranslationMethod;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.exception.validation.NestedValidationException;
-import lv.wings.exception.validation.NonLocalisedException;
 import lv.wings.mapper.ProductMapper;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
@@ -58,6 +57,7 @@ import lv.wings.service.ProductMaterialService;
 import lv.wings.service.ProductService;
 import lv.wings.service.S3Service;
 import lv.wings.service.TranslationService;
+
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -69,7 +69,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	private final ProductRepository productRepository;
 	private final ProductTranslationRepository productTranslationRepository;
 	private final ProductMapper productMapper;
-	private final ImageService<ProductImage, Integer> productImageService;
+	private final ImageService<ProductImage, Product, Integer> productImageService;
 	private final ProductCategoryService productCategoryService;
 	private final ColorService colorService;
 	private final ProductMaterialService productMaterialService;
@@ -86,7 +86,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			ProductRepository productRepository,
 			ProductTranslationRepository productTranslationRepository,
 			ProductMapper productMapper,
-			ImageService<ProductImage, Integer> productImageService,
+			ImageService<ProductImage, Product, Integer> productImageService,
 			LocaleService localeService,
 			ProductCategoryService productCategoryService,
 			ColorService colorService,
@@ -246,64 +246,115 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	@Override
 	@Transactional
 	public BasicMessageDto createProduct(NewProductDto dto) {
-		// use Validation Annotations to do basic format validation
-		validateNewProductDto(dto);
-
-		// self-explanotory error messages
-		LocaleCode defaultLocale = localeService.getDefaultLocale();
+		validateNewProductDto(dto, null);
 		List<CreateProductTranslationDto> providedTranslations = dto.getTranslations();
+		CreateProductTranslationDto defaultTranslation = localeService.validateDefaultLocaleIsPresent(providedTranslations);
+		localeService.validateOneTranslationPerEachLocale(providedTranslations);
+		boolean isManualTranslation = localeService.validateRequiredTranslationsPresentIfManual(dto);
 
-		CreateProductTranslationDto defaultTranslation = providedTranslations
-				.stream()
-				.filter(tr -> tr.getLocale() == defaultLocale)
-				.findFirst()
-				.orElseThrow(() -> new NonLocalisedException("Noklusētā valoda (" + defaultLocale + ") vienmēr ir obligāta, veidojot jaunu ierakstu.",
-						HttpStatus.UNPROCESSABLE_ENTITY));
-
-		Set<LocaleCode> providedLocales = providedTranslations.stream().map(l -> l.getLocale()).collect(Collectors.toSet());
-
-		if (providedTranslations.size() != providedLocales.size())
-			throw new NonLocalisedException("Valodu sarakstā ir dublikāti — katrai valodai jābūt tikai vienam tulkojumam.", HttpStatus.UNPROCESSABLE_ENTITY);
-
-		TranslationMethod translationMethod = dto.getTranslationMethod();
-
-		boolean isManualTranslation = translationMethod == TranslationMethod.MANUAL;
-
-		if (isManualTranslation && (providedTranslations.size() != localeService.getAllowedLocales().size()))
-			throw new NonLocalisedException("Manuālajā režīmā jānorāda tulkojumi visās atbalstītajās valodās.", HttpStatus.UNPROCESSABLE_ENTITY);
-
-
-		Product newProduct = Product.builder()
-				.amount(dto.getAmount())
-				.price(dto.getPrice())
+		Product newProduct = Product.builder().amount(dto.getAmount()).price(dto.getPrice())
 				.category(productCategoryService.findById(dto.getCategoryId())) // has been pre-validated
 				.build();
 
+		attachMaterials(newProduct, dto);
+		attachTranslations(newProduct, dto, isManualTranslation, defaultTranslation);
+		List<ProductImage> images = attachImages(newProduct, dto);
+		attachColors(newProduct, dto);
+
+		try {
+			persist(newProduct);
+		} catch (Exception e) {
+			if (images != null) {
+				productImageService.clearImagesUp(images, null);
+			}
+		}
+
+		return new BasicMessageDto("Jauns produkts tika pievienots.");
+	}
+
+	@Override
+	@Transactional
+	public BasicMessageDto updateProduct(NewProductDto dto, Integer id) {
+		Product existingProduct = findById(id);
+		validateNewProductDto(dto, existingProduct);
+
+		List<CreateProductTranslationDto> providedTranslations = dto.getTranslations();
+		CreateProductTranslationDto defaultTranslation = localeService.validateDefaultLocaleIsPresent(providedTranslations);
+		localeService.validateOneTranslationPerEachLocale(providedTranslations);
+		boolean isManualTranslation = localeService.validateRequiredTranslationsPresentIfManual(dto);
+
+		existingProduct.setAmount(dto.getAmount());
+		existingProduct.setPrice(dto.getPrice());
+		existingProduct.setCategory(productCategoryService.findById(dto.getCategoryId()));
+
+		attachMaterials(existingProduct, dto);
+		attachTranslations(existingProduct, dto, isManualTranslation, defaultTranslation);
+		attachColors(existingProduct, dto);
+
+		persist(existingProduct);
+		return new BasicMessageDto("Produkts tika atjaunots.");
+	}
+
+	@Override
+	public BasicMessageDto deleteProduct(Integer id) {
+		Product productForDelete = findById(id);
+		List<ProductImage> productImages = productForDelete.getImages();
+		productRepository.delete(productForDelete);
+		/*
+		 * Result of the delete (+ associated cascade-deletes):
+		 * Product (SOFT)
+		 * ProductTranslation (SOFT)
+		 * ProductImage (HARD) (but need to also clear up S3-Bucket)
+		 * ProductMaterials(HARD)
+		 * Product-Colors sites (HARD)
+		 */
+		productImages.stream().forEach(image -> imageUploader.deleteFile(image.getSrc()));
+		return new BasicMessageDto("Produkts veiksmīgi dzēsts");
+	}
+
+	@Override
+	public ExistingProductDto getExistingProductForAdmin(Integer id) {
+		Product product = findById(id);
+		return productMapper.toExistingDto(findById(id), productMaterialService.getMaterialsPerProduct(product, LocaleCode.LV));
+	}
+
+	private void attachColors(Product newProduct, NewProductDto dto) {
+		List<Integer> colorIds = dto.getColors();
+		if (colorIds != null) {
+			newProduct.setColors(colorService.getAllColorsByIds(colorIds));
+		}
+	}
+
+	private List<ProductImage> attachImages(Product newProduct, NewProductDto dto) {
+		List<MultipartFile> imagesDto = dto.getImages();
+		List<ProductImage> images = null;
+		if (imagesDto != null) {
+			images = productImageService.proccessImagesAndUpload(newProduct, dto.getImages());
+			newProduct.getImages().addAll(images);
+		}
+		return images;
+	}
+
+	private void attachMaterials(Product newProduct, NewProductDto dto) {
 		List<ProductMaterial> productMaterials = new ArrayList<>();
-		// has been pre-validated
 		List<NewProductMaterialDto> materialsDto = dto.getMaterials();
 		if (materialsDto != null) {
 			materialsDto.stream().forEach(pm -> {
 				Integer percentage = pm.getPercentage();
 				if (percentage > 0) {
-					productMaterials.add(ProductMaterial.builder()
-							.material(materialService.findById(pm.getId()))
-							.product(newProduct)
-							.percentage(percentage)
-							.build());
+					productMaterials
+							.add(ProductMaterial.builder().material(materialService.findById(pm.getId())).product(newProduct).percentage(percentage).build());
 				}
-
-
 			});
 			newProduct.setMadeOfMaterials(productMaterials);
 		}
+	}
 
-
+	private void attachTranslations(Product newProduct, NewProductDto dto, boolean isManualTranslation, CreateProductTranslationDto defaultTranslation) {
 		List<ProductTranslation> translations;
-		if (translationMethod == TranslationMethod.MANUAL) {
+		if (isManualTranslation) {
 			translations = new ArrayList<>();
 			dto.getTranslations().forEach(tr -> {
-				// default
 				translations.add(ProductTranslation.builder()
 						.locale(tr.getLocale())
 						.product(newProduct)
@@ -321,8 +372,8 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 					.description(defaultTranslation.getDescription())
 					.build());
 
-			// in the system at the moment the are only lv and en locales. so I am only translating to English, but this can be easily adjusted to be more
-			// dynamic if required
+			// In the system, at the moment, the are only "lv" and "en" locales.
+			// So I am only translating to English, but this can be easily adjusted to be more dynamic if required
 			translations.add(ProductTranslation.builder()
 					.locale(LocaleCode.EN)
 					.product(newProduct)
@@ -333,92 +384,9 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		}
 
 		newProduct.setTranslations(translations);
-
-		List<MultipartFile> imagesDto = dto.getImages();
-		List<ProductImage> images = null;
-		if (imagesDto != null) {
-			images = proccessImagesAndUpload(newProduct, dto.getImages());
-			newProduct.setImages(images);
-		}
-
-		// been prevalidated
-		List<Integer> colorIds = dto.getColors();
-		if (colorIds != null) {
-			newProduct.setColors(colorService.getAllColorsByIds(colorIds));
-		}
-
-		try {
-			persist(newProduct);
-		} catch (Exception e) {
-			if (images != null) {
-				clearImagesUp(images, null);
-			}
-		}
-
-		return new BasicMessageDto("Jauns produkts tika pievienots.");
 	}
 
-	@Override
-	public ExistingProductDto getExistingProductForAdmin(Integer id) {
-		Product product = findById(id);
-		return productMapper.toExistingDto(findById(id), productMaterialService.getMaterialsPerProduct(product, LocaleCode.LV));
-	}
-
-	private List<ProductImage> proccessImagesAndUpload(Product newProduct, List<MultipartFile> dtoImages) {
-		List<ProductImage> images = new ArrayList<>();
-
-		dtoImages.stream().forEach((image -> {
-			try {
-				String url = imageUploader.uploadFile(image, "products");
-				ProductImage productImage = new ProductImage(newProduct, url);
-				List<ProductImageTranslation> imageTranslations = new ArrayList<>();
-				imageTranslations.add(
-						new ProductImageTranslation(
-								LocaleCode.LV,
-								productImage,
-								String.format("Produkta %s attels Nr. %s",
-										getSelectedTranslation(newProduct, LocaleCode.LV).getTitle(),
-										images.size() + 1)));
-				imageTranslations.add(
-						new ProductImageTranslation(
-								LocaleCode.EN,
-								productImage,
-								String.format("Product %s image Nr. %s",
-										getSelectedTranslation(newProduct, LocaleCode.EN).getTitle(),
-										images.size() + 1)));
-				productImage.setTranslations(imageTranslations);
-				images.add(productImage);
-			} catch (Exception e) {
-				log.error(e.getMessage());
-				if (images.size() > 0) {
-					clearImagesUp(images, image);
-				}
-				throw new RuntimeException("Failed to upload image: " + image.getOriginalFilename(), e); // Will trigger a procedural exception
-			}
-		}));
-
-		return images;
-	}
-
-	private void clearImagesUp(@NonNull List<ProductImage> images, MultipartFile faultyImage) {
-		try {
-			images.forEach(alreadyUploaded -> {
-				imageUploader.deleteFile(alreadyUploaded.getSrc());
-			});
-		} catch (Exception ex) {
-			log.error(ex.getMessage());
-			if (faultyImage == null) {
-				throw new RuntimeException("Failed to save to DB links to the uploaded images => required image clean up",
-						ex);
-			} else {
-				throw new RuntimeException("Failed to upload image: " + faultyImage.getOriginalFilename() + " and failed to clear already uploaded images",
-						ex);
-			}
-
-		}
-	}
-
-	private void validateNewProductDto(NewProductDto dto) {
+	private void validateNewProductDto(NewProductDto dto, Product forUpdate) {
 		Set<ConstraintViolation<NewProductDto>> violations = validator.validate(dto);
 		Map<String, Object> errors = new HashMap<>();
 
@@ -449,8 +417,19 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			throw new NestedValidationException(errors);
 		}
 
+		boolean isCreating = forUpdate == null;
+
 		dto.getTranslations().forEach(tr -> {
-			if (existsByTitle(tr.getTitle())) {
+			String newTitle = tr.getTitle();
+			LocaleCode forLocale = tr.getLocale();
+			boolean titleAlreadyExists = productTranslationRepository.existsByTitleAndLocaleAndDeletedFalse(newTitle, forLocale);
+			boolean titleRemainsTheSame = !isCreating && forUpdate.getNarrowTranslations()
+					.stream()
+					.filter(existingTr -> existingTr.getLocale() == forLocale && newTitle.equals(existingTr.getTitle()))
+					.findFirst()
+					.isPresent();
+
+			if ((isCreating || !titleRemainsTheSame) && titleAlreadyExists) {
 				Map<String, String> subMap = (Map<String, String>) errors.computeIfAbsent("title", k -> new HashMap<>());
 				subMap.put(tr.getLocale().getCode(), "Norādīts nosaukums jau eksistē.");
 			}
@@ -489,10 +468,6 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 
 		if (!errors.isEmpty())
 			throw new NestedValidationException(errors);
-	}
-
-	private boolean existsByTitle(String title) {
-		return productTranslationRepository.existsByTitleAndDeletedFalse(title);
 	}
 
 	private ProductTitleDto mapToProductTitleDto(Product product) {

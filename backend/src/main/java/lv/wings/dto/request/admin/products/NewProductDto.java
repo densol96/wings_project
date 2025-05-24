@@ -9,11 +9,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
+import lv.wings.dto.interfaces.HasTranslationMethod;
 import lv.wings.enums.TranslationMethod;
 
 @Getter
 @Setter
-public class NewProductDto {
+public class NewProductDto implements HasTranslationMethod {
     private TranslationMethod translationMethod; // not doing if present check, cause if is not will fallback to AUTO
 
     @NotNull(message = "{price.required}")

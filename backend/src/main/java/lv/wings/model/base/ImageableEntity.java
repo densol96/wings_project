@@ -23,6 +23,9 @@ public abstract class ImageableEntity<L extends Localable, O extends HasImages<?
     @Column(nullable = false, length = 200)
     private String src;
 
+    @Column(nullable = false)
+    private Integer position;
+
     protected ImageableEntity(O owner, String src) {
         this.owner = owner;
         this.src = src;

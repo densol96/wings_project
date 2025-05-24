@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import lv.wings.annotation.AllowedSortFields;
 import lv.wings.dto.request.admin.products.NewProductDto;
 import lv.wings.dto.response.BasicMessageDto;
@@ -53,8 +53,7 @@ public class ProductAdminController {
     @DeleteMapping("/{id}")
     public ResponseEntity<BasicMessageDto> deleteProduct(@PathVariable Integer id) {
         log.info("Received DELETE request on /api/v1/admin/products/{}", id);
-        productService.deleteById(id);
-        return ResponseEntity.ok(new BasicMessageDto("Produkts veiksmīgi dzēsts"));
+        return ResponseEntity.ok(productService.deleteProduct(id));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

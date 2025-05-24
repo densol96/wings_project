@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
-
+import java.util.stream.Collectors;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import lv.wings.dto.interfaces.HasTranslationMethod;
 import lv.wings.enums.LocaleCode;
+import lv.wings.enums.TranslationMethod;
 import lv.wings.exception.entity.MissingTranslationException;
+import lv.wings.exception.validation.NonLocalisedException;
 import lv.wings.model.interfaces.Localable;
 import lv.wings.model.interfaces.Translatable;
 import lv.wings.service.LocaleService;
@@ -100,5 +104,34 @@ public class LocaleServiceImpl implements LocaleService {
     @Override
     public String getMessageForSpecificLocale(String messageCode, Object[] args, LocaleCode localeCode) {
         return messageSource.getMessage(messageCode, args, new Locale(localeCode.getCode()));
+    }
+
+    @Override
+    public <T extends Localable> T validateDefaultLocaleIsPresent(List<T> translations) {
+        return translations
+                .stream()
+                .filter(tr -> tr.getLocale() == getDefaultLocale())
+                .findFirst()
+                .orElseThrow(() -> new NonLocalisedException("Noklusētā valoda (" + DEFAULT_LOCALE + ") vienmēr ir obligāta, veidojot jaunu ierakstu.",
+                        HttpStatus.UNPROCESSABLE_ENTITY));
+    }
+
+    @Override
+    public void validateOneTranslationPerEachLocale(List<? extends Localable> translations) {
+        if (translations.size() != translations.stream().map(l -> l.getLocale()).collect(Collectors.toSet()).size())
+            throw new NonLocalisedException("Valodu sarakstā ir dublikāti — katrai valodai jābūt tikai vienam tulkojumam.", HttpStatus.UNPROCESSABLE_ENTITY);
+    }
+
+
+    @Override
+    public boolean validateRequiredTranslationsPresentIfManual(HasTranslationMethod entity) {
+        TranslationMethod translationMethod = entity.getTranslationMethod();
+
+        boolean isManualTranslation = translationMethod == TranslationMethod.MANUAL;
+
+        if (isManualTranslation && (entity.getTranslations().size() != getAllowedLocales().size()))
+            throw new NonLocalisedException("Manuālajā režīmā jānorāda tulkojumi visās atbalstītajās valodās.", HttpStatus.UNPROCESSABLE_ENTITY);
+
+        return isManualTranslation;
     }
 }

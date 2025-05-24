@@ -6,7 +6,9 @@ import org.springframework.data.domain.Pageable;
 import lv.wings.dto.response.event.SearchedEventDto;
 import lv.wings.dto.response.event.ShortEventDto;
 import lv.wings.dto.response.event.SingleEventDto;
+import lv.wings.enums.LocaleCode;
 import lv.wings.model.entity.Event;
+import lv.wings.model.translation.EventTranslation;
 
 public interface EventService extends CRUDService<Event, Integer> {
     Page<ShortEventDto> getPublicEvents(Pageable pageable);
@@ -14,4 +16,6 @@ public interface EventService extends CRUDService<Event, Integer> {
     SingleEventDto getPublicEvent(Integer id);
 
     List<SearchedEventDto> getSearchedEvents(String q);
+
+    EventTranslation getSelectedTranslation(Event event, LocaleCode locale);
 }
