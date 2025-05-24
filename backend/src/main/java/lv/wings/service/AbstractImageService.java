@@ -81,7 +81,7 @@ public abstract class AbstractImageService<T extends ImageableEntity<L, O>, O ex
                 .build();
     }
 
-    protected abstract T getImageInstance(O parentEntity, String url);
+    protected abstract T getImageInstance(O parentEntity, String url, Integer position);
 
     protected abstract L createImageTranslation(LocaleCode locale, T image, String title);
 
@@ -94,7 +94,7 @@ public abstract class AbstractImageService<T extends ImageableEntity<L, O>, O ex
                 repository.findMaxPositionByOwnerId(newOwner.getId()),
                 dtoImages,
                 folderName,
-                (parentEntity, url) -> getImageInstance(parentEntity, url),
+                (parentEntity, url, position) -> getImageInstance(parentEntity, url, position),
                 (image, translations) -> image.setTranslations(translations),
                 (locale, image, title) -> createImageTranslation(locale, image, title),
                 (parentEntity, locale) -> getTitleFromParent(parentEntity, locale));
@@ -117,7 +117,9 @@ public abstract class AbstractImageService<T extends ImageableEntity<L, O>, O ex
     public BasicMessageDto deleteImage(ID imageId) {
         T image = findById(imageId);
         imageProcessor.deleteImage(image);
+        System.out.println("SHOULD DELETE THE IMAGE = " + image.getSrc() + " - " + image.getId());
         repository.delete(image);
+        System.out.println("SHOULD HAVE BEEN DELETED!");
         return new BasicMessageDto("Attēls tika veiksmīgi izdzēsts.");
     }
 

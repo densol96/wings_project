@@ -18,8 +18,8 @@ import lv.wings.model.translation.EventImageTranslation;
 public class EventImage extends ImageableEntity<EventImageTranslation, Event> {
 
 	@Builder
-	public EventImage(Event event, String src) {
-		super(event, src);
+	public EventImage(Event event, String src, Integer position) {
+		super(event, src, position);
 	}
 
 }

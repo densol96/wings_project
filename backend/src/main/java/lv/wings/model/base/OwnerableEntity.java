@@ -16,6 +16,6 @@ import lv.wings.model.interfaces.Localable;
 @Data
 @NoArgsConstructor
 public abstract class OwnerableEntity<L extends Localable, I extends Imageable> extends TranslatableEntity<L> implements HasImages<I> {
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<I> images = new ArrayList<>();
 }

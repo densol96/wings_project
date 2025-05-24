@@ -19,8 +19,8 @@ import lv.wings.model.translation.ProductImageTranslation;
 public class ProductImage extends ImageableEntity<ProductImageTranslation, Product> {
 
 	@Builder
-	public ProductImage(Product product, String src) {
-		super(product, src);
+	public ProductImage(Product product, String src, Integer position) {
+		super(product, src, position);
 	}
 
 }

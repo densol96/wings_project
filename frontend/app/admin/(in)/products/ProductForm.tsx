@@ -134,9 +134,10 @@ const ProductForm = ({ className, existingProduct, requiredMeta }: Props) => {
         requiresTranslationsFields={form.translationMethod === TranslationMethod.MANUAL}
         error={formResponse?.errors?.["description"] as LocaleAndString}
         rows={5}
+        onChange={(e) => hanleLocaleFormChange(e)}
         localisedValues={[
           { locale: "lv", value: form.descriptionLv },
-          { locale: "en", value: form.descriptionLv },
+          { locale: "en", value: form.descriptionEn },
         ]}
         disabled={isLoading}
       />

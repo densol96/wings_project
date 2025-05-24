@@ -48,5 +48,10 @@ public class ProductMaterialServiceImpl extends AbstractCRUDService<ProductMater
         return productMaterialMapper.toDto(productMaterial, materialService.mapToDto(productMaterial.getMaterial()));
     }
 
+    @Override
+    public void deleteProductMaterialsPerProductId(@NonNull Integer productId) {
+        productMaterialRepo.deleteAllByProductId(productId);
+    }
+
 
 }

@@ -23,7 +23,6 @@ import lv.wings.model.base.AuditableEntityExtended;
 @NoArgsConstructor
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE product_material SET deleted = true WHERE id=?")
 public class ProductMaterial extends AuditableEntityExtended {
 
     @ManyToOne
@@ -36,8 +35,6 @@ public class ProductMaterial extends AuditableEntityExtended {
 
     @Column(nullable = false)
     private Integer percentage; // 0 - 100
-
-    private boolean deleted = false;
 
     @Builder
     public ProductMaterial(Product product, Material material, Integer percentage) {

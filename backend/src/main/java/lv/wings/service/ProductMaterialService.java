@@ -11,4 +11,6 @@ public interface ProductMaterialService extends CRUDService<ProductMaterial, Int
     List<ProductMaterialDto> getProductMaterialsPerProductId(Integer productId);
 
     List<ExistingProductMaterialDto> getMaterialsPerProduct(Product product, LocaleCode locale);
+
+    void deleteProductMaterialsPerProductId(Integer productId);
 }

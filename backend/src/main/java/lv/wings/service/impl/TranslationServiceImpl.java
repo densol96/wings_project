@@ -18,42 +18,45 @@ import lv.wings.service.TranslationService;
 @RequiredArgsConstructor
 public class TranslationServiceImpl implements TranslationService {
 
-    @Value("${openai.api-key}")
-    private String apiKey;
+        @Value("${openai.api-key}")
+        private String apiKey;
 
-    @Value("${openai.base-url}")
-    private String baseUrl;
+        @Value("${openai.base-url}")
+        private String baseUrl;
 
-    private final RestTemplate restTemplate;
+        private final RestTemplate restTemplate;
 
-    @Override
-    public String translateToEnglish(String text) {
-        String url = baseUrl + "/chat/completions";
+        @Override
+        public String translateToEnglish(String text) {
+                String url = baseUrl + "/chat/completions";
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(apiKey);
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_JSON);
+                headers.setBearerAuth(apiKey);
 
-        Map<String, Object> requestBody = Map.of(
-                "model", "gpt-3.5-turbo",
-                "messages", List.of(
-                        Map.of("role", "system", "content", "You are a translator from Latvian to English."),
-                        Map.of("role", "user", "content", text)));
+                Map<String, Object> requestBody = Map.of(
+                                "model", "gpt-3.5-turbo",
+                                "messages", List.of(
+                                                Map.of("role", "system", "content", "You are a translator from Latvian to English."),
+                                                Map.of("role", "user", "content", text)));
 
-        HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
+                HttpEntity<Map<String, Object>> request = new HttpEntity<>(requestBody, headers);
 
-        ResponseEntity<JsonNode> response = restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                request,
-                JsonNode.class);
+                ResponseEntity<JsonNode> response = restTemplate.exchange(
+                                url,
+                                HttpMethod.POST,
+                                request,
+                                JsonNode.class);
 
-        return response.getBody()
-                .get("choices")
-                .get(0)
-                .get("message")
-                .get("content")
-                .asText()
-                .trim();
-    }
+                String translation = response.getBody()
+                                .get("choices")
+                                .get(0)
+                                .get("message")
+                                .get("content")
+                                .asText()
+                                .trim();
+
+                System.out.println("TRANSLATION ===> " + translation);
+                return translation;
+        }
 }

@@ -26,7 +26,7 @@ import lv.wings.model.interfaces.HasTitle;
 public class ProductTranslation extends LocalableEntity<Product> implements HasTitle {
 
     // Unique should ne checked in service since this entity can be softly deleted
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(length = 1000)

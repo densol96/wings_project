@@ -1,6 +1,7 @@
 package lv.wings.service.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,13 +44,11 @@ import lv.wings.mapper.ProductMapper;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
 import lv.wings.model.entity.ProductMaterial;
-import lv.wings.model.translation.ProductImageTranslation;
 import lv.wings.model.translation.ProductTranslation;
 import lv.wings.repo.ProductRepository;
 import lv.wings.repo.ProductTranslationRepository;
 import lv.wings.service.AbstractTranslatableCRUDService;
 import lv.wings.service.ColorService;
-import lv.wings.service.ImageService;
 import lv.wings.service.LocaleService;
 import lv.wings.service.MaterialService;
 import lv.wings.service.ProductCategoryService;
@@ -57,7 +56,8 @@ import lv.wings.service.ProductMaterialService;
 import lv.wings.service.ProductService;
 import lv.wings.service.S3Service;
 import lv.wings.service.TranslationService;
-
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
@@ -69,14 +69,16 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	private final ProductRepository productRepository;
 	private final ProductTranslationRepository productTranslationRepository;
 	private final ProductMapper productMapper;
-	private final ImageService<ProductImage, Product, Integer> productImageService;
+	private final ProductImageService productImageService;
 	private final ProductCategoryService productCategoryService;
 	private final ColorService colorService;
 	private final ProductMaterialService productMaterialService;
 	private final MaterialService materialService;
 	private final Validator validator;
 	private final TranslationService translationService;
-	private final S3Service imageUploader;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 	// From the previous request
 	private List<Product> randomProducts;
 	private LocaleCode lastRequestedLocaleCode;
@@ -86,7 +88,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			ProductRepository productRepository,
 			ProductTranslationRepository productTranslationRepository,
 			ProductMapper productMapper,
-			ImageService<ProductImage, Product, Integer> productImageService,
+			ProductImageService productImageService,
 			LocaleService localeService,
 			ProductCategoryService productCategoryService,
 			ColorService colorService,
@@ -105,7 +107,6 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		this.productMaterialService = productMaterialService;
 		this.validator = validator;
 		this.translationService = translationService;
-		this.imageUploader = imageUploader;
 		this.materialService = materialService;
 	}
 
@@ -295,20 +296,21 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		return new BasicMessageDto("Produkts tika atjaunots.");
 	}
 
+	/*
+	 * Result of the delete (+ associated cascade-deletes):
+	 * Product (SOFT)
+	 * ProductTranslation (SOFT)
+	 * ProductImage (HARD) (but need to also clear up S3-Bucket)
+	 * ProductMaterials(HARD)
+	 * Product-Colors sites (HARD)
+	 */
 	@Override
+	@Transactional
 	public BasicMessageDto deleteProduct(Integer id) {
 		Product productForDelete = findById(id);
 		List<ProductImage> productImages = productForDelete.getImages();
+		productImages.stream().forEach(image -> productImageService.deleteImage(image.getId()));
 		productRepository.delete(productForDelete);
-		/*
-		 * Result of the delete (+ associated cascade-deletes):
-		 * Product (SOFT)
-		 * ProductTranslation (SOFT)
-		 * ProductImage (HARD) (but need to also clear up S3-Bucket)
-		 * ProductMaterials(HARD)
-		 * Product-Colors sites (HARD)
-		 */
-		productImages.stream().forEach(image -> imageUploader.deleteFile(image.getSrc()));
 		return new BasicMessageDto("Produkts veiksmīgi dzēsts");
 	}
 
@@ -320,40 +322,42 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 
 	private void attachColors(Product newProduct, NewProductDto dto) {
 		List<Integer> colorIds = dto.getColors();
-		if (colorIds != null) {
-			newProduct.setColors(colorService.getAllColorsByIds(colorIds));
+		newProduct.getColors().clear();
+		if (colorIds != null && !colorIds.isEmpty()) {
+			newProduct.getColors().addAll(colorService.getAllColorsByIds(colorIds));
 		}
 	}
 
 	private List<ProductImage> attachImages(Product newProduct, NewProductDto dto) {
 		List<MultipartFile> imagesDto = dto.getImages();
-		List<ProductImage> images = null;
-		if (imagesDto != null) {
-			images = productImageService.proccessImagesAndUpload(newProduct, dto.getImages());
-			newProduct.getImages().addAll(images);
-		}
-		return images;
+		if (imagesDto == null || imagesDto.isEmpty())
+			return Collections.emptyList();
+
+		List<ProductImage> images = productImageService.proccessImagesAndUpload(newProduct, imagesDto);
+		newProduct.getImages().addAll(images);
+		return images; // for delete from s3 if persisting of product fails later
 	}
 
 	private void attachMaterials(Product newProduct, NewProductDto dto) {
-		List<ProductMaterial> productMaterials = new ArrayList<>();
 		List<NewProductMaterialDto> materialsDto = dto.getMaterials();
-		if (materialsDto != null) {
-			materialsDto.stream().forEach(pm -> {
-				Integer percentage = pm.getPercentage();
-				if (percentage > 0) {
-					productMaterials
-							.add(ProductMaterial.builder().material(materialService.findById(pm.getId())).product(newProduct).percentage(percentage).build());
-				}
-			});
-			newProduct.setMadeOfMaterials(productMaterials);
+		newProduct.getMadeOfMaterials().clear();
+		entityManager.flush();
+
+		if (materialsDto != null && !materialsDto.isEmpty()) {
+			newProduct.getMadeOfMaterials().addAll(materialsDto.stream()
+					.filter(pm -> pm.getPercentage() != null && pm.getPercentage() > 0)
+					.map(pm -> ProductMaterial.builder()
+							.material(materialService.findById(pm.getId()))
+							.product(newProduct)
+							.percentage(pm.getPercentage())
+							.build())
+					.toList());
 		}
 	}
 
 	private void attachTranslations(Product newProduct, NewProductDto dto, boolean isManualTranslation, CreateProductTranslationDto defaultTranslation) {
-		List<ProductTranslation> translations;
+		List<ProductTranslation> translations = new ArrayList<>();
 		if (isManualTranslation) {
-			translations = new ArrayList<>();
 			dto.getTranslations().forEach(tr -> {
 				translations.add(ProductTranslation.builder()
 						.locale(tr.getLocale())
@@ -362,9 +366,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 						.description(tr.getDescription())
 						.build());
 			});
-			newProduct.setTranslations(translations);
 		} else {
-			translations = new ArrayList<>();
 			translations.add(ProductTranslation.builder()
 					.locale(defaultTranslation.getLocale())
 					.product(newProduct)
@@ -383,7 +385,11 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 					.build());
 		}
 
-		newProduct.setTranslations(translations);
+		// translations are soft deleted by default =>
+		// but in this case we actually want them to be hard deleted or a unqiueness cosntraint will fire off every time!!
+		productTranslationRepository.hardDeleteByProductId(newProduct.getId());
+		newProduct.getNarrowTranslations().clear();
+		newProduct.getNarrowTranslations().addAll(translations);
 	}
 
 	private void validateNewProductDto(NewProductDto dto, Product forUpdate) {

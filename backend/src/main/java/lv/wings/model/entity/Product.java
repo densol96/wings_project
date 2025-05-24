@@ -50,7 +50,7 @@ public class Product extends OwnerableEntity<ProductTranslation, ProductImage> {
 	@OneToMany(mappedBy = "product")
 	private List<OrderItem> orderItems = new ArrayList<>();
 
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ProductMaterial> madeOfMaterials = new ArrayList<>();
 
 	@ManyToMany

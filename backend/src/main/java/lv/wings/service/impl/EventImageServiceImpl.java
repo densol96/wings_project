@@ -36,8 +36,8 @@ public class EventImageServiceImpl extends AbstractImageService<EventImage, Even
 	}
 
 	@Override
-	protected EventImage getImageInstance(Event parentProduct, String url) {
-		return new EventImage(parentProduct, url);
+	protected EventImage getImageInstance(Event parentProduct, String url, Integer position) {
+		return new EventImage(parentProduct, url, position);
 	}
 
 	@Override

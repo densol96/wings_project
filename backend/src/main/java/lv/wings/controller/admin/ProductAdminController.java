@@ -24,6 +24,9 @@ import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.admin.products.ExistingProductDto;
 import lv.wings.dto.response.admin.products.ProductAdminDto;
 import lv.wings.service.ProductService;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @Slf4j
 @RestController
@@ -60,5 +63,11 @@ public class ProductAdminController {
     public ResponseEntity<BasicMessageDto> createProduct(@ModelAttribute NewProductDto dto) {
         log.info("Received POST request on /api/v1/admin/products/");
         return ResponseEntity.ok(productService.createProduct(dto));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BasicMessageDto> updateProduct(@PathVariable Integer id, @ModelAttribute NewProductDto dto) {
+        log.info("Received POST request on /api/v1/admin/products/");
+        return ResponseEntity.ok(productService.updateProduct(dto, id));
     }
 }

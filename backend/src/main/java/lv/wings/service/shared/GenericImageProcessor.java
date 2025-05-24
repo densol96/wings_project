@@ -41,7 +41,7 @@ public class GenericImageProcessor {
 
             try {
                 String url = awsS3service.uploadFile(file, s3Folder);
-                I image = imageFactory.create(parentEntity, url);
+                I image = imageFactory.create(parentEntity, url, index);
 
                 List<IT> translations = List.of(
                         translationFactory.create(LocaleCode.LV, image,

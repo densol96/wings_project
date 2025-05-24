@@ -15,5 +15,4 @@ public class ExistingProductDto {
     private List<ExistingProductTranslationDto> translations;
     private List<Integer> colors;
     private List<ExistingProductMaterialDto> materials;
-
 }

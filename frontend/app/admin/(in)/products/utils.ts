@@ -15,8 +15,8 @@ export const loadProductsMeta = async () => {
 };
 
 export const existingProductToForm = (product: ExistingProductDto): ProductUpdateDto => {
-  const lvTranslation = product.translations.find((t) => t.locale === "lv") as ExistingProductTranslationDto;
-  const enTranslation = product.translations.find((t) => t.locale === "en") as ExistingProductTranslationDto;
+  const lvTranslation = product.translations.find((t) => t.locale.toLowerCase() === "lv") as ExistingProductTranslationDto;
+  const enTranslation = product.translations.find((t) => t.locale.toLowerCase() === "en") as ExistingProductTranslationDto;
 
   return {
     id: product.id,

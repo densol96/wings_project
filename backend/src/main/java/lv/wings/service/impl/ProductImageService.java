@@ -38,8 +38,8 @@ public class ProductImageService extends AbstractImageService<ProductImage, Prod
     }
 
     @Override
-    protected ProductImage getImageInstance(Product parentProduct, String url) {
-        return new ProductImage(parentProduct, url);
+    protected ProductImage getImageInstance(Product parentProduct, String url, Integer position) {
+        return new ProductImage(parentProduct, url, position);
     }
 
     @Override

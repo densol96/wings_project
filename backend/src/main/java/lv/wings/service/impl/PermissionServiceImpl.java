@@ -1,14 +1,10 @@
 package lv.wings.service.impl;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.springframework.stereotype.Service;
-import lombok.NonNull;
 import lv.wings.dto.response.admin.roles.PermissionDto;
-import lv.wings.enums.PermissionName;
 import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.mapper.PermissionMapper;
 import lv.wings.model.security.Permission;
