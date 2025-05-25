@@ -9,11 +9,11 @@ export const createRole = async (prevState: FormState, formData: FormData): Prom
     ...formDataSerialised,
     permissionIds: numericPermissionIds,
   };
-  return (await serverFetchAction({
+  return await serverFetchAction<FormState>({
     endpoint: "admin/security/roles",
     method: "POST",
     body,
-  })) as FormState;
+  });
 };
 
 export default createRole;

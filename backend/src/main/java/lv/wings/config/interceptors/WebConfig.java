@@ -15,6 +15,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private final ParameterValidationInterceptor paramValidationInterceptor;
     private final CustomPageableResolver pageableResolver;
+    private final CustomSortResolver sortResolver;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -24,5 +25,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(pageableResolver);
+        resolvers.add(sortResolver);
     }
 }

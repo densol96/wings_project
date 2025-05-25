@@ -61,11 +61,10 @@ const Page = async ({ searchParams }: Props) => {
   return (
     <div className="">
       <Heading size="xl">Produktu pārvaldība</Heading>
-
       <p className="mb-5">Izmantojiet meklēšanas lauku, lai atrastu produktus pēc LV vai EN nosaukuma.</p>
       <p className="mb-5">
-        Filtri ļauj atlasīt pasūtījumus pēc kategorijas. <br />
-        Pasūtījumus var kārtot pēc izveides datuma – Jaunākā vai Vecākā, kā arī pēc pēdējās rediģēšanas laika – Nesenāk vai Senāk rediģētie.
+        Filtri ļauj atlasīt produktus pēc kategorijas. <br />
+        Produktus var kārtot pēc izveides datuma – Jaunākā vai Vecākā, kā arī pēc pēdējās rediģēšanas laika – Nesenāk vai Senāk rediģētie.
       </p>
       <div className="mb-10">
         <AddProductBtn />

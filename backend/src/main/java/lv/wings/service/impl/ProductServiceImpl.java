@@ -283,7 +283,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	@Override
 	@Transactional
 	public BasicMessageDto updateProduct(NewProductDto dto, Integer id) {
-		Product existingProduct = findById(id);
+		Product existingProduct = findByIdAndNotDeleted(id);
 		validateNewProductDto(dto, existingProduct);
 
 		List<CreateProductTranslationDto> providedTranslations = dto.getTranslations();
@@ -315,7 +315,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	@Override
 	@Transactional
 	public BasicMessageDto deleteProduct(Integer id) {
-		Product productForDelete = findById(id);
+		Product productForDelete = findByIdAndNotDeleted(id);
 		List<ProductImage> productImages = productForDelete.getImages();
 		productImages.stream().forEach(image -> productImageService.deleteImage(image.getId()));
 		productRepository.delete(productForDelete);

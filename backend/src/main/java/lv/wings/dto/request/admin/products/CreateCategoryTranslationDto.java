@@ -10,7 +10,7 @@ import lv.wings.model.interfaces.LocalableWithTitle;
 
 @Getter
 @Setter
-public class CreateProductTranslationDto implements LocalableWithTitle {
+public class CreateCategoryTranslationDto implements LocalableWithTitle {
     @NotNull(message = "{locale.required}")
     private LocaleCode locale;
 
@@ -18,6 +18,6 @@ public class CreateProductTranslationDto implements LocalableWithTitle {
     @Size(min = 5, max = 50, message = "{title.size}")
     private String title;
 
-    @Size(min = 10, max = 1000, message = "{description.size}")
+    @Size(min = 10, max = 300, message = "{description.size}")
     private String description;
 }

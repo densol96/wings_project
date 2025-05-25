@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.AuditorAware;
@@ -23,12 +26,14 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+import lv.wings.dto.request.admin.products.NewCategoryDto;
 import lv.wings.dto.response.BasicErrorDto;
 import lv.wings.dto.response.payment.CheckoutErrorDto;
 import lv.wings.enums.CheckoutStep;
+import lv.wings.enums.LocaleCode;
 import lv.wings.exception.coupon.InvalidCouponException;
 import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.exception.entity.MissingTranslationException;
@@ -38,6 +43,7 @@ import lv.wings.exception.other.ImageLeakException;
 import lv.wings.exception.other.TokenNotFoundException;
 import lv.wings.exception.payment.CheckoutException;
 import lv.wings.exception.payment.WebhookException;
+import lv.wings.exception.validation.ConstraintValidationException;
 import lv.wings.exception.validation.InvalidFieldsException;
 import lv.wings.exception.validation.InvalidParameterException;
 import lv.wings.exception.validation.NestedValidationException;
@@ -53,6 +59,7 @@ public class GlobalExceptionHandler {
 
     private final LocaleService localeService;
     private final AuditorAware<User> auditorService;
+    private final Validator validator;
 
     @Value("${spring.profiles.active}")
     private String activeProfile;
@@ -168,6 +175,43 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(localisedErrors);
     }
+
+    @ExceptionHandler(ConstraintValidationException.class)
+    public ResponseEntity<Map<String, Object>> handleValidation(ConstraintValidationException ex) {
+        Set<ConstraintViolation<?>> violations = ex.getViolations();
+        Map<String, Object> errors = new HashMap<>();
+
+        for (ConstraintViolation<?> violation : violations) {
+            String path = violation.getPropertyPath().toString(); // e.g., translations[0].title
+            String message = violation.getMessage();
+
+            Matcher matcher = Pattern.compile("translations\\[(\\d+)]\\.(\\w+)").matcher(path);
+            if (matcher.find()) {
+                int index = Integer.parseInt(matcher.group(1));
+                String field = matcher.group(2);
+
+                String locale = "unknown";
+                Object rootBean = violation.getRootBean();
+
+                if (rootBean instanceof NewCategoryDto dto
+                        && dto.getTranslations() != null
+                        && index < dto.getTranslations().size()) {
+                    LocaleCode lc = dto.getTranslations().get(index).getLocale();
+                    if (lc != null) {
+                        locale = lc.getCode();
+                    }
+                }
+
+                Map<String, String> subMap = (Map<String, String>) errors.computeIfAbsent(field, k -> new HashMap<>());
+                subMap.put(locale, message);
+            } else {
+                errors.put(path, message);
+            }
+        }
+
+        return handleNestedValidationException(new NestedValidationException(errors));
+    }
+
 
     @ExceptionHandler(NestedValidationException.class)
     public ResponseEntity<Map<String, Object>> handleNestedValidationException(NestedValidationException e) {

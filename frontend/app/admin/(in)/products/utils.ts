@@ -1,5 +1,15 @@
 import { adminFetch } from "@/actions/helpers/adminFetch";
-import { CategoryLi, ColorDto, ExistingProductDto, ExistingProductTranslationDto, MaterialDto, ProductUpdateDto } from "@/types";
+import {
+  CategoryLi,
+  CategoryUpdateDto,
+  ColorDto,
+  ExistingCategoryDto,
+  ExistingCategoryTranslationDto,
+  ExistingProductDto,
+  ExistingProductTranslationDto,
+  MaterialDto,
+  ProductUpdateDto,
+} from "@/types";
 import { fetcher } from "@/utils";
 // colors, categories, materials
 
@@ -33,5 +43,18 @@ export const existingProductToForm = (product: ExistingProductDto): ProductUpdat
       percentage: m.percentage,
       materialName: m.name,
     })),
+  };
+};
+
+export const existingCategoryToForm = (category: ExistingCategoryDto): CategoryUpdateDto => {
+  const lvTranslation = category.translations.find((t) => t.locale.toLowerCase() === "lv") as ExistingCategoryTranslationDto;
+  const enTranslation = category.translations.find((t) => t.locale.toLowerCase() === "en") as ExistingCategoryTranslationDto;
+
+  return {
+    id: category.id,
+    titleLv: lvTranslation.title,
+    titleEn: enTranslation.title,
+    descriptionLv: lvTranslation?.description ?? "",
+    descriptionEn: enTranslation?.description ?? "",
   };
 };

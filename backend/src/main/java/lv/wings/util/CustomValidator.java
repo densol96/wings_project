@@ -6,13 +6,14 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.method.HandlerMethod;
-
+import io.micrometer.common.lang.Nullable;
 import lv.wings.annotation.AllowedSortFields;
-import lv.wings.dto.request.admin.AdminPasswordDto;
-import lv.wings.exception.validation.InvalidFieldsException;
+import lv.wings.dto.interfaces.HasTranslationMethod;
+import lv.wings.enums.LocaleCode;
 import lv.wings.exception.validation.InvalidIdException;
 import lv.wings.exception.validation.InvalidParameterException;
-import lv.wings.model.security.User;
+import lv.wings.model.interfaces.LocalableWithTitle;
+import lv.wings.repo.base.TitleWithLocaleAndSoftDeleteRepository;
 
 public class CustomValidator {
 
@@ -57,5 +58,30 @@ public class CustomValidator {
 
     public static boolean userIsAllowedAccess(UserDetails user) {
         return user.isEnabled() && user.isAccountNonExpired() && user.isAccountNonLocked() && user.isCredentialsNonExpired();
+    }
+
+    public static <T> Map<String, Object> validateTitleUniqueness(
+            HasTranslationMethod dto,
+            TitleWithLocaleAndSoftDeleteRepository<T> repository,
+            Map<String, Object> errors,
+            @Nullable List<LocalableWithTitle> existingTranslations) {
+        dto.getTranslations().forEach(tr -> {
+            String newTitle = tr.getTitle();
+            LocaleCode forLocale = tr.getLocale();
+            boolean isCreating = existingTranslations == null;
+            boolean titleAlreadyExists = repository.existsByTitleAndLocaleAndDeletedFalse(newTitle, forLocale);
+            boolean titleRemainsTheSame = !isCreating && existingTranslations
+                    .stream()
+                    .filter(existingTr -> existingTr.getLocale() == forLocale && newTitle.equals(existingTr.getTitle()))
+                    .findFirst()
+                    .isPresent();
+
+            if ((isCreating || !titleRemainsTheSame) && titleAlreadyExists) {
+                Map<String, String> subMap = (Map<String, String>) errors.computeIfAbsent("title", k -> new HashMap<>());
+                subMap.put(tr.getLocale().getCode(), "Norādīts nosaukums jau eksistē.");
+            }
+        });
+
+        return errors;
     }
 }

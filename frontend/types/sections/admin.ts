@@ -182,3 +182,37 @@ export interface AdminImageDto {
   createdBy: UserMinDto;
   createdAt: string;
 }
+
+export type ProductCategoriesSearchParams = {
+  sort?: SimleSort;
+  direction?: SortDirection;
+};
+
+export interface AdminProductCategoryDto {
+  id: number;
+  translations: TitleLocalableDto[];
+  createdBy: UserMinDto;
+  createdAt: string;
+  lastModifiedBy: UserMinDto | null;
+  lastModifiedAt: string | null;
+  productsTotal: number;
+}
+
+export type CategoryUpdateDto = {
+  id: number;
+  titleLv: string;
+  titleEn: string;
+  descriptionLv: string;
+  descriptionEn: string;
+};
+
+export type ExistingCategoryTranslationDto = {
+  locale: Locale;
+  title: string;
+  description?: string;
+};
+
+export type ExistingCategoryDto = {
+  id: number;
+  translations: ExistingCategoryTranslationDto[];
+};

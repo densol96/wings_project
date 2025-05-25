@@ -1,6 +1,9 @@
+"use client";
+
 import { defaultLocale, locales } from "@/constants/locales";
 import { Locale, LocaleAndString } from "@/types";
 import { cn } from "@/utils";
+import { useFormStatus } from "react-dom";
 
 type LocalisedValues = {
   locale: Locale;
@@ -43,6 +46,8 @@ const MultiLangFormField = ({
   onChange,
   localisedValues,
 }: Props) => {
+  const { pending } = useFormStatus();
+
   return (
     <div className={cn("mb-4", className)}>
       <label htmlFor={name} className="block text-md font-medium text-gray-700 mb-1">
@@ -53,7 +58,7 @@ const MultiLangFormField = ({
         textarea={textarea}
         locale={defaultLocale}
         placeholder={placeholder?.[defaultLocale]}
-        disabled={disabled}
+        disabled={disabled || pending}
         error={error?.[defaultLocale]}
         rows={rows}
         requiresTranslationsFields={requiresTranslationsFields}

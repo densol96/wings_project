@@ -2,6 +2,7 @@
 
 import { ButtonProps } from "@/types";
 import { cn } from "@/utils";
+import { useFormStatus } from "react-dom";
 
 const sizes = {
   sm: "px-2",
@@ -17,8 +18,13 @@ const colors = {
 } as const;
 
 const Button = ({ children, size = "md", color = "primary", className, onClick, disabled = false, type = "submit" }: ButtonProps) => {
+  const { pending } = useFormStatus();
   return (
-    <button disabled={disabled} onClick={onClick} className={cn("transition duration-250 disabled:cursor-not-allowed", colors[color], sizes[size], className)}>
+    <button
+      disabled={disabled || pending}
+      onClick={onClick}
+      className={cn("transition duration-250 disabled:cursor-not-allowed", colors[color], sizes[size], className)}
+    >
       {children}
     </button>
   );
