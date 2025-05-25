@@ -31,17 +31,21 @@ const NewsGrid = function ({ lang, dict }: Props) {
   const isFirstRender = useRef(true);
 
   const getNews = async () => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
+    // if (isFirstRender.current) {
+    //   isFirstRender.current = false;
+    //   return;
+    // }
 
     if (currentPage === 1) setIsLoading(true);
     setIsError(false);
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/events?page=${currentPage}&lang=${lang}`);
+      console.log(response);
       if (!response.ok) throw new Error("response.ok = false likely due to problems with network (is server up?)");
+      console.log(response.status);
       const result = await response.json();
+      console.log("RESULTS");
+      console.log(result);
       const { content, page, size, totalPages, totalElements } = parsePageableResponse<ShortNewsItem>(result);
       setNews((prev) => ({
         news: [...prev.news, ...content],

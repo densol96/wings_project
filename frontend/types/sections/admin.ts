@@ -174,3 +174,11 @@ export type ExistingProductDto = {
   colors: number[];
   materials: ExistingProductMaterialDto[];
 };
+
+export interface AdminImageDto {
+  id: number;
+  src: string;
+  alt: string;
+  createdBy: UserMinDto;
+  createdAt: string;
+}

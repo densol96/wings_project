@@ -5,6 +5,7 @@ import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 import lv.wings.enums.LocaleCode;
+import lv.wings.exception.entity.EntityNotFoundException;
 import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductImage;
 import lv.wings.model.translation.ProductImageTranslation;
@@ -17,11 +18,11 @@ import lv.wings.service.shared.GenericImageProcessor;
 
 @Slf4j
 @Service
-public class ProductImageService extends AbstractImageService<ProductImage, Product, ProductImageTranslation, Integer> {
+public class ProductImageServiceImpl extends AbstractImageService<ProductImage, Product, ProductImageTranslation, Integer> {
 
     private final ProductService productService;
 
-    public ProductImageService(
+    public ProductImageServiceImpl(
             ImageRepository<ProductImage, Integer> repository,
             ProductService productService,
             LocaleService localeService,
@@ -54,6 +55,6 @@ public class ProductImageService extends AbstractImageService<ProductImage, Prod
 
     @Override
     protected Product getOwnerById(@NonNull Integer id) {
-        return productService.findById(id);
+        return productService.findByIdAndNotDeleted(id);
     }
 }

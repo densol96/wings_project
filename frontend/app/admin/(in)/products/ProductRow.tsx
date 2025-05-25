@@ -2,8 +2,7 @@ import { defaultLocale } from "@/constants/locales";
 import { ProductAdminDto } from "@/types";
 import { formatDateTime, highlightWithDiacritics } from "@/utils";
 import Link from "next/link";
-import { FaUserEdit } from "react-icons/fa";
-import DeleteRoleBtn from "../security/roles/DeleteRoleBtn";
+import { FaUserEdit, FaImages } from "react-icons/fa";
 import DeleteBtn from "../security/roles/DeleteRoleBtn";
 import deleteProduct from "@/actions/products/deleteProduct";
 import { StyledLink } from "@/components";
@@ -42,6 +41,9 @@ const ProductRow = ({ product, q }: Props) => {
       <div>{product.lastModifiedBy?.username || "-"}</div>
       <div>{product.lastModifiedAt ? formatDateTime(new Date(product.lastModifiedAt)) : "-"}</div>
       <div className="flex justify-center items-center gap-4">
+        <Link href={`/admin/products/${product.id}/images`}>
+          <FaImages size={24} />
+        </Link>
         <Link href={`/admin/products/${product.id}/edit`}>
           <FaUserEdit size={24} />
         </Link>

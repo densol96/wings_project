@@ -25,7 +25,6 @@ import lv.wings.dto.response.admin.products.ExistingProductDto;
 import lv.wings.dto.response.admin.products.ProductAdminDto;
 import lv.wings.service.ProductService;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Slf4j

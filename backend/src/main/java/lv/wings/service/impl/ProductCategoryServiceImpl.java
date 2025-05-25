@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
 import lombok.NonNull;
+import lv.wings.dto.request.admin.products.CreateProductTranslationDto;
+import lv.wings.dto.request.admin.products.NewProductDto;
+import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.product_category.ProductCategoryDto;
 import lv.wings.dto.response.product_category.ProductCategoryWithAmountDto;
 import lv.wings.dto.response.product_category.ShortProductCategoryDto;
 import lv.wings.mapper.ProductCategoryMapper;
+import lv.wings.model.entity.Product;
 import lv.wings.model.entity.ProductCategory;
+import lv.wings.model.entity.ProductImage;
 import lv.wings.model.translation.ProductCategoryTranslation;
 import lv.wings.repo.ProductCategoryRepository;
 import lv.wings.service.AbstractTranslatableCRUDService;
@@ -67,6 +73,35 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 	@Override
 	public ShortProductCategoryDto mapToShortDto(@NonNull ProductCategory category) {
 		return mapper.translationToShortDto(category, getRightTranslation(category, ProductCategoryTranslation.class));
+	}
+
+	@Override
+	@Transactional
+	public BasicMessageDto createCategory(NewCategoryDto dto) {
+		validateNewProductDto(dto, null);
+		List<CreateProductTranslationDto> providedTranslations = dto.getTranslations();
+		CreateProductTranslationDto defaultTranslation = localeService.validateDefaultLocaleIsPresent(providedTranslations);
+		localeService.validateOneTranslationPerEachLocale(providedTranslations);
+		boolean isManualTranslation = localeService.validateRequiredTranslationsPresentIfManual(dto);
+
+		Product newProduct = Product.builder().amount(dto.getAmount()).price(dto.getPrice())
+				.category(productCategoryService.findById(dto.getCategoryId())) // has been pre-validated
+				.build();
+
+		attachTranslations(newProduct, dto, isManualTranslation, defaultTranslation);
+		attachMaterials(newProduct, dto);
+		attachColors(newProduct, dto);
+		List<ProductImage> images = attachImages(newProduct, dto.getImages());
+
+		try {
+			persist(newProduct);
+		} catch (Exception e) {
+			if (images != null) {
+				productImageService.clearImagesUp(images, null);
+			}
+		}
+
+		return new BasicMessageDto("Jauns produkts tika pievienots.");
 	}
 
 	private ProductCategoryWithAmountDto getSpecialAllCategoryWithAmount() {

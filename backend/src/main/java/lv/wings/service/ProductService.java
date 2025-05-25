@@ -48,4 +48,6 @@ public interface ProductService extends CRUDService<Product, Integer> {
     BasicMessageDto updateProduct(NewProductDto dto, Integer id);
 
     BasicMessageDto deleteProduct(Integer id);
+
+    Product findByIdAndNotDeleted(Integer id);
 }

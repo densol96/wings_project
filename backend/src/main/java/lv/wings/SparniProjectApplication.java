@@ -11,10 +11,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import lv.wings.enums.Country;
@@ -203,16 +202,16 @@ public class SparniProjectApplication {
 				List<Color> colors = new ArrayList<>();
 
 				String[][] colorNames = {
-						{ "Red", "Sarkans" },
-						{ "Blue", "Zils" },
-						{ "Green", "Zaļš" },
-						{ "Yellow", "Dzeltens" },
-						{ "Black", "Melns" },
-						{ "White", "Balts" },
-						{ "Orange", "Oranžs" },
-						{ "Purple", "Violets" },
-						{ "Pink", "Rozā" },
-						{ "Gray", "Pelēks" }
+						{"Red", "Sarkans"},
+						{"Blue", "Zils"},
+						{"Green", "Zaļš"},
+						{"Yellow", "Dzeltens"},
+						{"Black", "Melns"},
+						{"White", "Balts"},
+						{"Orange", "Oranžs"},
+						{"Purple", "Violets"},
+						{"Pink", "Rozā"},
+						{"Gray", "Pelēks"}
 				};
 
 				for (String[] pair : colorNames) {
@@ -240,10 +239,10 @@ public class SparniProjectApplication {
 
 				// Materials
 				String[][] materialNames = {
-						{ "Wool", "Vilna" },
-						{ "Cotton", "Kokvilna" },
-						{ "Linen", "Lins" },
-						{ "Silk", "Zīds" }
+						{"Wool", "Vilna"},
+						{"Cotton", "Kokvilna"},
+						{"Linen", "Lins"},
+						{"Silk", "Zīds"}
 				};
 				List<Material> materials = new ArrayList<>();
 

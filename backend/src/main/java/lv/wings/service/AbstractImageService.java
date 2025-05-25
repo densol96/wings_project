@@ -7,11 +7,14 @@ import org.springframework.web.multipart.MultipartFile;
 import lombok.NonNull;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.admin.images.AdminImageDto;
+import lv.wings.dto.response.admin.orders.UserMinDto;
 import lv.wings.enums.LocaleCode;
 import lv.wings.exception.validation.InvalidProceduralException;
 import lv.wings.model.base.ImageLocalableEntity;
 import lv.wings.model.base.ImageableEntity;
 import lv.wings.model.interfaces.HasImages;
+import lv.wings.model.security.User;
 import lv.wings.repo.base.ImageRepository;
 import lv.wings.service.shared.GenericImageProcessor;
 import lv.wings.util.CustomValidator;
@@ -104,7 +107,8 @@ public abstract class AbstractImageService<T extends ImageableEntity<L, O>, O ex
 
     @Override
     public BasicMessageDto addMoreImages(Integer id, List<MultipartFile> images) {
-        proccessImagesAndUpload(getOwnerById(id), images);
+        List<T> imageEntities = proccessImagesAndUpload(getOwnerById(id), images);
+        repository.saveAll(imageEntities);
         return new BasicMessageDto("Jauni attēli tika veiksmīgi pievienoti.");
     }
 
@@ -117,11 +121,27 @@ public abstract class AbstractImageService<T extends ImageableEntity<L, O>, O ex
     public BasicMessageDto deleteImage(ID imageId) {
         T image = findById(imageId);
         imageProcessor.deleteImage(image);
-        System.out.println("SHOULD DELETE THE IMAGE = " + image.getSrc() + " - " + image.getId());
         repository.delete(image);
-        System.out.println("SHOULD HAVE BEEN DELETED!");
         return new BasicMessageDto("Attēls tika veiksmīgi izdzēsts.");
     }
+
+    @Override
+    public List<AdminImageDto> getAdminImages(Integer ownerId) {
+        getOwnerById(ownerId); // will throw an error if none such owner
+        return repository.findAllByOwnerId(ownerId).stream().map(this::mapImageToAdminDto).toList();
+    }
+
+    private AdminImageDto mapImageToAdminDto(@NonNull T image) {
+        User user = image.getCreatedBy();
+        return AdminImageDto.builder()
+                .id(image.getId())
+                .src(image.getSrc())
+                .alt(getRightTranslationForSelectedLocale(image, expectedTranslationClass, LocaleCode.LV).getAlt())
+                .createdAt(image.getCreatedAt())
+                .createdBy(new UserMinDto(user.getId(), user.getUsername()))
+                .build();
+    }
+
 
     private List<ImageDto> getImagesAsDtoPerOwnerIdWithLimit(Integer id, Integer limit) {
         CustomValidator.isValidId(getOwnerIdCode(), id);

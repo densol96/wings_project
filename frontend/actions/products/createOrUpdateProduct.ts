@@ -34,16 +34,13 @@ export const createOrUpdateProduct = async (formData: FormData, productId?: numb
 
   // clear old valeus that are not going to be read by Spring controller (no need to send overhead aka additional files etc.)
   cleanFormData(formData, ["images-input", "prod-material", "materials"]);
-  console.log(formData);
-  const res = await serverFetchAction<MultiLangFormState>({
+  return await serverFetchAction<MultiLangFormState>({
     endpoint: productId ? `admin/products/${productId}` : "admin/products",
     method: productId ? "PUT" : "POST",
     body: formData,
     alternativeOk: () => revalidatePath("/", "layout"),
     isMultipart: true,
   });
-  console.log(res);
-  return res;
 };
 
 export default createOrUpdateProduct;

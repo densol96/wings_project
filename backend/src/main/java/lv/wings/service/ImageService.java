@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 import lv.wings.dto.response.BasicMessageDto;
 import lv.wings.dto.response.ImageDto;
+import lv.wings.dto.response.admin.images.AdminImageDto;
 import lv.wings.model.interfaces.HasImages;
 import lv.wings.model.interfaces.Imageable;
 
@@ -25,4 +26,6 @@ public interface ImageService<T extends Imageable, O extends HasImages<T>, ID> e
     BasicMessageDto addMoreImages(Integer id, List<MultipartFile> images);
 
     BasicMessageDto deleteImage(ID imageId);
+
+    List<AdminImageDto> getAdminImages(Integer ownerId);
 }

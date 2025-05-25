@@ -1,7 +1,7 @@
 "use client";
 
 import createOrUpdateProduct from "@/actions/products/createOrUpdateProduct";
-import { Button, Form, FormField, Heading, ImageUploader, Label, Spinner } from "@/components";
+import { Button, Form, FormField, Heading, ImageUploader, Label } from "@/components";
 import MultiLangFormField from "@/components/shared/MultiLangFormField";
 import TranslationMethodRadioGroup from "@/components/shared/TranslationMethodRadioGroup";
 import SubmitButton from "@/components/ui/SubmitButton";
@@ -189,8 +189,8 @@ const ProductForm = ({ className, existingProduct, requiredMeta }: Props) => {
       {!existingProduct && <ImageUploader error={normalizeError(formResponse?.errors?.images)} onChange={setImages} />}
       <div className="flex flex-col items-center gap-10">
         {form.productMaterials.reduce((a, b) => a + b.percentage, 0) <= 100 && (
-          <SubmitButton disabled={isLoading} className="w-[300px]" color="green">
-            {isLoading ? <Spinner /> : "Apstiprināt"}
+          <SubmitButton isPending={isLoading} disabled={isLoading} className="w-[300px]" color="green">
+            Apstiprināt
           </SubmitButton>
         )}
         <Button disabled={isLoading} type="button" onClick={() => router.back()}>

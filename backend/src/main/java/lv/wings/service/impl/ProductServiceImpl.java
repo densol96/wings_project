@@ -49,6 +49,7 @@ import lv.wings.repo.ProductRepository;
 import lv.wings.repo.ProductTranslationRepository;
 import lv.wings.service.AbstractTranslatableCRUDService;
 import lv.wings.service.ColorService;
+import lv.wings.service.ImageService;
 import lv.wings.service.LocaleService;
 import lv.wings.service.MaterialService;
 import lv.wings.service.ProductCategoryService;
@@ -69,7 +70,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	private final ProductRepository productRepository;
 	private final ProductTranslationRepository productTranslationRepository;
 	private final ProductMapper productMapper;
-	private final ProductImageService productImageService;
+	private final ImageService<ProductImage, Product, Integer> productImageService;
 	private final ProductCategoryService productCategoryService;
 	private final ColorService colorService;
 	private final ProductMaterialService productMaterialService;
@@ -88,7 +89,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			ProductRepository productRepository,
 			ProductTranslationRepository productTranslationRepository,
 			ProductMapper productMapper,
-			ProductImageService productImageService,
+			ImageService<ProductImage, Product, Integer> productImageService,
 			LocaleService localeService,
 			ProductCategoryService productCategoryService,
 			ColorService colorService,
@@ -143,7 +144,13 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 
 	@Override
 	public ProductDto getProductById(Integer id) {
-		return mapToProductDto(productRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new EntityNotFoundException(entityNameKey, entityName, id)));
+		return mapToProductDto(findByIdAndNotDeleted(id));
+	}
+
+
+	@Override
+	public Product findByIdAndNotDeleted(Integer id) {
+		return productRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> new EntityNotFoundException(entityNameKey, entityName, id));
 	}
 
 	@Override
@@ -257,10 +264,10 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 				.category(productCategoryService.findById(dto.getCategoryId())) // has been pre-validated
 				.build();
 
-		attachMaterials(newProduct, dto);
 		attachTranslations(newProduct, dto, isManualTranslation, defaultTranslation);
-		List<ProductImage> images = attachImages(newProduct, dto);
+		attachMaterials(newProduct, dto);
 		attachColors(newProduct, dto);
+		List<ProductImage> images = attachImages(newProduct, dto.getImages());
 
 		try {
 			persist(newProduct);
@@ -288,11 +295,12 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		existingProduct.setPrice(dto.getPrice());
 		existingProduct.setCategory(productCategoryService.findById(dto.getCategoryId()));
 
-		attachMaterials(existingProduct, dto);
 		attachTranslations(existingProduct, dto, isManualTranslation, defaultTranslation);
+		attachMaterials(existingProduct, dto);
 		attachColors(existingProduct, dto);
 
 		persist(existingProduct);
+
 		return new BasicMessageDto("Produkts tika atjaunots.");
 	}
 
@@ -316,11 +324,14 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 
 	@Override
 	public ExistingProductDto getExistingProductForAdmin(Integer id) {
-		Product product = findById(id);
+		Product product = findByIdAndNotDeleted(id);
 		return productMapper.toExistingDto(findById(id), productMaterialService.getMaterialsPerProduct(product, LocaleCode.LV));
 	}
 
 	private void attachColors(Product newProduct, NewProductDto dto) {
+		/*
+		 * Not an oprhal removal => no need to manually flush() like in the example below
+		 */
 		List<Integer> colorIds = dto.getColors();
 		newProduct.getColors().clear();
 		if (colorIds != null && !colorIds.isEmpty()) {
@@ -328,19 +339,13 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		}
 	}
 
-	private List<ProductImage> attachImages(Product newProduct, NewProductDto dto) {
-		List<MultipartFile> imagesDto = dto.getImages();
-		if (imagesDto == null || imagesDto.isEmpty())
-			return Collections.emptyList();
-
-		List<ProductImage> images = productImageService.proccessImagesAndUpload(newProduct, imagesDto);
-		newProduct.getImages().addAll(images);
-		return images; // for delete from s3 if persisting of product fails later
-	}
-
 	private void attachMaterials(Product newProduct, NewProductDto dto) {
 		List<NewProductMaterialDto> materialsDto = dto.getMaterials();
 		newProduct.getMadeOfMaterials().clear();
+		/*
+		 * Apparentlly, Hibernate with orphanRemoval always firstly INSERT and only then deletes and this triggers the UNIQUE constraint violation
+		 * => need to flush the context
+		 */
 		entityManager.flush();
 
 		if (materialsDto != null && !materialsDto.isEmpty()) {
@@ -374,8 +379,6 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 					.description(defaultTranslation.getDescription())
 					.build());
 
-			// In the system, at the moment, the are only "lv" and "en" locales.
-			// So I am only translating to English, but this can be easily adjusted to be more dynamic if required
 			translations.add(ProductTranslation.builder()
 					.locale(LocaleCode.EN)
 					.product(newProduct)
@@ -385,8 +388,11 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 					.build());
 		}
 
-		// translations are soft deleted by default =>
-		// but in this case we actually want them to be hard deleted or a unqiueness cosntraint will fire off every time!!
+		/*
+		 * translations are soft deleted by default =>
+		 * but in this case we actually want them to be hard deleted or a unqiueness constraint will fire off every time!!
+		 * on top of that see the note about the Hibernate behaviour in the comment above!
+		 */
 		productTranslationRepository.hardDeleteByProductId(newProduct.getId());
 		newProduct.getNarrowTranslations().clear();
 		newProduct.getNarrowTranslations().addAll(translations);
@@ -474,6 +480,15 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 
 		if (!errors.isEmpty())
 			throw new NestedValidationException(errors);
+	}
+
+	private List<ProductImage> attachImages(Product product, List<MultipartFile> imagesDto) {
+		if (imagesDto == null || imagesDto.isEmpty())
+			return Collections.emptyList();
+
+		List<ProductImage> images = productImageService.proccessImagesAndUpload(product, imagesDto);
+		product.getImages().addAll(images);
+		return images; // for delete from s3 if persisting of product fails later
 	}
 
 	private ProductTitleDto mapToProductTitleDto(Product product) {
