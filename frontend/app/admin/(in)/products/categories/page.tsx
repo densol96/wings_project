@@ -37,7 +37,6 @@ const sortSelectOptions = {
 
 const Page = async ({ searchParams }: Props) => {
   const queryParams = new URLSearchParams(searchParams as unknown as { [key: string]: string }).toString();
-  console.log("queryParams ==> ", queryParams);
   const categories = await adminFetch<AdminProductCategoryDto[]>(`products/categories?${queryParams}`);
 
   return (

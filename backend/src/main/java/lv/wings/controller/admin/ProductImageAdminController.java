@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import lv.wings.dto.response.BasicMessageDto;
-import lv.wings.model.entity.Product;
 import lv.wings.dto.response.admin.images.AdminImageDto;
 import lv.wings.model.entity.ProductImage;
 import lv.wings.service.ImageService;
@@ -49,5 +48,4 @@ public class ProductImageAdminController {
         log.info("Received DELETE request on /api/v1/admin/products/images/{}", imageId);
         return ResponseEntity.ok(productImageService.deleteImage(imageId));
     }
-
 }

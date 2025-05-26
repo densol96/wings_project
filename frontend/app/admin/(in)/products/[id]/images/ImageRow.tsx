@@ -32,7 +32,7 @@ const ImageRow = ({ image, productId }: Props) => {
       </div>
 
       <div className="flex justify-center">
-        <DeleteBtn action={deleteImage} id={image.id} />
+        <DeleteBtn entityName="products" action={deleteImage} id={image.id} />
       </div>
     </div>
   );

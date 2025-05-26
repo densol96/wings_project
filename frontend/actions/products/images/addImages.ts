@@ -4,9 +4,9 @@ import { serverFetchAction } from "@/actions/helpers/serverFetchAction";
 import { FormState } from "@/types";
 import { revalidatePath } from "next/cache";
 
-export const addImages = async (formData: FormData, productId: number): Promise<FormState> => {
+export const addImages = async (formData: FormData, entityId: number, entityType: "products" | "events" = "products"): Promise<FormState> => {
   const res = await serverFetchAction<FormState>({
-    endpoint: `admin/products/${productId}/images`,
+    endpoint: `admin/${entityType}/${entityId}/images`,
     method: "POST",
     body: formData,
     alternativeOk: () => revalidatePath("/", "layout"),

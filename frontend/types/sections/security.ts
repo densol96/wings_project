@@ -1,4 +1,5 @@
 import { SortDirection } from "../common";
+import { TitleLocalableDto, UserMinDto } from "./admin";
 import { DeliveryMethod } from "./checkout";
 
 export type UserAdminDto = {
@@ -85,4 +86,15 @@ export type EventsSearchParams = {
   q?: string;
   page?: string;
   type?: SecurityEventType;
+};
+
+export type EventAdminDto = {
+  id: number;
+  translations: TitleLocalableDto[];
+  startDate: string;
+  endDate: string;
+  createdBy: UserMinDto;
+  createdAt: string;
+  lastModifiedBy: UserMinDto;
+  lastModifiedAt: string;
 };

@@ -18,11 +18,6 @@ public class ApplicationAuditAware implements AuditorAware<User> {
 	private User systemUser;
 	private final UserRepository userRepo;
 
-	// @PostConstruct
-	// public void init() {
-	// systemUser = userRepo.findSystemUserNative();
-	// }
-
 	@Override
 	public Optional<User> getCurrentAuditor() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -30,6 +25,9 @@ public class ApplicationAuditAware implements AuditorAware<User> {
 		if (authentication == null
 				|| !authentication.isAuthenticated()
 				|| authentication.getPrincipal() instanceof String) { // mind anonymousUser
+			if (systemUser == null) {
+				systemUser = userRepo.findByUsername("system").orElseGet(null);
+			}
 			return Optional.ofNullable(systemUser);
 		}
 

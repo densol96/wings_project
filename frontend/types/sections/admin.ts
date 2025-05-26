@@ -216,3 +216,36 @@ export type ExistingCategoryDto = {
   id: number;
   translations: ExistingCategoryTranslationDto[];
 };
+
+export type AdminEventsSearchParams = {
+  page?: string;
+  sort?: SimleSort;
+  direction?: SortDirection;
+  q?: string;
+};
+
+export type ExistingEventTranslationDto = {
+  locale: Locale;
+  title: string;
+  description: string;
+  location: string;
+};
+
+export type ExistingEventDto = {
+  id: number;
+  translations: ExistingEventTranslationDto[];
+  startDate: string;
+  endDate: string;
+};
+
+export type EventUpdateDto = {
+  id: number;
+  titleLv: string;
+  titleEn: string;
+  descriptionLv: string;
+  descriptionEn: string;
+  locationLv: string;
+  locationEn: string;
+  startDate: string;
+  endDate: string;
+};

@@ -1,5 +1,6 @@
 package lv.wings.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +15,7 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 
 import lombok.NonNull;
-
+import lv.wings.config.security.UserSecurityService;
 import lv.wings.dto.request.admin.products.CreateCategoryTranslationDto;
 import lv.wings.dto.request.admin.products.NewCategoryDto;
 import lv.wings.dto.response.BasicMessageDto;
@@ -50,6 +51,8 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 	private final ProductCategoryMapper productCategoryMapper;
 	private final Validator validator;
 	private final TranslationService translationService;
+	private final UserSecurityService userSecurityService;
+
 
 	public ProductCategoryServiceImpl(
 			ProductCategoryRepository productCategoryRepo,
@@ -58,7 +61,8 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 			ProductService productService,
 			ProductCategoryMapper productCategoryMapper,
 			Validator validator,
-			TranslationService translationService) {
+			TranslationService translationService,
+			UserSecurityService userSecurityService) {
 		super(productCategoryRepo, "ProductCategory", "entity.product-category", localeService);
 		this.productCategoryRepo = productCategoryRepo;
 		this.productCategoryTranslationRepo = productCategoryTranslationRepo;
@@ -66,6 +70,7 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 		this.productCategoryMapper = productCategoryMapper;
 		this.validator = validator;
 		this.translationService = translationService;
+		this.userSecurityService = userSecurityService;
 	}
 
 	@Override
@@ -137,6 +142,9 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 		localeService.validateOneTranslationPerEachLocale(providedTranslations);
 		boolean isManualTranslation = localeService.validateRequiredTranslationsPresentIfManual(dto);
 		attachTranslations(existingCategory, dto, isManualTranslation, defaultTranslation);
+		// Audit are working, however they will not record the activity if it was only the translationd fields that were updated
+		existingCategory.setLastModifiedAt(LocalDateTime.now());
+		existingCategory.setLastModifiedBy(userSecurityService.getCurrentUser());
 		persist(existingCategory);
 		return new BasicMessageDto("Kategorija tika atjaunota.");
 	}
@@ -199,7 +207,10 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 		 * but in this case we actually want them to be hard deleted or a unqiueness constraint will fire off every time!!
 		 * on top of that see the note about the Hibernate behaviour in the comment above!
 		 */
-		productCategoryTranslationRepo.hardDeleteByCategoryId(newCategory.getId());
+		Integer categoryId = newCategory.getId();
+		if (categoryId != null) {
+			productCategoryTranslationRepo.hardDeleteByCategoryId(newCategory.getId());
+		}
 		newCategory.getNarrowTranslations().clear();
 		newCategory.getNarrowTranslations().addAll(translations);
 	}
@@ -212,8 +223,8 @@ public class ProductCategoryServiceImpl extends AbstractTranslatableCRUDService<
 
 		Map<String, Object> errors = new HashMap<>();
 		boolean isCreating = forUpdate == null;
-		CustomValidator.validateTitleUniqueness(dto, productCategoryTranslationRepo, errors,
-				isCreating ? null : forUpdate.getNarrowTranslations().stream().map(tr -> (LocalableWithTitle) tr).toList());
+		CustomValidator.validateTitleUniqueness(dto, errors,
+				(string, locale) -> productCategoryTranslationRepo.existsByTitleAndLocaleAndDeletedFalse(string, locale), forUpdate);
 
 		if (!errors.isEmpty())
 			throw new NestedValidationException(errors);

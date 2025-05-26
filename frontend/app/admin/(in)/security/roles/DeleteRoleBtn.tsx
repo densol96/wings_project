@@ -11,9 +11,10 @@ import { MdDelete } from "react-icons/md";
 type Props = {
   id: number;
   action: (prevState: FormState, formData: FormData) => Promise<FormState>;
+  entityName?: "products" | "events";
 };
 
-const DeleteBtn = ({ id, action }: Props) => {
+const DeleteBtn = ({ id, action, entityName }: Props) => {
   const [state, formAction] = useFormState<FormState, FormData>(action, null);
   useEffect(() => {
     if (state?.error?.message) {
@@ -26,6 +27,7 @@ const DeleteBtn = ({ id, action }: Props) => {
   return (
     <form action={formAction}>
       <input key={id} type="hidden" name="id" value={id} />
+      {entityName && <input type="hidden" name="entityName" value={entityName} />}
       <SubmitButton className="p-2">
         <MdDelete size={20} />
       </SubmitButton>

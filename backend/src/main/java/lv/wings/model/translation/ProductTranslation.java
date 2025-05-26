@@ -20,12 +20,12 @@ import lv.wings.model.interfaces.HasTitle;
 @Table(
         name = "product_translations",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"translatable_id", "locale"})
+                @UniqueConstraint(columnNames = {"translatable_id", "locale"}),
+        // @UniqueConstraint(columnNames = {"title", "locale"}) // Unique should be checked in service since this entity can be softly deleted
         })
 @SQLDelete(sql = "UPDATE product_translations SET deleted = true WHERE id=?")
 public class ProductTranslation extends LocalableEntity<Product> implements HasTitle {
 
-    // Unique should ne checked in service since this entity can be softly deleted
     @Column(nullable = false, length = 100)
     private String title;
 

@@ -11,6 +11,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -24,7 +26,6 @@ import lv.wings.model.entity.Color;
 import lv.wings.model.entity.DeliveryPrice;
 import lv.wings.model.entity.DeliveryType;
 import lv.wings.model.entity.Event;
-import lv.wings.model.entity.EventCategory;
 import lv.wings.model.entity.EventImage;
 import lv.wings.model.entity.GlobalParam;
 import lv.wings.model.entity.Material;
@@ -37,7 +38,6 @@ import lv.wings.model.security.Role;
 import lv.wings.model.security.User;
 import lv.wings.model.translation.ColorTranslation;
 import lv.wings.model.translation.DeliveryTypeTranslation;
-import lv.wings.model.translation.EventCategoryTranslation;
 import lv.wings.model.translation.EventImageTranslation;
 import lv.wings.model.translation.EventTranslation;
 import lv.wings.model.translation.MaterialTranslation;
@@ -51,7 +51,6 @@ import lv.wings.repo.PermissionRepository;
 import lv.wings.repo.ColorRepository;
 import lv.wings.repo.CustomerRepository;
 import lv.wings.repo.DeliveryTypeRepository;
-import lv.wings.repo.EventCategoryRepository;
 import lv.wings.repo.EventImageRepository;
 import lv.wings.repo.ProductCategoryRepository;
 import lv.wings.repo.ProductImageRepository;
@@ -105,7 +104,6 @@ public class SparniProjectApplication {
 			DeliveryTypeRepository deliveryTypeRepo,
 			EventRepository eventRepo,
 			EventImageRepository eventImageRepo,
-			EventCategoryRepository eventCategoryRepo,
 			PasswordEncoder passwordEncoder,
 			ProductCategoryRepository productCategoryRepo,
 			ProductRepository productRepo,
@@ -131,20 +129,6 @@ public class SparniProjectApplication {
 				gbp.setCreatedBy(u1);
 				globalParamsRepo.save(gbp);
 
-				EventCategory eventCategory1 = new EventCategory();
-				EventCategoryTranslation eventCategory1Lv = EventCategoryTranslation.builder()
-						.title("Veikala blogs")
-						.locale(LocaleCode.LV)
-						.category(eventCategory1)
-						.build();
-				EventCategoryTranslation eventCategory1En = EventCategoryTranslation.builder()
-						.title("Shop blog")
-						.locale(LocaleCode.EN)
-						.category(eventCategory1)
-						.build();
-				eventCategory1.setTranslations(List.of(eventCategory1Lv, eventCategory1En));
-				eventCategory1.setCreatedBy(u1);
-				eventCategoryRepo.save(eventCategory1);
 
 				for (int i = 1; i <= 10; i++) {
 
@@ -166,7 +150,6 @@ public class SparniProjectApplication {
 					Event e = Event.builder()
 							.startDate(LocalDate.now())
 							.endDate(LocalDate.now().plusDays(1)) // 24hrs
-							.category(eventCategory1)
 							.build();
 
 					lv.setEntity(e);
@@ -175,7 +158,10 @@ public class SparniProjectApplication {
 					e.setCreatedBy(u1);
 					eventRepo.save(e);
 					if (i <= 3) {
-						EventImage bilde = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg").event(e)
+						EventImage bilde = EventImage.builder()
+								.src("http://localhost:8080/images/bilde1.jpg")
+								.event(e)
+								.position(1)
 								.build();
 						EventImageTranslation altEn = EventImageTranslation.builder().alt("Good Image").image(bilde)
 								.locale(LocaleCode.EN).build();
@@ -186,7 +172,7 @@ public class SparniProjectApplication {
 						eventImageRepo.save(bilde);
 						if (i <= 2) {
 							EventImage bilde2 = EventImage.builder().src("http://localhost:8080/images/bilde1.jpg")
-									.event(e).build();
+									.event(e).position(2).build();
 							EventImageTranslation altEn2 = EventImageTranslation.builder().alt("Some other good Image")
 									.image(bilde2).locale(LocaleCode.EN).build();
 							EventImageTranslation altLv2 = EventImageTranslation.builder().alt("Kada cita laba bilde")
@@ -558,7 +544,7 @@ public class SparniProjectApplication {
 				productRepo.save(glove7);
 
 				// BILDES
-				ProductImage bilde1 = ProductImage.builder().product(glove7)
+				ProductImage bilde1 = ProductImage.builder().product(glove7).position(1)
 						.src("http://localhost:8080/images/products/cimdi1.jpg").build();
 				bilde1.setCreatedBy(u1);
 				ProductImageTranslation bilde1_lv = ProductImageTranslation.builder().alt("Labi cimdi 1")
@@ -568,7 +554,7 @@ public class SparniProjectApplication {
 				bilde1.setTranslations(List.of(bilde1_lv, bilde1_en));
 				productImageRepo.save(bilde1);
 
-				ProductImage bilde2 = ProductImage.builder().product(glove7)
+				ProductImage bilde2 = ProductImage.builder().product(glove7).position(2)
 						.src("http://localhost:8080/images/products/cimdi2.jpg").build();
 				bilde2.setCreatedBy(u1);
 				ProductImageTranslation bilde2_lv = ProductImageTranslation.builder().alt("Labi cimdi 2")
@@ -578,7 +564,7 @@ public class SparniProjectApplication {
 				bilde2.setTranslations(List.of(bilde2_lv, bilde2_en));
 				productImageRepo.save(bilde2);
 
-				ProductImage bilde3 = ProductImage.builder().product(glove7)
+				ProductImage bilde3 = ProductImage.builder().product(glove7).position(3)
 						.src("http://localhost:8080/images/products/cimdi3.jpg").build();
 				bilde3.setCreatedBy(u1);
 				ProductImageTranslation bilde3_lv = ProductImageTranslation.builder().alt("Labi cimdi 3")
@@ -588,7 +574,7 @@ public class SparniProjectApplication {
 				bilde3.setTranslations(List.of(bilde3_lv, bilde3_en));
 				productImageRepo.save(bilde3);
 
-				ProductImage bilde4 = ProductImage.builder().product(glove6)
+				ProductImage bilde4 = ProductImage.builder().product(glove6).position(1)
 						.src("http://localhost:8080/images/products/cimdi1.jpg").build();
 				bilde4.setCreatedBy(u1);
 				ProductImageTranslation bilde4_lv = ProductImageTranslation.builder().alt("Labi cimdi 3")
@@ -598,7 +584,7 @@ public class SparniProjectApplication {
 				bilde4.setTranslations(List.of(bilde4_lv, bilde4_en));
 				productImageRepo.save(bilde4);
 
-				ProductImage bilde5 = ProductImage.builder().product(glove6)
+				ProductImage bilde5 = ProductImage.builder().product(glove6).position(2)
 						.src("http://localhost:8080/images/products/cimdi2.jpg").build();
 				bilde5.setCreatedBy(u1);
 				ProductImageTranslation bilde5_lv = ProductImageTranslation.builder().alt("Labi cimdi 3")
@@ -608,7 +594,7 @@ public class SparniProjectApplication {
 				bilde5.setTranslations(List.of(bilde5_lv, bilde5_en));
 				productImageRepo.save(bilde5);
 
-				ProductImage bilde6 = ProductImage.builder().product(glove5)
+				ProductImage bilde6 = ProductImage.builder().product(glove5).position(3)
 						.src("http://localhost:8080/images/products/cimdi3.jpg").build();
 				bilde6.setCreatedBy(u1);
 				ProductImageTranslation bilde6_lv = ProductImageTranslation.builder().alt("Labi cimdi 3")
@@ -809,5 +795,4 @@ public class SparniProjectApplication {
 			}
 		};
 	}
-
 }

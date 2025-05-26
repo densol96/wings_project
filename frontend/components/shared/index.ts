@@ -27,3 +27,5 @@ export { default as AuditableSelect } from "./AuditableSelect";
 export { default as ImageUploadInput } from "./ImageUploadInput";
 export { default as ImagesPreview } from "./ImagesPreview";
 export { default as ImageUploader } from "./ImageUploader";
+export { default as ImageRow } from "./ImageRow";
+export { default as ManageImages } from "./ManageImages";

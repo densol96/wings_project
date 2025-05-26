@@ -73,8 +73,6 @@ public interface ProductMapper {
                 return product.getOrderItems().stream().map(orderItem -> orderItem.getAmount()).reduce(0, (a, b) -> a + b);
         }
 
-
-
         default List<TitleLocalableDto> transform(List<ProductTranslation> translations) {
                 return translations.stream().map(e -> new TitleLocalableDto(e.getLocale(), e.getTitle())).toList();
         }

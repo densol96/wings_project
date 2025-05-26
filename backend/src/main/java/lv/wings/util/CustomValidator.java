@@ -12,8 +12,11 @@ import lv.wings.dto.interfaces.HasTranslationMethod;
 import lv.wings.enums.LocaleCode;
 import lv.wings.exception.validation.InvalidIdException;
 import lv.wings.exception.validation.InvalidParameterException;
+import lv.wings.model.base.TranslatableEntity;
+import lv.wings.model.interfaces.Localable;
 import lv.wings.model.interfaces.LocalableWithTitle;
 import lv.wings.repo.base.TitleWithLocaleAndSoftDeleteRepository;
+import lv.wings.util.mapping.EntityExistenceProvider;
 
 public class CustomValidator {
 
@@ -60,16 +63,46 @@ public class CustomValidator {
         return user.isEnabled() && user.isAccountNonExpired() && user.isAccountNonLocked() && user.isCredentialsNonExpired();
     }
 
-    public static <T> Map<String, Object> validateTitleUniqueness(
+    // public static <T> Map<String, Object> validateTitleUniqueness(
+    // HasTranslationMethod dto,
+    // TitleWithLocaleAndSoftDeleteRepository<T> repository,
+    // Map<String, Object> errors,
+    // @Nullable List<LocalableWithTitle> existingTranslations) {
+    // dto.getTranslations().forEach(tr -> {
+    // String newTitle = tr.getTitle();
+    // LocaleCode forLocale = tr.getLocale();
+    // boolean isCreating = existingTranslations == null;
+    // boolean titleAlreadyExists = repository.existsByTitleAndLocaleAndDeletedFalse(newTitle, forLocale);
+    // boolean titleRemainsTheSame = !isCreating && existingTranslations
+    // .stream()
+    // .filter(existingTr -> existingTr.getLocale() == forLocale && newTitle.equals(existingTr.getTitle()))
+    // .findFirst()
+    // .isPresent();
+
+    // if ((isCreating || !titleRemainsTheSame) && titleAlreadyExists) {
+    // Map<String, String> subMap = (Map<String, String>) errors.computeIfAbsent("title", k -> new HashMap<>());
+    // subMap.put(tr.getLocale().getCode(), "Norādīts nosaukums jau eksistē.");
+    // }
+    // });
+
+    // return errors;
+    // }
+
+    public static <T extends LocalableWithTitle> Map<String, Object> validateTitleUniqueness(
             HasTranslationMethod dto,
-            TitleWithLocaleAndSoftDeleteRepository<T> repository,
             Map<String, Object> errors,
-            @Nullable List<LocalableWithTitle> existingTranslations) {
+            EntityExistenceProvider repoFunction,
+            TranslatableEntity<T> forUpdate) {
+
+        boolean isCreating = forUpdate == null;
+
+        List<LocalableWithTitle> existingTranslations =
+                isCreating ? null : forUpdate.getNarrowTranslations().stream().map(tr -> (LocalableWithTitle) tr).toList();
+
         dto.getTranslations().forEach(tr -> {
             String newTitle = tr.getTitle();
             LocaleCode forLocale = tr.getLocale();
-            boolean isCreating = existingTranslations == null;
-            boolean titleAlreadyExists = repository.existsByTitleAndLocaleAndDeletedFalse(newTitle, forLocale);
+            boolean titleAlreadyExists = repoFunction.existsByTitleAndLocale(newTitle, forLocale);
             boolean titleRemainsTheSame = !isCreating && existingTranslations
                     .stream()
                     .filter(existingTr -> existingTr.getLocale() == forLocale && newTitle.equals(existingTr.getTitle()))

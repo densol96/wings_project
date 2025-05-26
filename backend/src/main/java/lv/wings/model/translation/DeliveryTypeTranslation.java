@@ -16,10 +16,13 @@ import lv.wings.model.entity.DeliveryType;
 @Data
 @Table(
         name = "delivery_type_translations",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"translatable_id", "locale"}),
+                @UniqueConstraint(columnNames = {"title", "locale"})
+        })
 public class DeliveryTypeTranslation extends LocalableEntity<DeliveryType> {
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String title;
 
     @Column(nullable = false, length = 100)

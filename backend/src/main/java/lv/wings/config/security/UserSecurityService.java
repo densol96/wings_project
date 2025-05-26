@@ -20,11 +20,14 @@ public class UserSecurityService {
         }
 
         Object principal = auth.getPrincipal();
-        System.out.println(principal);
         if (principal instanceof MyUserDetails user) {
             return user;
         }
         throw new AuthenticationCredentialsNotFoundException("Invalid authentication in CurrentUserService.getCurrentUser");
+    }
+
+    public User getCurrentUser() {
+        return getCurrentUserDetails().getUser();
     }
 
     public Set<String> getUserAuthorities(User user) {

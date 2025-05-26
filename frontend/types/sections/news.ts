@@ -11,12 +11,11 @@ export type SingleNewsItem = {
   id: number;
   imageDtos: ImageDto[];
   translationDto: ShortContent & {
-    location: string;
+    location?: string;
   };
   createdAt: Date;
-  startDate: Date;
-  endDate: Date;
-  categoryName: string;
+  startDate?: Date;
+  endDate?: Date;
 };
 
 export type NewsDictionaryType = {

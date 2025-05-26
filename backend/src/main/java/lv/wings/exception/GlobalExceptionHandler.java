@@ -29,6 +29,7 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lv.wings.dto.interfaces.HasTranslationMethod;
 import lv.wings.dto.request.admin.products.NewCategoryDto;
 import lv.wings.dto.response.BasicErrorDto;
 import lv.wings.dto.response.payment.CheckoutErrorDto;
@@ -193,7 +194,7 @@ public class GlobalExceptionHandler {
                 String locale = "unknown";
                 Object rootBean = violation.getRootBean();
 
-                if (rootBean instanceof NewCategoryDto dto
+                if (rootBean instanceof HasTranslationMethod dto
                         && dto.getTranslations() != null
                         && index < dto.getTranslations().size()) {
                     LocaleCode lc = dto.getTranslations().get(index).getLocale();

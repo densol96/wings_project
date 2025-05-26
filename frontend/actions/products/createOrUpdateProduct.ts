@@ -12,7 +12,6 @@ export const createOrUpdateProduct = async (formData: FormData, productId?: numb
    * But some need to be formatted (like title-lv and description-en)
    * as well some need to be cleared out images-input (since images were added from the state)
    */
-
   let i = 0;
   localeCodes.forEach((localeCode) => {
     if (localeCode === defaultLocale || formData.get("translationMethod") === TranslationMethod.MANUAL) {
@@ -34,13 +33,15 @@ export const createOrUpdateProduct = async (formData: FormData, productId?: numb
 
   // clear old valeus that are not going to be read by Spring controller (no need to send overhead aka additional files etc.)
   cleanFormData(formData, ["images-input", "prod-material", "materials"]);
-  return await serverFetchAction<MultiLangFormState>({
+  const res = await serverFetchAction<MultiLangFormState>({
     endpoint: productId ? `admin/products/${productId}` : "admin/products",
     method: productId ? "PUT" : "POST",
     body: formData,
     alternativeOk: () => revalidatePath("/", "layout"),
     isMultipart: true,
   });
+  console.log(res);
+  return res;
 };
 
 export default createOrUpdateProduct;

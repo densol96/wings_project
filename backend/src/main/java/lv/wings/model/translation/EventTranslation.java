@@ -11,14 +11,18 @@ import lombok.NoArgsConstructor;
 import lv.wings.enums.LocaleCode;
 import lv.wings.model.base.LocalableEntity;
 import lv.wings.model.entity.Event;
+import lv.wings.model.interfaces.LocalableWithTitle;
 
 @Entity
 @NoArgsConstructor
 @Data
 @Table(
         name = "event_translations",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
-public class EventTranslation extends LocalableEntity<Event> {
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"translatable_id", "locale"}),
+                @UniqueConstraint(columnNames = {"title", "locale"})
+        })
+public class EventTranslation extends LocalableEntity<Event> implements LocalableWithTitle {
 
     @Column(nullable = false, length = 100)
     private String title;

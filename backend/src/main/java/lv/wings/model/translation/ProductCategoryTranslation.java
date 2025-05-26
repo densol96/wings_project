@@ -19,11 +19,15 @@ import lv.wings.model.interfaces.LocalableWithTitle;
 @Data
 @Table(
         name = "product_category_translations",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"translatable_id", "locale"}),
+        // @UniqueConstraint(columnNames = {"title", "locale"}) // Unique should be checked in service since this entity can be softly deleted
+        })
 @SQLDelete(sql = "UPDATE product_category_translations SET deleted = true WHERE id=?")
 public class ProductCategoryTranslation extends LocalableEntity<ProductCategory> implements LocalableWithTitle {
 
-    @Column(unique = true, nullable = false, length = 50)
+
+    @Column(nullable = false, length = 50)
     private String title;
 
     @Column(length = 300)

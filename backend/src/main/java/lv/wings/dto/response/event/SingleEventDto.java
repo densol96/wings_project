@@ -17,5 +17,4 @@ public class SingleEventDto {
     private LocalDate endDate;
     private EventTranslationDto translationDto;
     private List<ImageDto> imageDtos;
-    private String categoryName;
 }

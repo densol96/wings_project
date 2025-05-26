@@ -37,11 +37,11 @@ public abstract class AuditableEntity implements Auditable {
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(insertable = false)
+    @Column(insertable = false, updatable = true)
     private LocalDateTime lastModifiedAt;
 
     @LastModifiedBy
     @ManyToOne
-    @JoinColumn(insertable = false)
+    @JoinColumn(insertable = false, updatable = true)
     private User lastModifiedBy;
 }

@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 
 export const deleteImage = async (prevState: FormState, formData: FormData): Promise<FormState> => {
   return await serverFetchAction({
-    endpoint: `admin/products/images/${formData.get("id")}`,
+    endpoint: `admin/${formData.get("entityName")}/images/${formData.get("id")}`,
     method: "DELETE",
     alternativeOk: () => {
       revalidatePath("/", "layout");

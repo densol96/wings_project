@@ -18,10 +18,13 @@ import lv.wings.model.entity.Color;
 @Data
 @Table(
         name = "color_translations",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"translatable_id", "locale"}),
+                @UniqueConstraint(columnNames = {"name", "locale"})
+        })
 public class ColorTranslation extends LocalableEntity<Color> {
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, length = 50)
     String name;
 
     @Builder

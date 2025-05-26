@@ -34,8 +34,6 @@ export const createOrUpdateCategory = async (prevState: MultiLangFormState, form
     translations,
   };
 
-  console.log(body);
-
   const res = await serverFetchAction<MultiLangFormState>({
     endpoint: id ? `admin/products/categories/${id}` : "admin/products/categories",
     method: id ? "PUT" : "POST",

@@ -18,10 +18,13 @@ import lv.wings.model.entity.Material;
 @Data
 @Table(
         name = "material_translations",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"translatable_id", "locale"}))
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"translatable_id", "locale"}),
+                @UniqueConstraint(columnNames = {"name", "locale"})
+        })
 public class MaterialTranslation extends LocalableEntity<Material> {
 
-    @Column(nullable = false, unique = true, length = 50)
+    @Column(nullable = false, length = 50)
     String name;
 
     @Builder

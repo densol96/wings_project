@@ -1,5 +1,6 @@
 package lv.wings.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-
+import lv.wings.config.security.UserSecurityService;
 import lv.wings.dto.request.admin.products.CreateProductTranslationDto;
 import lv.wings.dto.request.admin.products.NewProductDto;
 import lv.wings.dto.request.admin.products.NewProductMaterialDto;
@@ -77,6 +78,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 	private final MaterialService materialService;
 	private final Validator validator;
 	private final TranslationService translationService;
+	private final UserSecurityService userSecurityService;
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -97,7 +99,8 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			Validator validator,
 			TranslationService translationService,
 			S3Service imageUploader,
-			MaterialService materialService) {
+			MaterialService materialService,
+			UserSecurityService userSecurityService) {
 		super(productRepository, "Product", "entity.product", localeService);
 		this.productTranslationRepository = productTranslationRepository;
 		this.productRepository = productRepository;
@@ -109,6 +112,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		this.validator = validator;
 		this.translationService = translationService;
 		this.materialService = materialService;
+		this.userSecurityService = userSecurityService;
 	}
 
 	@Override
@@ -275,6 +279,7 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 			if (images != null) {
 				productImageService.clearImagesUp(images, null);
 			}
+			throw new RuntimeException(e); // wil trigger a procedural error handling but user will see the the 500 error
 		}
 
 		return new BasicMessageDto("Jauns produkts tika pievienots.");
@@ -298,6 +303,9 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		attachTranslations(existingProduct, dto, isManualTranslation, defaultTranslation);
 		attachMaterials(existingProduct, dto);
 		attachColors(existingProduct, dto);
+
+		existingProduct.setLastModifiedAt(LocalDateTime.now());
+		existingProduct.setLastModifiedBy(userSecurityService.getCurrentUser());
 
 		persist(existingProduct);
 
@@ -393,7 +401,10 @@ public class ProductServiceImpl extends AbstractTranslatableCRUDService<Product,
 		 * but in this case we actually want them to be hard deleted or a unqiueness constraint will fire off every time!!
 		 * on top of that see the note about the Hibernate behaviour in the comment above!
 		 */
-		productTranslationRepository.hardDeleteByProductId(newProduct.getId());
+		Integer productId = newProduct.getId();
+		if (productId != null) {
+			productTranslationRepository.hardDeleteByProductId(newProduct.getId());
+		}
 		newProduct.getNarrowTranslations().clear();
 		newProduct.getNarrowTranslations().addAll(translations);
 	}

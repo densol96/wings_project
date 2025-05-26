@@ -8,7 +8,7 @@ const Page = ({ params: { id } }: IdParams) => {
   return (
     <div className="space-y-8 w-[80%]">
       <Heading size="xl">{`Produkta (#${id}) attēlu pārvaldība`}</Heading>
-      <AddImagesForm productId={id} />
+      <AddImagesForm ownerId={id} />
       <Suspense fallback={<Spinner />}>
         <ManageImages id={id} />
       </Suspense>

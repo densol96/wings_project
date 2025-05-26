@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-const AddImagesForm = ({ productId }: { productId: number }) => {
+const AddImagesForm = ({ ownerId, entityType = "products" }: { ownerId: number; entityType?: "products" | "events" }) => {
   const [formResponse, setFormResponse] = useState<FormState>();
   const [images, setImages] = useState<File[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +30,7 @@ const AddImagesForm = ({ productId }: { productId: number }) => {
     setIsLoading(true);
     const formData = new FormData(e.currentTarget);
     images.forEach((image) => formData.append("images", image));
-    setFormResponse(await addImages(formData, productId));
+    setFormResponse(await addImages(formData, ownerId, entityType));
     setIsLoading(false);
   };
 
