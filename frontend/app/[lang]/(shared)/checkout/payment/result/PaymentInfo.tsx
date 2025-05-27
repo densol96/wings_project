@@ -33,20 +33,27 @@ export interface OrderSummaryDto {
 
 const PaymentInfo = ({ paymentIntentId, dict }: Props) => {
   const { lang } = useLangContext();
-  const { clearCart } = useCartContext();
+  const { clearCart, cartIsLoaded } = useCartContext();
   const { data, isLoading } = useLoadData<OrderSummaryDto>(
     `${process.env.NEXT_PUBLIC_BACKEND_URL_EXTENDED}/orders/post-payment/${paymentIntentId}?lang=${lang}`
   );
 
   useEffect(() => {
-    console.log("CART SHOULD BE CLEARED");
-    clearCart();
-  }, []);
+    if (cartIsLoaded) clearCart();
+  }, [cartIsLoaded]);
 
   return isLoading ? (
     <Spinner />
   ) : (
     <div>
+      <button
+        onClick={() => {
+          console.log(clearCart);
+          clearCart();
+        }}
+      >
+        Clear cart
+      </button>
       <p>
         <strong className="mr-6">{dict.orderId}:</strong> {data?.id}
       </p>

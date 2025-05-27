@@ -33,5 +33,4 @@ public class FrontendCacheInvalidatorImpl implements FrontendCacheInvalidator {
             log.error("Server error: {}, body: {}", e.getStatusCode(), e.getResponseBodyAsString());
         }
     }
-
 }

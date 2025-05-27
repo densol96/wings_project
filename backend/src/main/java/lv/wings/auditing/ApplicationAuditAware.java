@@ -25,9 +25,9 @@ public class ApplicationAuditAware implements AuditorAware<User> {
 		if (authentication == null
 				|| !authentication.isAuthenticated()
 				|| authentication.getPrincipal() instanceof String) { // mind anonymousUser
-			if (systemUser == null) {
-				systemUser = userRepo.findByUsername("system").orElseGet(null);
-			}
+			// if (systemUser == null) {
+			// systemUser = userRepo.findByUsername("system").orElseGet(null);
+			// }
 			return Optional.ofNullable(systemUser);
 		}
 

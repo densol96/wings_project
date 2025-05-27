@@ -57,6 +57,6 @@ public class TranslationServiceImpl implements TranslationService {
                                 .trim();
 
                 System.out.println("TRANSLATION ===> " + translation);
-                return translation;
+                return translation.replaceAll("[\"'()\\[\\]{}]", "");
         }
 }

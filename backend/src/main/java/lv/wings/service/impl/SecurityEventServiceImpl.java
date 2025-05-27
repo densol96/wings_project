@@ -75,6 +75,7 @@ public class SecurityEventServiceImpl implements SecurityEventService {
                     String token = HashUtils.createRandomToken();
                     String hashedToken = HashUtils.createTokenHash(token);
                     tokenStoreService.storeToken(RedisKeyType.REQUEST_UNLOCK, hashedToken, user.getId());
+                    System.out.println("SENDING.......");
                     emailSenderService.sendLoginAttemptsExceeded(
                             user,
                             UrlAssembler.getFullFrontendPath("/admin/request-account-unlock/" + token));

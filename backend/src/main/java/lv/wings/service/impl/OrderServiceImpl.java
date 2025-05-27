@@ -171,6 +171,7 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
 
         // Amounts have been reserved during paymentIntent creation => if not PAID, we need to release them
         if (newStatus != OrderStatus.PAID) {
+            System.out.println("RESERVATION CANCELLED!");
             order.getOrderItems().forEach(orderItem -> {
                 productService.getProductByIdWithLock(orderItem.getProduct().getId()).ifPresent((product -> {
                     product.setAmount(product.getAmount() + orderItem.getAmount());
@@ -193,10 +194,8 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
             paymentIntent = PaymentIntent.retrieve(paymentIntentId);
         } catch (Exception e) {
             updateOrderStatusOnWebhookEvent(paymentIntentId, OrderStatus.CANCELLED);
-        }
-
-        if (paymentIntent == null)
             return;
+        }
 
         // means, order will be proccessed in the webhook
         if (paymentIntent.getStatus().equals("succeeded") || paymentIntent.getStatus().equals("canceled")
@@ -206,9 +205,15 @@ public class OrderServiceImpl extends AbstractCRUDService<Order, Integer> implem
 
         try {
             paymentIntent.cancel();
-            updateOrderStatusOnWebhookEvent(paymentIntentId, OrderStatus.CANCELLED);
+            /*
+             * After cancelling, Stripe itself will trigger the Cancel Event!
+             * So, No need to call updateOrderStatusOnWebhookEvent(paymentIntentId, OrderStatus.CANCELLED);
+             * This is causing bugs with reservation system!
+             */
+            // updateOrderStatusOnWebhookEvent(paymentIntentId, OrderStatus.CANCELLED);
         } catch (StripeException exception) {
-            throw new RuntimeException("THIS SHOULD ROLLBACK THE TRANSACTION IN CASE OF THE EXCEPTION");
+            updateOrderStatusOnWebhookEvent(paymentIntentId, OrderStatus.CANCELLED);
+            // throw new RuntimeException("THIS SHOULD ROLLBACK THE TRANSACTION IN CASE OF THE EXCEPTION");
         }
     }
 

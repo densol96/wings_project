@@ -116,26 +116,7 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
 
     @Override
     public Page<EventAdminDto> getAllEventsForAdmin(String q, Pageable pageable, LocalDate start, LocalDate end) {
-        return eventRepo.findAll((root, query, cb) -> {
-            List<Predicate> predicates = new ArrayList<>();
-
-            if (q != null && !q.isBlank()) {
-                String likePattern = "%" + q.toLowerCase() + "%";
-                predicates.add(cb.or(
-                        cb.like(cb.lower(root.get("title")), likePattern),
-                        cb.like(cb.lower(root.get("description")), likePattern)));
-            }
-
-            if (start != null) {
-                predicates.add(cb.greaterThanOrEqualTo(root.get("startDate"), start));
-            }
-
-            if (end != null) {
-                predicates.add(cb.lessThanOrEqualTo(root.get("endDate"), end));
-            }
-
-            return cb.and(predicates.toArray(new Predicate[0]));
-        }, pageable).map(eventMapper::toAdminDto);
+        return eventRepo.findAllForAdmin(pageable, q, start, end).map(eventMapper::toAdminDto);
     }
 
     @Override
@@ -222,6 +203,7 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
                         .title(tr.getTitle())
                         .description(tr.getDescription())
                         .location(tr.getLocation())
+                        .event(newEvent)
                         .build());
             });
         } else {
@@ -239,7 +221,7 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
 
             translations.add(EventTranslation.builder()
                     .locale(LocaleCode.EN)
-                    .title(title)
+                    .title(title != null ? translationService.translateToEnglish(title) : null)
                     .description(description != null ? translationService.translateToEnglish(description) : null)
                     .location(location != null ? translationService.translateToEnglish(location) : null)
                     .event(newEvent)
@@ -261,6 +243,30 @@ public class EventServiceImpl extends AbstractTranslatableCRUDService<Event, Eve
         Map<String, Object> errors = new HashMap<>();
         CustomValidator.validateTitleUniqueness(dto, errors,
                 (string, locale) -> eventTranslationRepository.existsByTitleAndLocale(string, locale), forUpdate);
+
+        LocalDate startDate = dto.getStartDate();
+        LocalDate endDate = dto.getEndDate();
+
+        String provideBothMessage = "Jānorāda gan sākuma, gan beigu datums.";
+
+        if (startDate != null && endDate == null) {
+            errors.put("endDate", provideBothMessage);
+        }
+
+        if (startDate == null && endDate != null) {
+            errors.put("startDate", provideBothMessage);
+        }
+
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+            errors.put("endDate", "Beigu datums nevar būt pirms sākuma datuma.");
+        }
+
+        if (forUpdate == null && startDate != null) {
+            LocalDate today = LocalDate.now();
+            if (startDate.isBefore(today)) {
+                errors.put("startDate", "Jaunam pasākumam sākuma datums nevar būt pagātnē.");
+            }
+        }
 
         if (!errors.isEmpty())
             throw new NestedValidationException(errors);

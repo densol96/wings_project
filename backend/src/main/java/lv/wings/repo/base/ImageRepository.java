@@ -18,5 +18,4 @@ public interface ImageRepository<T extends ImageableEntity<?, ?>, ID> extends Jp
 
     @Query("SELECT COALESCE(MAX(i.position), 0) FROM #{#entityName} i WHERE i.owner.id = :ownerId")
     int findMaxPositionByOwnerId(@Param("ownerId") Integer ownerId);
-
 }

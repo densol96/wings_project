@@ -28,7 +28,7 @@ const ProductRow = ({ product, q }: Props) => {
           .filter((tr) => tr.locale.toLowerCase() !== defaultLocale)
           .map((tr) => (
             <div className="flex justify-center">
-              <StyledLink innerClassName="gap-0" showIcon={false} href={`/${tr.locale}/shop/products/${product.id}`}>
+              <StyledLink innerClassName="gap-0" showIcon={false} href={`/${tr.locale.toLowerCase()}/shop/products/${product.id}`}>
                 <p>{highlightWithDiacritics(tr.title, stringQ)}</p>
               </StyledLink>
             </div>

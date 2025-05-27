@@ -15,6 +15,7 @@ public class OrderTimeoutScheduler {
     private final OrderService orderService;
 
     public void scheduleOrderTimeoutCheck(String paymentIntentId, Duration delay) {
+        System.out.println("TASK WAS BOOKED FOR SCHEDULER!");
         taskScheduler.schedule(
                 () -> orderService.handleOrderTimeout(paymentIntentId),
                 Instant.now().plus(delay));

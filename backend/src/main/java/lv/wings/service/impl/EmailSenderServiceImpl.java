@@ -57,7 +57,11 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
     @Override
     public void sendLoginAttemptsExceeded(User user, String requestUnlockUrl) {
+        System.out.println("=== I RUN ===");
         String html = emailTemplateService.generateLoginAttemptsExceededEmailHtml(user, requestUnlockUrl);
+        System.out.println(html);
+        System.out.println(html);
+        System.out.println(user.getEmail());
         sendHtmlEmail(user.getEmail(), "Darba konta bloķēšana", html);
     }
 

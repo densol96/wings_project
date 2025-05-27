@@ -29,7 +29,7 @@ const EventRow = ({ event, q }: Props) => {
           .filter((tr) => tr.locale.toLowerCase() !== defaultLocale)
           .map((tr) => (
             <div key={tr.locale} className="flex justify-center">
-              <StyledLink innerClassName="gap-0" showIcon={false} href={`/${tr.locale}/news/${event.id}`}>
+              <StyledLink innerClassName="gap-0" showIcon={false} href={`/${tr.locale.toLowerCase()}/news/${event.id}`}>
                 <p>{highlightWithDiacritics(tr.title, stringQ)}</p>
               </StyledLink>
             </div>

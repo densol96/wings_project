@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useLangContext } from "@/context";
 import { Button, Heading, MyImage, OrderReview } from "@/components";
 import { PaymentSectionDictionary } from "@/types";
+import { useRouter } from "next/navigation";
 
 type Props = {
   dict: PaymentSectionDictionary;
@@ -16,6 +17,7 @@ const CheckoutForm = ({ dict }: Props) => {
   const elements = useElements();
 
   const { lang } = useLangContext();
+  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -32,11 +34,25 @@ const CheckoutForm = ({ dict }: Props) => {
     });
 
     if (error) {
-      // например, card_decline, validation_error и т.д.
-      console.log("STRIPE ERROR: ", error);
-      toast.error(error.message ?? "Payment failed");
+      if (error.code === "payment_intent_unexpected_state") {
+        toast.error(
+          lang == "lv"
+            ? "Sesija ir beigusies. Lai turpinātu, lūdzu, sāciet maksājuma procesu no jauna."
+            : "The session has ended. To continue, please restart the payment process."
+        );
+        setTimeout(() => {
+          router.back();
+        }, 3000);
+      } else {
+        toast.error(
+          error.message ||
+            (lang == "lv"
+              ? "Maksājumu neizdevās pabeigt. Lūdzu, pārbaudiet savu maksājumu informāciju vai mēģiniet vēlreiz ar citu maksājuma metodi. Ja problēma turpinās, sazinieties ar mūsu atbalsta komandu."
+              : "The payment could not be completed. Please check your payment details or try again using a different payment method. If the issue persists, contact our support team.")
+        );
+      }
     } else {
-      toast.success("Payment succeeded!");
+      toast.success(lang == "lv" ? "Maksājums veiksmīgi saņemts. Paldies par jūsu pirkumu!" : "Payment successfully received. Thank you for your purchase!");
     }
   };
 

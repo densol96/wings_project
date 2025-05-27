@@ -17,10 +17,10 @@ import lv.wings.enums.TranslationMethod;
 public class NewEventDto implements HasTranslationMethod {
     private TranslationMethod translationMethod;
 
-    @FutureOrPresent(message = "{start.futureOrPresent}")
+    // @FutureOrPresent(message = "{start.futureOrPresent}")
     private LocalDate startDate;
 
-    @Future(message = "{end.future}")
+    // @Future(message = "{end.future}")
     private LocalDate endDate;
 
     @NotEmpty(message = "{translations.empty}")

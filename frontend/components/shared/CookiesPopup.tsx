@@ -21,7 +21,7 @@ type Props = {
 
 const LOCAL_STORAGE_KEY = "cookies_agreed_to_by_user";
 // const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
-const ACCEPT_ANSWER_FOR = 1000 * 60; // 1 min
+const ACCEPT_ANSWER_FOR = 1000 * 60 * 5; // 1 min
 
 const CookiesPopup = ({ dict }: Props) => {
   // "2025-03-10T22:00:00"

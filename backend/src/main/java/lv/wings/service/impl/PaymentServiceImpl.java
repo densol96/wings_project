@@ -271,7 +271,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         orderService.saveNewOrder(orderDto, paymentIntent.getId(), discount, totalCosts);
 
-        orderTimeoutScheduler.scheduleOrderTimeoutCheck(paymentIntent.getId(), Duration.ofSeconds(30));
+        orderTimeoutScheduler.scheduleOrderTimeoutCheck(paymentIntent.getId(), Duration.ofSeconds(40));
 
         return new PaymentIntentDto(paymentIntent.getClientSecret());
     }

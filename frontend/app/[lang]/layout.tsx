@@ -86,7 +86,7 @@ const RootLayout = async ({ children, params: { lang } }: Props) => {
       <Scroll />
       {/* <body className={`${roboto.className} min-h-screen flex flex-col`}> */}
       <ReactQueryProvider>
-        <TestBtn />
+        {/* <TestBtn /> */}
         <CartProvider>
           <SidebarProvider>
             <Header navMenu={dict.navMenu} />
